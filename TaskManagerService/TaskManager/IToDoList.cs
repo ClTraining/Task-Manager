@@ -1,19 +1,10 @@
-﻿#region Using
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskManagerServise.Entities;
-
-#endregion
+﻿using EntitiesLibrary;
 
 
-namespace TaskManagerServise.TaskManager
+namespace TaskManagerService.TaskManager
 {
     public interface IToDoList
     {
-        TaskContract AddTask(TaskContract task);
+        ContractTask AddTask(ContractTask task);
     }
 }

@@ -1,9 +1,9 @@
-﻿using TaskConsoleClient.Entities;
+﻿using EntitiesLibrary;
 
 namespace TaskConsoleClient.WCFClient
 {
     public interface ITaskManagerApplication
     {
-        TaskContract AddTask(TaskContract task);
+        ContractTask AddTask(ContractTask task);
     }
 }

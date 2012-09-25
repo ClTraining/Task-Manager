@@ -1,15 +1,9 @@
-﻿#region Using
-
-
-
-#endregion
-
-using TaskConsoleClient.Entities;
+﻿using EntitiesLibrary;
 
 namespace TaskConsoleClient.Manager
 {
     public interface ICommandManager
     {
-        TaskContract AddTask(TaskContract task);
+        ContractTask AddTask(ContractTask task);
     }
 }

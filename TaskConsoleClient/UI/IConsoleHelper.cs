@@ -1,16 +1,10 @@
-﻿#region Using
-
-using TaskConsoleClient.Entities;
-using TaskConsoleClient.Manager;
-
-#endregion
-
+﻿using EntitiesLibrary;
 
 namespace TaskConsoleClient.UI
 {
     public interface IConsoleHelper
     {
-        void View(TaskContract task);
+        void View(ContractTask task);
 
         void Parse(string text);
     }

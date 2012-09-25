@@ -1,19 +1,9 @@
-﻿#region Using
+﻿using EntitiesLibrary;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskManagerServise.Entities;
-
-#endregion
-
-
-namespace TaskManagerServise.TaskManager
+namespace TaskManagerService.TaskManager
 {
     public interface ITaskFactory
     {
-        CTask Create();
+        ServiceTask Create();
     }
 }

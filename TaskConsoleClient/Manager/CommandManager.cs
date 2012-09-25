@@ -1,17 +1,12 @@
-﻿#region Using
-
-using System;
-using TaskConsoleClient.Entities;
-using TaskConsoleClient.WCFClient;
-
-#endregion
+﻿using System;
+using EntitiesLibrary;
 
 
 namespace TaskConsoleClient.Manager
 {
     class CommandManager: ICommandManager
     {
-        public TaskContract AddTask(TaskContract task)
+        public ContractTask AddTask(ContractTask task)
         {
             throw new NotImplementedException();
         }

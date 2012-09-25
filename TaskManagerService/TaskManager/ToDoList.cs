@@ -1,22 +1,12 @@
-﻿#region 
+﻿using EntitiesLibrary;
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TaskManagerServise.Entities;
-
-#endregion
-
-
-namespace TaskManagerServise.TaskManager
+namespace TaskManagerService.TaskManager
 {
     public class ToDoList:IToDoList
     {
-        public TaskContract AddTask(TaskContract task)
+        public ContractTask AddTask(ContractTask task)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }
