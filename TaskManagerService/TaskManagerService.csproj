@@ -54,8 +54,13 @@
   </ItemGroup>
   <ItemGroup>
 <<<<<<< HEAD
+<<<<<<< HEAD
     <Compile Include="DataBaseAccessLayer\IRepository.cs" />
     <Compile Include="DataBaseAccessLayer\MemoRepository.cs" />
+=======
+    <Compile Include="DataBaseAccessLayer\MemoRepository.cs" />
+    <Compile Include="DataBaseAccessLayer\IRepository.cs" />
+>>>>>>> 3766ead263ffb24ee412845c3194483de43e7911
 =======
     <Compile Include="DataBaseAccessLayer\MemoRepository.cs" />
     <Compile Include="DataBaseAccessLayer\IRepository.cs" />
