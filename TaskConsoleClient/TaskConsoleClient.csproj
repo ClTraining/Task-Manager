@@ -53,7 +53,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Entities\EntitiesLibrary.csproj">
+    <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">
       <Project>{85ab2841-cf5e-4e7b-ac83-b17d01492589}</Project>
       <Name>EntitiesLibrary</Name>
     </ProjectReference>
