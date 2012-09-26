@@ -69,17 +69,11 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerServiceTests
     {
-<<<<<<< HEAD
+
         private readonly ITask _incomingTask = new ContractTask();
         private readonly ITask _outgoingTask = new ContractTask();
         private readonly IToDoList _list = Substitute.For<IToDoList>();
         private readonly ITaskManagerService _manager;
-=======
-        private readonly ServiceTask incomingTask = new ServiceTask();
-        private readonly ContractTask outgoingTask = new ContractTask();
-        private readonly IToDoList list = Substitute.For<IToDoList>();
-        private readonly ITaskManagerService manager;
->>>>>>> 1f1548013167aa9e61bbe0657a7c700fe4a23329
 
         public TaskManagerServiceTests()
         {
@@ -92,11 +86,7 @@ namespace TaskManagerHost.WCFServer
             //arrange
             _list.AddTask(_outgoingTask).Returns(_incomingTask);
 
-<<<<<<< HEAD
             var task = _manager.AddTask(_outgoingTask as ContractTask);
-=======
-            var task = manager.AddTask(outgoingTask);
->>>>>>> 1f1548013167aa9e61bbe0657a7c700fe4a23329
 
             task.Should().Be(_incomingTask);
         }
