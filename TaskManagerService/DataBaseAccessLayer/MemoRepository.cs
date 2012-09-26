@@ -10,7 +10,7 @@ using Xunit;
 #endregion
 
 
-namespace TaskManagerApp.DataBaseAccessLayer
+namespace TaskManagerHost.DataBaseAccessLayer
 {
     public class MemoRepository : IRepository
     {

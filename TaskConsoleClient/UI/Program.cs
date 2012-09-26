@@ -1,7 +1,5 @@
 ﻿using System;
 using System.ServiceModel;
-using EntitiesLibrary;
-using TaskConsoleClient.Manager;
 using TaskManagerHost.WCFServer;
 
 namespace TaskConsoleClient.UI
@@ -12,8 +10,11 @@ namespace TaskConsoleClient.UI
         {
             var task = new ConsoleHelper().Parse(Console.ReadLine());
             var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444");
+            //var client = new TaskManagerService(new ToDoList(new TaskFactory(), new MemoRepository()));
             var client = factory.CreateChannel();
-            client.AddTask(task);
+            var result = client.AddTask(task);
+            Console.WriteLine(result);
+            Console.ReadLine();
         }
     }
 }

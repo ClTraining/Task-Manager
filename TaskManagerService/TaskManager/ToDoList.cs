@@ -1,11 +1,9 @@
 ﻿using EntitiesLibrary;
-using FluentAssertions;
 using NSubstitute;
-using TaskManagerApp.DataBaseAccessLayer;
-using TaskManagerHost.TaskManager;
+using TaskManagerHost.DataBaseAccessLayer;
 using Xunit;
 
-namespace TaskManagerApp.TaskManager
+namespace TaskManagerHost.TaskManager
 {
     public class ToDoList : IToDoList
     {
@@ -26,20 +24,20 @@ namespace TaskManagerApp.TaskManager
     }
     public class ToDoListTests
     {
-        private readonly ITask incomingTask = new ContractTask();
-        private readonly ServiceTask expectedTask = new ServiceTask();
-        private readonly ITaskFactory factory = Substitute.For<ITaskFactory>();
-        private IRepository repository = Substitute.For<IRepository>();
+        private readonly ITask _incomingTask = new ContractTask();
+        private readonly ServiceTask _expectedTask = new ServiceTask();
+        private readonly ITaskFactory _factory = Substitute.For<ITaskFactory>();
+        private readonly IRepository _repository = Substitute.For<IRepository>();
 
 
         [Fact]
         public void todolist_asks_factory_for_new_task_and_saves_list()
         {
-            var list = new ToDoList(factory, repository);
-            factory.Create().Returns(expectedTask);
+            var list = new ToDoList(_factory, _repository);
+            _factory.Create().Returns(_expectedTask);
 
-            list.AddTask(incomingTask);
-            repository.Received().AddTask(expectedTask);
+            list.AddTask(_incomingTask);
+            _repository.Received().AddTask(_expectedTask);
 
         }
     }
