@@ -16,9 +16,7 @@ namespace TaskConsoleClient.Manager
 
         public ContractTask AddTask(ContractTask task)
         {
-            var res = client.AddTask(task);
-            Console.WriteLine("Task ID = {0}, {1}", res.Id, res.Name);
-            return null;
+            return client.AddTask(task);
         }
 
         public void Run()
