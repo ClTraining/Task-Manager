@@ -8,18 +8,19 @@ namespace TaskManagerService.TaskManager
 {
     public class ToDoList : IToDoList
     {
-        private readonly ITaskFactory factory;
-        private IRepository repository;
+        private readonly ITaskFactory _factory;
+        private readonly IRepository _repository;
 
         public ToDoList(ITaskFactory factory, IRepository repository)
         {
-            this.factory = factory;
-            this.repository = repository;
+            _factory = factory;
+            _repository = repository;
         }
 
         public ITask AddTask(ITask task)
         {
-            return null;
+            var newTask = _factory.Create();
+            return _repository.SaveTask(newTask);
         }
     }
 
@@ -35,7 +36,7 @@ namespace TaskManagerService.TaskManager
         public void todolist_asks_factory_for_new_task_and_saves_list()
         {
             var list = new ToDoList(factory, repository);
-            factory.Create(incomingTask).Returns(expectedTask);
+            factory.Create().Returns(expectedTask);
 
             list.AddTask(incomingTask);
             repository.Received().SaveTask(expectedTask);

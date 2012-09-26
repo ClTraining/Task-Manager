@@ -4,6 +4,6 @@ namespace TaskManagerService.TaskManager
 {
     public interface ITaskFactory
     {
-        ServiceTask Create(ITask task);
+        ServiceTask Create();
     }
 }
