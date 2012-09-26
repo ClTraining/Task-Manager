@@ -25,18 +25,18 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerService : ITaskManagerService
     {
-        private readonly IToDoList tasks;
+        private readonly IToDoList _tasks;
 
         public TaskManagerService() { }
 
         public TaskManagerService(IToDoList tasks)
         {
-            this.tasks = tasks;
+            this._tasks = tasks;
         }
 
         public ITask AddTask(ContractTask task)
         {
-            return tasks.AddTask(task);
+            return _tasks.AddTask(task);
         }
     }
 

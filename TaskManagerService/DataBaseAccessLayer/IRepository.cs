@@ -4,6 +4,8 @@ namespace TaskManagerApp.DataBaseAccessLayer
 {
     public interface IRepository
     {
-        ServiceTask SaveTask(ServiceTask task);
+        ServiceTask AddTask(ServiceTask task);
+        ServiceTask GetTaskById(int id);
+        ServiceTask EditTask(ServiceTask task);
     }
 }
