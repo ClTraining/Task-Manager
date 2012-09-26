@@ -8,18 +8,27 @@ using Xunit;
 
 namespace TaskManagerService.WCFServer
 {
-    class TaskManagerApplication
+    static class TaskManagerApplication
     {
         static void Main()
         {
-            new TaskManagerService(new ToDoList()).Start();
+            const string address = "net.tcp://localhost:44444";
+            using (var serviceHost = new ServiceHost(typeof(TaskManagerService), new Uri(address)))
+            {
+                serviceHost.Open();
+                Console.WriteLine("Host started");
+                Console.WriteLine("Press Enter to terminate the host...");
+                Console.ReadLine();
+            }
         }
     }
 
     public class TaskManagerService : ITaskManagerService
     {
-        const string serviceAddress = "net.tcp://localhost:44444";
         private readonly IToDoList tasks;
+        private ITask task;
+
+        public TaskManagerService() { }
 
         public TaskManagerService(IToDoList tasks)
         {
@@ -30,25 +39,17 @@ namespace TaskManagerService.WCFServer
         {
             return tasks.AddTask(task);
         }
-
-        public void Start()
-        {            
-            using (var serviceHost = new ServiceHost(typeof(TaskManagerService), new Uri(serviceAddress)))
-            {
-                serviceHost.Open();
-            }
-        }
     }
 
 
-    public class TaskManagerAppTests
+    public class TaskManagerServiceTests
     {
         private readonly ITask incomingTask = Substitute.For<ITask>();
         private readonly ITask outgoingTask = Substitute.For<ITask>();
         private readonly IToDoList list = Substitute.For<IToDoList>();
         private readonly ITaskManagerService manager;
 
-        public TaskManagerAppTests()
+        public TaskManagerServiceTests()
         {
             manager = new TaskManagerService(list);         
         }

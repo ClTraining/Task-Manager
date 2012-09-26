@@ -12,8 +12,9 @@ namespace TaskConsoleClient.UI
             const string serviceAddress = "net.tcp://localhost:44444";
             using (var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), serviceAddress))
             {
+                var task = new ContractTask {Id = 0, Name = "afdsfds"};
                 var client = factory.CreateChannel();
-                var taskResult = client.AddTask(new ContractTask());
+                var taskResult = client.AddTask(task);
                 Console.WriteLine(taskResult.Id);
             }
         }
