@@ -20,7 +20,7 @@ namespace TaskManagerService.TaskManager
         public ITask AddTask(ITask task)
         {
             var newTask = _factory.Create();
-            return _repository.SaveTask(newTask);
+            return _repository.AddTask(newTask);
         }
     }
 
@@ -39,7 +39,7 @@ namespace TaskManagerService.TaskManager
             factory.Create().Returns(expectedTask);
 
             list.AddTask(incomingTask);
-            repository.Received().SaveTask(expectedTask);
+            repository.Received().AddTask(expectedTask);
 
         }
     }
