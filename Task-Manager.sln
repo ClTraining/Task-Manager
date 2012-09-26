@@ -37,3 +37,42 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskConsoleClient", "TaskConsoleClient\TaskConsoleClient.csproj", "{97B2CC74-1F43-4126-8D42-F36E625DB10E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerService", "TaskManagerService\TaskManagerService.csproj", "{4D72AA03-489E-47EB-A42B-9BF2887A1538}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{BB417DE5-7627-4FB2-8C97-F134B1F952E9}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntitiesLibrary", "EntitiesLibrary\EntitiesLibrary.csproj", "{85AB2841-CF5E-4E7B-AC83-B17D01492589}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97B2CC74-1F43-4126-8D42-F36E625DB10E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97B2CC74-1F43-4126-8D42-F36E625DB10E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97B2CC74-1F43-4126-8D42-F36E625DB10E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97B2CC74-1F43-4126-8D42-F36E625DB10E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D72AA03-489E-47EB-A42B-9BF2887A1538}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D72AA03-489E-47EB-A42B-9BF2887A1538}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D72AA03-489E-47EB-A42B-9BF2887A1538}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D72AA03-489E-47EB-A42B-9BF2887A1538}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85AB2841-CF5E-4E7B-AC83-B17D01492589}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85AB2841-CF5E-4E7B-AC83-B17D01492589}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85AB2841-CF5E-4E7B-AC83-B17D01492589}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85AB2841-CF5E-4E7B-AC83-B17D01492589}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
