@@ -46,23 +46,23 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerService : ITaskManagerService
     {
-        private readonly IToDoList _tasks;
+        private readonly IToDoList tasks;
 
         public TaskManagerService()
         {
-            this._tasks = new ToDoList(new TaskFactory(), new MemoRepository());
+            this.tasks = new ToDoList(new TaskFactory(), new MemoRepository());
             Console.WriteLine("added new task");
-            _tasks = new ToDoList(new TaskFactory(), new MemoRepository());
+            tasks = new ToDoList(new TaskFactory(), new MemoRepository());
         }
 
         public TaskManagerService(IToDoList tasks)
         {
-            this._tasks = tasks;
+            this.tasks = tasks;
         }
 
         public ServiceTask AddTask(ContractTask task)
         {
-            return _tasks.AddTask(task);
+            return tasks.AddTask(task);
         }
     }
 
@@ -70,25 +70,25 @@ namespace TaskManagerHost.WCFServer
     public class TaskManagerServiceTests
     {
 
-        private readonly ITask _incomingTask = new ContractTask();
-        private readonly ITask _outgoingTask = new ContractTask();
-        private readonly IToDoList _list = Substitute.For<IToDoList>();
-        private readonly ITaskManagerService _manager;
+        private readonly ITask incomingTask = new ContractTask();
+        private readonly ITask outgoingTask = new ContractTask();
+        private readonly IToDoList list = Substitute.For<IToDoList>();
+        private readonly ITaskManagerService manager;
 
         public TaskManagerServiceTests()
         {
-            _manager = new TaskManagerService(_list);         
+            manager = new TaskManagerService(list);         
         }
 
         [Fact]
         public void should_send_and_return_task()
         {
             //arrange
-            _list.AddTask(_outgoingTask).Returns(_incomingTask);
+            list.AddTask(outgoingTask).Returns(incomingTask);
 
-            var task = _manager.AddTask(_outgoingTask as ContractTask);
+            var task = manager.AddTask(outgoingTask as ContractTask);
 
-            task.Should().Be(_incomingTask);
+            task.Should().Be(incomingTask);
         }
     }
 }
