@@ -5,6 +5,6 @@ namespace TaskManagerService.TaskManager
 {
     public interface IToDoList
     {
-        ContractTask AddTask(ContractTask task);
+        ITask AddTask(ITask task);
     }
 }

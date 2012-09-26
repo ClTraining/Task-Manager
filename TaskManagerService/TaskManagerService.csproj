@@ -61,6 +61,7 @@
     <Compile Include="TaskManager\TaskFactory.cs" />
     <Compile Include="TaskManager\ToDoList.cs" />
     <Compile Include="WCFServer\ITaskManagerApplication.cs" />
+    <Compile Include="WCFServer\TaskManagerApplication.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -7,7 +7,7 @@ namespace TaskManagerService.TaskManager
 {
     public class ToDoList : IToDoList
     {
-        public ContractTask AddTask(ContractTask task)
+        public ITask AddTask(ITask task)
         {
             return new ServiceTask();
         }
@@ -15,13 +15,5 @@ namespace TaskManagerService.TaskManager
 
     public class ToDoListTests
     {
-        ITaskFactory factory = Substitute.For<ITaskFactory>();
-
-        [Fact]
-        public void should_create_task_in_factory_and_send_to_repository()
-        {
-            var task = factory.Create();
-            task.Should().Be(new ServiceTask());
-        }
     }
 }
