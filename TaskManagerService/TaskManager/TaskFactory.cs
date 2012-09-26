@@ -2,10 +2,10 @@
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
-using TaskManagerService.DataBaseAccessLayer;
+using TaskManagerApp.DataBaseAccessLayer;
 using Xunit;
 
-namespace TaskManagerService.TaskManager
+namespace TaskManagerApp.TaskManager
 {
     public class TaskFactory : ITaskFactory
     {

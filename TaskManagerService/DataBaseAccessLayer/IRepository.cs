@@ -1,6 +1,6 @@
 ﻿using EntitiesLibrary;
 
-namespace TaskManagerService.DataBaseAccessLayer
+namespace TaskManagerApp.DataBaseAccessLayer
 {
     public interface IRepository
     {

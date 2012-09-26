@@ -1,16 +1,36 @@
+using System;
+using System.ServiceModel;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
-using TaskManagerService.TaskManager;
+using TaskManagerApp.TaskManager;
 using Xunit;
 
-namespace TaskManagerService.WCFServer
+namespace TaskManagerHost.WCFServer
 {
-    class TaskManagerApplication : ITaskManagerApplication
+    static class TaskManagerApplication
+    {
+        static void Main()
+        {
+            const string address = "net.tcp://localhost:44444";
+            using (var serviceHost = new ServiceHost(typeof(TaskManagerService), new Uri(address)))
+            {
+                serviceHost.Open();
+                Console.WriteLine("Host started");
+                Console.WriteLine("Press Enter to terminate the host...");
+                Console.ReadLine();
+            }
+        }
+    }
+
+    public class TaskManagerService : ITaskManagerService
     {
         private readonly IToDoList tasks;
+        private ITask task;
 
-        public TaskManagerApplication(IToDoList tasks)
+        public TaskManagerService() { }
+
+        public TaskManagerService(IToDoList tasks)
         {
             this.tasks = tasks;
         }
@@ -21,22 +41,28 @@ namespace TaskManagerService.WCFServer
         }
     }
 
-    public class TaskManagerAppTests
+
+    public class TaskManagerServiceTests
     {
-        readonly ITask incomeTask = new ContractTask { Id = 0, Name = "Buy milk" };
-        readonly ITask expectedTask = new ServiceTask { Id = 1, Name = "Buy milk" };
-        readonly IToDoList tasks = Substitute.For<IToDoList>();
+        private readonly ITask incomingTask = Substitute.For<ITask>();
+        private readonly ITask outgoingTask = Substitute.For<ITask>();
+        private readonly IToDoList list = Substitute.For<IToDoList>();
+        private readonly ITaskManagerService manager;
+
+        public TaskManagerServiceTests()
+        {
+            manager = new TaskManagerService(list);         
+        }
 
         [Fact]
-        public void should_redirect_creating_task_to_todolist()
+        public void should_send_and_return_task()
         {
-            var app = new TaskManagerApplication(tasks);
+            //arrange
+            list.AddTask(outgoingTask).Returns(incomingTask);
 
-            tasks.AddTask(incomeTask).Returns(expectedTask);
+            var task = manager.AddTask(outgoingTask);
 
-            var resTask = app.AddTask(incomeTask);
-
-            resTask.Should().Be(expectedTask);
+            task.Should().Be(incomingTask);
         }
     }
 }

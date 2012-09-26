@@ -1,7 +1,7 @@
 ﻿using System;
 using EntitiesLibrary;
 
-namespace TaskManagerService.DataBaseAccessLayer
+namespace TaskManagerApp.DataBaseAccessLayer
 {
     public class MemoRepository : IRepository
     {
