@@ -48,8 +48,8 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerServiceTests
     {
-        private readonly ITask incomingTask = new ContractTask();
-        private readonly ITask outgoingTask = new ContractTask();
+        private readonly ServiceTask incomingTask = new ServiceTask();
+        private readonly ContractTask outgoingTask = new ContractTask();
         private readonly IToDoList list = Substitute.For<IToDoList>();
         private readonly ITaskManagerService manager;
 
@@ -64,7 +64,7 @@ namespace TaskManagerHost.WCFServer
             //arrange
             list.AddTask(outgoingTask).Returns(incomingTask);
 
-            var task = manager.AddTask(outgoingTask as ContractTask);
+            var task = manager.AddTask(outgoingTask);
 
             task.Should().Be(incomingTask);
         }
