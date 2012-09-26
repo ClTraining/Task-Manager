@@ -3,7 +3,7 @@ using System.ServiceModel;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
-using TaskManagerApp.TaskManager;
+using TaskManagerHost.TaskManager;
 using Xunit;
 
 namespace TaskManagerHost.WCFServer
@@ -26,7 +26,6 @@ namespace TaskManagerHost.WCFServer
     public class TaskManagerService : ITaskManagerService
     {
         private readonly IToDoList tasks;
-        private ITask task;
 
         public TaskManagerService() { }
 
@@ -35,7 +34,7 @@ namespace TaskManagerHost.WCFServer
             this.tasks = tasks;
         }
 
-        public ITask AddTask(ITask task)
+        public ITask AddTask(ContractTask task)
         {
             return tasks.AddTask(task);
         }
@@ -44,8 +43,8 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerServiceTests
     {
-        private readonly ITask incomingTask = Substitute.For<ITask>();
-        private readonly ITask outgoingTask = Substitute.For<ITask>();
+        private readonly ITask incomingTask = new ContractTask();
+        private readonly ITask outgoingTask = new ContractTask();
         private readonly IToDoList list = Substitute.For<IToDoList>();
         private readonly ITaskManagerService manager;
 
@@ -60,7 +59,7 @@ namespace TaskManagerHost.WCFServer
             //arrange
             list.AddTask(outgoingTask).Returns(incomingTask);
 
-            var task = manager.AddTask(outgoingTask);
+            var task = manager.AddTask(outgoingTask as ContractTask);
 
             task.Should().Be(incomingTask);
         }

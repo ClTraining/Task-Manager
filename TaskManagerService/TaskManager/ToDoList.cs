@@ -2,6 +2,7 @@
 using FluentAssertions;
 using NSubstitute;
 using TaskManagerApp.DataBaseAccessLayer;
+using TaskManagerHost.TaskManager;
 using Xunit;
 
 namespace TaskManagerApp.TaskManager
