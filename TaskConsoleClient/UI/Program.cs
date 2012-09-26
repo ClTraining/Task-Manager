@@ -8,13 +8,13 @@ namespace TaskConsoleClient.UI
     {
         static void Main()
         {
+            var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444");
             while (true)
             {
                 var task = new ConsoleHelper().Parse(Console.ReadLine());
-                var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444");
                 var client = factory.CreateChannel();
                 var res = client.AddTask(task);
-                Console.WriteLine(res.Id);
+                Console.WriteLine(res);
             }
         }
     }
