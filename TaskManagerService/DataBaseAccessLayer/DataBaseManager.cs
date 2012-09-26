@@ -3,7 +3,7 @@ using EntitiesLibrary;
 
 namespace TaskManagerService.DataBaseAccessLayer
 {
-    public class DataBaseManager : IDataBaseManager
+    public class InMemoRepository : IRepository
     {
         public ServiceTask SaveTask(ServiceTask task)
         {

@@ -2,9 +2,8 @@
 
 namespace TaskManagerService.DataBaseAccessLayer
 {
-    public interface IDataBaseManager
+    public interface IRepository
     {
         ServiceTask SaveTask(ServiceTask task);
-        int GetId();
     }
 }

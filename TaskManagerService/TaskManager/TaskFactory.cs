@@ -9,7 +9,7 @@ namespace TaskManagerService.TaskManager
 {
     public class TaskFactory : ITaskFactory
     {
-        public ServiceTask Create()
+        public ServiceTask Create(ITask task)
         {
             return null;
         }
