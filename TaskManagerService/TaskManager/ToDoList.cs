@@ -18,7 +18,7 @@ namespace TaskManagerApp.TaskManager
             _repository = repository;
         }
 
-        public ITask AddTask(ITask task)
+        public ServiceTask AddTask(ITask task)
         {
             var newTask = _factory.Create();
             return _repository.AddTask(newTask);

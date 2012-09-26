@@ -5,12 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using EntitiesLibrary;
 using FluentAssertions;
+using TaskManagerApp.DataBaseAccessLayer;
 using Xunit;
 
 #endregion
 
 
-namespace TaskManagerApp.DataBaseAccessLayer
+namespace TaskManagerHost.DataBaseAccessLayer
 {
     public class MemoRepository : IRepository
     {

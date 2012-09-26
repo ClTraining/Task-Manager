@@ -4,6 +4,6 @@ namespace TaskManagerHost.TaskManager
 {
     public interface IToDoList
     {
-        ITask AddTask(ITask task);
+        ServiceTask AddTask(ITask task);
     }
 }

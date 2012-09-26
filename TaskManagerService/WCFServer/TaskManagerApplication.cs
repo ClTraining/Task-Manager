@@ -3,6 +3,8 @@ using System.ServiceModel;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
+using TaskManagerApp.TaskManager;
+using TaskManagerHost.DataBaseAccessLayer;
 using TaskManagerHost.TaskManager;
 using Xunit;
 
@@ -25,20 +27,21 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerService : ITaskManagerService
     {
-        private readonly IToDoList _tasks;
+        private readonly IToDoList tasks;
 
         public TaskManagerService() {
             Console.WriteLine("added new task");
+            tasks = new ToDoList(new TaskFactory(), new MemoRepository());
         }
 
         public TaskManagerService(IToDoList tasks)
         {
-            this._tasks = tasks;
+            this.tasks = tasks;
         }
 
-        public ITask AddTask(ContractTask task)
+        public ServiceTask AddTask(ContractTask task)
         {
-            return _tasks.AddTask(task);
+            return tasks.AddTask(task);
         }
     }
 
