@@ -1,7 +1,7 @@
 ﻿using System.ServiceModel;
 using EntitiesLibrary;
 
-namespace TaskManagerService.WCFServer
+namespace TaskManagerHost.WCFServer
 {
     [ServiceContract]
     public interface ITaskManagerService

@@ -3,10 +3,10 @@ using System.ServiceModel;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
-using TaskManagerService.TaskManager;
+using TaskManagerApp.TaskManager;
 using Xunit;
 
-namespace TaskManagerService.WCFServer
+namespace TaskManagerHost.WCFServer
 {
     static class TaskManagerApplication
     {
