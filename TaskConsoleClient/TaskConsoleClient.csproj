@@ -37,6 +37,9 @@
     <Reference Include="FluentAssertions">
       <HintPath>..\packages\FluentAssertions.1.7.1.1\Lib\net40\FluentAssertions.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
+    </Reference>
     <Reference Include="NSubstitute">
       <HintPath>..\packages\NSubstitute.1.4.3.0\lib\NET40\NSubstitute.dll</HintPath>
     </Reference>
@@ -65,7 +68,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Entities\EntitiesLibrary.csproj">
+    <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">
       <Project>{85ab2841-cf5e-4e7b-ac83-b17d01492589}</Project>
       <Name>EntitiesLibrary</Name>
     </ProjectReference>

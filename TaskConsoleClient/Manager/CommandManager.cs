@@ -1,7 +1,6 @@
 ﻿using System;
 using EntitiesLibrary;
 
-
 namespace TaskConsoleClient.Manager
 {
     class CommandManager: ICommandManager
