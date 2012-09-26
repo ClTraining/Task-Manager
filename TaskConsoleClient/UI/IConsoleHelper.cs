@@ -6,6 +6,6 @@ namespace TaskConsoleClient.UI
     {
         void View(ContractTask task);
 
-        void Parse(string text);
+        ContractTask Parse(string text);
     }
 }
