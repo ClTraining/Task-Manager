@@ -1,5 +1,4 @@
-﻿using System;
-using System.ServiceModel;
+﻿using TaskConsoleClient.Manager;
 using TaskManagerHost.WCFServer;
 
 namespace TaskConsoleClient.UI
@@ -8,15 +7,10 @@ namespace TaskConsoleClient.UI
     {
         static void Main()
         {
-            using (var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444"))
+            var client = new CommandManager();
+            while (true)
             {
-                var client = factory.CreateChannel();
-                while (true)
-                {
-                    var task = new ConsoleHelper().Parse(Console.ReadLine());
-                    var res = client.AddTask(task);
-                    Console.WriteLine(res.Id);
-                }
+                client.Run();
             }
         }
     }

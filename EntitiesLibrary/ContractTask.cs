@@ -2,7 +2,7 @@
 
 namespace EntitiesLibrary
 {
-    public class ContractTask : ITask
+    public class ContractTask
     {
         public int Id { get; set; }
 

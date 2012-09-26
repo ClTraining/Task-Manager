@@ -7,37 +7,37 @@ namespace TaskManagerHost.TaskManager
 {
     public class ToDoList : IToDoList
     {
-        private readonly ITaskFactory _factory;
-        private readonly IRepository _repository;
+        private readonly ITaskFactory factory;
+        private readonly IRepository repository;
 
         public ToDoList(ITaskFactory factory, IRepository repository)
         {
-            _factory = factory;
-            _repository = repository;
+            this.factory = factory;
+            this.repository = repository;
         }
 
-        public ServiceTask AddTask(ITask task)
+        public ServiceTask AddTask(ContractTask task)
         {
-            var newTask = _factory.Create();
-            return _repository.AddTask(newTask);
+            var newTask = factory.Create();
+            return repository.AddTask(newTask);
         }
     }
     public class ToDoListTests
     {
-        private readonly ITask _incomingTask = new ContractTask();
-        private readonly ServiceTask _expectedTask = new ServiceTask();
-        private readonly ITaskFactory _factory = Substitute.For<ITaskFactory>();
-        private readonly IRepository _repository = Substitute.For<IRepository>();
+        private readonly ContractTask incomingTask = new ContractTask();
+        private readonly ServiceTask expectedTask = new ServiceTask();
+        private readonly ITaskFactory factory = Substitute.For<ITaskFactory>();
+        private readonly IRepository repository = Substitute.For<IRepository>();
 
 
         [Fact]
         public void todolist_asks_factory_for_new_task_and_saves_list()
         {
-            var list = new ToDoList(_factory, _repository);
-            _factory.Create().Returns(_expectedTask);
+            var list = new ToDoList(factory, repository);
+            factory.Create().Returns(expectedTask);
 
-            list.AddTask(_incomingTask);
-            _repository.Received().AddTask(_expectedTask);
+            list.AddTask(incomingTask);
+            repository.Received().AddTask(expectedTask);
 
         }
     }

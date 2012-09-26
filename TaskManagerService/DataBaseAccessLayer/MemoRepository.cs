@@ -78,7 +78,6 @@ namespace TaskManagerHost.DataBaseAccessLayer
             var task = new ServiceTask {Id = 0};
             var newtask = repository.AddTask(task);
             newtask.Id.Should().Be(1);
-            string st;
         }
 
         [Fact]
