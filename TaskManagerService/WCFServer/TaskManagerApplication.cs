@@ -27,7 +27,9 @@ namespace TaskManagerHost.WCFServer
     {
         private readonly IToDoList _tasks;
 
-        public TaskManagerService() { }
+        public TaskManagerService() {
+            Console.WriteLine("added new task");
+        }
 
         public TaskManagerService(IToDoList tasks)
         {
