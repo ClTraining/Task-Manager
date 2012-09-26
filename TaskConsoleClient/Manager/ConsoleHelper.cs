@@ -19,32 +19,11 @@ namespace TaskConsoleClient.UI
             Console.WriteLine("Task ID: {0}\tTask Name: {1}", task.Id, task.Name);
         }
 
-        //public ContractTask Parse(string text)
-        //{
-        //    //var commands = new List<string> { "add ", "list ", "list" };
-
-        //    //var commandManager = new CommandManager();
-
-        //    ContractTask result = null;
-        //    if (text.StartsWith("add "))
-        //    {
-        //        result = new ContractTask { Name = text.Substring(4) };
-        //        //commandManager.AddTask(result);
-        //        Console.WriteLine("Created new Task: {0}", result.Name);
-        //    }
-        //    else
-        //    {
-        //        throw new WrongArgumentException("Command is not supported");
-        //    }
-
-        //    return result;
-        //}
-        public void Parse(string text)
+        public ContractTask Parse(string text)
         {
-            var commands = new List<string> { "add ", "list ", "list" };
+            var commands = new List<string> { "add ", "list", "list " };
 
             var commandManager = new CommandManager();
-
             ContractTask result = null;
             if (text.StartsWith("add "))
             {
@@ -56,6 +35,28 @@ namespace TaskConsoleClient.UI
             {
                 throw new WrongArgumentException("Command is not supported");
             }
+
+            return result;
+        }
+
+        public void ViewTaskById(int ID)
+        {
+
+        }
+
+
+        private void GetTaskById(int ID)
+        {
+
+        }
+
+        private List<ContractTask> ViewAllTasks()
+        {
+
+        }
+
+        private ContractTask EditTask(ContractTask input)
+        {
 
         }
     }
