@@ -10,10 +10,10 @@ namespace TaskConsoleClient.UI
     {
         static void Main()
         {
-            //var task = new ConsoleHelper().Parse(Console.ReadLine())
-            //var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444");
-            //var client = factory.CreateChannel();
-            //client.AddTask(task);
+            var task = new ConsoleHelper().Parse(Console.ReadLine());
+            var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444");
+            var client = factory.CreateChannel();
+            client.AddTask(task);
         }
     }
 }
