@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using EntitiesLibrary;
 using FluentAssertions;
 using TaskConsoleClient.Manager;
 using Xunit;
+using NSubstitute;
 
 
 namespace TaskConsoleClient.UI
@@ -41,22 +41,44 @@ namespace TaskConsoleClient.UI
         //}
         public void Parse(string text)
         {
-            var commands = new List<string> { "add ", "list ", "list" };
-
             var commandManager = new CommandManager();
 
-            ContractTask result = null;
-            if (text.StartsWith("add "))
+            if (IsContainsCommands(text))
             {
-                result = new ContractTask { Name = text.Substring(4) };
-                //commandManager.AddTask(result);
-                Console.WriteLine("Created new Task: {0}", result.Name);
+                var command = GetCommand(text);
+                switch (command)
+                {
+                    case "add ":
+                        commandManager.AddTask(new ContractTask { Name = text.Substring(4) });
+                        break;
+                    case "list":
+                        commandManager.ViewAllTasks();
+                        break;
+                    case "list ":
+                        commandManager.ViewTaskById(int.Parse(text.Substring(5)));
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
             }
             else
-            {
                 throw new WrongArgumentException("Command is not supported");
-            }
 
+
+        }
+
+        private bool IsContainsCommands(string text)
+        {
+            var commands = new List<string> { "add ", "list ", "list" };
+            return commands.Any(text.Contains);
+        }
+
+        private string GetCommand(string text)
+        {
+            var end = text.IndexOf(" ");
+            var result = text.Substring(0, end + 1);
+            Console.Out.WriteLine("end = {0}", result);
+            return result;
         }
     }
 
@@ -68,21 +90,9 @@ namespace TaskConsoleClient.UI
 
     public class ConsoleHelperTester
     {
-        [Fact]
-        public void should_get_task_from_console()
-        {
-            // arrange
-            var sh = new ConsoleHelper();
-
-            // act
-            var taskName = sh.Parse("add hello world");
-
-            // assert
-            taskName.Name.Should().BeEquivalentTo("hello world");
-        }
 
         [Fact]
-        public void when_passed_wrong_argument_should_throw_WrongArgumentException()
+        public void parse_when_passed_wrong_argument_should_throw_WrongArgumentException()
         {
             // arrange
             var consoleHelper = new ConsoleHelper();
@@ -93,7 +103,7 @@ namespace TaskConsoleClient.UI
         }
 
         [Fact]
-        public void should_show_on_console_the_info_in_task()
+        public void view_should_show_on_console_the_info_in_task()
         {
             // arrange
             var expected = new StringBuilder();
@@ -107,8 +117,17 @@ namespace TaskConsoleClient.UI
 
             // assert
             expected.ToString().Should().BeEquivalentTo("Task ID: 1\tTask Name: Buy Milk\r\n");
+        }
 
+        [Fact]
+        public void parse_when_passed_list_command_should_show_task_by_id()
+        {
+            // arrange
+            var consoleHelper = new ConsoleHelper();
+            var cm = NSubstitute.Substitute.For<ICommandManager>();
 
+            // act
+            
         }
     }
 }
