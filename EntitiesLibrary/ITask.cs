@@ -1,4 +1,4 @@
-﻿namespace EntitiesLibrary
+namespace EntitiesLibrary
 {
     public interface ITask
     {

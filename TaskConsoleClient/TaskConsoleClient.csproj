@@ -45,6 +45,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -59,9 +60,10 @@
     <Compile Include="UI\ConsoleHelper.cs" />
     <Compile Include="Manager\ICommandManager.cs" />
     <Compile Include="UI\IConsoleHelper.cs" />
-    <Compile Include="WCFClient\ITaskManagerApplication.cs" />
+    <Compile Include="WCFClient\ITaskManagerClient.cs" />
     <Compile Include="UI\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WCFClient\TaskManagerClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -71,6 +73,10 @@
     <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">
       <Project>{85ab2841-cf5e-4e7b-ac83-b17d01492589}</Project>
       <Name>EntitiesLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TaskManagerService\TaskManagerService.csproj">
+      <Project>{4D72AA03-489E-47EB-A42B-9BF2887A1538}</Project>
+      <Name>TaskManagerService</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
