@@ -34,14 +34,13 @@ namespace TaskManagerHost.WCFServer
             Bind<IRepository>().To<MemoRepository>();
             Bind<ITaskFactory>().To<TaskFactory>();
             Bind<IToDoList>().To<ToDoList>();
-            Bind<ITaskManagerService>().To<TaskManagerService>();
         }
     }
 
     public class TaskManagerService : ITaskManagerService
     {
-        readonly TaskManagerModule module;
-        private IKernel kernel;
+        private readonly TaskManagerModule module;
+        private readonly IKernel kernel;
 
         public TaskManagerService()
         {
@@ -50,7 +49,7 @@ namespace TaskManagerHost.WCFServer
             Console.WriteLine("added new task");
         }
 
-        public ServiceTask AddTask(ContractTask task)
+        public ContractTask AddTask(ContractTask task)
         {
             return kernel.Get<ToDoList>().AddTask(task);
         }
