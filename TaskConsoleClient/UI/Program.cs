@@ -8,7 +8,8 @@ namespace TaskConsoleClient.UI
     {
         static void Main()
         {
-            using(var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444"))
+            var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444");
+            while (true)
             {
                 var task = new ConsoleHelper().Parse(Console.ReadLine());
                 var client = factory.CreateChannel();
