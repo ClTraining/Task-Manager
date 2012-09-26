@@ -1,7 +1,6 @@
 ﻿using EntitiesLibrary;
 
-
-namespace TaskManagerService.TaskManager
+namespace TaskManagerHost.TaskManager
 {
     public interface IToDoList
     {
