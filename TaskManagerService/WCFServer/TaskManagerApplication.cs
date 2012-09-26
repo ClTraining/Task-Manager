@@ -8,16 +8,16 @@ namespace TaskManagerService.WCFServer
 {
     class TaskManagerApplication : ITaskManagerApplication
     {
-        private readonly IToDoList tasks;
+        private readonly IToDoList _tasks;
 
         public TaskManagerApplication(IToDoList tasks)
         {
-            this.tasks = tasks;
+            this._tasks = tasks;
         }
 
         public ITask AddTask(ITask task)
         {
-            return tasks.AddTask(task);
+            return _tasks.AddTask(task);
         }
     }
 
