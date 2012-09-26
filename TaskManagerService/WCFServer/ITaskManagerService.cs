@@ -7,6 +7,6 @@ namespace TaskManagerHost.WCFServer
     public interface ITaskManagerService
     {
         [OperationContract]
-        ITask AddTask(ContractTask task);
+        ServiceTask AddTask(ContractTask task);
     }
 }

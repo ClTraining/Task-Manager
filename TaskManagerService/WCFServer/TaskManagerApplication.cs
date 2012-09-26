@@ -52,6 +52,7 @@ namespace TaskManagerHost.WCFServer
         {
             this._tasks = new ToDoList(new TaskFactory(), new MemoRepository());
             Console.WriteLine("added new task");
+            _tasks = new ToDoList(new TaskFactory(), new MemoRepository());
         }
 
         public TaskManagerService(IToDoList tasks)
@@ -59,7 +60,7 @@ namespace TaskManagerHost.WCFServer
             this._tasks = tasks;
         }
 
-        public ITask AddTask(ContractTask task)
+        public ServiceTask AddTask(ContractTask task)
         {
             return _tasks.AddTask(task);
         }
