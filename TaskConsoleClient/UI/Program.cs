@@ -1,4 +1,5 @@
-﻿using TaskConsoleClient.Manager;
+﻿﻿using TaskConsoleClient.Manager;
+﻿using System;
 
 namespace TaskConsoleClient.UI
 {
@@ -6,7 +7,11 @@ namespace TaskConsoleClient.UI
     {
         static void Main()
         {
-            
+            var helper = new ConsoleHelper();
+            while (true)
+            {
+                helper.Parse(Console.ReadLine());
+            }
         }
     }
 }

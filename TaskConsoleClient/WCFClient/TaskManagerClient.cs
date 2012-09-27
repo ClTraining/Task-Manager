@@ -6,11 +6,4 @@ using System.Threading.Tasks;
 
 namespace TaskConsoleClient.WCFClient
 {
-    public interface ITaskManagerClient
-    {
-    }
-
-    class TaskManagerClient
-    {
-    }
 }
