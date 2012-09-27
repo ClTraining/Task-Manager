@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿using TaskConsoleClient.Manager;
 ﻿using System;
 
@@ -15,3 +16,14 @@ namespace TaskConsoleClient.UI
         }
     }
 }
+=======
+﻿namespace TaskConsoleClient.UI
+{
+    class Program
+    {
+        static void Main()
+        {
+        }
+    }
+}
+>>>>>>> added wcf client
