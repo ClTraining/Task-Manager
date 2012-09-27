@@ -5,6 +5,8 @@ using System.Text;
 using System.Text.RegularExpressions;
 using EntitiesLibrary;
 using FluentAssertions;
+using NSubstitute;
+using TaskConsoleClient.Manager;
 using Xunit;
 
 
@@ -83,6 +85,24 @@ namespace TaskConsoleClient.UI
             expected.ToString().Should().BeEquivalentTo("Task ID: 1\tTask Name: Buy Milk\r\n");
 
 
+        }
+
+        [Fact]
+        public void should_recognise_add_command()
+        {
+            // arrange
+            var coMan = Substitute.For<ICommandManager>();
+            var consoleHelper = new ConsoleHelper();
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+
+            // act
+            coMan.AddTask(null).ReturnsForAnyArgs(new ContractTask { Name = "Test task", Id = 1 });
+            consoleHelper.View(coMan.AddTask(null));
+            //consoleHelper.Parse("add Test task");
+
+            // assert
+            sb.ToString().Should().BeEquivalentTo("Task ID: 1\tTask Name: Test task\r\n");
         }
     }
 }

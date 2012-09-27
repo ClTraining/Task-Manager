@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region Using
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using EntitiesLibrary;
@@ -7,26 +9,29 @@ using NSubstitute;
 using TaskManagerHost.DataBaseAccessLayer;
 using Xunit;
 
+#endregion
+
+
 namespace TaskManagerHost.TaskManager
 {
     public class ToDoList : IToDoList
     {
         private readonly ITaskFactory factory;
         private readonly IRepository repository;
+        private readonly ITaskMapper mapper;
 
-        public ToDoList(ITaskFactory factory, IRepository repository)
+        public ToDoList(ITaskFactory factory, IRepository repository, ITaskMapper mapper)
         {
             this.factory = factory;
             this.repository = repository;
+            this.mapper = mapper;
         }
 
         public ContractTask AddTask(ContractTask task)
         {
-            var newTask = factory.Create();
-            newTask.Name = task.Name;
-            newTask.Id = task.Id;
+            var newTask = mapper.ConvertToService(task);
             newTask = repository.AddTask(newTask);
-            var result = new ContractTask {Name = newTask.Name, Id = newTask.Id};
+            var result = mapper.ConvertToContract(newTask);
             return result;
         }
 
@@ -45,11 +50,9 @@ namespace TaskManagerHost.TaskManager
 
         public ContractTask EditTask(ContractTask task)
         {
-            var newTask = factory.Create();
-            newTask.Name = task.Name;
-            newTask.Id = task.Id;
+            var newTask = mapper.ConvertToService(task);
             newTask = repository.EditTask(newTask);
-            var result = new ContractTask { Name = newTask.Name, Id = newTask.Id };
+            var result = mapper.ConvertToContract(newTask);
             return result;
         }
 
@@ -78,7 +81,8 @@ namespace TaskManagerHost.TaskManager
         {
             var memorepository = new MemoRepository();
             var fact = new TaskFactory();
-            var todolist = new ToDoList(fact, memorepository);
+            var mapper = new TaskMapper();
+            var todolist = new ToDoList(fact, memorepository, mapper);
             var task = new ContractTask { Id = 0 };
             var newtask = todolist.AddTask(task);
             newtask.Id.Should().Be(1);
@@ -89,7 +93,8 @@ namespace TaskManagerHost.TaskManager
         {
             var memorepository = new MemoRepository();
             var fact = new TaskFactory();
-            var todolist = new ToDoList(fact, memorepository);
+            var mapper = new TaskMapper();
+            var todolist = new ToDoList(fact, memorepository, mapper);
             Action action = () => todolist.GetTaskById(1);
             action.ShouldThrow<Exception>().WithMessage("Task with id 1 was not found");
         }
@@ -99,7 +104,8 @@ namespace TaskManagerHost.TaskManager
         {
             var memorepository = new MemoRepository();
             var fact = new TaskFactory();
-            var todolist = new ToDoList(fact, memorepository);
+            var mapper = new TaskMapper();
+            var todolist = new ToDoList(fact, memorepository, mapper);
             todolist.AddTask(new ContractTask{ Id = 10, Name = "test task" });
             todolist.AddTask(new ContractTask { Id = 0, Name = "another task" });
             todolist.AddTask(new ContractTask { Id = 0, Name = "my task" });
@@ -116,7 +122,8 @@ namespace TaskManagerHost.TaskManager
         {
             var memorepository = new MemoRepository();
             var fact = new TaskFactory();
-            var todolist = new ToDoList(fact, memorepository);
+            var mapper = new TaskMapper();
+            var todolist = new ToDoList(fact, memorepository, mapper);
             Action action = () => todolist.EditTask(new ContractTask { Id = 10, Name = "test task" });
             action.ShouldThrow<Exception>().WithMessage("Task with id 10 was not found");
         }
@@ -126,7 +133,8 @@ namespace TaskManagerHost.TaskManager
         {
             var memorepository = new MemoRepository();
             var fact = new TaskFactory();
-            var todolist = new ToDoList(fact, memorepository);
+            var mapper = new TaskMapper();
+            var todolist = new ToDoList(fact, memorepository, mapper);
             todolist.AddTask(new ContractTask { Id = 10, Name = "test task" });
             todolist.AddTask(new ContractTask { Id = 0, Name = "another task" });
             todolist.AddTask(new ContractTask { Id = 0, Name = "my task" });
