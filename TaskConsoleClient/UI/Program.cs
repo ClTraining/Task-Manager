@@ -1,5 +1,4 @@
 ﻿using TaskConsoleClient.Manager;
-using TaskManagerHost.WCFServer;
 
 namespace TaskConsoleClient.UI
 {
@@ -7,11 +6,7 @@ namespace TaskConsoleClient.UI
     {
         static void Main()
         {
-            var client = new CommandManager();
-            while (true)
-            {
-                client.Run();
-            }
+            
         }
     }
 }

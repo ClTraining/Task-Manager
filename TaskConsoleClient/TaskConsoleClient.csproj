@@ -74,7 +74,7 @@
       <Name>EntitiesLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\TaskManagerService\TaskManagerService.csproj">
-      <Project>{4D72AA03-489E-47EB-A42B-9BF2887A1538}</Project>
+      <Project>{4d72aa03-489e-47eb-a42b-9bf2887a1538}</Project>
       <Name>TaskManagerService</Name>
     </ProjectReference>
   </ItemGroup>
