@@ -7,19 +7,13 @@ namespace TaskConsoleClient.Manager
 {
     class CommandManager : ICommandManager
     {
-        private ConsoleHelper ch = new ConsoleHelper();
 
         public ContractTask AddTask(ContractTask task)
         {
             throw new NotImplementedException();
         }
 
-        public void ViewTaskById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ViewAllTasks()
+        public ContractTask GetTaskById(int id)
         {
             throw new NotImplementedException();
         }
@@ -28,9 +22,10 @@ namespace TaskConsoleClient.Manager
         {
             throw new NotImplementedException();
         }
-        private ContractTask GetTaskById(int id)
+
+        public List<ContractTask> GetAllTasks()
         {
-            return new ContractTask();
+            throw new NotImplementedException();
         }
     }
 }

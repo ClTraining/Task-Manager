@@ -6,8 +6,8 @@ namespace TaskConsoleClient.Manager
     public interface ICommandManager
     {
         ContractTask AddTask(ContractTask task);
-        void ViewTaskById(int id);
-        void ViewAllTasks();
+        ContractTask GetTaskById(int id);
+        List<ContractTask> GetAllTasks();
         ContractTask Edit(ContractTask task);
     }
 }
