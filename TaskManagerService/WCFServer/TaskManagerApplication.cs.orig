@@ -1,10 +1,13 @@
 using System;
 using System.ServiceModel;
-using Ninject;
-using Ninject.Modules;
-using TaskManagerHost.DataBaseAccessLayer;
-using TaskManagerHost.TaskManager;
-
+<<<<<<< HEAD
+=======
+using EntitiesLibrary;
+using FluentAssertions;
+using NSubstitute;
+using TaskManagerApp.TaskManager;
+using Xunit;
+>>>>>>> updated
 
 namespace TaskManagerHost.WCFServer
 {
@@ -28,12 +31,18 @@ namespace TaskManagerHost.WCFServer
     public class TaskManagerModule : NinjectModule
     {
         public override void Load()
+        private readonly IToDoList tasks;
+        private ITask task;
+
+        public TaskManagerService() { }
+
+        public TaskManagerService(IToDoList tasks)
         {
             Bind<IRepository>().To<MemoRepository>();
             Bind<ITaskFactory>().To<TaskFactory>();
             Bind<IToDoList>().To<ToDoList>();
         }
-
+    }
     public class TaskManagerService : ITaskManagerService
     {
         private readonly TaskManagerModule module;
@@ -58,13 +67,8 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerServiceTests
     {
-<<<<<<< HEAD
         private readonly ContractTask incomingTask = new ContractTask();
         private readonly ContractTask outgoingTask = new ContractTask();
-=======
-        private readonly ITask incomingTask = new ContractTask();
-        private readonly ITask outgoingTask = new ContractTask();
->>>>>>> updated
         private readonly IToDoList list = Substitute.For<IToDoList>();
         private readonly ITaskManagerService manager;
 
@@ -79,7 +83,7 @@ namespace TaskManagerHost.WCFServer
             //arrange
             list.AddTask(outgoingTask).Returns(incomingTask);
 
-            var task = manager.AddTask(outgoingTask as ContractTask);
+            var task = manager.AddTask(outgoingTask);
 
             task.Name.Should().Be(incomingTask.Name);
         }

@@ -1,4 +1,4 @@
-
+<<<<<<< HEAD
 ﻿#region Using
 
 using System.Collections.Generic;
@@ -16,4 +16,14 @@ namespace TaskManagerHost.TaskManager
         List<ContractTask> GetAllTasks();
         ContractTask EditTask(ContractTask task);
     }
+=======
+﻿using EntitiesLibrary;
+
+namespace TaskManagerApp.TaskManager
+{
+    public interface IToDoList
+    {
+        ITask AddTask(ITask task);
+    }
+>>>>>>> updated
 }

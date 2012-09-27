@@ -8,16 +8,18 @@ using FluentAssertions;
 using NSubstitute;
 <<<<<<< HEAD
 using TaskManagerHost.DataBaseAccessLayer;
-=======
-using TaskManagerApp.DataBaseAccessLayer;
-using TaskManagerHost.TaskManager;
->>>>>>> updated
 using Xunit;
 
 #endregion
 
 
 namespace TaskManagerHost.TaskManager
+=======
+using TaskManagerApp.DataBaseAccessLayer;
+using Xunit;
+
+namespace TaskManagerApp.TaskManager
+>>>>>>> updated
 {
     public class ToDoList : IToDoList
     {

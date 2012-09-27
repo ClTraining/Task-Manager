@@ -1,9 +1,16 @@
 ﻿using EntitiesLibrary;
 using FluentAssertions;
-using TaskManagerApp.DataBaseAccessLayer;
+<<<<<<< HEAD
 using Xunit;
 
 namespace TaskManagerHost.TaskManager
+=======
+using NSubstitute;
+using TaskManagerApp.DataBaseAccessLayer;
+using Xunit;
+
+namespace TaskManagerApp.TaskManager
+>>>>>>> updated
 {
     public class TaskFactory : ITaskFactory
     {

@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using EntitiesLibrary;
 using FluentAssertions;
 using TaskConsoleClient.Manager;
+using TaskManagerHost.WCFServer;
 using Xunit;
 using NSubstitute;
 
@@ -28,6 +30,7 @@ namespace TaskConsoleClient.UI
 
         public void Parse(string text)
         {
+            if (IsContainsCommands(text))
             if (IsContainsCommands(text))
             {
                 var command = GetCommand(text);
@@ -85,6 +88,17 @@ namespace TaskConsoleClient.UI
     public class ConsoleHelperTester
     {
         private readonly CommandManager cm = new CommandManager();
+        public void should_get_task_from_console()
+        {
+            // arrange
+            var sh = new ConsoleHelper();
+
+            // act
+            var taskName = sh.Parse("add hello world");
+
+            // assert
+            taskName.Name.Should().BeEquivalentTo("hello world");
+        }
 
         [Fact]
         public void parse_when_passed_wrong_argument_should_throw_WrongArgumentException()
@@ -126,6 +140,10 @@ namespace TaskConsoleClient.UI
             // act
             comMan.GetTaskById(5).Returns(new ContractTask { Name = "Test task", Id = 5 });
             consoleHelper.Parse("list 5");
+
+            // assert
+            sb.ToString().Should().BeEquivalentTo("Task ID: 5\tTask Name: Test task\r\n");
+        }
 
             // assert
             sb.ToString().Should().BeEquivalentTo("Task ID: 5\tTask Name: Test task\r\n");

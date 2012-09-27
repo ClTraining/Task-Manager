@@ -1,10 +1,13 @@
-
 ﻿using System.Runtime.Serialization;
 
 
 namespace EntitiesLibrary
 {
+<<<<<<< HEAD
     public class ContractTask
+=======
+    public class ContractTask : ITask
+>>>>>>> updated
     {
         public int Id { get; set; }
 
