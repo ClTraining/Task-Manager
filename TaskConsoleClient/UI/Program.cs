@@ -1,7 +1,7 @@
 ﻿using System;
-using System.IO;
+using Ninject;
+using Ninject.Modules;
 using TaskConsoleClient.Manager;
-using TaskManagerHost.WCFServer;
 
 namespace TaskConsoleClient.UI
 {
@@ -10,12 +10,22 @@ namespace TaskConsoleClient.UI
 
         static void Main()
         {
-            var helper = new ConsoleHelper(new CommandManager());
+            var module = new TaskManagerModule();
+            var kernel = new StandardKernel(module);
+            var consoleHelper = kernel.Get<IConsoleHelper>();
             string s;
             while ((s = Console.ReadLine()) != null)
             {
-                helper.Parse(s);
+                consoleHelper.Parse(s);
             }
+        }
+    }
+    public class TaskManagerModule : NinjectModule
+    {
+        public override void Load()
+        {
+            Bind<IConsoleHelper>().To<ConsoleHelper>();
+            Bind<ICommandManager>().To<CommandManager>();
         }
     }
 }
