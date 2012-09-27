@@ -24,8 +24,17 @@ namespace TaskConsoleClient.Manager
             using (var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444"))
             {
                 client = factory.CreateChannel();
-                AddTask(new ConsoleHelper().Parse(Console.ReadLine()));
+                var res = AddTask(new ConsoleHelper().Parse(Console.ReadLine()));
+                Console.WriteLine(res);
             }
+        }
+    }
+
+    class TaskManagerClient : ITaskManagerService
+    {
+        public ContractTask AddTask(ContractTask task)
+        {
+            return null;
         }
     }
 }
