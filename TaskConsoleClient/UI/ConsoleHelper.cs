@@ -34,7 +34,8 @@ namespace TaskConsoleClient.UI
                 switch (command)
                 {
                     case "add ":
-                        commandManager.AddTask(new ContractTask { Name = text.Substring(4) });
+                        var addedtask = commandManager.AddTask(new ContractTask { Name = text.Substring(4) });
+                        Console.WriteLine("Task: {0} created",addedtask.Name);
                         break;
                     case "list":
                         {
@@ -140,12 +141,11 @@ namespace TaskConsoleClient.UI
             Console.SetOut(new StringWriter(sb));
 
             // act
-            coMan.AddTask(null).ReturnsForAnyArgs(new ContractTask { Name = "Test task", Id = 1 });
-            consoleHelper.View(coMan.AddTask(null));
+            coMan.AddTask(null).ReturnsForAnyArgs(new ContractTask{Name = "Say Hello"});            
             consoleHelper.Parse("add Test task");
 
             // assert
-            sb.ToString().Should().BeEquivalentTo("Task ID: 1\tTask Name: Test task\r\n");
+            sb.ToString().Should().BeEquivalentTo("Task: Say Hello created\r\n");
         }
 
         [Fact]
