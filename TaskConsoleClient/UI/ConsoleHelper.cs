@@ -86,19 +86,20 @@ namespace TaskConsoleClient.UI
     }
 
     public class ConsoleHelperTester
-    {
-        private readonly CommandManager cm = new CommandManager();
-        public void should_get_task_from_console()
-        {
-            // arrange
-            var sh = new ConsoleHelper();
+    { 
+        private readonly IConnection conn = Substitute.For<IConnection>();
+        private readonly ICommandManager cm = Substitute.For<ICommandManager>();
+        //public void should_get_task_from_console()
+        //{
+        //    // arrange
+        //    var sh = new ConsoleHelper(cm);
 
-            // act
-            var taskName = sh.Parse("add hello world");
+        //    // act
+        //    var taskName = sh.Parse("add hello world");
 
-            // assert
-            taskName.Name.Should().BeEquivalentTo("hello world");
-        }
+        //    // assert
+        //    taskName.Name.Should().BeEquivalentTo("hello world");
+        //}
 
         [Fact]
         public void parse_when_passed_wrong_argument_should_throw_WrongArgumentException()
