@@ -1,10 +1,13 @@
 using System;
 using System.ServiceModel;
 using EntitiesLibrary;
+using FluentAssertions;
+using NSubstitute;
 using Ninject;
 using Ninject.Modules;
 using TaskManagerHost.DataBaseAccessLayer;
 using TaskManagerHost.TaskManager;
+using Xunit;
 
 namespace TaskManagerHost.WCFServer
 {
@@ -52,10 +55,8 @@ namespace TaskManagerHost.WCFServer
         public ContractTask AddTask(ContractTask task)
         {
             var sTask = taskList.AddTask(task);
-<<<<<<< HEAD
+
             return new ContractTask() { Id = sTask.Id, Name = sTask.Name };
-=======
-            return new ContractTask() {Id = sTask.Id, Name = sTask.Name};
         }
     }
 
@@ -81,7 +82,6 @@ namespace TaskManagerHost.WCFServer
             var task = manager.AddTask(outgoingTask);
 
             task.Should().Be(incomingTask);
->>>>>>> master
         }
     }
 }
