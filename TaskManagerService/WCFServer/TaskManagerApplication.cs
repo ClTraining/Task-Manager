@@ -80,7 +80,7 @@ namespace TaskManagerHost.WCFServer
 
             var task = manager.AddTask(outgoingTask);
 
-            task.Should().Be(incomingTask);
+            task.Name.Should().Be(incomingTask.Name);
         }
     }
 }
