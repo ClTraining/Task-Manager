@@ -41,17 +41,21 @@ namespace TaskManagerHost.WCFServer
     {
         private readonly TaskManagerModule module;
         private readonly IKernel kernel;
-
+        private readonly IToDoList taskList;
+        
         public TaskManagerService()
         {
             module = new TaskManagerModule();
             kernel = new StandardKernel(module);
+            taskList = kernel.Get<ToDoList>();
+
             Console.WriteLine("added new task");
         }
 
         public ContractTask AddTask(ContractTask task)
         {
-            return kernel.Get<ToDoList>().AddTask(task);
+            var sTask = taskList.AddTask(task);
+            return new ContractTask() {Id = sTask.Id, Name = sTask.Name};
         }
     }
 
