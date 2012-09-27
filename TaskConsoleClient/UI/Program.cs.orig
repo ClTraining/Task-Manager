@@ -1,0 +1,21 @@
+﻿﻿using TaskConsoleClient.Manager;
+﻿using System;
+
+namespace TaskConsoleClient.UI
+{
+    static class Program
+    {
+        static void Main()
+        {
+<<<<<<< HEAD
+            var helper = new ConsoleHelper(new CommandManager(new NetTcpConnection()));
+            while (true)
+            {
+                helper.Parse(Console.ReadLine());
+            }
+=======
+            
+>>>>>>> 84a790710d6647d9cb671fafa6e0dd28da269bab
+        }
+    }
+}

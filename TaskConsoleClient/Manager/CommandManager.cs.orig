@@ -1,44 +1,13 @@
 <<<<<<< HEAD
-﻿using System;
-using System.Collections.Generic;
-using EntitiesLibrary;
-using TaskConsoleClient.UI;
-
-namespace TaskConsoleClient.Manager
-{
-    class CommandManager : ICommandManager
-    {
-
-        public ContractTask AddTask(ContractTask task)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ContractTask GetTaskById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ContractTask Edit(ContractTask task)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<ContractTask> GetAllTasks()
-        {
-            throw new NotImplementedException();
-        }
-    }
-}
-=======
 ﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using EntitiesLibrary;
 using NSubstitute;
 using Xunit;
 
 namespace TaskConsoleClient.Manager
 {
-    class CommandManager: ICommandManager
+    class CommandManager : ICommandManager
     {
         private readonly IConnection conn;
 
@@ -46,8 +15,8 @@ namespace TaskConsoleClient.Manager
         {
             this.conn = conn;
         }
-
         public ContractTask AddTask(ContractTask task)
+        public List<ContractTask> GetAllTasks()
         {
             return conn.GetClient().AddTask(task); ;
         }
@@ -78,4 +47,45 @@ namespace TaskConsoleClient.Manager
         }
     }
 }
->>>>>>> pasha
+=======
+﻿using System;
+using System.Collections.Generic;
+using System.ServiceModel;
+using EntitiesLibrary;
+using TaskConsoleClient.UI;
+using TaskManagerHost.WCFServer;
+
+namespace TaskConsoleClient.Manager
+{
+    class CommandManager: ICommandManager
+    {
+        private ITaskManagerService client;
+
+        public CommandManager()
+        {
+        }
+
+        public ContractTask AddTask(ContractTask task)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ContractTask GetTaskById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<ContractTask> GetAllTasks()
+        {
+            throw new NotImplementedException();
+        }
+
+        public ContractTask Edit(ContractTask task)
+        {
+            throw new NotImplementedException();
+        }
+
+    }
+}
+
+>>>>>>> 84a790710d6647d9cb671fafa6e0dd28da269bab

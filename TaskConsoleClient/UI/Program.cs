@@ -1,4 +1,4 @@
-﻿﻿using TaskConsoleClient.Manager;
+﻿using TaskConsoleClient.Manager;
 ﻿using System;
 
 namespace TaskConsoleClient.UI
@@ -7,10 +7,10 @@ namespace TaskConsoleClient.UI
     {
         static void Main()
         {
-            var helper = new ConsoleHelper(new CommandManager(new NetTcpConnection()));
+            var client = new CommandManager();
             while (true)
             {
-                helper.Parse(Console.ReadLine());
+                client.Run();
             }
         }
     }
