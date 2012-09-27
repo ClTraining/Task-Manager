@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using EntitiesLibrary;
 using NSubstitute;
@@ -16,7 +17,9 @@ namespace TaskConsoleClient.Manager
 
         public ContractTask AddTask(ContractTask task)
         {
-            return conn.GetClient().AddTask(task); ;
+            var res = conn.GetClient().AddTask(task); ;
+            Console.WriteLine(res.Id);
+            return res;
         }
 
         public ContractTask GetTaskById(int id)

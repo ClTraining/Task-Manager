@@ -15,6 +15,8 @@ namespace TaskManagerHost.DataBaseAccessLayer
 {
     public class MemoRepository : IRepository
     {
+
+        static int newId = 0;
         private readonly List<ServiceTask> taskList;
 
         public MemoRepository()
@@ -64,7 +66,6 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         private int GetNewId()
         {
-            var newId = 0;
 
             if (taskList.Any())
             {

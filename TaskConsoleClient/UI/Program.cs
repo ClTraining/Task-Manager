@@ -2,12 +2,8 @@
 using Ninject.Modules;
 using TaskConsoleClient.Manager;
 ﻿using System;
-using System.ServiceModel;
-using EntitiesLibrary;
-using TaskConsoleClient.Manager;
-using TaskManagerHost.WCFServer;
 
-﻿namespace TaskConsoleClient.UI
+namespace TaskConsoleClient.UI
 {
     public static class Program
     {
@@ -30,6 +26,7 @@ using TaskManagerHost.WCFServer;
         {
             Bind<IConsoleHelper>().To<ConsoleHelper>();
             Bind<ICommandManager>().To<CommandManager>();
+            Bind<IConnection>().To<NetTcpConnection>();
         }
     }
 }

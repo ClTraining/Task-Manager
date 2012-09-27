@@ -1,77 +1,78 @@
-//using System;
-//using System.Collections.Generic;
-//using EntitiesLibrary;
-//using FluentAssertions;
-//using NSubstitute;
-//using Ninject;
-//using Ninject.Modules;
-//using TaskManagerHost.DataBaseAccessLayer;
-//using TaskManagerHost.TaskManager;
-//using Xunit;
+using System;
+using System.Collections.Generic;
+using EntitiesLibrary;
+using FluentAssertions;
+using NSubstitute;
+using Ninject;
+using Ninject.Modules;
+using TaskManagerHost.DataBaseAccessLayer;
+using TaskManagerHost.TaskManager;
+using Xunit;
 
-//namespace TaskManagerHost.WCFServer
-//{
-//    public class TaskManagerService : ITaskManagerService
-//    {
-//        private readonly TaskManagerModule module;
-//        private readonly IKernel kernel;
-//        private readonly IToDoList taskList;
-        
-//        public TaskManagerService()
-//        {
-//            module = new TaskManagerModule();
-//            kernel = new StandardKernel(module);
-//            taskList = kernel.Get<ToDoList>();
+namespace TaskManagerHost.WCFServer
+{
+    public class TaskManagerService : ITaskManagerService
+    {
+        private readonly TaskManagerModule module;
+        private readonly IKernel kernel;
+        private readonly IToDoList taskList;
 
-//            Console.WriteLine("new request added");
-//        }
+        public TaskManagerService()
+        {
+            module = new TaskManagerModule();
+            kernel = new StandardKernel(module);
+            taskList = kernel.Get<ToDoList>();
 
-//        public ContractTask AddTask(ContractTask task)
-//        {
-//            return taskList.AddTask(task);
-//        }
+            Console.WriteLine("new request added");
+        }
 
-//        public ContractTask GetTaskById(int id)
-//        {
-//            return taskList.GetTaskById(id);
-//        }
+        public ContractTask AddTask(ContractTask task)
+        {
+            return taskList.AddTask(task);
+        }
 
-//        public List<ContractTask> GetAllTasks()
-//        {
-//            return taskList.GetAllTasks();
-//        }
+        public ContractTask GetTaskById(int id)
+        {
+            return taskList.GetTaskById(id);
+        }
 
-//        public ContractTask Edit(ContractTask task)
-//        {
-//            return null;
-//        }
-//    }
+        public List<ContractTask> GetAllTasks()
+        {
+            return taskList.GetAllTasks();
+        }
 
-//    public class TaskManagerModule : NinjectModule
-//    {
-//        public override void Load()
-//        {
-//            Bind<IRepository>().To<MemoRepository>();
-//            Bind<ITaskFactory>().To<TaskFactory>();
-//            Bind<IToDoList>().To<ToDoList>();
-//        }
-//    }
+        public ContractTask Edit(ContractTask task)
+        {
+            return null;
+        }
+    }
 
-//    public class TaskManagerServiceTests
-//    {
-//        private readonly ServiceTask incomingTask = new ServiceTask();
-//        private readonly ContractTask outgoingTask = new ContractTask();
-//        private readonly IToDoList list = Substitute.For<IToDoList>();
-//        private readonly ITaskManagerService manager;
+    public class TaskManagerModule : NinjectModule
+    {
+        public override void Load()
+        {
+            Bind<IRepository>().To<MemoRepository>().InSingletonScope();
+            Bind<ITaskFactory>().To<TaskFactory>();
+            Bind<IToDoList>().To<ToDoList>().InSingletonScope();
+            Bind<ITaskMapper>().To<TaskMapper>();
+        }
+    }
 
-//        public TaskManagerServiceTests()
-//        {
-//            manager = new TaskManagerService();
-//        }
+    public class TaskManagerServiceTests
+    {
+        private readonly ServiceTask incomingTask = new ServiceTask();
+        private readonly ContractTask outgoingTask = new ContractTask();
+        private readonly IToDoList list = Substitute.For<IToDoList>();
+        private readonly ITaskManagerService manager;
 
-//        [Fact]
-//        public void should_send_and_return_task()
-//        {
-//        }
-//    }
-//}
+        public TaskManagerServiceTests()
+        {
+            manager = new TaskManagerService();
+        }
+
+        [Fact]
+        public void should_send_and_return_task()
+        {
+        }
+    }
+}
