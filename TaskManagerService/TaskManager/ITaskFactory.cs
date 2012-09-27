@@ -1,6 +1,11 @@
-﻿using EntitiesLibrary;
+﻿#region Using
 
-namespace TaskManagerService.TaskManager
+using EntitiesLibrary;
+
+#endregion
+
+
+namespace TaskManagerHost.TaskManager
 {
     public interface ITaskFactory
     {

@@ -1,31 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ServiceModel;
 using EntitiesLibrary;
 using TaskConsoleClient.UI;
+using TaskManagerHost.WCFServer;
 
 namespace TaskConsoleClient.Manager
 {
-    class CommandManager : ICommandManager
+    class CommandManager: ICommandManager
     {
+        private ITaskManagerService client;
+
+        public CommandManager()
+        {
+        }
 
         public ContractTask AddTask(ContractTask task)
         {
-            throw new NotImplementedException();
+            return client.AddTask(task);
         }
 
-        public ContractTask GetTaskById(int id)
+        public void Run()
         {
-            throw new NotImplementedException();
-        }
-
-        public ContractTask Edit(ContractTask task)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<ContractTask> GetAllTasks()
-        {
-            throw new NotImplementedException();
+            using (var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444"))
+            {
+                client = factory.CreateChannel();
+                AddTask(new ConsoleHelper().Parse(Console.ReadLine()));
+            }
         }
     }
 }
+

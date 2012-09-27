@@ -168,5 +168,23 @@ namespace TaskConsoleClient.UI
 
             sb.ToString().Should().BeEquivalentTo("Task ID: 1\tTask Name: Sasha\r\nTask ID: 2\tTask Name: Pasha\r\nTask ID: 3\tTask Name: Lena\r\n");
         }
+
+        [Fact]
+        public void should_recognise_add_command()
+        {
+            // arrange
+            var coMan = Substitute.For<ICommandManager>();
+            var consoleHelper = new ConsoleHelper();
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+
+            // act
+            coMan.AddTask(null).ReturnsForAnyArgs(new ContractTask { Name = "Test task", Id = 1 });
+            consoleHelper.View(coMan.AddTask(null));
+            //consoleHelper.Parse("add Test task");
+
+            // assert
+            sb.ToString().Should().BeEquivalentTo("Task ID: 1\tTask Name: Test task\r\n");
+        }
     }
 }

@@ -1,10 +1,18 @@
-﻿using EntitiesLibrary;
+﻿#region Using
+
+using System.Collections.Generic;
+using EntitiesLibrary;
+
+#endregion
 
 
-namespace TaskManagerService.TaskManager
+namespace TaskManagerHost.TaskManager
 {
     public interface IToDoList
     {
-        ITask AddTask(ITask task);
+        ContractTask AddTask(ContractTask task);
+        ContractTask GetTaskById(int id);
+        List<ContractTask> GetAllTasks();
+        ContractTask EditTask(ContractTask task);
     }
 }
