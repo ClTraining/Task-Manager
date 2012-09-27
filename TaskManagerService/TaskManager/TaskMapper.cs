@@ -11,13 +11,13 @@ namespace TaskManagerHost.TaskManager
     {
         public ServiceTask ConvertToService(ContractTask task)
         {
-            var newTask = new ServiceTask {Id = task.Id, Name = task.Name, Completed = task.Completed};
+            var newTask = new ServiceTask {Id = task.Id, Name = task.Name, IsCompleted = task.IsCompleted};
             return newTask;
         }
 
         public ContractTask ConvertToContract(ServiceTask task)
         {
-            var newTask = new ContractTask { Id = task.Id, Name = task.Name, Completed = task.Completed };
+            var newTask = new ContractTask { Id = task.Id, Name = task.Name, IsCompleted = task.IsCompleted };
             return newTask;
         }
     }
