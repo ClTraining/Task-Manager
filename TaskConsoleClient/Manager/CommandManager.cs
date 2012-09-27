@@ -8,15 +8,19 @@ namespace TaskConsoleClient.Manager
 {
     class CommandManager: ICommandManager
     {
-        private readonly TaskManagerClient client;
-        public CommandManager()
+        public void Run()
         {
-            client = new TaskManagerClient();
+            using (var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444"))
+            {
+                var client = factory.CreateChannel();
+                var res = client.AddTask(new ConsoleHelper().Parse(Console.ReadLine()));
+                Console.WriteLine(res.Id);
+            }
         }
 
         public ContractTask AddTask(ContractTask task)
         {
-            return client.AddTask(task);
+            return null;// client.AddTask(task);
         }
     }
 
@@ -26,13 +30,7 @@ namespace TaskConsoleClient.Manager
 
         public ContractTask AddTask(ContractTask task)
         {
-            using (var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444"))
-            {
-                client = factory.CreateChannel();
-                var res = client.AddTask(task);
-                Console.WriteLine(res);
-                return res;
-            }
+            return null;
         }
     }
 }
