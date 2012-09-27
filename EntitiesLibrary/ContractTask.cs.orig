@@ -1,17 +1,16 @@
 ﻿using System.Runtime.Serialization;
-<<<<<<< HEAD
 
-=======
->>>>>>> updated
 
 namespace EntitiesLibrary
 {
+<<<<<<< HEAD
     public class ContractTask
+=======
+    public class ContractTask : ITask
+>>>>>>> updated
     {
-        [DataMember]
         public int Id { get; set; }
 
-        [DataMember]
         public string Name { get; set; }
 
         public bool Completed { get; set; }

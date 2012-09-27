@@ -6,7 +6,12 @@ using System.Linq;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
+<<<<<<< HEAD
 using TaskManagerHost.DataBaseAccessLayer;
+=======
+using TaskManagerApp.DataBaseAccessLayer;
+using TaskManagerHost.TaskManager;
+>>>>>>> updated
 using Xunit;
 
 #endregion

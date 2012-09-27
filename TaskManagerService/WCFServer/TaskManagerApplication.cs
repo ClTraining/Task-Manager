@@ -1,6 +1,14 @@
 using System;
 using System.ServiceModel;
+<<<<<<< HEAD
 using TaskManagerApp.TaskManager;
+=======
+using EntitiesLibrary;
+using FluentAssertions;
+using NSubstitute;
+using TaskManagerHost.TaskManager;
+using Xunit;
+>>>>>>> updated
 
 namespace TaskManagerHost.WCFServer
 {
@@ -25,7 +33,6 @@ namespace TaskManagerHost.WCFServer
     {
         public override void Load()
         private readonly IToDoList tasks;
-        private ITask task;
 
         public TaskManagerService() { }
 
@@ -35,6 +42,7 @@ namespace TaskManagerHost.WCFServer
             Bind<ITaskFactory>().To<TaskFactory>();
             Bind<IToDoList>().To<ToDoList>();
         }
+<<<<<<< HEAD
     }
     public class TaskManagerService : ITaskManagerService
     {
@@ -43,6 +51,10 @@ namespace TaskManagerHost.WCFServer
         private readonly IToDoList taskList;
         
         public TaskManagerService()
+=======
+
+        public ITask AddTask(ContractTask task)
+>>>>>>> updated
         {
             module = new TaskManagerModule();
             kernel = new StandardKernel(module);
@@ -60,8 +72,13 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerServiceTests
     {
+<<<<<<< HEAD
         private readonly ContractTask incomingTask = new ContractTask();
         private readonly ContractTask outgoingTask = new ContractTask();
+=======
+        private readonly ITask incomingTask = new ContractTask();
+        private readonly ITask outgoingTask = new ContractTask();
+>>>>>>> updated
         private readonly IToDoList list = Substitute.For<IToDoList>();
         private readonly ITaskManagerService manager;
 
@@ -76,7 +93,7 @@ namespace TaskManagerHost.WCFServer
             //arrange
             list.AddTask(outgoingTask).Returns(incomingTask);
 
-            var task = manager.AddTask(outgoingTask);
+            var task = manager.AddTask(outgoingTask as ContractTask);
 
             task.Name.Should().Be(incomingTask.Name);
         }
