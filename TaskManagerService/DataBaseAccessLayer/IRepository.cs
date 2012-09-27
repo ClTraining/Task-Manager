@@ -1,4 +1,5 @@
-﻿using EntitiesLibrary;
+﻿using System.Collections.Generic;
+using EntitiesLibrary;
 
 namespace TaskManagerHost.DataBaseAccessLayer
 {
@@ -6,6 +7,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
     {
         ServiceTask AddTask(ServiceTask task);
         ServiceTask GetTaskById(int id);
+        List<ServiceTask> GetAllTasks();
         ServiceTask EditTask(ServiceTask task);
     }
 }

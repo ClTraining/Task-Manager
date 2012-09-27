@@ -62,7 +62,7 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerServiceTests
     {
-        private readonly ServiceTask incomingTask = new ServiceTask();
+        private readonly ContractTask incomingTask = new ContractTask();
         private readonly ContractTask outgoingTask = new ContractTask();
         private readonly IToDoList list = Substitute.For<IToDoList>();
         private readonly ITaskManagerService manager;
