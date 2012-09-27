@@ -31,7 +31,6 @@ namespace TaskConsoleClient.UI
         public void Parse(string text)
         {
             if (IsContainsCommands(text))
-            if (IsContainsCommands(text))
             {
                 var command = GetCommand(text);
                 switch (command)
