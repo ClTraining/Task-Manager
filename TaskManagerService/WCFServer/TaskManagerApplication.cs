@@ -9,7 +9,8 @@ namespace TaskManagerHost.WCFServer
 
         static void Main()
         {
-            using (var serviceHost = new ServiceHost(typeof(TaskManagerService), new Uri(Address)))
+            const string address = "net.tcp://localhost:44444";
+            using (var serviceHost = new ServiceHost(typeof(TaskManagerService), new Uri(address)))
             {
                 serviceHost.Open();
                 Console.WriteLine("Host started");
@@ -22,13 +23,18 @@ namespace TaskManagerHost.WCFServer
     public class TaskManagerModule : NinjectModule
     {
         public override void Load()
+        private readonly IToDoList tasks;
+        private ITask task;
+
+        public TaskManagerService() { }
+
+        public TaskManagerService(IToDoList tasks)
         {
             Bind<IRepository>().To<MemoRepository>();
             Bind<ITaskFactory>().To<TaskFactory>();
             Bind<IToDoList>().To<ToDoList>();
         }
     }
-
     public class TaskManagerService : ITaskManagerService
     {
         private readonly TaskManagerModule module;
@@ -48,7 +54,6 @@ namespace TaskManagerHost.WCFServer
         {
             var sTask = taskList.AddTask(task);
             return new ContractTask() {Id = sTask.Id, Name = sTask.Name};
-        }
     }
 
 

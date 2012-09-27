@@ -1,4 +1,4 @@
-﻿﻿using TaskConsoleClient.Manager;
+﻿using TaskConsoleClient.Manager;
 ﻿using System;
 
 namespace TaskConsoleClient.UI
@@ -7,15 +7,18 @@ namespace TaskConsoleClient.UI
     {
         static void Main()
         {
-<<<<<<< HEAD
-            var helper = new ConsoleHelper(new CommandManager(new NetTcpConnection()));
+            var client = new CommandManager();
             while (true)
             {
-                helper.Parse(Console.ReadLine());
-            }
+<<<<<<< HEAD
+                client.Run();
 =======
-            
->>>>>>> 84a790710d6647d9cb671fafa6e0dd28da269bab
+                var task = new ContractTask {Id = 0, Name = "afdsfds"};
+                var client = factory.CreateChannel();
+                var taskResult = client.AddTask(task);
+                Console.WriteLine(taskResult.Id);
+>>>>>>> added client wcf
+            }
         }
     }
 }
