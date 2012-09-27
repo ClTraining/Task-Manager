@@ -1,35 +1,76 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using EntitiesLibrary;
 using FluentAssertions;
+using TaskConsoleClient.Manager;
 using Xunit;
+using NSubstitute;
 
 
 namespace TaskConsoleClient.UI
 {
     class ConsoleHelper : IConsoleHelper
     {
+        private readonly ICommandManager commandManager;
+
+        public ConsoleHelper(ICommandManager commandManager)
+        {
+            this.commandManager = commandManager;
+        }
+
         public void View(ContractTask task)
         {
             Console.WriteLine("Task ID: {0}\tTask Name: {1}", task.Id, task.Name);
         }
 
-        public ContractTask Parse(string text)
+        public void Parse(string text)
         {
-            ContractTask result = null;
-            if (text.StartsWith("add "))
+            if (IsContainsCommands(text))
             {
-                result = new ContractTask { Name = text.Substring(4) };
-                Console.WriteLine("Created new Task: {0}", result.Name);
+                var command = GetCommand(text);
+                switch (command)
+                {
+                    case "add ":
+                        commandManager.AddTask(new ContractTask { Name = text.Substring(4) });
+                        break;
+                    case "list":
+                        {
+                            var tasks = commandManager.GetAllTasks();
+                            foreach (var contractTask in tasks)
+                                View(contractTask);
+                        }
+                        break;
+                    case "list ":
+                        {
+                            var task = commandManager.GetTaskById(int.Parse(text.Substring(5)));
+                            View(task);
+                        }
+                        break;
+                    default:
+                        throw new NotImplementedException();
+                }
             }
             else
-            {
                 throw new WrongArgumentException("Command is not supported");
-            }
 
+        }
+
+        private bool IsContainsCommands(string text)
+        {
+            var commands = new List<string> { "add ", "list ", "list" };
+            return commands.Any(text.Contains);
+        }
+
+        private string GetCommand(string text)
+        {
+            if (text == "list")
+                return text;
+
+            var end = text.IndexOf(' ');
+            var result = text.Substring(0, end + 1);
             return result;
         }
     }
@@ -42,24 +83,13 @@ namespace TaskConsoleClient.UI
 
     public class ConsoleHelperTester
     {
-        [Fact]
-        public void should_get_task_from_console()
-        {
-            // arrange
-            var sh = new ConsoleHelper();
-
-            // act
-            var taskName = sh.Parse("add hello world");
-
-            // assert
-            taskName.Name.Should().BeEquivalentTo("hello world");
-        }
+        private readonly CommandManager cm = new CommandManager();
 
         [Fact]
-        public void when_passed_wrong_argument_should_throw_WrongArgumentException()
+        public void parse_when_passed_wrong_argument_should_throw_WrongArgumentException()
         {
             // arrange
-            var consoleHelper = new ConsoleHelper();
+            var consoleHelper = new ConsoleHelper(cm);
             // act
             Action action = () => consoleHelper.Parse("abrakadabra");
 
@@ -67,12 +97,12 @@ namespace TaskConsoleClient.UI
         }
 
         [Fact]
-        public void should_show_on_console_the_info_in_task()
+        public void view_should_show_on_console_the_info_in_task()
         {
             // arrange
             var expected = new StringBuilder();
 
-            var consoleHelper = new ConsoleHelper();
+            var consoleHelper = new ConsoleHelper(cm);
             var contractTask = new ContractTask { Name = "Buy Milk", Id = 1 };
 
             // act
@@ -81,8 +111,62 @@ namespace TaskConsoleClient.UI
 
             // assert
             expected.ToString().Should().BeEquivalentTo("Task ID: 1\tTask Name: Buy Milk\r\n");
+        }
 
+        [Fact]
+        public void should_recognise_list_id_command()
+        {
+            // arrange
+            var comMan = Substitute.For<ICommandManager>();
+            var consoleHelper = new ConsoleHelper(comMan);
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
 
+            // act
+            comMan.GetTaskById(5).Returns(new ContractTask { Name = "Test task", Id = 5 });
+            consoleHelper.Parse("list 5");
+
+            // assert
+            sb.ToString().Should().BeEquivalentTo("Task ID: 5\tTask Name: Test task\r\n");
+        }
+
+        [Fact]
+        public void should_recognise_add_command()
+        {
+            // arrange
+            var coMan = Substitute.For<ICommandManager>();
+            var consoleHelper = new ConsoleHelper(coMan);
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+
+            // act
+            coMan.AddTask(null).ReturnsForAnyArgs(new ContractTask { Name = "Test task", Id = 1 });
+            consoleHelper.View(coMan.AddTask(null));
+            consoleHelper.Parse("add Test task");
+
+            // assert
+            sb.ToString().Should().BeEquivalentTo("Task ID: 1\tTask Name: Test task\r\n");
+        }
+
+        [Fact]
+        public void should_recognise_list_command()
+        {
+            // arrange
+            var coMan = Substitute.For<ICommandManager>();
+            var consoleHelper = new ConsoleHelper(coMan);
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+
+            //act
+            coMan.GetAllTasks().Returns(new List<ContractTask>
+                                            {
+                                                new ContractTask{Name = "Sasha",Id=1},
+                                                new ContractTask{Name = "Pasha",Id = 2},
+                                                new ContractTask{Name = "Lena",Id=3}
+                                            });
+            consoleHelper.Parse("list");
+
+            sb.ToString().Should().BeEquivalentTo("Task ID: 1\tTask Name: Sasha\r\nTask ID: 2\tTask Name: Pasha\r\nTask ID: 3\tTask Name: Lena\r\n");
         }
     }
 }

@@ -23,7 +23,7 @@ namespace TaskConsoleClient.Manager
 
         public ContractTask GetTaskById(int id)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public ContractTask Edit(ContractTask task)
@@ -44,7 +44,7 @@ namespace TaskConsoleClient.Manager
             using (var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444"))
             {
                 var client = factory.CreateChannel();
-                var res = client.AddTask(new ConsoleHelper().Parse(Console.ReadLine()));
+                var res = client.AddTask(task);
                 Console.WriteLine(res.Id);
                 return res;
             }
