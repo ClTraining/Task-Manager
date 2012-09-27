@@ -7,10 +7,10 @@ namespace TaskConsoleClient.UI
     {
         static void Main()
         {
-            var cm = new CommandManager();
+            var helper = new ConsoleHelper();
             while (true)
             {
-                cm.Run();
+                helper.Parse(Console.ReadLine());
             }
         }
     }
