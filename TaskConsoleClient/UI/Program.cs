@@ -2,6 +2,7 @@
 ﻿using TaskConsoleClient.Manager;
 ﻿using System;
 
+
 namespace TaskConsoleClient.UI
 {
     static class Program
@@ -19,10 +20,13 @@ namespace TaskConsoleClient.UI
 =======
 ﻿namespace TaskConsoleClient.UI
 {
-    class Program
     {
         static void Main()
         {
+            var task = new ContractTask();
+            var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444");
+            var client = factory.CreateChannel();
+            client.AddTask(task);
         }
     }
 }
