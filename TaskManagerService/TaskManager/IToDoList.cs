@@ -1,10 +1,13 @@
-﻿using EntitiesLibrary;
+﻿using System.Collections.Generic;
+using EntitiesLibrary;
 
-
-namespace TaskManagerService.TaskManager
+namespace TaskManagerHost.TaskManager
 {
     public interface IToDoList
     {
-        ITask AddTask(ITask task);
+        ContractTask AddTask(ContractTask task);
+        ContractTask GetTaskById(int id);
+        List<ContractTask> GetAllTasks();
+        ContractTask EditTask(ContractTask task);
     }
 }

@@ -1,9 +1,17 @@
-﻿namespace TaskConsoleClient.UI
+﻿﻿using TaskConsoleClient.Manager;
+﻿using System;
+
+namespace TaskConsoleClient.UI
 {
-    class Program
+    static class Program
     {
         static void Main()
         {
+            var helper = new ConsoleHelper(new CommandManager(new NetTcpConnection()));
+            while (true)
+            {
+                helper.Parse(Console.ReadLine());
+            }
         }
     }
 }

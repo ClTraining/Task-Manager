@@ -1,11 +1,8 @@
-﻿using System;
-using EntitiesLibrary;
+﻿using EntitiesLibrary;
 using FluentAssertions;
-using NSubstitute;
-using TaskManagerService.DataBaseAccessLayer;
 using Xunit;
 
-namespace TaskManagerService.TaskManager
+namespace TaskManagerHost.TaskManager
 {
     public class TaskFactory : ITaskFactory
     {
