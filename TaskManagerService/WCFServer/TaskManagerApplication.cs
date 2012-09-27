@@ -11,14 +11,14 @@ using Xunit;
 
 namespace TaskManagerHost.WCFServer
 {
-    static class TaskManagerApplication
+    internal static class TaskManagerApplication
     {
-        const string Address = "net.tcp://localhost:44444";
+        private const string Address = "net.tcp://localhost:44444";
 
-        static void Main()
+        private static void Main()
         {
             const string address = "net.tcp://localhost:44444";
-            using (var serviceHost = new ServiceHost(typeof(TaskManagerModule.TaskManagerService), new Uri(address)))
+            using (var serviceHost = new ServiceHost(typeof (TaskManagerModule.TaskManagerService), new Uri(address)))
             {
                 serviceHost.Open();
                 Console.WriteLine("Host started");
@@ -37,51 +37,53 @@ namespace TaskManagerHost.WCFServer
             Bind<IToDoList>().To<ToDoList>();
         }
 
-    public class TaskManagerService : ITaskManagerService
-    {
-        private readonly TaskManagerModule module;
-        private readonly IKernel kernel;
-        private readonly IToDoList taskList;
-        
-        public TaskManagerService()
+        public class TaskManagerService : ITaskManagerService
         {
-            module = new TaskManagerModule();
-            kernel = new StandardKernel(module);
-            taskList = kernel.Get<ToDoList>();
+            private readonly TaskManagerModule module;
+            private readonly IKernel kernel;
+            private readonly IToDoList taskList;
 
-            Console.WriteLine("added new task");
-        }
+            public TaskManagerService()
+            {
+                module = new TaskManagerModule();
+                kernel = new StandardKernel(module);
+                taskList = kernel.Get<ToDoList>();
 
-        public ContractTask AddTask(ContractTask task)
-        {
-            var sTask = taskList.AddTask(task);
-            return new ContractTask() {Id = sTask.Id, Name = sTask.Name};
-    }
+                Console.WriteLine("added new task");
+            }
+
+            public ContractTask AddTask(ContractTask task)
+            {
+                var sTask = taskList.AddTask(task);
+                return new ContractTask() {Id = sTask.Id, Name = sTask.Name};
+            }
 
 
-    public class TaskManagerServiceTests
-    {
+            public class TaskManagerServiceTests
+            {
 
-        private readonly ContractTask incomingTask = new ContractTask();
-        private readonly ContractTask outgoingTask = new ContractTask();
+                private readonly ContractTask incomingTask = new ContractTask();
+                private readonly ContractTask outgoingTask = new ContractTask();
 
-        private readonly IToDoList list = Substitute.For<IToDoList>();
-        private readonly ITaskManagerService manager;
+                private readonly IToDoList list = Substitute.For<IToDoList>();
+                private readonly ITaskManagerService manager;
 
-        public TaskManagerServiceTests()
-        {
-            manager = new TaskManagerService();         
-        }
+                public TaskManagerServiceTests()
+                {
+                    manager = new TaskManagerService();
+                }
 
-        [Fact]
-        public void should_send_and_return_task()
-        {
-            //arrange
-            list.AddTask(outgoingTask).Returns(incomingTask);
+                [Fact]
+                public void should_send_and_return_task()
+                {
+                    //arrange
+                    list.AddTask(outgoingTask).Returns(incomingTask);
 
-            var task = manager.AddTask(outgoingTask as ContractTask);
+                    var task = manager.AddTask(outgoingTask as ContractTask);
 
-            //task.Name.Should().Be(incomingTask.Name);
+                    //task.Name.Should().Be(incomingTask.Name);
+                }
+            }
         }
     }
 }
