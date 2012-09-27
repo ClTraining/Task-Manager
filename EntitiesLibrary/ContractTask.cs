@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace EntitiesLibrary
+﻿namespace EntitiesLibrary
 {
     public class ContractTask
     {

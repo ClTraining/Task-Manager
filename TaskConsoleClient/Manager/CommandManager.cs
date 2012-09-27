@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ServiceModel;
 using EntitiesLibrary;
-using TaskConsoleClient.UI;
 using TaskManagerHost.WCFServer;
 
 namespace TaskConsoleClient.Manager
