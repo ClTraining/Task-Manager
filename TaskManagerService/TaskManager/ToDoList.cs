@@ -38,7 +38,6 @@ namespace TaskManagerHost.TaskManager
 
             list.AddTask(incomingTask);
             repository.Received().AddTask(expectedTask);
-
         }
     }
 }
