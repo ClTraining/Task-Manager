@@ -4,7 +4,6 @@ using System.ServiceModel;
 using TaskManagerApp.TaskManager;
 =======
 using EntitiesLibrary;
-using FluentAssertions;
 using NSubstitute;
 using TaskManagerHost.TaskManager;
 using Xunit;
