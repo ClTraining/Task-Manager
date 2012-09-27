@@ -7,11 +7,7 @@ namespace TaskConsoleClient.UI
     {
         static void Main()
         {
-            var client = new CommandManager();
-            while (true)
-            {
-                client.Run();
-            }
+            
         }
     }
 }
