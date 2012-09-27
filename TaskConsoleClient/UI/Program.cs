@@ -7,7 +7,6 @@ namespace TaskConsoleClient.UI
 {
     static class Program
     {
-
         static void Main()
         {
             var module = new TaskManagerModule();

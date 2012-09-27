@@ -1,7 +1,6 @@
 using System;
 using System.ServiceModel;
 using EntitiesLibrary;
-using FluentAssertions;
 using NSubstitute;
 using Ninject;
 using Ninject.Modules;
