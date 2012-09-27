@@ -76,12 +76,6 @@ namespace TaskManagerHost.WCFServer
         [Fact]
         public void should_send_and_return_task()
         {
-            //arrange
-            list.AddTask(outgoingTask).Returns(incomingTask);
-
-            var task = manager.AddTask(outgoingTask);
-
-            task.Should().Be(incomingTask);
         }
     }
 }
