@@ -71,7 +71,6 @@ namespace TaskConsoleClient.UI
 
             var end = text.IndexOf(" ");
             var result = text.Substring(0, end + 1);
-            //Console.Out.WriteLine("end = {0}", result);
             return result;
         }
     }
@@ -141,8 +140,8 @@ namespace TaskConsoleClient.UI
             Console.SetOut(new StringWriter(sb));
 
             // act
-            coMan.AddTask(new ContractTask()).ReturnsForAnyArgs(new ContractTask { Name = "Test task", Id = 1 });
-            consoleHelper.View(coMan.AddTask(new ContractTask()));
+            coMan.AddTask(null).ReturnsForAnyArgs(new ContractTask { Name = "Test task", Id = 1 });
+            consoleHelper.View(coMan.AddTask(null));
             consoleHelper.Parse("add Test task");
 
             // assert
