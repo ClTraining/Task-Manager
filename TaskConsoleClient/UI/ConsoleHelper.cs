@@ -161,7 +161,7 @@ namespace TaskConsoleClient.UI
             consoleHelper.Parse("add Test task");
 
             // assert
-            sb.ToString().Should().BeEquivalentTo("Task: Say Hello created\r\n");
+            sb.ToString().Should().BeEquivalentTo("Task ID: 0\tTask Name: Say Hello\r\n");
         }
 
         [Fact]
