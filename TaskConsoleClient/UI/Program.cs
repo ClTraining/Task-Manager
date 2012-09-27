@@ -7,7 +7,7 @@ namespace TaskConsoleClient.UI
     {
         static void Main()
         {
-            var helper = new ConsoleHelper(new CommandManager());
+            var helper = new ConsoleHelper(new CommandManager(new NetTcpConnection()));
             while (true)
             {
                 helper.Parse(Console.ReadLine());

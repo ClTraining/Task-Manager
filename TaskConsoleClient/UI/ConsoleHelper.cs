@@ -6,6 +6,7 @@ using System.Text;
 using EntitiesLibrary;
 using FluentAssertions;
 using TaskConsoleClient.Manager;
+using TaskManagerHost.WCFServer;
 using Xunit;
 using NSubstitute;
 
@@ -83,7 +84,7 @@ namespace TaskConsoleClient.UI
 
     public class ConsoleHelperTester
     {
-        private readonly CommandManager cm = new CommandManager();
+        private readonly CommandManager cm = new CommandManager(new NetTcpConnection());
 
         [Fact]
         public void parse_when_passed_wrong_argument_should_throw_WrongArgumentException()

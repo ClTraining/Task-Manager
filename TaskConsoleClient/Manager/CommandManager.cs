@@ -1,53 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
-using TaskConsoleClient.UI;
+using NSubstitute;
 using TaskManagerHost.WCFServer;
+using Xunit;
 
 namespace TaskConsoleClient.Manager
 {
     class CommandManager: ICommandManager
     {
-        private readonly TaskManagerClient client;
+        private readonly IConnection conn;
 
-        public CommandManager()
+        public CommandManager(IConnection conn)
         {
-            client = new TaskManagerClient();
+            this.conn = conn;
         }
 
         public ContractTask AddTask(ContractTask task)
         {
-            return client.AddTask(task);
+            return conn.GetClient().AddTask(task); ;
         }
 
         public ContractTask GetTaskById(int id)
         {
-            return null;
+            return conn.GetClient().GetTaskById(id);
         }
 
         public ContractTask Edit(ContractTask task)
         {
-            throw new NotImplementedException();
+            return conn.GetClient().Edit(task);
         }
 
         public List<ContractTask> GetAllTasks()
         {
-            throw new NotImplementedException();
+            return conn.GetClient().GetAllTasks();
         }
     }
 
-    class TaskManagerClient
+    public interface IConnection
     {
-        public ContractTask AddTask(ContractTask task)
+        ITaskManagerService GetClient();
+    }
+
+    public class NetTcpConnection : IConnection
+    {
+        private ChannelFactory<ITaskManagerService> factory;
+        private ITaskManagerService client;
+
+        public ITaskManagerService GetClient()
         {
-            using (var factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444"))
-            {
-                var client = factory.CreateChannel();
-                var res = client.AddTask(task);
-                Console.WriteLine(res.Id);
-                return res;
-            }
+            factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444");
+
+            client = factory.CreateChannel();
+            return client;
+        }
+    }
+
+    public class CommandManagerTests
+    {
+        private readonly ITaskManagerService service = Substitute.For<ITaskManagerService>();
+        readonly ContractTask task = new ContractTask();
+
+        [Fact]
+        public void should_send_add_task_to_service()
+        {
         }
     }
 }

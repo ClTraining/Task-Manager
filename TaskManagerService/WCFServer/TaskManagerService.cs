@@ -23,26 +23,25 @@ namespace TaskManagerHost.WCFServer
             kernel = new StandardKernel(module);
             taskList = kernel.Get<ToDoList>();
 
-            Console.WriteLine("added new task");
+            Console.WriteLine("new request added");
         }
 
         public ContractTask AddTask(ContractTask task)
         {
-            var sTask = taskList.AddTask(task);
-            return new ContractTask {Id = sTask.Id, Name = sTask.Name};
+            return taskList.AddTask(task);
         }
 
-        public List<ContractTask> ViewAllTasks()
+        public ContractTask GetTaskById(int id)
         {
-            return null;
+            return taskList.GetTaskById(id);
         }
 
-        public ContractTask ViewTaskById(int id)
+        public List<ContractTask> GetAllTasks()
         {
-            return null;
+            return taskList.GetAllTasks();
         }
 
-        public ContractTask IsCompleted(ContractTask task)
+        public ContractTask Edit(ContractTask task)
         {
             return null;
         }

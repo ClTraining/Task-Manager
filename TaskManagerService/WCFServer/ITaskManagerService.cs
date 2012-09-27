@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System.Collections.Generic;
+using System.ServiceModel;
 using EntitiesLibrary;
 
 namespace TaskManagerHost.WCFServer
@@ -8,5 +9,14 @@ namespace TaskManagerHost.WCFServer
     {
         [OperationContract]
         ContractTask AddTask(ContractTask task);
+        
+        [OperationContract]
+        ContractTask GetTaskById(int id);
+        
+        [OperationContract]
+        List<ContractTask> GetAllTasks();
+
+        [OperationContract]
+        ContractTask Edit(ContractTask task);
     }
 }
