@@ -5,6 +5,9 @@ namespace TaskManagerHost.TaskManager
 {
     public interface IToDoList
     {
-        ServiceTask AddTask(ContractTask task);
+        ContractTask AddTask(ContractTask task);
+        ContractTask GetTaskById(int id);
+        List<ContractTask> GetAllTasks();
+        ContractTask EditTask(ContractTask task);
     }
 }

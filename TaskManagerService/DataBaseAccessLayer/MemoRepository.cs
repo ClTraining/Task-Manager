@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using EntitiesLibrary;
 using FluentAssertions;
@@ -14,11 +15,11 @@ namespace TaskManagerHost.DataBaseAccessLayer
 {
     public class MemoRepository : IRepository
     {
-        private readonly List<ServiceTask> _taskList;
+        private readonly List<ServiceTask> taskList;
 
         public MemoRepository()
         {
-            _taskList = new List<ServiceTask>();
+            taskList = new List<ServiceTask>();
         }
 
         public ServiceTask AddTask(ServiceTask task)
@@ -26,14 +27,14 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
             task.Id = GetNewId();
 
-            _taskList.Add(task);
+            taskList.Add(task);
 
             return task;
         }
 
         public ServiceTask GetTaskById(int id)
         {
-            var task = _taskList.FirstOrDefault(t => t.Id == id);
+            var task = taskList.FirstOrDefault(t => t.Id == id);
 
             if (task == null)
             {
@@ -42,9 +43,14 @@ namespace TaskManagerHost.DataBaseAccessLayer
             return task;
         }
 
+        public List<ServiceTask> GetAllTasks()
+        {
+            return taskList.ToList();
+        }
+
         public ServiceTask EditTask(ServiceTask task)
         {
-            var taskToEdit = _taskList.FirstOrDefault(t => t.Id == task.Id);
+            var taskToEdit = taskList.FirstOrDefault(t => t.Id == task.Id);
 
             if (taskToEdit == null)
             {
@@ -60,9 +66,9 @@ namespace TaskManagerHost.DataBaseAccessLayer
         {
             var newId = 0;
 
-            if (_taskList.Any())
+            if (taskList.Any())
             {
-                newId = _taskList.Max(x => x.Id);
+                newId = taskList.Max(x => x.Id);
             }
 
             return ++newId;
@@ -127,6 +133,20 @@ namespace TaskManagerHost.DataBaseAccessLayer
             task1.Name.Should().Be("new test task");
             task2.Name.Should().Be("new another task");
             task3.Name.Should().Be("new my task");
+        }
+
+        [Fact]
+        public void should_get_all_tasks()
+        {
+            var repository = new MemoRepository();
+            var taskList = repository.GetAllTasks();
+            taskList.Should().BeEquivalentTo(new List<ServiceTask>());
+            var task1 = new ServiceTask {Id = 10, Name = "test task"};
+            var task2 = new ServiceTask {Id = 10, Name = "test task1"};
+            task1 = repository.AddTask(task1);
+            task2= repository.AddTask(task2);
+            taskList = repository.GetAllTasks();
+            taskList.Should().BeEquivalentTo(new List<ServiceTask>{task1,task2});
         }
     }
 }
