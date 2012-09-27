@@ -64,7 +64,6 @@
     <Compile Include="UI\IConsoleHelper.cs" />
     <Compile Include="UI\Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WCFClient\TaskManagerClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
