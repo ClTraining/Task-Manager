@@ -1,5 +1,13 @@
 using System;
 using System.ServiceModel;
+<<<<<<< HEAD
+=======
+using EntitiesLibrary;
+using FluentAssertions;
+using NSubstitute;
+using TaskManagerApp.TaskManager;
+using Xunit;
+>>>>>>> updated
 
 namespace TaskManagerHost.WCFServer
 {
@@ -9,12 +17,8 @@ namespace TaskManagerHost.WCFServer
 
         static void Main()
         {
-<<<<<<< HEAD
-            using (var serviceHost = new ServiceHost(typeof(TaskManagerService), new Uri(Address)))
-=======
             const string address = "net.tcp://localhost:44444";
             using (var serviceHost = new ServiceHost(typeof(TaskManagerService), new Uri(address)))
->>>>>>> added client wcf
             {
                 serviceHost.Open();
                 Console.WriteLine("Host started");
@@ -26,23 +30,19 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerModule : NinjectModule
     {
-<<<<<<< HEAD
         public override void Load()
-=======
         private readonly IToDoList tasks;
         private ITask task;
 
         public TaskManagerService() { }
 
         public TaskManagerService(IToDoList tasks)
->>>>>>> added client wcf
         {
             Bind<IRepository>().To<MemoRepository>();
             Bind<ITaskFactory>().To<TaskFactory>();
             Bind<IToDoList>().To<ToDoList>();
         }
     }
-
     public class TaskManagerService : ITaskManagerService
     {
         private readonly TaskManagerModule module;
@@ -57,15 +57,11 @@ namespace TaskManagerHost.WCFServer
 
             Console.WriteLine("added new task");
         }
-<<<<<<< HEAD
 
         public ContractTask AddTask(ContractTask task)
         {
             var sTask = taskList.AddTask(task);
             return new ContractTask() {Id = sTask.Id, Name = sTask.Name};
-        }
-=======
->>>>>>> added client wcf
     }
 
 

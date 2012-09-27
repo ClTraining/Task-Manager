@@ -1,0 +1,34 @@
+﻿using EntitiesLibrary;
+using FluentAssertions;
+<<<<<<< HEAD
+using Xunit;
+
+namespace TaskManagerHost.TaskManager
+=======
+using NSubstitute;
+using TaskManagerApp.DataBaseAccessLayer;
+using Xunit;
+
+namespace TaskManagerApp.TaskManager
+>>>>>>> updated
+{
+    public class TaskFactory : ITaskFactory
+    {
+        public ServiceTask Create()
+        {
+            return new ServiceTask();
+        }
+    }
+
+    public class TaskFactoryTests
+    {
+        [Fact]
+        public void should_create_new_task()
+        {
+            ITaskFactory taskFactory= new TaskFactory();
+            var result = taskFactory.Create();
+            result.Should().BeOfType<ServiceTask>();
+        }
+
+    }
+}

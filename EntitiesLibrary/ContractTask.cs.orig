@@ -1,5 +1,8 @@
 ﻿using System.Runtime.Serialization;
+<<<<<<< HEAD
 
+=======
+>>>>>>> updated
 
 namespace EntitiesLibrary
 {
