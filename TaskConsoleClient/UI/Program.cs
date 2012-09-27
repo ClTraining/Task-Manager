@@ -1,4 +1,6 @@
-﻿using TaskConsoleClient.Manager;
+﻿using Ninject;
+using Ninject.Modules;
+using TaskConsoleClient.Manager;
 ﻿using System;
 using System.ServiceModel;
 using EntitiesLibrary;
@@ -7,8 +9,9 @@ using TaskManagerHost.WCFServer;
 
 ﻿namespace TaskConsoleClient.UI
 {
+    public static class Program
     {
-        static void Main()
+        public static void Main()
         {
             var module = new TaskManagerModule();
             var kernel = new StandardKernel(module);
@@ -20,6 +23,7 @@ using TaskManagerHost.WCFServer;
             }
         }
     }
+
     public class TaskManagerModule : NinjectModule
     {
         public override void Load()

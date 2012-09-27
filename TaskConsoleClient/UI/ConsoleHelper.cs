@@ -145,9 +145,6 @@ namespace TaskConsoleClient.UI
             sb.ToString().Should().BeEquivalentTo("Task ID: 5\tTask Name: Test task\r\n");
         }
 
-            // assert
-            sb.ToString().Should().BeEquivalentTo("Task ID: 5\tTask Name: Test task\r\n");
-        }
 
         [Fact]
         public void should_recognise_add_command()
