@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.ServiceModel;
 using EntitiesLibrary;
 using NSubstitute;
-using TaskManagerHost.WCFServer;
 using Xunit;
 
 namespace TaskConsoleClient.Manager
@@ -37,28 +35,8 @@ namespace TaskConsoleClient.Manager
         }
     }
 
-    public interface IConnection
-    {
-        ITaskManagerService GetClient();
-    }
-
-    public class NetTcpConnection : IConnection
-    {
-        private ChannelFactory<ITaskManagerService> factory;
-        private ITaskManagerService client;
-
-        public ITaskManagerService GetClient()
-        {
-            factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444");
-
-            client = factory.CreateChannel();
-            return client;
-        }
-    }
-
     public class CommandManagerTests
     {
-        private readonly ITaskManagerService service = Substitute.For<ITaskManagerService>();
         readonly ContractTask task = new ContractTask();
 
         [Fact]
