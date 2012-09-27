@@ -38,7 +38,7 @@ namespace TaskConsoleClient.UI
                 {
                     case "add ":
                         var addedtask = commandManager.AddTask(new ContractTask { Name = text.Substring(4) });
-                        Console.WriteLine("Task: {0} created",addedtask.Name);
+                        View(addedtask);
                         break;
                     case "list":
                         {
