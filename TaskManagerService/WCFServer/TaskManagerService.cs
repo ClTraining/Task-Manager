@@ -13,7 +13,7 @@ namespace TaskManagerHost.WCFServer
 {
     public class TaskManagerService : ITaskManagerService
     {
-        private readonly IToDoList taskList;
+        public IToDoList taskList;
 
         public TaskManagerService()
         {
@@ -45,10 +45,9 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerModule : NinjectModule
     {
-        private readonly string xmlStorage = Environment.CurrentDirectory = "\\taskStorage.xml";
         public override void Load()
         {
-            Bind<IRepository>().To<XmlRepository>().InSingletonScope().WithConstructorArgument("fileName", xmlStorage);
+            Bind<IRepository>().To<MemoRepository>();
             Bind<ITaskFactory>().To<TaskFactory>();
             Bind<IToDoList>().To<ToDoList>().InSingletonScope();
             Bind<ITaskMapper>().To<TaskMapper>();
@@ -57,9 +56,33 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerServiceTests
     {
+        TaskManagerService service = new TaskManagerService{taskList = Substitute.For<IToDoList>()};
+        ContractTask outTask = new ContractTask();
+        ContractTask inTask = new ContractTask{Id = 1};
+        List<ContractTask> list = new List<ContractTask>();
+        
         [Fact]
-        public void should_send_and_return_task()
+        public void should_create_task_and_return_taskid()
         {
+            service.taskList.AddTask(outTask).Returns(inTask);
+            var res = service.AddTask(outTask);
+            res.Should().Be(inTask);
+        }
+        [Fact]
+        public void should_get_task_by_id_and_return_task()
+        {
+            service.taskList.GetTaskById(1).Returns(inTask);
+            var res = service.GetTaskById(1);
+            res.Should().Be(inTask);
+        }
+        [Fact]
+        public void should_get_all_taasks()
+        {
+            list.Add(outTask);
+            list.Add(inTask);
+            service.taskList.GetAllTasks().Returns(list);
+            var res = service.GetAllTasks();
+            res.Should().BeEquivalentTo(list);
         }
     }
 }
