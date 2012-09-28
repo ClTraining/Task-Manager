@@ -33,11 +33,14 @@ namespace TaskConsoleClient.UI
             switch (command)
             {
                 case "add ":
-                    Console.WriteLine("Task added. Task ID: " + commandManager.AddTask(text.Substring(4)));
+                    var resultId = commandManager.AddTask(text.Substring(4));
+                    Console.WriteLine("Task added. Task ID: " + resultId);
                     break;
 
                 case "list":
-                    commandManager.GetAllTasks().ForEach(Console.WriteLine);
+                    commandManager
+                        .GetAllTasks()
+                        .ForEach(x => Console.WriteLine("ID: {0}\tTask: {1}", x.Id, x.Name));
                     break;
 
                 case "list ":
@@ -67,7 +70,7 @@ namespace TaskConsoleClient.UI
             return commands.Any(text.Contains);
         }
 
-        public string GetCommand(string text)
+        private string GetCommand(string text)
         {
             if (text == "list")
                 return text;
@@ -80,8 +83,6 @@ namespace TaskConsoleClient.UI
 
     public class InvalidCommandException : Exception
     {
-        public InvalidCommandException() { }
-
         public InvalidCommandException(string message)
             : base(message) { }
     }
