@@ -55,8 +55,17 @@ namespace TaskConsoleClient.UI
                     break;
                 case "list ":
                     {
-                        var task = commandManager.GetTaskById(int.Parse(text.Substring(5)));
-                        View(task);
+                        try
+                        {
+                            var id = int.Parse(text.Substring(5));
+                            var task = commandManager.GetTaskById(id);
+                            if (task == null) throw new NullReferenceException(string.Format("Task not found. Task ID"));
+                            View(task);
+                        }
+                        catch (NullReferenceException e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
                     }
                     break;
             }
