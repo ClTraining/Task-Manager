@@ -30,34 +30,38 @@ namespace TaskConsoleClient.UI
 
         public void Parse(string text)
         {
-            if (IsContainsCommands(text))
+
+            try
             {
-                var command = GetCommand(text);
-                switch (command)
-                {
-                    case "add ":
-                        var addedtask = commandManager.AddTask(new ContractTask { Name = text.Substring(4) });
-                        View(addedtask);
-                        break;
-                    case "list":
-                        {
-                            var tasks = commandManager.GetAllTasks();
-                            foreach (var contractTask in tasks)
-                                View(contractTask);
-                        }
-                        break;
-                    case "list ":
-                        {
-                            var task = commandManager.GetTaskById(int.Parse(text.Substring(5)));
-                            View(task);
-                        }
-                        break;
-                    default:
-                        throw new NotImplementedException();
-                }
+                if (!IsContainsCommands(text))
+                    throw new WrongArgumentException("Command is not supported");
             }
-            else
-                throw new WrongArgumentException("Command is not supported");
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            var command = GetCommand(text);
+            switch (command)
+            {
+                case "add ":
+                    var addedtask = commandManager.AddTask(new ContractTask {Name = text.Substring(4)});
+                    View(addedtask);
+                    break;
+                case "list":
+                    {
+                        var tasks = commandManager.GetAllTasks();
+                        foreach (var contractTask in tasks)
+                            View(contractTask);
+                    }
+                    break;
+                case "list ":
+                    {
+                        var task = commandManager.GetTaskById(int.Parse(text.Substring(5)));
+                        View(task);
+                    }
+                    break;
+            }
 
         }
 
@@ -85,7 +89,7 @@ namespace TaskConsoleClient.UI
     }
 
     public class ConsoleHelperTester
-    { 
+    {
         private readonly IConnection conn = Substitute.For<IConnection>();
         private readonly ICommandManager cm = Substitute.For<ICommandManager>();
         //public void should_get_task_from_console()
@@ -108,7 +112,7 @@ namespace TaskConsoleClient.UI
             // act
             Action action = () => consoleHelper.Parse("abrakadabra");
 
-            action.ShouldThrow<WrongArgumentException>().WithMessage("Command is not supported");
+            action.ShouldThrow<WrongArgumentException>().WithInnerMessage("Command is not supported");
         }
 
         [Fact]
@@ -156,7 +160,7 @@ namespace TaskConsoleClient.UI
             Console.SetOut(new StringWriter(sb));
 
             // act
-            coMan.AddTask(null).ReturnsForAnyArgs(new ContractTask{Name = "Say Hello"});            
+            coMan.AddTask(null).ReturnsForAnyArgs(new ContractTask { Name = "Say Hello" });
             consoleHelper.Parse("add Test task");
 
             // assert
