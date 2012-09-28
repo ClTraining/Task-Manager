@@ -11,28 +11,31 @@ namespace TaskManagerHost.DataBaseAccessLayer
 {
     class XmlRepository: IRepository
     {
-        private const string FileName = "e:\\test.xml";
+        private readonly string fileName;
         private List<ServiceTask> TaskList {
             get
             {
-                var fileStream = new FileStream(FileName, FileMode.Open);
+                var fileStream = new FileStream(fileName, FileMode.Open);
                 var retu = (List<ServiceTask>) serializer.Deserialize(fileStream);
                 fileStream.Close();
                 return retu;
             }
             set
             {
-                var myWriter = new StreamWriter(FileName);
+                var myWriter = new StreamWriter(fileName);
                 serializer.Serialize(myWriter, value);
                 myWriter.Close();
             }
         }
         private readonly List<ServiceTask> taskList;
         private readonly XmlSerializer serializer;
-        public XmlRepository()
+        public XmlRepository(string fileName)
         {
+            this.fileName = fileName;
+
             serializer = new XmlSerializer(typeof(List<ServiceTask>));
-            if (!File.Exists(FileName))
+
+            if (!File.Exists(fileName))
             {
                 TaskList = new List<ServiceTask>();
             }
@@ -98,24 +101,26 @@ namespace TaskManagerHost.DataBaseAccessLayer
         [Fact]
         public void should_save_task_and_generate_new_id()
         {
-            var repository = new XmlRepository();
+            var repository = new XmlRepository("test1");
             var task = new ServiceTask { Id = 0 };
             var newtask = repository.AddTask(task);
             newtask.Id.Should().Be(1);
+            File.Delete("test1");
         }
 
         [Fact]
         public void should_throw_exception_when_task_was_not_found()
         {
-            var repository = new XmlRepository();
+            var repository = new XmlRepository("test2");
             Action action = () => repository.GetTaskById(1);
             action.ShouldThrow<Exception>().WithMessage("Task with id 1 was not found");
+            File.Delete("test2");
         }
 
         [Fact]
         public void should_get_task_by_id()
         {
-            var repository = new XmlRepository();
+            var repository = new XmlRepository("test3");
             repository.AddTask(new ServiceTask { Id = 10, Name = "test task" });
             repository.AddTask(new ServiceTask { Id = 0, Name = "another task" });
             repository.AddTask(new ServiceTask { Id = 0, Name = "my task" });
@@ -125,20 +130,22 @@ namespace TaskManagerHost.DataBaseAccessLayer
             task1.Name.Should().Be("test task");
             task2.Name.Should().Be("another task");
             task3.Name.Should().Be("my task");
+            File.Delete("test3");
         }
 
         [Fact]
         public void should_throw_exception_when_task_was_not_found_for_save_task()
         {
-            var repository = new XmlRepository();
+            var repository = new XmlRepository("test4");
             Action action = () => repository.EditTask(new ServiceTask { Id = 10, Name = "test task" });
             action.ShouldThrow<Exception>().WithMessage("Task with id 10 was not found");
+            File.Delete("test4");
         }
 
         [Fact]
         public void should_edit_task_by_id()
         {
-            var repository = new XmlRepository();
+            var repository = new XmlRepository("test5");
             repository.AddTask(new ServiceTask { Id = 10, Name = "test task" });
             repository.AddTask(new ServiceTask { Id = 0, Name = "another task" });
             repository.AddTask(new ServiceTask { Id = 0, Name = "my task" });
@@ -151,12 +158,13 @@ namespace TaskManagerHost.DataBaseAccessLayer
             task1.Name.Should().Be("new test task");
             task2.Name.Should().Be("new another task");
             task3.Name.Should().Be("new my task");
+            File.Delete("test5");
         }
 
         [Fact]
         public void should_get_all_tasks()
         {
-            var repository = new XmlRepository();
+            var repository = new XmlRepository("test6");
             var taskList = repository.GetAllTasks();
             taskList.Should().BeEquivalentTo(new List<ServiceTask>());
             var task1 = new ServiceTask { Id = 10, Name = "test task" };
@@ -164,7 +172,10 @@ namespace TaskManagerHost.DataBaseAccessLayer
             task1 = repository.AddTask(task1);
             task2 = repository.AddTask(task2);
             taskList = repository.GetAllTasks();
-            taskList.Should().BeEquivalentTo(new List<ServiceTask> { task1, task2 });
+            taskList.Count.Should().Be(2);
+            taskList.First().Name.Should().Be(task1.Name);
+            taskList.Last().Name.Should().Be(task2.Name);
+            File.Delete("test6");
         }
     }
 }

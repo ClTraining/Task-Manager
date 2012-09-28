@@ -45,9 +45,10 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerModule : NinjectModule
     {
+        private readonly string xmlStorage = Environment.CurrentDirectory = "\\taskStorage.xml";
         public override void Load()
         {
-            Bind<IRepository>().To<XmlRepository>().InSingletonScope();
+            Bind<IRepository>().To<XmlRepository>().InSingletonScope().WithConstructorArgument("fileName", xmlStorage);
             Bind<ITaskFactory>().To<TaskFactory>();
             Bind<IToDoList>().To<ToDoList>().InSingletonScope();
             Bind<ITaskMapper>().To<TaskMapper>();
