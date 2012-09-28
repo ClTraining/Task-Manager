@@ -68,7 +68,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Start\NinjectWebCommon.cs" />
     <Compile Include="DataBaseAccessLayer\IRepository.cs" />
     <Compile Include="DataBaseAccessLayer\MemoRepository.cs" />
     <Compile Include="DataBaseAccessLayer\XmlRepository.cs" />
