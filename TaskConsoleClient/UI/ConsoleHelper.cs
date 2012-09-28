@@ -43,8 +43,8 @@ namespace TaskConsoleClient.UI
             switch (command)
             {
                 case "add ":
-                    var addedtask = commandManager.AddTask(new ContractTask {Name = text.Substring(4)});
-                    View(addedtask);
+                    var resId = commandManager.AddTask(text.Substring(4));
+                    View(new ContractTask{Id = resId});
                     break;
                 case "list":
                     {

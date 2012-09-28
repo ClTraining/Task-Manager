@@ -22,7 +22,7 @@ namespace TaskManagerHost.WCFServer
             Console.WriteLine("new request added");
         }
 
-        public ContractTask AddTask(ContractTask task)
+        public int AddTask(string task)
         {
             return taskList.AddTask(task);
         }
