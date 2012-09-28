@@ -21,11 +21,6 @@ namespace TaskConsoleClient.UI
             this.commandManager = commandManager;
         }
 
-        public void View(ContractTask task)
-        {
-            Console.WriteLine("Task ID: {0}\tTask Name: {1}", task.Id, task.Name);
-        }
-
         public void Parse(string text)
         {
 
@@ -43,14 +38,12 @@ namespace TaskConsoleClient.UI
             switch (command)
             {
                 case "add ":
-                    var resId = commandManager.AddTask(text.Substring(4));
-                    View(new ContractTask{Id = resId});
+                    Console.WriteLine(commandManager.AddTask(text.Substring(4)));
                     break;
                 case "list":
                     {
                         var tasks = commandManager.GetAllTasks();
-                        foreach (var contractTask in tasks)
-                            View(contractTask);
+                        tasks.ForEach(Console.WriteLine);
                     }
                     break;
                 case "list ":
@@ -60,7 +53,7 @@ namespace TaskConsoleClient.UI
                             var id = int.Parse(text.Substring(5));
                             var task = commandManager.GetTaskById(id);
                             if (task == null) throw new NullReferenceException(string.Format("Task not found. Task ID"));
-                            View(task);
+                            Console.WriteLine("ID: {0}\tTask: {1}", task.Id, task.Name);
                         }
                         catch (NullReferenceException e)
                         {
