@@ -8,7 +8,7 @@ namespace TaskConsoleClient.Manager
         public ITaskManagerService GetClient()
         {
             return new ChannelFactory<ITaskManagerService>
-                                        (new NetTcpBinding(), "net.tcp://192.168.22.124:44444")
+                                        (new NetTcpBinding(), "net.tcp://localhost:44444")
                                         .CreateChannel();
         }
     }

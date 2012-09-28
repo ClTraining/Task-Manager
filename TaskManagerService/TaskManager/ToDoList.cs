@@ -33,8 +33,12 @@ namespace TaskManagerHost.TaskManager
         public ContractTask GetTaskById(int id)
         {
             var newTask = repository.GetTaskById(id);
+            ContractTask result = null;
 
-            var result = new ContractTask { Name = newTask.Name, Id = newTask.Id };
+            if (newTask != null)
+            {
+                result = new ContractTask {Name = newTask.Name, Id = newTask.Id};
+            }
             return result;
         }
 
