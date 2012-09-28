@@ -11,12 +11,12 @@ namespace TaskConsoleClient.UI
         {
             var module = new TaskManagerModule();
             var kernel = new StandardKernel(module);
-            var consoleHelper = kernel.Get<IConsoleHelper>();
+            var consoleHelper = kernel.Get<ConsoleHelper>();
             string s;
-            while ((s = Console.ReadLine()) != null)
-            {
-                consoleHelper.Parse(s);
-            }
+
+            while (( s = Console.ReadLine()) != null)
+                consoleHelper.ExecuteCommand(s);
+
         }
     }
 
@@ -24,7 +24,6 @@ namespace TaskConsoleClient.UI
     {
         public override void Load()
         {
-            Bind<IConsoleHelper>().To<ConsoleHelper>();
             Bind<ICommandManager>().To<CommandManager>();
             Bind<IConnection>().To<NetTcpConnection>();
         }

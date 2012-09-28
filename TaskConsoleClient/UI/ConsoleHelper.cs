@@ -6,13 +6,13 @@ using System.Text;
 using EntitiesLibrary;
 using FluentAssertions;
 using TaskConsoleClient.Manager;
-using Xunit;
 using NSubstitute;
+using Xunit;
 
 
 namespace TaskConsoleClient.UI
 {
-    class ConsoleHelper : IConsoleHelper
+    class ConsoleHelper
     {
         private readonly ICommandManager commandManager;
 
@@ -21,9 +21,8 @@ namespace TaskConsoleClient.UI
             this.commandManager = commandManager;
         }
 
-        public void Parse(string text)
+        public void ExecuteCommand(string text)
         {
-
             try
             {
                 if (!IsContainsCommands(text))
@@ -38,14 +37,13 @@ namespace TaskConsoleClient.UI
             switch (command)
             {
                 case "add ":
-                    Console.WriteLine(commandManager.AddTask(text.Substring(4)));
+                    Console.WriteLine("Task added. Task ID: " + commandManager.AddTask(text.Substring(4)));
                     break;
+
                 case "list":
-                    {
-                        var tasks = commandManager.GetAllTasks();
-                        tasks.ForEach(Console.WriteLine);
-                    }
+                    commandManager.GetAllTasks().ForEach(Console.WriteLine);
                     break;
+
                 case "list ":
                     {
                         try
@@ -91,100 +89,85 @@ namespace TaskConsoleClient.UI
     public class ConsoleHelperTester
     {
         private readonly ICommandManager cm = Substitute.For<ICommandManager>();
-        //public void should_get_task_from_console()
-        //{
-        //    // arrange
-        //    var sh = new ConsoleHelper(cm);
 
-        //    // act
-        //    var taskName = sh.Parse("add hello world");
+        [Fact]
+        public void should_get_task_from_console()
+        {
+            // arrange
+            var sh = new ConsoleHelper(cm);
+            cm.AddTask("add hello world").Returns(1);
 
-        //    // assert
-        //    taskName.Name.Should().BeEquivalentTo("hello world");
-        //}
+            // act
+            sh.ExecuteCommand("add hello world");
 
-        //[Fact]
-        //public void parse_when_passed_wrong_argument_should_throw_WrongArgumentException()
-        //{
-        //    // arrange
-        //    var consoleHelper = new ConsoleHelper(cm);
-        //    // act
-        //    Action action = () => consoleHelper.Parse("abrakadabra");
+            // assert;
+        }
 
-        //    action.ShouldThrow<WrongArgumentException>().WithInnerMessage("Command is not supported");
-        //}
+        [Fact]
+        public void parse_when_passed_wrong_argument_should_throw_WrongArgumentException()
+        {
+            // arrange
+            var consoleHelper = new ConsoleHelper(cm);
+            // act
+            Action action = () => consoleHelper.ExecuteCommand("abrakadabra");
 
-        //[Fact]
-        //public void view_should_show_on_console_the_info_in_task()
-        //{
-        //    // arrange
-        //    var expected = new StringBuilder();
+            action.ShouldThrow<WrongArgumentException>().WithMessage("Command is not supported");
+        }
 
-        //    var consoleHelper = new ConsoleHelper(cm);
-        //    var contractTask = new ContractTask { Name = "Buy Milk", Id = 1 };
+        [Fact]
+        public void should_recognise_list_id_command()
+        {
+            // arrange
+            var comMan = Substitute.For<ICommandManager>();
+            var consoleHelper = new ConsoleHelper(comMan);
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
 
-        //    // act
-        //    Console.SetOut(new StringWriter(expected));
-        //    consoleHelper.View(contractTask);
+            // act
+            comMan.GetTaskById(5).Returns(new ContractTask { Name = "Test task", Id = 5 });
+            consoleHelper.ExecuteCommand("list 5");
 
-        //    // assert
-        //    expected.ToString().Should().BeEquivalentTo("Task ID: 1\tTask Name: Buy Milk\r\n");
-        //}
-
-        //[Fact]
-        //public void should_recognise_list_id_command()
-        //{
-        //    // arrange
-        //    var comMan = Substitute.For<ICommandManager>();
-        //    var consoleHelper = new ConsoleHelper(comMan);
-        //    var sb = new StringBuilder();
-        //    Console.SetOut(new StringWriter(sb));
-
-        //    // act
-        //    comMan.GetTaskById(5).Returns(new ContractTask { Name = "Test task", Id = 5 });
-        //    consoleHelper.Parse("list 5");
-
-        //    // assert
-        //    sb.ToString().Should().BeEquivalentTo("Task ID: 5\tTask Name: Test task\r\n");
-        //}
+            // assert
+            sb.ToString().Should().Be("Task ID: 5\tTask Name: Test task\r\n");
+        }
 
 
-        //[Fact]
-        //public void should_recognise_add_command()
-        //{
-        //    // arrange
-        //    var coMan = Substitute.For<ICommandManager>();
-        //    var consoleHelper = new ConsoleHelper(coMan);
-        //    var sb = new StringBuilder();
-        //    Console.SetOut(new StringWriter(sb));
+        [Fact]
+        public void should_recognise_add_command()
+        {
+            // arrange
+            var coMan = Substitute.For<ICommandManager>();
+            var consoleHelper = new ConsoleHelper(coMan);
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
 
-        //    // act
-        //    coMan.AddTask(null).ReturnsForAnyArgs(new ContractTask { Name = "Say Hello" });
-        //    consoleHelper.Parse("add Test task");
+            // act
+            coMan.AddTask(null).Returns(1);
+            consoleHelper.ExecuteCommand("add Test task");
 
-        //    // assert
-        //    sb.ToString().Should().BeEquivalentTo("Task ID: 0\tTask Name: Say Hello\r\n");
-        //}
+            // assert
+            sb.ToString().Should().BeEquivalentTo("Task ID: 0\tTask Name: Say Hello\r\n");
+        }
 
-        //[Fact]
-        //public void should_recognise_list_command()
-        //{
-        //    // arrange
-        //    var coMan = Substitute.For<ICommandManager>();
-        //    var consoleHelper = new ConsoleHelper(coMan);
-        //    var sb = new StringBuilder();
-        //    Console.SetOut(new StringWriter(sb));
+        [Fact]
+        public void should_recognise_list_command()
+        {
+            // arrange
+            var coMan = Substitute.For<ICommandManager>();
+            var consoleHelper = new ConsoleHelper(coMan);
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
 
-        //    //act
-        //    coMan.GetAllTasks().Returns(new List<ContractTask>
-        //                                    {
-        //                                        new ContractTask{Name = "Sasha",Id=1},
-        //                                        new ContractTask{Name = "Pasha",Id = 2},
-        //                                        new ContractTask{Name = "Lena",Id=3}
-        //                                    });
-        //    consoleHelper.Parse("list");
+            //act
+            coMan.GetAllTasks().Returns(new List<ContractTask>
+                                            {
+                                                new ContractTask{Name = "Sasha",Id=1},
+                                                new ContractTask{Name = "Pasha",Id = 2},
+                                                new ContractTask{Name = "Lena",Id=3}
+                                            });
+            consoleHelper.ExecuteCommand("list");
 
-        //    sb.ToString().Should().BeEquivalentTo("Task ID: 1\tTask Name: Sasha\r\nTask ID: 2\tTask Name: Pasha\r\nTask ID: 3\tTask Name: Lena\r\n");
-        //}
+            sb.ToString().Should().BeEquivalentTo("Task ID: 1\tTask Name: Sasha\r\nTask ID: 2\tTask Name: Pasha\r\nTask ID: 3\tTask Name: Lena\r\n");
+        }
     }
 }
