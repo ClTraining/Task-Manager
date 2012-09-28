@@ -5,10 +5,9 @@ namespace TaskManagerHost.DataBaseAccessLayer
 {
     public interface IRepository
     {
-        ServiceTask AddTask(ServiceTask task);
+        ServiceTask AddTask(string name);
         ServiceTask GetTaskById(int id);
         List<ServiceTask> GetAllTasks();
-        ServiceTask EditTask(ServiceTask task);
-        int GetNewId();
+        bool MarkCompleted(int id);
     }
 }

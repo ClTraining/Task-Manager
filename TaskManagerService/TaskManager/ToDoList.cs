@@ -30,6 +30,11 @@ namespace TaskManagerHost.TaskManager
             return result;
         }
 
+        public ContractTask AddTask(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public ContractTask GetTaskById(int id)
         {
             var newTask = repository.GetTaskById(id);
@@ -46,6 +51,11 @@ namespace TaskManagerHost.TaskManager
         {
             var newTasks = repository.GetAllTasks();
             return newTasks.Select(serviceTask => new ContractTask {Name = serviceTask.Name, Id = serviceTask.Id}).ToList();
+        }
+
+        public bool MarkCompleted(int id)
+        {
+            throw new NotImplementedException();
         }
 
         public ContractTask EditTask(ContractTask task)
@@ -67,6 +77,10 @@ namespace TaskManagerHost.TaskManager
         private readonly ITaskFactory factory = Substitute.For<ITaskFactory>();
         private readonly ITaskMapper mapper = new TaskMapper();
         private readonly IRepository memorepository = new MemoRepository();
+        private readonly List<ContractTask> tasks = new List<ContractTask> { new ContractTask { Id = 10, Name = "test task" } ,
+            new ContractTask { Id = 0, Name = "another task" },
+            new ContractTask { Id = 0, Name = "my task" }
+            };
 
         [Fact]
         public void should_save_task_and_generate_new_id()
@@ -89,10 +103,6 @@ namespace TaskManagerHost.TaskManager
         public void should_get_task_by_id()
         {
             var todolist = new ToDoList(factory, memorepository, mapper);
-            var tasks = new List<ContractTask> { new ContractTask { Id = 10, Name = "test task" } ,
-            new ContractTask { Id = 0, Name = "another task" },
-            new ContractTask { Id = 0, Name = "my task" }
-            };
             var addedTasks = tasks.Select(todolist.AddTask).ToList();
             var getedTasks = addedTasks.Select(contractTask => todolist.GetTaskById(contractTask.Id)).ToList();
             foreach (var task in getedTasks)
@@ -113,9 +123,8 @@ namespace TaskManagerHost.TaskManager
         public void should_edit_task_by_id()
         {
             var todolist = new ToDoList(factory, memorepository, mapper);
-            todolist.AddTask(new ContractTask { Id = 10, Name = "test task" });
-            todolist.AddTask(new ContractTask { Id = 0, Name = "another task" });
-            todolist.AddTask(new ContractTask { Id = 0, Name = "my task" });
+            var addedTasks = tasks.Select(todolist.AddTask).ToList();
+            var editedTasks = addedTasks.Select(todolist.EditTask).ToList();
             todolist.EditTask(new ContractTask { Id = 1, Name = "new test task" });
             todolist.EditTask(new ContractTask { Id = 2, Name = "new another task" });
             todolist.EditTask(new ContractTask { Id = 3, Name = "new my task" });

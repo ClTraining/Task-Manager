@@ -23,6 +23,11 @@ namespace TaskManagerHost.DataBaseAccessLayer
             return task;
         }
 
+        public ServiceTask AddTask(string name)
+        {
+            throw new NotImplementedException();
+        }
+
         public ServiceTask GetTaskById(int id)
         {
             var task = taskList.FirstOrDefault(t => t.Id == id);
@@ -43,6 +48,11 @@ namespace TaskManagerHost.DataBaseAccessLayer
         public List<ServiceTask> GetAllTasks()
         {
             return taskList.ToList();
+        }
+
+        public bool MarkCompleted(int id)
+        {
+            throw new NotImplementedException();
         }
 
         public ServiceTask EditTask(ServiceTask task)
