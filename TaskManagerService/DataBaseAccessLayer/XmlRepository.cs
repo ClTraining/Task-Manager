@@ -53,7 +53,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
             return task;
         }
 
-        public ServiceTask AddTask(string name)
+        public int AddTask(string name)
         {
             throw new NotImplementedException();
         }
@@ -75,6 +75,11 @@ namespace TaskManagerHost.DataBaseAccessLayer
         }
 
         public bool MarkCompleted(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteAllTasks()
         {
             throw new NotImplementedException();
         }

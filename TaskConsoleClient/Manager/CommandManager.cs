@@ -29,7 +29,7 @@ namespace TaskConsoleClient.Manager
 
         public bool MarkCompleted(int task)
         {
-            return conn.GetClient().Edit(task);
+            return conn.GetClient().MarkCompleted(task);
         }
 
         public List<ContractTask> GetAllTasks()

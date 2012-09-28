@@ -22,17 +22,11 @@ namespace TaskManagerHost.TaskManager
             this.mapper = mapper;
         }
 
-        public ContractTask AddTask(ContractTask task)
+        public int AddTask(string name)
         {
-            var newTask = mapper.ConvertToService(task);
-            newTask = repository.AddTask(newTask);
-            var result = mapper.ConvertToContract(newTask);
-            return result;
-        }
-
-        public ContractTask AddTask(string name)
-        {
-            throw new NotImplementedException();
+            //var newTask = repository.AddTask(name);
+            //var result = mapper.ConvertToContract(newTask);
+            return repository.AddTask(name);
         }
 
         public ContractTask GetTaskById(int id)
@@ -53,17 +47,10 @@ namespace TaskManagerHost.TaskManager
             return newTasks.Select(serviceTask => new ContractTask {Name = serviceTask.Name, Id = serviceTask.Id}).ToList();
         }
 
+
         public bool MarkCompleted(int id)
         {
-            throw new NotImplementedException();
-        }
-
-        public ContractTask EditTask(ContractTask task)
-        {
-            var newTask = mapper.ConvertToService(task);
-            newTask = repository.EditTask(newTask);
-            var result = mapper.ConvertToContract(newTask);
-            return result;
+            return repository.MarkCompleted(id);
         }
 
     }
@@ -77,24 +64,24 @@ namespace TaskManagerHost.TaskManager
         private readonly ITaskFactory factory = Substitute.For<ITaskFactory>();
         private readonly ITaskMapper mapper = new TaskMapper();
         private readonly IRepository memorepository = new MemoRepository();
-        private readonly List<ContractTask> tasks = new List<ContractTask> { new ContractTask { Id = 10, Name = "test task" } ,
-            new ContractTask { Id = 0, Name = "another task" },
-            new ContractTask { Id = 0, Name = "my task" }
-            };
+        private readonly List<string> taskNames = new List<string> { "test task", "another task", "my task" };
+        private readonly  IToDoList todolist;
+
+        public  ToDoListTests()
+        {
+            todolist = new ToDoList(factory, memorepository, mapper);
+        }
 
         [Fact]
         public void should_save_task_and_generate_new_id()
         {
-            var todolist = new ToDoList(factory, memorepository, mapper);
-            var task = new ContractTask { Id = 0 };
-            var newtask = todolist.AddTask(task);
-            newtask.Id.Should().Be(1);
+            var newtask = todolist.AddTask(taskNames[0]);
+            newtask.Should().Be(1);
         }
 
         [Fact]
         public void should_throw_exception_when_task_was_not_found()
         {
-            var todolist = new ToDoList(factory, memorepository, mapper);
             Action action = () => todolist.GetTaskById(1);
             action.ShouldThrow<Exception>().WithMessage("Task with id 1 was not found");
         }
@@ -102,51 +89,31 @@ namespace TaskManagerHost.TaskManager
         [Fact]
         public void should_get_task_by_id()
         {
-            var todolist = new ToDoList(factory, memorepository, mapper);
-            var addedTasks = tasks.Select(todolist.AddTask).ToList();
-            var getedTasks = addedTasks.Select(contractTask => todolist.GetTaskById(contractTask.Id)).ToList();
+            var addedTasks = taskNames.Select(todolist.AddTask).ToList();
+            var getedTasks = addedTasks.Select(contractTask => todolist.GetTaskById(contractTask)).ToList();
             foreach (var task in getedTasks)
             {
-                addedTasks.ToArray()[getedTasks.IndexOf(task)].Name.Should().Be(task.Name);
+                addedTasks.ToArray()[getedTasks.IndexOf(task)].Should().Be(task.Id);
             }
         }
 
         [Fact]
         public void should_throw_exception_when_task_was_not_found_for_save_task()
         {
-            var todolist = new ToDoList(factory, memorepository, mapper);
-            Action action = () => todolist.EditTask(new ContractTask { Id = 10, Name = "test task" });
+            Action action = () => todolist.MarkCompleted(1);
             action.ShouldThrow<Exception>().WithMessage("Task with id 10 was not found");
         }
 
         [Fact]
         public void should_edit_task_by_id()
         {
-            var todolist = new ToDoList(factory, memorepository, mapper);
-            var addedTasks = tasks.Select(todolist.AddTask).ToList();
-            var editedTasks = addedTasks.Select(todolist.EditTask).ToList();
-            todolist.EditTask(new ContractTask { Id = 1, Name = "new test task" });
-            todolist.EditTask(new ContractTask { Id = 2, Name = "new another task" });
-            todolist.EditTask(new ContractTask { Id = 3, Name = "new my task" });
-            var task1 = todolist.GetTaskById(1);
-            var task2 = todolist.GetTaskById(2);
-            var task3 = todolist.GetTaskById(3);
-            task1.Name.Should().Be("new test task");
-            task2.Name.Should().Be("new another task");
-            task3.Name.Should().Be("new my task");
-        }
-
-        [Fact]
-        public void should_get_all_tasks()
-        {
-            //var taskList = memoRepository.GetAllTasks();
-            //taskList.Should().BeEquivalentTo(new List<ServiceTask>());
-            //var task1 = new ServiceTask { Id = 10, Name = "test task" };
-            //var task2 = new ServiceTask { Id = 10, Name = "test task1" };
-            //task1 = memoRepository.AddTask(task1);
-            //task2 = memoRepository.AddTask(task2);
-            //taskList = memoRepository.GetAllTasks();
-            //taskList.Should().BeEquivalentTo(new List<ServiceTask> { task1, task2 });
+            var addedTasks = taskNames.Select(todolist.AddTask).ToList();
+            var editedTasks = addedTasks.Select(a => todolist.MarkCompleted(a)).ToList();
+            var newTasks = todolist.GetAllTasks();
+            foreach (var task in newTasks)
+            {
+                task.IsCompleted.Should().Be(true);
+            }
         }
     }
 }

@@ -23,9 +23,13 @@ namespace TaskManagerHost.DataBaseAccessLayer
             return task;
         }
 
-        public ServiceTask AddTask(string name)
+        public int AddTask(string name)
         {
-            throw new NotImplementedException();
+            var task = new ServiceTask {Name = name, Id = GetNewId()};
+
+            taskList.Add(task);
+
+            return task.Id;
         }
 
         public ServiceTask GetTaskById(int id)
@@ -52,7 +56,19 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public bool MarkCompleted(int id)
         {
-            throw new NotImplementedException();
+            var result = true;
+
+            var taskToEdit = taskList.FirstOrDefault(t => t.Id == id);
+
+            if (taskToEdit == null)
+            {
+                result = false;
+            }
+            else
+            {
+                taskToEdit.IsCompleted = true;
+            }
+            return result;
         }
 
         public ServiceTask EditTask(ServiceTask task)
@@ -69,7 +85,23 @@ namespace TaskManagerHost.DataBaseAccessLayer
             return taskToEdit;
         }
 
-        public int GetNewId()
+        public bool DeleteAllTasks()
+        {
+            var result = true;
+            try
+            {
+                taskList = new List<ServiceTask>();
+            }
+            catch (Exception)
+            {
+
+                result = false;
+            }
+            
+            return result;
+        }
+
+        private int GetNewId()
         {
            var newId = 0;
 
@@ -84,89 +116,67 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
     public class TestMemoRepository
     {
-        public void should_save_task_and_generate_new_id()
-        {
-            var repository = new MemoRepository();
-            var task = new ServiceTask { Id = 0 };
-            var tTask = repository.AddTask(task);
-            Console.Out.WriteLine(tTask.Id);
-            tTask.Id.Should().Be(1);
-        }
-
-        public void should_throw_exception_when_task_was_not_found()
-        {
-            var repository = new MemoRepository();
-            Action action = () => repository.GetTaskById(1);
-            action.ShouldThrow<Exception>().WithMessage("Task with id 1 was not found");
-        }
-
-        public void should_get_task_by_id()
-        {
-            var repository = new MemoRepository();
-            repository.AddTask(new ServiceTask { Id = 10, Name = "test task" });
-            repository.AddTask(new ServiceTask { Id = 0, Name = "another task" });
-            repository.AddTask(new ServiceTask { Id = 0, Name = "my task" });
-            var task1 = repository.GetTaskById(1);
-            var task2 = repository.GetTaskById(2);
-            var task3 = repository.GetTaskById(3);
-            task1.Name.Should().Be("test task");
-            task2.Name.Should().Be("another task");
-            task3.Name.Should().Be("my task"); 
-        }
-
-        public void should_throw_exception_when_task_was_not_found_for_save_task()
-        {
-            var repository = new MemoRepository();
-            Action action = () => repository.EditTask(new ServiceTask { Id = 10, Name = "test task" });
-            action.ShouldThrow<Exception>().WithMessage("Task with id 10 was not found");
-        }
-
-        public void should_edit_task_by_id()
-        {
-            var repository = new MemoRepository();
-            repository.AddTask(new ServiceTask { Id = 10, Name = "test task" });
-            repository.AddTask(new ServiceTask { Id = 0, Name = "another task" });
-            repository.AddTask(new ServiceTask { Id = 0, Name = "my task" });
-            repository.EditTask(new ServiceTask { Id = 1, Name = "new test task" });
-            repository.EditTask(new ServiceTask { Id = 2, Name = "new another task" });
-            repository.EditTask(new ServiceTask { Id = 3, Name = "new my task" });
-            var task1 = repository.GetTaskById(1);
-            var task2 = repository.GetTaskById(2);
-            var task3 = repository.GetTaskById(3);
-            task1.Name.Should().Be("new test task");
-            task2.Name.Should().Be("new another task");
-            task3.Name.Should().Be("new my task");
-        }
-
-        public void should_get_all_tasks()
-        {
-            var repository = new MemoRepository();
-            var taskList = repository.GetAllTasks();
-            taskList.Should().BeEquivalentTo(new List<ServiceTask>());
-            var task1 = new ServiceTask {Id = 10, Name = "test task"};
-            var task2 = new ServiceTask {Id = 10, Name = "test task1"};
-            task1 = repository.AddTask(task1);
-            task2= repository.AddTask(task2);
-            taskList = repository.GetAllTasks();
-            taskList.Should().BeEquivalentTo(new List<ServiceTask>{task1,task2});
-        }
-
-        private List<ServiceTask> list = new List<ServiceTask>
-                                             {
-                                                 new ServiceTask{Id = 1, Name = "first test"},
-                                                 new ServiceTask{Id = 2, Name = "second test"},
-                                                 new ServiceTask{Id= 3, Name = "third test"}
-                                             };
-
-        MemoRepository memo = new MemoRepository();
+        private readonly IRepository repository = new MemoRepository();
+        private readonly List<string> taskNames = new List<string> { "test task", "another task", "my task" };
 
         [Fact]
-        public void FactMethodName()
+        public void should_save_task_and_generate_new_id()
         {
-            list.ForEach(x => memo.AddTask(x));
+            repository.DeleteAllTasks();
+            var tTask = repository.AddTask(taskNames[0]);
+            tTask.Should().Be(1);
+        }
 
-            var res = memo.GetAllTasks();
-            res.Count.Should().Be(3);
+        [Fact]
+        public void should_throw_exception_when_task_was_not_found()
+        {
+            repository.DeleteAllTasks();
+            var task = repository.GetTaskById(1);
+            task.Should().BeNull();
+        }
+
+        [Fact]
+        public void should_get_task_by_id()
+        {
+            repository.DeleteAllTasks();
+            var addedTasks = taskNames.Select(repository.AddTask);
+            var getedTasks = addedTasks.Select(repository.GetTaskById).ToList();
+            foreach (var task in getedTasks)
+            {
+                task.Name.Should().Be(taskNames.ToArray()[getedTasks.ToList().IndexOf(task)]);
+            }
+        }
+
+        [Fact]
+        public void should_throw_exception_when_task_was_not_found_for_save_task()
+        {
+            var result =  repository.MarkCompleted(10);
+            result.Should().Be(false);
+        }
+
+        [Fact]
+        public void should_edit_task_by_id()
+        {
+            var addedTasks = taskNames.Select(repository.AddTask).ToList();
+            var compl = addedTasks.Select(repository.MarkCompleted).ToList();
+            var getedTasks = addedTasks.Select(repository.GetTaskById).ToList();
+            foreach (var task in getedTasks)
+            {
+                task.IsCompleted.Should().Be(true);
+            }
+        }
+
+        [Fact]
+        public void should_get_all_tasks()
+        {
+            var taskList = repository.GetAllTasks();
+            taskList.Should().BeEquivalentTo(new List<ServiceTask>());
+            var addedTasks = taskNames.Select(repository.AddTask).ToList();
+            taskList = repository.GetAllTasks().ToList();
+            foreach (var task in taskList)
+            {
+                task.Name.Should().Be(taskNames.ToArray()[taskList.IndexOf(task)]);
+            }
         }
 
         [Fact]

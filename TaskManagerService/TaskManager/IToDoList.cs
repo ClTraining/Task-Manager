@@ -11,7 +11,7 @@ namespace TaskManagerHost.TaskManager
 {
     public interface IToDoList
     {
-        ContractTask AddTask(string name);
+        int AddTask(string name);
         ContractTask GetTaskById(int id);
         List<ContractTask> GetAllTasks();
         bool MarkCompleted(int id);
