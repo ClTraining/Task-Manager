@@ -9,7 +9,7 @@ namespace TaskConsoleClient.Manager
 {
     class CommandManager : ICommandManager
     {
-        private IConnection conn;
+        private readonly IConnection conn;
 
         public CommandManager(IConnection conn)
         {

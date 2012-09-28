@@ -10,11 +10,8 @@ namespace TaskManagerHost.DataBaseAccessLayer
 {
     public class MemoRepository : IRepository
     {
-        readonly List<ServiceTask> taskList = new List<ServiceTask>();
 
-        public MemoRepository()
-        {
-        }
+        static List<ServiceTask> taskList = new List<ServiceTask>();
 
         public ServiceTask AddTask(ServiceTask task)
         {
@@ -58,7 +55,8 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public int GetNewId()
         {
-            var newId = 0;
+           var newId = 0;
+
             if (taskList.Any())
             {
                 newId = taskList.Max(x => x.Id);
@@ -70,19 +68,15 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
     public class TestMemoRepository
     {
-        [Fact]
         public void should_save_task_and_generate_new_id()
         {
             var repository = new MemoRepository();
             var task = new ServiceTask { Id = 0 };
-            //var newtask = repository.AddTask(task);
-            //newtask.Id.Should().Be(1);
             var tTask = repository.AddTask(task);
             Console.Out.WriteLine(tTask.Id);
             tTask.Id.Should().Be(1);
         }
 
-        [Fact]
         public void should_throw_exception_when_task_was_not_found()
         {
             var repository = new MemoRepository();
@@ -90,7 +84,6 @@ namespace TaskManagerHost.DataBaseAccessLayer
             action.ShouldThrow<Exception>().WithMessage("Task with id 1 was not found");
         }
 
-        [Fact]
         public void should_get_task_by_id()
         {
             var repository = new MemoRepository();
@@ -105,7 +98,6 @@ namespace TaskManagerHost.DataBaseAccessLayer
             task3.Name.Should().Be("my task"); 
         }
 
-        [Fact]
         public void should_throw_exception_when_task_was_not_found_for_save_task()
         {
             var repository = new MemoRepository();
@@ -113,7 +105,6 @@ namespace TaskManagerHost.DataBaseAccessLayer
             action.ShouldThrow<Exception>().WithMessage("Task with id 10 was not found");
         }
 
-        [Fact]
         public void should_edit_task_by_id()
         {
             var repository = new MemoRepository();
@@ -131,7 +122,6 @@ namespace TaskManagerHost.DataBaseAccessLayer
             task3.Name.Should().Be("new my task");
         }
 
-        [Fact]
         public void should_get_all_tasks()
         {
             var repository = new MemoRepository();
@@ -143,6 +133,30 @@ namespace TaskManagerHost.DataBaseAccessLayer
             task2= repository.AddTask(task2);
             taskList = repository.GetAllTasks();
             taskList.Should().BeEquivalentTo(new List<ServiceTask>{task1,task2});
+        }
+
+        private List<ServiceTask> list = new List<ServiceTask>
+                                             {
+                                                 new ServiceTask{Id = 1, Name = "first test"},
+                                                 new ServiceTask{Id = 2, Name = "second test"},
+                                                 new ServiceTask{Id= 3, Name = "third test"}
+                                             };
+
+        MemoRepository memo = new MemoRepository();
+
+        [Fact]
+        public void FactMethodName()
+        {
+            list.ForEach(x => memo.AddTask(x));
+
+            var res = memo.GetAllTasks();
+            res.Count.Should().Be(3);
+        }
+
+        [Fact]
+        public void FactMethodName1()
+        {
+            
         }
     }
 }

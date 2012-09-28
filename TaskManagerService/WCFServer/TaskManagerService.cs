@@ -42,7 +42,7 @@ namespace TaskManagerHost.WCFServer
             return null;
         }
     }
-
+    
     public class TaskManagerModule : NinjectModule
     {
         public override void Load()
@@ -56,9 +56,9 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerServiceTests
     {
-        TaskManagerService service = new TaskManagerService{taskList = Substitute.For<IToDoList>()};
-        ContractTask outTask = new ContractTask();
-        ContractTask inTask = new ContractTask{Id = 1};
+        readonly TaskManagerService service = new TaskManagerService{taskList = Substitute.For<IToDoList>()};
+        readonly ContractTask outTask = new ContractTask();
+        readonly ContractTask inTask = new ContractTask{Id = 1};
         List<ContractTask> list = new List<ContractTask>();
         
         [Fact]
