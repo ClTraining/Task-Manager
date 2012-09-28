@@ -8,7 +8,7 @@ namespace TaskManagerHost.WCFServer
     public interface ITaskManagerService
     {
         [OperationContract]
-        ContractTask AddTask(ContractTask task);
+        int AddTask(string task);
 
         [OperationContract]
         ContractTask GetTaskById(int id);
@@ -17,6 +17,6 @@ namespace TaskManagerHost.WCFServer
         List<ContractTask> GetAllTasks();
 
         [OperationContract]
-        ContractTask Edit(ContractTask task);
+        bool MarkCompleted(int task);
     }
 }

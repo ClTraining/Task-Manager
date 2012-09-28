@@ -16,10 +16,9 @@ namespace TaskConsoleClient.Manager
             this.conn = conn;
         }
 
-        public ContractTask AddTask(ContractTask task)
+        public int AddTask(string task)
         {
-            var res = conn.GetClient().AddTask(task); ;
-            Console.WriteLine(res.Id);
+            var res = conn.GetClient().AddTask(task);
             return res;
         }
 
@@ -28,7 +27,7 @@ namespace TaskConsoleClient.Manager
             return conn.GetClient().GetTaskById(id);
         }
 
-        public ContractTask Edit(ContractTask task)
+        public bool MarkCompleted(int task)
         {
             return conn.GetClient().Edit(task);
         }
@@ -45,7 +44,7 @@ namespace TaskConsoleClient.Manager
         readonly ContractTask outTask = new ContractTask();
         private readonly IConnection connection = Substitute.For<IConnection>();
 
-        private CommandManager commandManager;
+        private readonly CommandManager commandManager;
 
         public CommandManagerTests()
         {
@@ -55,11 +54,11 @@ namespace TaskConsoleClient.Manager
         [Fact]
         public void should_send_add_task_to_service()
         {
-            connection.GetClient().AddTask(outTask).Returns(inTask);
-            var result = commandManager.AddTask(outTask);
+            connection.GetClient().AddTask("Hello").Returns(1);
+            var result = commandManager.AddTask("Hello");
 
             // assert
-            result.Should().Be(inTask);
+            result.Should().Be(1);
         }
 
         [Fact]
