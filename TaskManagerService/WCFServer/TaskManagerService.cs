@@ -37,9 +37,9 @@ namespace TaskManagerHost.WCFServer
             return taskList.GetAllTasks();
         }
 
-        public ContractTask MarkCompleted(ContractTask task)
+        public bool MarkCompleted(int task)
         {
-            return null;
+            return false;
         }
     }
     

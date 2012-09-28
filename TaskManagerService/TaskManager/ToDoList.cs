@@ -30,7 +30,7 @@ namespace TaskManagerHost.TaskManager
             return result;
         }
 
-        public ContractTask AddTask(string name)
+        public int AddTask(string name)
         {
             throw new NotImplementedException();
         }
