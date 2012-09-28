@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using EntitiesLibrary;
+using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
@@ -8,7 +9,7 @@ namespace TaskConsoleClient.Manager
 {
     class CommandManager : ICommandManager
     {
-        private readonly IConnection conn;
+        private IConnection conn;
 
         public CommandManager(IConnection conn)
         {
@@ -40,11 +41,46 @@ namespace TaskConsoleClient.Manager
 
     public class CommandManagerTests
     {
-        readonly ContractTask task = new ContractTask();
+        readonly ContractTask inTask = new ContractTask{Id = 1};
+        readonly ContractTask outTask = new ContractTask();
+        private readonly IConnection connection = Substitute.For<IConnection>();
+
+        private CommandManager commandManager;
+
+        public CommandManagerTests()
+        {
+            commandManager = new CommandManager(connection);
+        }
 
         [Fact]
         public void should_send_add_task_to_service()
         {
+            connection.GetClient().AddTask(outTask).Returns(inTask);
+            var result = commandManager.AddTask(outTask);
+
+            // assert
+            result.Should().Be(inTask);
+        }
+
+        [Fact]
+        public void should_get_task_by_id()
+        {
+            connection.GetClient().GetTaskById(1).Returns(inTask);
+            var result = commandManager.GetTaskById(1);
+
+            // assert
+            result.Should().Be(inTask);
+        }
+
+        [Fact]
+        public void should_get_all_tasks()
+        {
+            var list = new List<ContractTask> {inTask, outTask};
+            connection.GetClient().GetAllTasks().Returns(list);
+            var result = commandManager.GetAllTasks();
+
+            // assert
+            result.Should().BeEquivalentTo(list);
         }
     }
 }
