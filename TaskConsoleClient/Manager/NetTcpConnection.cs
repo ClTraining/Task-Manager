@@ -5,9 +5,6 @@ namespace TaskConsoleClient.Manager
 {
     public class NetTcpConnection : IConnection
     {
-        private ChannelFactory<ITaskManagerService> factory;
-        private ITaskManagerService client;
-
         public ITaskManagerService GetClient()
         {
             return new ChannelFactory<ITaskManagerService>

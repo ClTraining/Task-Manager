@@ -1,25 +1,19 @@
-﻿#region Using
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 using EntitiesLibrary;
 using FluentAssertions;
 using Xunit;
-
-#endregion
 
 
 namespace TaskManagerHost.DataBaseAccessLayer
 {
     public class MemoRepository : IRepository
     {
-        private readonly List<ServiceTask> taskList;
+        readonly List<ServiceTask> taskList = new List<ServiceTask>();
 
         public MemoRepository()
         {
-            taskList = new List<ServiceTask>();
         }
 
         public ServiceTask AddTask(ServiceTask task)
@@ -62,10 +56,9 @@ namespace TaskManagerHost.DataBaseAccessLayer
             return taskToEdit;
         }
 
-        private int GetNewId()
+        public int GetNewId()
         {
             var newId = 0;
-
             if (taskList.Any())
             {
                 newId = taskList.Max(x => x.Id);
@@ -81,9 +74,12 @@ namespace TaskManagerHost.DataBaseAccessLayer
         public void should_save_task_and_generate_new_id()
         {
             var repository = new MemoRepository();
-            var task = new ServiceTask {Id = 0};
-            var newtask = repository.AddTask(task);
-            newtask.Id.Should().Be(1);
+            var task = new ServiceTask { Id = 0 };
+            //var newtask = repository.AddTask(task);
+            //newtask.Id.Should().Be(1);
+            var tTask = repository.AddTask(task);
+            Console.Out.WriteLine(tTask.Id);
+            tTask.Id.Should().Be(1);
         }
 
         [Fact]

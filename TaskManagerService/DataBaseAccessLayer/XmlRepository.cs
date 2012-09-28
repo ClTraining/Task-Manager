@@ -77,7 +77,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
             return taskToEdit;
         }
 
-        private int GetNewId()
+        public int GetNewId()
         {
             var newId = 0;
 

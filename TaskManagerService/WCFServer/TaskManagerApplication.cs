@@ -1,13 +1,10 @@
 using System;
 using System.ServiceModel;
 
-
 namespace TaskManagerHost.WCFServer
 {
-    internal static class TaskManagerApplication
+    static class TaskManagerApplication
     {
-        private const string Address = "net.tcp://localhost:44444";
-
         private static void Main()
         {
             const string address = "net.tcp://localhost:44444";

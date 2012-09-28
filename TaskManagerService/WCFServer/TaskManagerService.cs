@@ -13,17 +13,13 @@ namespace TaskManagerHost.WCFServer
 {
     public class TaskManagerService : ITaskManagerService
     {
-        private readonly TaskManagerModule module;
-        private readonly IKernel kernel;
-        private readonly IToDoList taskList;
+        private static readonly IToDoList taskList;
 
-        public TaskManagerService()
+        static TaskManagerService()
         {
-            module = new TaskManagerModule();
-            kernel = new StandardKernel(module);
-            taskList = kernel.Get<ToDoList>();
+            taskList = new StandardKernel(new TaskManagerModule()).Get<ToDoList>();
 
-            Console.WriteLine("new request added");
+            Console.WriteLine("new operation");
         }
 
         public ContractTask AddTask(ContractTask task)
@@ -51,28 +47,16 @@ namespace TaskManagerHost.WCFServer
     {
         public override void Load()
         {
-            Bind<IRepository>().To<MemoRepository>().InSingletonScope();
+            Bind<IRepository>().To<MemoRepository>();
             Bind<ITaskFactory>().To<TaskFactory>();
-            Bind<IToDoList>().To<ToDoList>().InSingletonScope();
+            Bind<IToDoList>().To<ToDoList>();
             Bind<ITaskMapper>().To<TaskMapper>();
         }
     }
 
     public class TaskManagerServiceTests
     {
-        private readonly ServiceTask incomingTask = new ServiceTask();
-        private readonly ContractTask outgoingTask = new ContractTask();
-        private readonly IToDoList list = Substitute.For<IToDoList>();
-        private readonly ITaskManagerService manager;
-
-        public TaskManagerServiceTests()
-        {
-            manager = new TaskManagerService();
-        }
-
         [Fact]
-        public void should_send_and_return_task()
-        {
-        }
+        public void_shoul
     }
 }
