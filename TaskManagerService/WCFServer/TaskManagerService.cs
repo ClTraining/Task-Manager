@@ -56,7 +56,5 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerServiceTests
     {
-        [Fact]
-        public void_shoul
     }
 }
