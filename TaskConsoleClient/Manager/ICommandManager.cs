@@ -8,6 +8,6 @@ namespace TaskConsoleClient.Manager
         int AddTask(string task);
         ContractTask GetTaskById(int id);
         List<ContractTask> GetAllTasks();
-        ContractTask Edit(ContractTask task);
+        bool MarkCompleted(int id);
     }
 }

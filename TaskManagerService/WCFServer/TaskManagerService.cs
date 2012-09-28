@@ -37,7 +37,7 @@ namespace TaskManagerHost.WCFServer
             return taskList.GetAllTasks();
         }
 
-        public ContractTask Edit(ContractTask task)
+        public ContractTask MarkCompleted(ContractTask task)
         {
             return null;
         }
