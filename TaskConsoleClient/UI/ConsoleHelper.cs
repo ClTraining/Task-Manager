@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using EntitiesLibrary;
 using FluentAssertions;
 using TaskConsoleClient.Manager;
-using TaskManagerHost.WCFServer;
 using Xunit;
 using NSubstitute;
 
@@ -76,7 +74,7 @@ namespace TaskConsoleClient.UI
             if (text == "list")
                 return text;
 
-            var end = text.IndexOf(" ");
+            var end = text.IndexOf(' ');
             var result = text.Substring(0, end + 1);
             return result;
         }
@@ -90,7 +88,6 @@ namespace TaskConsoleClient.UI
 
     public class ConsoleHelperTester
     {
-        private readonly IConnection conn = Substitute.For<IConnection>();
         private readonly ICommandManager cm = Substitute.For<ICommandManager>();
         //public void should_get_task_from_console()
         //{

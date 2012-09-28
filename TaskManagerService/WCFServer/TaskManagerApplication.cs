@@ -7,7 +7,6 @@ namespace TaskManagerHost.WCFServer
     {
         private static void Main()
         {
-            const string address = "net.tcp://localhost:44444";
             using (var serviceHost = new ServiceHost(typeof(TaskManagerService)))
             {
                 serviceHost.Open();
