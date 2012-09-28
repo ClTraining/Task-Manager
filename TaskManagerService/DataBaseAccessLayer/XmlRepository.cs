@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Serialization;
 using EntitiesLibrary;
 using FluentAssertions;
@@ -14,11 +12,14 @@ namespace TaskManagerHost.DataBaseAccessLayer
     class XmlRepository: IRepository
     {
         private const string FileName = "e:\\test.xml";
-        private List<ServiceTask> TaskList { get {var fileStream= new FileStream(FileName, FileMode.Open);
-            var retu = (List<ServiceTask>)serializer.Deserialize(fileStream);
-            fileStream.Close();
-            return retu;
-        }
+        private List<ServiceTask> TaskList {
+            get
+            {
+                var fileStream = new FileStream(FileName, FileMode.Open);
+                var retu = (List<ServiceTask>) serializer.Deserialize(fileStream);
+                fileStream.Close();
+                return retu;
+            }
             set
             {
                 var myWriter = new StreamWriter(FileName);
@@ -26,13 +27,16 @@ namespace TaskManagerHost.DataBaseAccessLayer
                 myWriter.Close();
             }
         }
-        private List<ServiceTask> taskList;
+        private readonly List<ServiceTask> taskList;
         private readonly XmlSerializer serializer;
         public XmlRepository()
         {
             serializer = new XmlSerializer(typeof(List<ServiceTask>));
-            TaskList = new List<ServiceTask>();
-            taskList = new List<ServiceTask>();
+            if (!File.Exists(FileName))
+            {
+                TaskList = new List<ServiceTask>();
+            }
+            taskList = TaskList;
         }
 
         public ServiceTask AddTask(ServiceTask task)
