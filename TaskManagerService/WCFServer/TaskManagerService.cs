@@ -47,7 +47,7 @@ namespace TaskManagerHost.WCFServer
     {
         public override void Load()
         {
-            Bind<IRepository>().To<MemoRepository>().InSingletonScope();
+            Bind<IRepository>().To<XmlRepository>().InSingletonScope();
             Bind<ITaskFactory>().To<TaskFactory>();
             Bind<IToDoList>().To<ToDoList>().InSingletonScope();
             Bind<ITaskMapper>().To<TaskMapper>();
