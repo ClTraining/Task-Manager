@@ -1,6 +1,4 @@
-﻿#region Using
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using EntitiesLibrary;
@@ -8,9 +6,6 @@ using FluentAssertions;
 using NSubstitute;
 using TaskManagerHost.DataBaseAccessLayer;
 using Xunit;
-
-#endregion
-
 
 namespace TaskManagerHost.TaskManager
 {

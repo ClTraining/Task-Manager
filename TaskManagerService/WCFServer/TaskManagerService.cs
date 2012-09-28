@@ -13,13 +13,13 @@ namespace TaskManagerHost.WCFServer
 {
     public class TaskManagerService : ITaskManagerService
     {
-        private static readonly IToDoList taskList;
+        private readonly IToDoList taskList;
 
-        static TaskManagerService()
+        public TaskManagerService()
         {
             taskList = new StandardKernel(new TaskManagerModule()).Get<ToDoList>();
 
-            Console.WriteLine("new operation");
+            Console.WriteLine("new request added");
         }
 
         public ContractTask AddTask(ContractTask task)
@@ -47,14 +47,18 @@ namespace TaskManagerHost.WCFServer
     {
         public override void Load()
         {
-            Bind<IRepository>().To<MemoRepository>();
+            Bind<IRepository>().To<MemoRepository>().InSingletonScope();
             Bind<ITaskFactory>().To<TaskFactory>();
-            Bind<IToDoList>().To<ToDoList>();
+            Bind<IToDoList>().To<ToDoList>().InSingletonScope();
             Bind<ITaskMapper>().To<TaskMapper>();
         }
     }
 
     public class TaskManagerServiceTests
     {
+        [Fact]
+        public void should_send_and_return_task()
+        {
+        }
     }
 }
