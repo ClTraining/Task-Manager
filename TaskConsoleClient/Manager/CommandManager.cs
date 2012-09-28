@@ -27,9 +27,9 @@ namespace TaskConsoleClient.Manager
             return conn.GetClient().GetTaskById(id);
         }
 
-        public bool MarkCompleted(int task)
+        public bool MarkCompleted(int id)
         {
-            return conn.GetClient().MarkCompleted(task);
+            return conn.GetClient().MarkCompleted(id);
         }
 
         public List<ContractTask> GetAllTasks()

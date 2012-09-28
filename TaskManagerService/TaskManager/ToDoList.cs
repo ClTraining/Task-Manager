@@ -24,8 +24,6 @@ namespace TaskManagerHost.TaskManager
 
         public int AddTask(string name)
         {
-            //var newTask = repository.AddTask(name);
-            //var result = mapper.ConvertToContract(newTask);
             return repository.AddTask(name);
         }
 

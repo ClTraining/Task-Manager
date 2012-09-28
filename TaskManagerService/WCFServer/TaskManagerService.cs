@@ -40,12 +40,7 @@ namespace TaskManagerHost.WCFServer
 
         public bool MarkCompleted(int task)
         {
-            throw new NotImplementedException();
-        }
-
-        public ContractTask MarkCompleted(ContractTask task)
-        {
-            return null;
+            return false;
         }
     }
     

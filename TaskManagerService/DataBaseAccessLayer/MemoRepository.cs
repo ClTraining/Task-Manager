@@ -36,16 +36,6 @@ namespace TaskManagerHost.DataBaseAccessLayer
         {
             var task = taskList.FirstOrDefault(t => t.Id == id);
 
-            //try
-            //{
-            //    if (task == null)
-            //        throw new Exception(String.Format("Task with id {0} was not found", id));
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e.Message);
-            //}
-
             return task;
         }
 
