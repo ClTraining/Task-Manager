@@ -17,6 +17,6 @@ namespace TaskManagerHost.WCFServer
         List<ContractTask> GetAllTasks();
 
         [OperationContract]
-        bool MarkCompleted(int task);
+        bool MarkCompleted(int id);
     }
 }

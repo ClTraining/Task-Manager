@@ -40,25 +40,31 @@ namespace TaskConsoleClient.UI
                 case "list":
                     commandManager
                         .GetAllTasks()
-                        .ForEach(x => Console.WriteLine("ID: {0}\tTask: {1}", x.Id, x.Name));
+                        .ForEach(x => Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
                     break;
 
                 case "list ":
+                    try
                     {
-                        try
-                        {
-                            var id = int.Parse(text.Substring(5));
-                            var task = commandManager.GetTaskById(id);
+                        var lid = int.Parse(text.Substring(command.Length));
+                        var task = commandManager.GetTaskById(lid);
 
-                            if (task == null) throw new NullReferenceException(string.Format("Task not found. Task ID"));
-
-                            Console.WriteLine("ID: {0}\tTask: {1}", task.Id, task.Name);
-                        }
-                        catch (NullReferenceException e)
-                        {
-                            Console.WriteLine(e.Message);
-                        }
+                        if (task == null) throw new NullReferenceException(string.Format("Task not found. Task ID"));
+                        Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
                     }
+                    catch (NullReferenceException e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    break;
+
+                case "completed ":
+
+                    var cid = int.Parse(text.Substring(command.Length));
+
+                    var isCompleted = commandManager.MarkCompleted(cid);
+                    Console.WriteLine("Task ID: {0} completed", cid);
+                    
                     break;
             }
 
@@ -66,7 +72,7 @@ namespace TaskConsoleClient.UI
 
         public bool IsContainsCommands(string text)
         {
-            var commands = new List<string> { "add ", "list ", "list" };
+            var commands = new List<string> { "add ", "list ", "list", "completed " };
             return commands.Any(text.Contains);
         }
 
@@ -111,7 +117,7 @@ namespace TaskConsoleClient.UI
         }
 
         [Fact]
-        public void parse_when_passed_wrong_argument_should_throw_WrongArgumentException()
+        public void parse_when_passed_wrong_argument_should_throw_wrongargumentexception()
         {
             //arrange
             const string command = "asdasdasdasd";

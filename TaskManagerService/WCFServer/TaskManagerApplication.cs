@@ -7,7 +7,7 @@ namespace TaskManagerHost.WCFServer
     {
         private static void Main()
         {
-            using (var serviceHost = new ServiceHost(typeof(TaskManagerService)))
+            using (var serviceHost = new ServiceHost(typeof(TaskManagerService), new Uri("net.tcp://localhost:44444")))
             {
                 serviceHost.Open();
                 Console.WriteLine("Host started");

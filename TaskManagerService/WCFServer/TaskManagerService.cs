@@ -37,9 +37,9 @@ namespace TaskManagerHost.WCFServer
             return taskList.GetAllTasks();
         }
 
-        public bool MarkCompleted(int task)
+        public bool MarkCompleted(int id)
         {
-            return false;
+            return taskList.MarkCompleted(id);
         }
     }
     
@@ -62,7 +62,7 @@ namespace TaskManagerHost.WCFServer
         [Fact]
         public void should_create_task_and_return_taskid()
         {
-            var taskName = "some task";
+            var taskName = "some id";
             service.taskList.AddTask(taskName).Returns(1);
             var res = service.AddTask(taskName);
             res.Should().Be(1);
