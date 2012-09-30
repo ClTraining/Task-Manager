@@ -41,6 +41,11 @@ namespace TaskManagerHost.WCFServer
         {
             return taskList.MarkCompleted(id);
         }
+
+        public bool TestConnection()
+        {
+            return true;
+        }
     }
     
     public class TaskManagerModule : NinjectModule

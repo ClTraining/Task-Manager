@@ -9,23 +9,48 @@ namespace TaskConsoleClient.UI
     {
         public static void Main()
         {
-            var module = new TaskManagerModule();
+            var module = new TaskManagerModule(TestConnection());
+
             var kernel = new StandardKernel(module);
-            var consoleHelper = kernel.Get<ConsoleHelper>();
-            string s;
 
-            while (( s = Console.ReadLine()) != null)
-                consoleHelper.ExecuteCommand(s);
+            for (string s; ((s = Console.ReadLine()) != null); )
+                kernel.Get<ConsoleHelper>().ExecuteCommand(s);
+        }
 
+        private static string TestConnection()
+        {
+            Console.Clear();
+            Console.Write("Enter server address: ");
+            var address = Console.ReadLine();
+            var res = new NetTcpConnection(address).TestConnection();
+            if (res != "Connection established.")
+            {
+                Console.CursorVisible = false;
+                Console.WriteLine(res);
+                Console.ReadLine();
+                Console.Clear();
+                TestConnection();
+            }
+
+            return address;
         }
     }
 
     public class TaskManagerModule : NinjectModule
     {
+        private readonly string address;
+        public TaskManagerModule(string address)
+        {
+            this.address = address;
+        }
+
         public override void Load()
         {
             Bind<ICommandManager>().To<CommandManager>();
-            Bind<IConnection>().To<NetTcpConnection>();
+            Bind<IConnection>()
+                .To<NetTcpConnection>()
+                .WithConstructorArgument("address", address);
+            new NetTcpConnection(address).TestConnection();
         }
     }
 }

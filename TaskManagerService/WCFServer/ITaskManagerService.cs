@@ -18,5 +18,8 @@ namespace TaskManagerHost.WCFServer
 
         [OperationContract]
         bool MarkCompleted(int id);
+
+        [OperationContract]
+        bool TestConnection();
     }
 }

@@ -61,13 +61,11 @@ namespace TaskConsoleClient.UI
                 case "completed ":
 
                     var cid = int.Parse(text.Substring(command.Length));
-
-                    var isCompleted = commandManager.MarkCompleted(cid);
+                    commandManager.MarkCompleted(cid);
                     Console.WriteLine("Task ID: {0} completed", cid);
                     
                     break;
             }
-
         }
 
         public bool IsContainsCommands(string text)
@@ -106,11 +104,8 @@ namespace TaskConsoleClient.UI
         [Fact]
         public void should_get_task_from_console()
         {
-            // arrange
-            var sh = new ConsoleHelper(cm);
-
             // act
-            sh.ExecuteCommand("add hello world");
+            consoleHelper.ExecuteCommand("add hello world");
 
             // assert;
             cm.Received().AddTask("hello world");
