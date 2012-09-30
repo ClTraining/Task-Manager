@@ -150,5 +150,15 @@ namespace TaskConsoleClient.UI
             // assert
             cm.Received().AddTask("Test task");
         }
+
+        [Fact]
+        public void should_recognise_iscomplited_command()
+        {
+            // act
+            consoleHelper.ExecuteCommand("completed 1");
+
+            // assert
+            cm.Received().MarkCompleted(1);
+        }
     }
 }
