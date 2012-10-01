@@ -13,8 +13,7 @@ namespace TaskManagerHost.TaskManager
     {
         public ServiceTask ConvertToService(ContractTask task)
         {
-            var newTask = new ServiceTask {Id = task.Id, Name = task.Name, IsCompleted = task.IsCompleted};
-            return newTask;
+            return task!= null ? new ServiceTask {Id = task.Id, Name = task.Name, IsCompleted = task.IsCompleted} : null;
         }
 
         public ContractTask ConvertToContract(ServiceTask task)
@@ -48,5 +47,20 @@ namespace TaskManagerHost.TaskManager
             result.Id.Should().Be(contractTask.Id);
             result.IsCompleted.Should().Be(contractTask.IsCompleted);
         }
+
+        [Fact]
+        public void should_return_null__if_null_passed_convert_from_contract()
+        {
+            var result = taskMapper.ConvertToService(null);
+            result.Should().BeNull();
+        }
+
+        [Fact]
+        public void should_return_null__if_null_passed_convert_from_service()
+        {
+            var result = taskMapper.ConvertToContract(null);
+            result.Should().BeNull();
+        }
+
     }
 }
