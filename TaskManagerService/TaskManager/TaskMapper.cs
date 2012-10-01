@@ -26,9 +26,9 @@ namespace TaskManagerHost.TaskManager
 
     public class TaskMapperTests
     {
-        private ServiceTask serviceTask = new ServiceTask(){Id = 10, Name = "service", IsCompleted = true};
-        private ContractTask contractTask = new ContractTask(){Id = 11, Name = "contract", IsCompleted = false};
-        private TaskMapper taskMapper = new TaskMapper();
+        private readonly ServiceTask serviceTask = new ServiceTask(){Id = 10, Name = "service", IsCompleted = true};
+        private readonly ContractTask contractTask = new ContractTask(){Id = 11, Name = "contract", IsCompleted = false};
+        private readonly TaskMapper taskMapper = new TaskMapper();
 
         [Fact]
         public void should_convert_service_to_contract()
