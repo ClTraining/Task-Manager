@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
+using FluentAssertions;
 using NSubstitute;
 using TaskManagerHost.TaskManager;
+using Xunit;
 
 namespace TaskManagerHost.WCFServer
 {
@@ -47,40 +49,46 @@ namespace TaskManagerHost.WCFServer
 
     public class TaskManagerServiceTests
     {
-        readonly ITaskManagerService service = Substitute.For<ITaskManagerService>();
-        readonly List<ContractTask> list = new List<ContractTask>{new ContractTask { Name = "some", Id = 1 }};
+        private readonly ITaskManagerService service;
+        private readonly IToDoList list = Substitute.For<IToDoList>(); 
 
-        //[Fact]
-        //public void should_create_task_and_return_taskid()
-        //{
-        //    const string taskName = "some id";
-        //    service.taskList.AddTask(taskName).Returns(1);
-        //    var res = service.AddTask(taskName);
-        //    res.Should().Be(1);
-        //}
+        public TaskManagerServiceTests()
+        {
+            service = new TaskManagerService(list);
+        }
 
-        //[Fact]
-        //public void should_get_task_by_id_and_return_task()
-        //{
-        //    service.taskList.GetTaskById(1).Returns(list[0]);
-        //    var res = service.GetTaskById(1);
-        //    res.Should().Be(list[0]);
-        //}
+        [Fact]
+        public void should_create_task_and_return_taskid()
+        {
+            list.AddTask("some task").Returns(1);
+            var res = service.AddTask("some task");
+            res.Should().Be(1);
+        }
 
-        //[Fact]
-        //public void should_get_all_taasks()
-        //{
-        //    service.taskList.GetAllTasks().Returns(list);
-        //    var res = service.GetAllTasks();
-        //    res.Should().BeEquivalentTo(list);
-        //}
+        [Fact]
+        public void should_get_task_by_id_and_return_task()
+        {
+            var task = new ContractTask {Id = 1};
+            list.GetTaskById(1).Returns(task);
+            var res = service.GetTaskById(1);
+            res.Should().Be(task);
+        }
 
-        //[Fact]
-        //public void should_send_id_receive_completed_value()
-        //{
-        //    service.taskList.MarkCompleted(1).Returns(true);
-        //    var res = service.MarkCompleted(1);
-        //    res.Should().Be(true);
-        //}
+        [Fact]
+        public void should_get_all_taasks()
+        {
+            var listTasks = new List<ContractTask>() {new ContractTask {Id = 1, Name = "some", IsCompleted = false}};
+            list.GetAllTasks().Returns(listTasks);
+            var res = service.GetAllTasks();
+            res.Should().BeEquivalentTo(listTasks);
+        }
+
+        [Fact]
+        public void should_send_id_receive_completed_value()
+        {
+            list.MarkCompleted(1).Returns(true);
+            var res = service.MarkCompleted(1);
+            res.Should().Be(true);
+        }
     }
 }
