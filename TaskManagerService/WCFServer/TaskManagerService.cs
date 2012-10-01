@@ -93,6 +93,9 @@ namespace TaskManagerHost.WCFServer
         [Fact]
         public void should_send_id_receive_completed_value()
         {
+            service.taskList.MarkCompleted(1).Returns(true);
+            var res = service.MarkCompleted(1);
+            res.Should().Be(true);
         }
     }
 }
