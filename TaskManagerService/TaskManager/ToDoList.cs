@@ -55,7 +55,7 @@ namespace TaskManagerHost.TaskManager
         private readonly ITaskMapper mapper = Substitute.For<ITaskMapper>();
         private readonly  IToDoList todolist;
 
-        public  ToDoListTests()
+        public ToDoListTests()
         {
             todolist = new ToDoList(repository, mapper);
         }

@@ -12,7 +12,7 @@ using Xunit;
 
 namespace TaskManagerHost.DataBaseAccessLayer
 {
-    class XmlRepository: IRepository
+    public class XmlRepository: IRepository
     {
         private readonly string fileName;
         private List<ServiceTask> taskList;
