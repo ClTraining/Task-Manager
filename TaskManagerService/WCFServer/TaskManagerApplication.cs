@@ -10,10 +10,13 @@ namespace TaskManagerHost.WCFServer
 {
     static class TaskManagerApplication
     {
+        static readonly Uri baseAddresses = new Uri("net.tcp://localhost:44444");
+
         private static void Main()
         {
-            IKernel kernel = new StandardKernel(new TaskManagerModule());
-            using (var serviceHost = new ServiceHost(kernel.Get<ITaskManagerService>(), new Uri("net.tcp://localhost:44444")))
+            var kernel = new StandardKernel(new TaskManagerModule());
+
+            using (var serviceHost = new ServiceHost(kernel.Get<ITaskManagerService>(), baseAddresses))
             {
                 serviceHost.Open();
                 Console.WriteLine("Host started");
