@@ -1,5 +1,10 @@
+#region Using
+
 using System;
 using System.ServiceModel;
+
+#endregion
+
 
 namespace TaskManagerHost.WCFServer
 {

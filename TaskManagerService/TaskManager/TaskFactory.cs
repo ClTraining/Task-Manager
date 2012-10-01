@@ -1,7 +1,12 @@
-﻿using EntitiesLibrary;
+﻿#region Using
+
+using EntitiesLibrary;
 using FluentAssertions;
 using TaskManagerHost.DataBaseAccessLayer;
 using Xunit;
+
+#endregion
+
 
 namespace TaskManagerHost.TaskManager
 {
