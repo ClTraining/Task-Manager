@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceModel;
 using EntitiesLibrary;
 using FluentAssertions;
 using Xunit;
@@ -84,7 +83,6 @@ namespace TaskManagerHost.DataBaseAccessLayer
             }
             catch (Exception)
             {
-
                 result = false;
             }
             
