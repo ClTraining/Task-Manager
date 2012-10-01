@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Entities")]
+[assembly: AssemblyTitle("EntitiesLibrary")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Entities")]
-[assembly: AssemblyCopyright("Copyright ©  2012")]
+[assembly: AssemblyCompany("NETIK")]
+[assembly: AssemblyProduct("EntitiesLibrary")]
+[assembly: AssemblyCopyright("Copyright © NETIK 2012")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("ac3ece0b-d69e-4270-b26c-1a0f5d7a683e")]
+[assembly: Guid("38e46f37-5c50-4b63-a767-c6b123536940")]
 
 // Version information for an assembly consists of the following four values:
 //
