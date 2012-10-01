@@ -17,8 +17,6 @@ namespace TaskManagerHost.WCFServer
         public TaskManagerService(IToDoList list)
         {
             taskList = list;
-
-            Console.WriteLine("new request added");
         }
 
         public int AddTask(string task)
