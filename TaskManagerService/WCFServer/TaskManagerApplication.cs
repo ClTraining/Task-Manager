@@ -14,6 +14,7 @@ namespace TaskManagerHost.WCFServer
 
         private static void Main()
         {
+            Console.Title = "Task Manager Service";
             var kernel = new StandardKernel(new TaskManagerModule());
 
             using (var serviceHost = new ServiceHost(kernel.Get<ITaskManagerService>(), baseAddresses))

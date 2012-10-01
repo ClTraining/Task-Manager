@@ -52,8 +52,8 @@ namespace TaskConsoleClient.UI
         private void MarkTaskCompleted(string text, string command)
         {
             var cid = int.Parse(text.Substring(command.Length));
-            commandManager.MarkCompleted(cid);
-            Console.WriteLine("Task ID: {0} completed", cid);
+            var result = commandManager.MarkCompleted(cid);
+            Console.WriteLine("Task ID: " + cid + (result ? " complited" : " not complited. Task doesn't exist"));
         }
 
         private void ListSingleTask(string text, string command)
@@ -63,7 +63,7 @@ namespace TaskConsoleClient.UI
 
             if (task == null)
             {
-                Console.WriteLine(string.Format("Task not found (ID: {0})", lid));
+                Console.WriteLine("Task not found (ID: {0}", lid);
                 return;
             }
             ViewTaskInfo(task);
