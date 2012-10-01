@@ -58,8 +58,6 @@ namespace TaskConsoleClient.UI
 
         private void ListSingleTask(string text, string command)
         {
-            //try
-            //{
             var lid = int.Parse(text.Substring(command.Length));
             var task = commandManager.GetTaskById(lid);
 
@@ -117,12 +115,6 @@ namespace TaskConsoleClient.UI
                 group = match.Groups[1];
 
             return group.ToString();
-        }
-
-
-        private void PrintExceptionInfo(Exception ex)
-        {
-            Console.WriteLine(ex.Message);
         }
     }
 
