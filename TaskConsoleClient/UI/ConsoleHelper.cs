@@ -1,4 +1,6 @@
-﻿using System;
+﻿#region Using
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -8,11 +10,14 @@ using TaskConsoleClient.Manager;
 using NSubstitute;
 using Xunit;
 
+#endregion
+
+
 namespace TaskConsoleClient.UI
 {
     class ConsoleHelper
     {
-        private readonly List<string> commandPatterms = new List<string>
+        private readonly List<string> commandPatterns = new List<string>
                                       {
                                           @"^(add)\s",
                                           @"^(list)$",
@@ -101,13 +106,13 @@ namespace TaskConsoleClient.UI
 
         private bool IsCommandCorrect(string text)
         {
-            var regexes = commandPatterms.Select(x => new Regex(x)).ToList();
+            var regexes = commandPatterns.Select(x => new Regex(x)).ToList();
             return regexes.Any(regex => regex.IsMatch(text));
         }
 
         private string GetCommand(string text)
         {
-            var regexes = commandPatterms.Select(x => new Regex(x)).ToList();
+            var regexes = commandPatterns.Select(x => new Regex(x)).ToList();
             var regex = regexes.FirstOrDefault(x => x.IsMatch(text));
             var match = regex.Match(text);
             Group group = null;
