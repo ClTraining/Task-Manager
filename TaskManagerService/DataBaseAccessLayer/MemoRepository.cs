@@ -1,9 +1,14 @@
-﻿using System;
+﻿#region Using
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using EntitiesLibrary;
 using FluentAssertions;
 using Xunit;
+
+#endregion
+
 
 
 namespace TaskManagerHost.DataBaseAccessLayer
@@ -140,6 +145,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
         [Fact]
         public void should_throw_exception_when_task_was_not_found_for_save_task()
         {
+            repository.DeleteAllTasks();
             var result =  repository.MarkCompleted(10);
             result.Should().Be(false);
         }
@@ -147,6 +153,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
         [Fact]
         public void should_edit_task_by_id()
         {
+            repository.DeleteAllTasks();
             var addedTasks = taskNames.Select(repository.AddTask).ToList();
             var compl = addedTasks.Select(repository.MarkCompleted).ToList();
             var getedTasks = addedTasks.Select(repository.GetTaskById).ToList();
@@ -159,6 +166,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
         [Fact]
         public void should_get_all_tasks()
         {
+            repository.DeleteAllTasks();
             var taskList = repository.GetAllTasks();
             taskList.Should().BeEquivalentTo(new List<ServiceTask>());
             var addedTasks = taskNames.Select(repository.AddTask).ToList();
