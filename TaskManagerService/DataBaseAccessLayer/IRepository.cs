@@ -14,6 +14,5 @@ namespace TaskManagerHost.DataBaseAccessLayer
         ServiceTask GetTaskById(int id);
         List<ServiceTask> GetAllTasks();
         bool MarkCompleted(int id);
-        void DeleteAllTasks();
     }
 }

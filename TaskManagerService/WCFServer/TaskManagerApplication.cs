@@ -13,7 +13,7 @@ namespace TaskManagerHost.WCFServer
         private static void Main()
         {
             IKernel kernel = new StandardKernel(new TaskManagerModule());
-            using (var serviceHost = new ServiceHost(kernel.Get<ITaskManagerService>()))
+            using (var serviceHost = new ServiceHost(kernel.Get<ITaskManagerService>(), new Uri("net.tcp://localhost:44444")))
             {
                 serviceHost.Open();
                 Console.WriteLine("Host started");
