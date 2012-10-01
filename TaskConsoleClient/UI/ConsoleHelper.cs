@@ -58,19 +58,17 @@ namespace TaskConsoleClient.UI
 
         private void ListSingleTask(string text, string command)
         {
-            try
-            {
-                var lid = int.Parse(text.Substring(command.Length)); //
-                var task = commandManager.GetTaskById(lid);
+            //try
+            //{
+            var lid = int.Parse(text.Substring(command.Length));
+            var task = commandManager.GetTaskById(lid);
 
-                if (task == null) throw new NullReferenceException(string.Format("Task not found (ID: {0})", lid));
-
-                ViewTaskInfo(task);
-            }
-            catch (NullReferenceException e)
+            if (task == null)
             {
-                PrintExceptionInfo(e);
+                Console.WriteLine(string.Format("Task not found (ID: {0})", lid));
+                return;
             }
+            ViewTaskInfo(task);
         }
 
         private void ListTasks()
@@ -94,18 +92,12 @@ namespace TaskConsoleClient.UI
         private bool IsCommandSupported(string text)
         {
             var result = true;
-            try
+            if (!IsCommandCorrect(text))
             {
-                if (!IsCommandCorrect(text))
-                {
-                    result = false;
-                    throw new InvalidCommandException("Command is not supported");
-                }
+                result = false;
+                Console.WriteLine("Command is not supported");
             }
-            catch (Exception e)
-            {
-                PrintExceptionInfo(e);
-            }
+
             return result;
         }
 
@@ -132,12 +124,6 @@ namespace TaskConsoleClient.UI
         {
             Console.WriteLine(ex.Message);
         }
-    }
-
-    public class InvalidCommandException : Exception
-    {
-        public InvalidCommandException(string message)
-            : base(message) { }
     }
 
     public class ConsoleHelperTests

@@ -9,6 +9,7 @@ namespace TaskConsoleClient.UI
     {
         public static void Main()
         {
+            Console.Title = "Task Manager Application";
             Console.WriteLine(TestConnection()
                 ? "Connection established."
                 : "Wrong server address.");
