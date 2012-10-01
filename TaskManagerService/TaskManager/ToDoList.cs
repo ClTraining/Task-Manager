@@ -11,13 +11,11 @@ namespace TaskManagerHost.TaskManager
 {
     public class ToDoList : IToDoList
     {
-        private readonly ITaskFactory factory;
         private readonly IRepository repository;
-        private readonly ITaskMapper mapper;
+        private ITaskMapper mapper;
 
-        public ToDoList(ITaskFactory factory, IRepository repository, ITaskMapper mapper)
+        public ToDoList(IRepository repository, ITaskMapper mapper)
         {
-            this.factory = factory;
             this.repository = repository;
             this.mapper = mapper;
         }
@@ -30,19 +28,13 @@ namespace TaskManagerHost.TaskManager
         public ContractTask GetTaskById(int id)
         {
             var newTask = repository.GetTaskById(id);
-            ContractTask result = null;
-
-            if (newTask != null)
-            {
-                result = new ContractTask {Name = newTask.Name, Id = newTask.Id};
-            }
-            return result;
+            return mapper.ConvertToContract(newTask);
         }
 
         public List<ContractTask> GetAllTasks()
         {
             var newTasks = repository.GetAllTasks();
-            return newTasks.Select(serviceTask => new ContractTask {Name = serviceTask.Name, Id = serviceTask.Id}).ToList();
+            return newTasks.Select(mapper.ConvertToContract).ToList();
         }
 
 
@@ -50,68 +42,57 @@ namespace TaskManagerHost.TaskManager
         {
             return repository.MarkCompleted(id);
         }
-
     }
-
-
 
     public class ToDoListTests
     {
-        private readonly ContractTask incomingTask = new ContractTask();
-        private readonly ServiceTask expectedTask = new ServiceTask();
-        private readonly ITaskFactory factory = Substitute.For<ITaskFactory>();
-        private readonly ITaskMapper mapper = new TaskMapper();
-        private readonly IRepository memorepository = new MemoRepository();
-        private readonly List<string> taskNames = new List<string> { "test task", "another task", "my task" };
+        private readonly IRepository repository = Substitute.For<IRepository>();
+        private readonly ITaskMapper mapper = Substitute.For<ITaskMapper>();
         private readonly  IToDoList todolist;
 
         public  ToDoListTests()
         {
-            todolist = new ToDoList(factory, memorepository, mapper);
+            todolist = new ToDoList(repository, mapper);
         }
 
         [Fact]
         public void should_save_task_and_generate_new_id()
         {
-            var newtask = todolist.AddTask(taskNames[0]);
+            repository.AddTask("new task").Returns(1);
+            var newtask = todolist.AddTask("new task");
             newtask.Should().Be(1);
-        }
-
-        [Fact]
-        public void should_throw_exception_when_task_was_not_found()
-        {
-            Action action = () => todolist.GetTaskById(1);
-            action.ShouldThrow<Exception>().WithMessage("Task with id 1 was not found");
         }
 
         [Fact]
         public void should_get_task_by_id()
         {
-            var addedTasks = taskNames.Select(todolist.AddTask).ToList();
-            var getedTasks = addedTasks.Select(contractTask => todolist.GetTaskById(contractTask)).ToList();
-            foreach (var task in getedTasks)
-            {
-                addedTasks.ToArray()[getedTasks.IndexOf(task)].Should().Be(task.Id);
-            }
+            var serviceTask = new ServiceTask();
+            var contractTask = new ContractTask();
+            repository.GetTaskById(1).Returns(serviceTask);
+            mapper.ConvertToContract(serviceTask).Returns(contractTask);
+
+            var res = todolist.GetTaskById(1);
+            res.Should().Be(contractTask);
         }
 
         [Fact]
-        public void should_throw_exception_when_task_was_not_found_for_save_task()
+        public void should_get_all_tasks()
         {
-            Action action = () => todolist.MarkCompleted(1);
-            action.ShouldThrow<Exception>().WithMessage("Task with id 10 was not found");
+            var serviceTasks = new List<ServiceTask> { new ServiceTask { Id = 1, Name = "some" } };
+            repository.GetAllTasks().Returns(serviceTasks);
+
+            var contractTasks = serviceTasks.Select(task => mapper.ConvertToContract(task)).ToList();
+
+            var res = todolist.GetAllTasks();
+            res.Should().BeEquivalentTo(contractTasks);
         }
 
         [Fact]
-        public void should_edit_task_by_id()
+        public void should_mark_task_as_completed_by_id()
         {
-            var addedTasks = taskNames.Select(todolist.AddTask).ToList();
-            var editedTasks = addedTasks.Select(a => todolist.MarkCompleted(a)).ToList();
-            var newTasks = todolist.GetAllTasks();
-            foreach (var task in newTasks)
-            {
-                task.IsCompleted.Should().Be(true);
-            }
+            repository.MarkCompleted(1).Returns(true);
+            var res = todolist.MarkCompleted(1);
+            res.Should().Be(true);
         }
     }
 }

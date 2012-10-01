@@ -31,7 +31,6 @@ namespace TaskConsoleClient.Manager
                 Console.Write("Wrong address. Press Enter and try else.");
                 Console.ReadLine();
             }
-
             return test;
         }
     }
