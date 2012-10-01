@@ -1,4 +1,5 @@
-﻿using System;
+﻿#region Using
+
 using System.Collections.Generic;
 using System.Linq;
 using EntitiesLibrary;
@@ -7,12 +8,15 @@ using NSubstitute;
 using TaskManagerHost.DataBaseAccessLayer;
 using Xunit;
 
+#endregion
+
+
 namespace TaskManagerHost.TaskManager
 {
     public class ToDoList : IToDoList
     {
         private readonly IRepository repository;
-        private ITaskMapper mapper;
+        private readonly ITaskMapper mapper;
 
         public ToDoList(IRepository repository, ITaskMapper mapper)
         {
@@ -43,6 +47,7 @@ namespace TaskManagerHost.TaskManager
             return repository.MarkCompleted(id);
         }
     }
+
 
     public class ToDoListTests
     {
