@@ -169,10 +169,5 @@ namespace TaskManagerHost.DataBaseAccessLayer
             }
         }
 
-        [Fact]
-        public void FactMethodName1()
-        {
-            
-        }
     }
 }
