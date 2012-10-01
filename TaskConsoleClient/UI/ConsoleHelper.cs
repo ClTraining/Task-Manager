@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using FluentAssertions;
 using TaskConsoleClient.Manager;
 using NSubstitute;
@@ -19,69 +20,106 @@ namespace TaskConsoleClient.UI
 
         public void ExecuteCommand(string text)
         {
-            try
-            {
-                if (!IsContainsCommands(text))
-                    throw new InvalidCommandException("Command is not supported");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-
+            if (!IsCommandSupported(text)) return;
             var command = GetCommand(text);
             switch (command)
             {
                 case "add ":
-                    var resultId = commandManager.AddTask(text.Substring(4));
-                    Console.WriteLine("Task added. Task ID: " + resultId);
+                    AddTask(text);
                     break;
 
                 case "list":
-                    commandManager
-                        .GetAllTasks()
-                        .ForEach(x => Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
+                    ListTasks();
                     break;
 
                 case "list ":
-                    try
-                    {
-                        var lid = int.Parse(text.Substring(command.Length));
-                        var task = commandManager.GetTaskById(lid);
-
-                        if (task == null) throw new NullReferenceException(string.Format("Task not found. Task ID"));
-                        Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
-                    }
-                    catch (NullReferenceException e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
+                    ListSingleTask(text, command);
                     break;
 
                 case "completed ":
-
-                    var cid = int.Parse(text.Substring(command.Length));
-                    commandManager.MarkCompleted(cid);
-                    Console.WriteLine("Task ID: {0} completed", cid);
-                    
+                    MarkTaskCompleted(text, command);
                     break;
             }
         }
 
-        public bool IsContainsCommands(string text)
+        private void MarkTaskCompleted(string text, string command)
         {
-            var commands = new List<string> { "add ", "list ", "list", "completed " };
-            return commands.Any(text.Contains);
+            var cid = int.Parse(text.Substring(command.Length));
+            commandManager.MarkCompleted(cid);
+            Console.WriteLine("Task ID: {0} completed", cid);
+        }
+
+        private void ListSingleTask(string text, string command)
+        {
+            try
+            {
+                var lid = int.Parse(text.Substring(command.Length)); //
+                var task = commandManager.GetTaskById(lid);
+
+                if (task == null) throw new NullReferenceException(string.Format("Task not found. Task ID"));
+                Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
+            }
+            catch (NullReferenceException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+        }
+
+        private void ListTasks()
+        {
+            commandManager
+                .GetAllTasks()
+                .ForEach(x => Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
+        }
+
+        private void AddTask(string text)
+        {
+            var resultId = commandManager.AddTask(text.Substring(4)); //
+            Console.WriteLine("Task added. Task ID: " + resultId);
+        }
+
+        private bool IsCommandSupported(string text)
+        {
+            var result = true;
+            try
+            {
+                if (!IsCommandCorrect(text))
+                {
+                    result = false;
+                    throw new InvalidCommandException("Command is not supported");
+                }
+            }
+            catch (Exception e)
+            {
+                PrintExceptionInfo(e);
+            }
+            return result;
+        }
+
+        private bool IsCommandCorrect(string text)
+        {
+            var commandPatterms = new List<string>
+                                      {
+                                          @"^add\s",
+                                          @"^list$",
+                                          @"^list\s\d{1,}$",
+                                          @"^completed\s\d{1,}$"
+                                      };
+            var regexes = commandPatterms.Select(x => new Regex(x)).ToList();
+            return regexes.Any(regex => regex.IsMatch(text));
         }
 
         private string GetCommand(string text)
         {
-            if (text == "list")
-                return text;
-
             var end = text.IndexOf(' ');
             var result = text.Substring(0, end + 1);
             return result;
+        }
+
+
+        private void PrintExceptionInfo(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
         }
     }
 
@@ -98,7 +136,7 @@ namespace TaskConsoleClient.UI
 
         public ConsoleHelperTests()
         {
-            consoleHelper = new ConsoleHelper(cm);    
+            consoleHelper = new ConsoleHelper(cm);
         }
 
         [Fact]
@@ -111,19 +149,6 @@ namespace TaskConsoleClient.UI
             cm.Received().AddTask("hello world");
         }
 
-        [Fact]
-        public void parse_when_passed_wrong_argument_should_throw_wrongargumentexception()
-        {
-            //arrange
-            const string command = "asdasdasdasd";
-            Action act = () => consoleHelper.ExecuteCommand(command);
-
-            //act
-            var res = consoleHelper.IsContainsCommands(command);
-
-            //assert
-            if (res) act.ShouldThrow<InvalidCommandException>().WithMessage("Command not supported");
-        }
 
         [Fact]
         public void should_recognise_list_id_command()
@@ -154,6 +179,38 @@ namespace TaskConsoleClient.UI
 
             // assert
             cm.Received().MarkCompleted(1);
+        }
+
+        [Fact]
+        public void test_regex_list_all()
+        {
+            var r = new Regex(@"^list$");
+            var result = r.IsMatch("list");
+            result.Should().Be(true);
+        }
+
+        [Fact]
+        public void test_regex_add()
+        {
+            var r = new Regex(@"^add\s");
+            var result = r.IsMatch("add\nlkhglkhglyglygl jykjyk");
+            result.Should().Be(true);
+        }
+
+        [Fact]
+        public void test_regex_list_task()
+        {
+            var r = new Regex(@"^list\s\d{1,}$");
+            var result = r.IsMatch("list 0");
+            result.Should().Be(true);
+        }
+
+        [Fact]
+        public void test_regex_completed_task()
+        {
+            var r = new Regex(@"^completed\s\d{1,}$");
+            var result = r.IsMatch("completed 4");
+            result.Should().Be(true);
         }
     }
 }
