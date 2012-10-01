@@ -13,7 +13,7 @@ namespace TaskManagerHost.WCFServer
         private static void Main()
         {
             IKernel kernel = new StandardKernel(new TaskManagerModule());
-            using (var serviceHost = new ServiceHost(kernel.Get<IToDoList>()))
+            using (var serviceHost = new ServiceHost(kernel.Get<ITaskManagerService>()))
             {
                 serviceHost.Open();
                 Console.WriteLine("Host started");
@@ -27,6 +27,7 @@ namespace TaskManagerHost.WCFServer
     {
         public override void Load()
         {
+            Bind<ITaskManagerService>().To<TaskManagerService>();
             Bind<IRepository>().To<MemoRepository>();
             Bind<ITaskFactory>().To<TaskFactory>();
             Bind<IToDoList>().To<ToDoList>();

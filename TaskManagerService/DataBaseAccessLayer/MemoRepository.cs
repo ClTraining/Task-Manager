@@ -14,7 +14,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
     public class MemoRepository : IRepository
     {
 
-        static List<ServiceTask> taskList = new List<ServiceTask>();
+        List<ServiceTask> taskList = new List<ServiceTask>();
 
         public int AddTask(string name)
         {
