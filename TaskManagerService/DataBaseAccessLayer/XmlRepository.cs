@@ -19,19 +19,20 @@ namespace TaskManagerHost.DataBaseAccessLayer
         private List<ServiceTask> taskList;
         private readonly XmlSerializer serializer;
 
-        private List<ServiceTask> TaskList {
+        private List<ServiceTask> TaskList 
+        {
             get
             {
                 var fileStream = new FileStream(fileName, FileMode.Open);
-                var retu = (List<ServiceTask>) serializer.Deserialize(fileStream);
+                var list = (List<ServiceTask>) serializer.Deserialize(fileStream);
                 fileStream.Close();
-                return retu;
+                return list;
             }
             set
             {
-                var myWriter = new StreamWriter(fileName);
-                serializer.Serialize(myWriter, value);
-                myWriter.Close();
+                var writer = new StreamWriter(fileName);
+                serializer.Serialize(writer, value);
+                writer.Close();
             }
         }
         

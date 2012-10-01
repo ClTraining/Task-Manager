@@ -2,7 +2,6 @@
 
 using EntitiesLibrary;
 using FluentAssertions;
-using TaskManagerHost.DataBaseAccessLayer;
 using Xunit;
 
 #endregion
