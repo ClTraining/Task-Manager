@@ -19,19 +19,20 @@ namespace TaskConsoleClient.Manager
             return factory.CreateChannel();
         }
 
-        public string TestConnection()
+        public bool TestConnection()
         {
             var test = false;
-            var client = factory.CreateChannel();
             try
             {
-                test = client.TestConnection();
+                test = factory.CreateChannel().TestConnection();
             }
             catch (EndpointNotFoundException)
             {
+                Console.Write("Wrong address. Press Enter and try else.");
+                Console.ReadLine();
             }
 
-            return test ? "Connection established" : "Wrong address. Press Enter and try else.";
+            return test;
         }
     }
 }

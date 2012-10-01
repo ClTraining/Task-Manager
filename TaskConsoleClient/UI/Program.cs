@@ -19,21 +19,16 @@ namespace TaskConsoleClient.UI
 
         private static string TestConnection()
         {
-            Console.Clear();
-            Console.Write("Enter server address: ");
             var address = "";
-            var res = "";
-            while (res != "Connection established.")
+            var res = false;
+            while (res != true)
             {
+                Console.Clear();
+                Console.Write("Enter server address: ");
                 address = Console.ReadLine();
                 res = new NetTcpConnection(address).TestConnection();
-                Console.CursorVisible = false;
-                Console.WriteLine(res);
-                Console.ReadLine();
-                Console.Clear();
-                TestConnection();
             }
-
+            Console.WriteLine("Connection established\nEnter your command:");
             return address;
         }
     }
