@@ -16,6 +16,9 @@ namespace TaskManagerHost.DataBaseAccessLayer
     class XmlRepository: IRepository
     {
         private readonly string fileName;
+        private List<ServiceTask> taskList;
+        private readonly XmlSerializer serializer;
+
         private List<ServiceTask> TaskList {
             get
             {
@@ -31,8 +34,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
                 myWriter.Close();
             }
         }
-        private List<ServiceTask> taskList;
-        private readonly XmlSerializer serializer;
+        
         public XmlRepository(string fileName)
         {
             this.fileName = fileName;
