@@ -1,9 +1,13 @@
-﻿using System;
+﻿#region Using
+
 using System.Collections.Generic;
 using System.Linq;
 using EntitiesLibrary;
 using FluentAssertions;
 using Xunit;
+
+#endregion
+
 
 namespace TaskManagerHost.DataBaseAccessLayer
 {
