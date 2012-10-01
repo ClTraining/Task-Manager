@@ -61,7 +61,7 @@ namespace TaskConsoleClient.UI
             }
             catch (NullReferenceException e)
             {
-                Console.WriteLine(e.Message);
+               PrintExceptionInfo(e);
             }
         }
 
