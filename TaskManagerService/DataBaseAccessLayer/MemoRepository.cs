@@ -17,18 +17,14 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public int AddTask(string name)
         {
-            var task = new ServiceTask {Name = name, Id = GetNewId()};
+            taskList.Add(new ServiceTask {Name = name, Id = GetNewId()});
 
-            taskList.Add(task);
-
-            return task.Id;
+            return taskList.Select(x => x.Id).Last();
         }
 
         public ServiceTask GetTaskById(int id)
         {
-            var task = taskList.FirstOrDefault(t => t.Id == id);
-
-            return task;
+            return taskList.FirstOrDefault(t => t.Id == id);
         }
 
         public List<ServiceTask> GetAllTasks()
@@ -43,13 +39,10 @@ namespace TaskManagerHost.DataBaseAccessLayer
             var taskToEdit = taskList.FirstOrDefault(t => t.Id == id);
 
             if (taskToEdit == null)
-            {
                 result = false;
-            }
             else
-            {
                 taskToEdit.IsCompleted = true;
-            }
+
             return result;
         }
 
