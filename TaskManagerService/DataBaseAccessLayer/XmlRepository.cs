@@ -90,11 +90,10 @@ namespace TaskManagerHost.DataBaseAccessLayer
             return result;
         }
 
-        public bool DeleteAllTasks()
+        public void DeleteAllTasks()
         {
             taskList = new List<ServiceTask>();
             TaskList = taskList;
-            return true;
         }
 
         private int GetNewId()
