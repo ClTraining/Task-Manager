@@ -8,10 +8,9 @@ namespace TaskConsoleClient.Manager
     {
         private readonly ChannelFactory<ITaskManagerService> factory;
 
-        public NetTcpConnection(string address)
+        public NetTcpConnection()
         {
-            factory = new ChannelFactory<ITaskManagerService>
-                                        (new NetTcpBinding(), string.Format("net.tcp://{0}:44444", address));
+            factory = new ChannelFactory<ITaskManagerService>(new NetTcpBinding(), "net.tcp://localhost:44444");
         }
 
         public ITaskManagerService GetClient()
@@ -24,6 +23,7 @@ namespace TaskConsoleClient.Manager
             var test = false;
             try
             {
+                factory.Open();
                 test = factory.CreateChannel().TestConnection();
             }
             catch (EndpointNotFoundException)
