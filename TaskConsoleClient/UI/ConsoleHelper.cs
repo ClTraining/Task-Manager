@@ -15,7 +15,7 @@ namespace TaskConsoleClient.UI
         private readonly List<string> commandPatterms = new List<string>
                                       {
                                           @"^(add)\s",
-                                          @"^list$",
+                                          @"^(list)$",
                                           @"^(list\s)\d+$",
                                           @"^(completed)\s\d+$"
                                       };
