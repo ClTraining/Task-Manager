@@ -11,15 +11,11 @@ namespace TaskManagerHost.TaskManager
 {
     public class ToDoList : IToDoList
     {
-        private readonly ITaskFactory factory;
         private readonly IRepository repository;
-        private readonly ITaskMapper mapper;
 
-        public ToDoList(ITaskFactory factory, IRepository repository, ITaskMapper mapper)
+        public ToDoList(IRepository repository)
         {
-            this.factory = factory;
             this.repository = repository;
-            this.mapper = mapper;
         }
 
         public int AddTask(string name)
@@ -59,21 +55,20 @@ namespace TaskManagerHost.TaskManager
     {
         private readonly ContractTask incomingTask = new ContractTask();
         private readonly ServiceTask expectedTask = new ServiceTask();
-        private readonly ITaskFactory factory = Substitute.For<ITaskFactory>();
-        private readonly ITaskMapper mapper = new TaskMapper();
-        private readonly IRepository memorepository = new MemoRepository();
+        private readonly IRepository repository = Substitute.For<IRepository>();
         private readonly List<string> taskNames = new List<string> { "test task", "another task", "my task" };
         private readonly  IToDoList todolist;
 
         public  ToDoListTests()
         {
-            todolist = new ToDoList(factory, memorepository, mapper);
+            todolist = new ToDoList(repository);
         }
 
         [Fact]
         public void should_save_task_and_generate_new_id()
         {
-            var newtask = todolist.AddTask(taskNames[0]);
+            repository.AddTask("new task").Returns(1);
+            var newtask = todolist.AddTask("new task");
             newtask.Should().Be(1);
         }
 
@@ -87,12 +82,11 @@ namespace TaskManagerHost.TaskManager
         [Fact]
         public void should_get_task_by_id()
         {
-            var addedTasks = taskNames.Select(todolist.AddTask).ToList();
-            var getedTasks = addedTasks.Select(contractTask => todolist.GetTaskById(contractTask)).ToList();
-            foreach (var task in getedTasks)
-            {
-                addedTasks.ToArray()[getedTasks.IndexOf(task)].Should().Be(task.Id);
-            }
+            var serviceTask = new ServiceTask();
+            var contractTask = new ContractTask();
+            repository.GetTaskById(1).Returns(serviceTask);
+            var res = todolist.GetTaskById(1);
+            res.Should().Be(contractTask);
         }
 
         [Fact]
@@ -105,13 +99,9 @@ namespace TaskManagerHost.TaskManager
         [Fact]
         public void should_edit_task_by_id()
         {
-            var addedTasks = taskNames.Select(todolist.AddTask).ToList();
-            var editedTasks = addedTasks.Select(a => todolist.MarkCompleted(a)).ToList();
-            var newTasks = todolist.GetAllTasks();
-            foreach (var task in newTasks)
-            {
-                task.IsCompleted.Should().Be(true);
-            }
+            repository.MarkCompleted(1).Returns(true);
+            var res = todolist.MarkCompleted(1);
+            res.Should().Be(true);
         }
     }
 }
