@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
+using EntitiesLibrary;
 using FluentAssertions;
 using TaskConsoleClient.Manager;
 using NSubstitute;
@@ -11,6 +12,14 @@ namespace TaskConsoleClient.UI
 {
     class ConsoleHelper
     {
+        private readonly List<string> commandPatterms = new List<string>
+                                      {
+                                          @"^(add)\s",
+                                          @"^list$",
+                                          @"^(list\s)\d+$",
+                                          @"^(completed)\s\d+$"
+                                      };
+
         private readonly ICommandManager commandManager;
 
         public ConsoleHelper(ICommandManager commandManager)
@@ -24,19 +33,17 @@ namespace TaskConsoleClient.UI
             var command = GetCommand(text);
             switch (command)
             {
-                case "add ":
+                case "add":
                     AddTask(text);
                     break;
-
                 case "list":
                     ListTasks();
                     break;
-
                 case "list ":
+                case "list\t":
                     ListSingleTask(text, command);
                     break;
-
-                case "completed ":
+                case "completed":
                     MarkTaskCompleted(text, command);
                     break;
             }
@@ -58,11 +65,11 @@ namespace TaskConsoleClient.UI
 
                 if (task == null) throw new NullReferenceException(string.Format("Task not found (ID: {0})", lid));
 
-                Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
+                ViewTaskInfo(task);
             }
             catch (NullReferenceException e)
             {
-               PrintExceptionInfo(e);
+                PrintExceptionInfo(e);
             }
         }
 
@@ -70,12 +77,17 @@ namespace TaskConsoleClient.UI
         {
             commandManager
                 .GetAllTasks()
-                .ForEach(x => Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
+                .ForEach(x => { if (x != null) ViewTaskInfo(x); });
+        }
+
+        private void ViewTaskInfo(ContractTask task)
+        {
+            Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
         }
 
         private void AddTask(string text)
         {
-            var resultId = commandManager.AddTask(text.Substring(4)); //
+            var resultId = commandManager.AddTask(text.Substring(4));
             Console.WriteLine("Task added. Task ID: " + resultId);
         }
 
@@ -99,22 +111,20 @@ namespace TaskConsoleClient.UI
 
         private bool IsCommandCorrect(string text)
         {
-            var commandPatterms = new List<string>
-                                      {
-                                          @"^add\s",
-                                          @"^list$",
-                                          @"^list\s\d{1,}$",
-                                          @"^completed\s\d{1,}$"
-                                      };
             var regexes = commandPatterms.Select(x => new Regex(x)).ToList();
             return regexes.Any(regex => regex.IsMatch(text));
         }
 
         private string GetCommand(string text)
         {
-            var end = text.IndexOf(' ');
-            var result = text.Substring(0, end + 1);
-            return result;
+            var regexes = commandPatterms.Select(x => new Regex(x)).ToList();
+            var regex = regexes.FirstOrDefault(x => x.IsMatch(text));
+            var match = regex.Match(text);
+            Group group = null;
+            if (match.Success)
+                group = match.Groups[1];
+
+            return group.ToString();
         }
 
 
@@ -193,6 +203,7 @@ namespace TaskConsoleClient.UI
         [Fact]
         public void test_regex_add()
         {
+            // arrange
             var r = new Regex(@"^add\s");
             var result = r.IsMatch("add\nlkhglkhglyglygl jykjyk");
             result.Should().Be(true);
@@ -201,7 +212,7 @@ namespace TaskConsoleClient.UI
         [Fact]
         public void test_regex_list_task()
         {
-            var r = new Regex(@"^list\s\d{1,}$");
+            var r = new Regex(@"^list\s\d+$");
             var result = r.IsMatch("list 0");
             result.Should().Be(true);
         }
@@ -209,7 +220,7 @@ namespace TaskConsoleClient.UI
         [Fact]
         public void test_regex_completed_task()
         {
-            var r = new Regex(@"^completed\s\d{1,}$");
+            var r = new Regex(@"^completed\s\d+$");
             var result = r.IsMatch("completed 4");
             result.Should().Be(true);
         }
