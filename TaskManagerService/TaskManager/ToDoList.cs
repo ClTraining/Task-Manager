@@ -12,10 +12,12 @@ namespace TaskManagerHost.TaskManager
     public class ToDoList : IToDoList
     {
         private readonly IRepository repository;
+        private ITaskMapper mapper;
 
-        public ToDoList(IRepository repository)
+        public ToDoList(IRepository repository, ITaskMapper mapper)
         {
             this.repository = repository;
+            this.mapper = mapper;
         }
 
         public int AddTask(string name)
@@ -26,13 +28,7 @@ namespace TaskManagerHost.TaskManager
         public ContractTask GetTaskById(int id)
         {
             var newTask = repository.GetTaskById(id);
-            ContractTask result = null;
-
-            if (newTask != null)
-            {
-                result = new ContractTask {Name = newTask.Name, Id = newTask.Id};
-            }
-            return result;
+            return mapper.ConvertToContract(newTask);
         }
 
         public List<ContractTask> GetAllTasks()
@@ -46,7 +42,6 @@ namespace TaskManagerHost.TaskManager
         {
             return repository.MarkCompleted(id);
         }
-
     }
 
 
@@ -56,12 +51,13 @@ namespace TaskManagerHost.TaskManager
         private readonly ContractTask incomingTask = new ContractTask();
         private readonly ServiceTask expectedTask = new ServiceTask();
         private readonly IRepository repository = Substitute.For<IRepository>();
+        private readonly ITaskMapper mapper = Substitute.For<ITaskMapper>();
         private readonly List<string> taskNames = new List<string> { "test task", "another task", "my task" };
         private readonly  IToDoList todolist;
 
         public  ToDoListTests()
         {
-            todolist = new ToDoList(repository);
+            todolist = new ToDoList(repository, mapper);
         }
 
         [Fact]
@@ -73,27 +69,15 @@ namespace TaskManagerHost.TaskManager
         }
 
         [Fact]
-        public void should_throw_exception_when_task_was_not_found()
-        {
-            Action action = () => todolist.GetTaskById(1);
-            action.ShouldThrow<Exception>().WithMessage("Task with id 1 was not found");
-        }
-
-        [Fact]
         public void should_get_task_by_id()
         {
             var serviceTask = new ServiceTask();
             var contractTask = new ContractTask();
             repository.GetTaskById(1).Returns(serviceTask);
+            mapper.ConvertToContract(serviceTask).Returns(contractTask);
+
             var res = todolist.GetTaskById(1);
             res.Should().Be(contractTask);
-        }
-
-        [Fact]
-        public void should_throw_exception_when_task_was_not_found_for_save_task()
-        {
-            Action action = () => todolist.MarkCompleted(1);
-            action.ShouldThrow<Exception>().WithMessage("Task with id 10 was not found");
         }
 
         [Fact]
