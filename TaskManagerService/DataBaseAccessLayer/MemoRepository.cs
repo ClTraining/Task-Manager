@@ -1,6 +1,5 @@
 ﻿#region Using
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using EntitiesLibrary;
@@ -10,23 +9,12 @@ using Xunit;
 #endregion
 
 
-
 namespace TaskManagerHost.DataBaseAccessLayer
 {
     public class MemoRepository : IRepository
     {
 
-        static List<ServiceTask> taskList = new List<ServiceTask>();
-
-        public ServiceTask AddTask(ServiceTask task)
-        {
-
-            task.Id = GetNewId();
-
-            taskList.Add(task);
-
-            return task;
-        }
+        List<ServiceTask> taskList = new List<ServiceTask>();
 
         public int AddTask(string name)
         {
@@ -66,34 +54,9 @@ namespace TaskManagerHost.DataBaseAccessLayer
             return result;
         }
 
-        public ServiceTask EditTask(ServiceTask task)
+        public void DeleteAllTasks()
         {
-            var taskToEdit = taskList.FirstOrDefault(t => t.Id == task.Id);
-
-            if (taskToEdit == null)
-            {
-                throw new Exception(String.Format("Task with id {0} was not found", task.Id));
-            }
-
-            taskToEdit.Name = task.Name;
-
-            return taskToEdit;
-        }
-
-        public bool DeleteAllTasks()
-        {
-            var result = true;
-            try
-            {
-                taskList = new List<ServiceTask>();
-            }
-            catch (Exception)
-            {
-
-                result = false;
-            }
-            
-            return result;
+            taskList = new List<ServiceTask>();         
         }
 
         private int GetNewId()
