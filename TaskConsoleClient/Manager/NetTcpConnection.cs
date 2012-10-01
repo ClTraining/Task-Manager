@@ -22,9 +22,10 @@ namespace TaskConsoleClient.Manager
         public string TestConnection()
         {
             var test = false;
+            var client = factory.CreateChannel();
             try
             {
-                test = factory.CreateChannel().TestConnection();
+                test = client.TestConnection();
             }
             catch (EndpointNotFoundException)
             {

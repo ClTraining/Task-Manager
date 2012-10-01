@@ -21,10 +21,12 @@ namespace TaskConsoleClient.UI
         {
             Console.Clear();
             Console.Write("Enter server address: ");
-            var address = Console.ReadLine();
-            var res = new NetTcpConnection(address).TestConnection();
-            if (res != "Connection established.")
+            var address = "";
+            var res = "";
+            while (res != "Connection established.")
             {
+                address = Console.ReadLine();
+                res = new NetTcpConnection(address).TestConnection();
                 Console.CursorVisible = false;
                 Console.WriteLine(res);
                 Console.ReadLine();
