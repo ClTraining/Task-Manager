@@ -58,7 +58,7 @@ namespace TaskConsoleClient.UI
         {
             var cid = int.Parse(text.Substring(command.Length));
             var result = commandManager.MarkCompleted(cid);
-            Console.WriteLine("Task ID: " + cid + (result ? " complited" : " not complited. Task doesn't exist"));
+            Console.WriteLine("Task ID: " + cid + (result ? " completed" : " not completed. Task doesn't exist"));
         }
 
         private void ListSingleTask(string text, string command)
