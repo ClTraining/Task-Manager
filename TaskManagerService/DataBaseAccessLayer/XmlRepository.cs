@@ -111,7 +111,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
     public class XmlRepositoryTests
     {
-        private readonly IRepository repository = new XmlRepository("test");
+        private readonly XmlRepository repository = new XmlRepository("test");
         private readonly List<string> taskNames = new List<string> { "test task", "another task", "my task" };
 
         [Fact]
