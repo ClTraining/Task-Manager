@@ -111,7 +111,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
             return ++newId;
         }
     }
-    public class TestXmlRepository
+    public class XmlRepositoryTests
     {
         [Fact]
         public void should_save_task_and_generate_new_id()

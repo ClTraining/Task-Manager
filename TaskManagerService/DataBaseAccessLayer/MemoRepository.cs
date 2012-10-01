@@ -104,7 +104,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
         }
     }
 
-    public class TestMemoRepository
+    public class MemoRepositoryTests
     {
         private readonly IRepository repository = new MemoRepository();
         private readonly List<string> taskNames = new List<string> { "test task", "another task", "my task" };
