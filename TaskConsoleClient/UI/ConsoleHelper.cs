@@ -56,7 +56,8 @@ namespace TaskConsoleClient.UI
                 var lid = int.Parse(text.Substring(command.Length)); //
                 var task = commandManager.GetTaskById(lid);
 
-                if (task == null) throw new NullReferenceException(string.Format("Task not found. Task ID"));
+                if (task == null) throw new NullReferenceException(string.Format("Task not found (ID: {0})", lid));
+
                 Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
             }
             catch (NullReferenceException e)

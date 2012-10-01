@@ -1,9 +1,9 @@
-#region Using
-
 using System;
 using System.ServiceModel;
-
-#endregion
+using Ninject;
+using Ninject.Modules;
+using TaskManagerHost.DataBaseAccessLayer;
+using TaskManagerHost.TaskManager;
 
 
 namespace TaskManagerHost.WCFServer
@@ -12,7 +12,8 @@ namespace TaskManagerHost.WCFServer
     {
         private static void Main()
         {
-            using (var serviceHost = new ServiceHost(typeof(TaskManagerService)))
+            IKernel kernel = new StandardKernel(new TaskManagerModule());
+            using (var serviceHost = new ServiceHost(kernel.Get<IToDoList>()))
             {
                 serviceHost.Open();
                 Console.WriteLine("Host started");
@@ -21,4 +22,16 @@ namespace TaskManagerHost.WCFServer
             }
         }
     }
+
+    public class TaskManagerModule : NinjectModule
+    {
+        public override void Load()
+        {
+            Bind<IRepository>().To<MemoRepository>();
+            Bind<ITaskFactory>().To<TaskFactory>();
+            Bind<IToDoList>().To<ToDoList>();
+            Bind<ITaskMapper>().To<TaskMapper>();
+        }
+    }
+
 }
