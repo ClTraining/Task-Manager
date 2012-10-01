@@ -1,16 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.ServiceModel;
 using EntitiesLibrary;
-using FluentAssertions;
 using NSubstitute;
 using TaskManagerHost.TaskManager;
-using Xunit;
 
 namespace TaskManagerHost.WCFServer
 {
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
     public class TaskManagerService : ITaskManagerService
     {
-        public IToDoList taskList;
+        private readonly IToDoList taskList;
 
         public TaskManagerService(IToDoList list)
         {
