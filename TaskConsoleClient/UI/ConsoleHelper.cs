@@ -12,7 +12,6 @@ namespace TaskConsoleClient.UI
 {
     class ConsoleHelper
     {
-
         private readonly ICommandManager commandManager;
 
         public ConsoleHelper(ICommandManager commandManager)
@@ -34,7 +33,7 @@ namespace TaskConsoleClient.UI
                     break;
                 case "list ":
                 case "list\t":
-                    ListSingleTask(text, command);
+                    ShowSingleTask(text, command);
                     break;
                 case "complete":
                     MarkTaskCompleted(text, command);
@@ -49,7 +48,7 @@ namespace TaskConsoleClient.UI
             Console.WriteLine("Task ID: " + cid + (result ? " marked as completed" : " not complited. Task doesn't exist"));
         }
 
-        private void ListSingleTask(string text, string command)
+        private void ShowSingleTask(string text, string command)
         {
             var lid = int.Parse(text.Substring(command.Length));
             var task = commandManager.GetTaskById(lid);
