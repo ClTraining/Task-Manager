@@ -10,8 +10,8 @@ namespace TaskManagerHost.WCFServer
     {
         public int TaskId{ get; private set; }
 
-        public TaskNotFoundException(string message, int id)
-            : base(message)
+        public TaskNotFoundException(int id)
+            : base()
         {
             TaskId = id;
         }
