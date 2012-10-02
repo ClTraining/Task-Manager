@@ -45,7 +45,7 @@ namespace TaskConsoleClient.UI
         {
             var cid = int.Parse(text.Substring(command.Length));
             commandManager.MarkCompleted(cid);
-            Console.WriteLine("Task ID: " + cid + (" complited"));
+            Console.WriteLine("Task ID: " + cid + (" completed"));
         }
 
         private void ShowSingleTask(string text, string command)
