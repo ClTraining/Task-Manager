@@ -38,8 +38,7 @@ namespace TaskManagerHost.TaskManager
         public List<ContractTask> GetAllTasks()
         {
             var newTasks = repository.GetAllTasks();
-            //return newTasks.Select(mapper.ConvertToContract).ToList();
-            return newTasks.Select(l => ((ContractTask)null)).ToList(); 
+            return newTasks == null ? null : newTasks.Select(mapper.ConvertToContract).ToList();
         }
 
 

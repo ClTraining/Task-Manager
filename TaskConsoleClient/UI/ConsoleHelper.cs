@@ -1,6 +1,4 @@
-﻿#region Using
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -10,14 +8,11 @@ using TaskConsoleClient.Manager;
 using NSubstitute;
 using Xunit;
 
-#endregion
-
-
 namespace TaskConsoleClient.UI
 {
     class ConsoleHelper
     {
-        private readonly List<string> commandPatterns = new List<string>
+        private readonly List<string> commandPatterms = new List<string>
                                       {
                                           @"^(add)\s",
                                           @"^(list)$",
@@ -58,7 +53,7 @@ namespace TaskConsoleClient.UI
         {
             var cid = int.Parse(text.Substring(command.Length));
             var result = commandManager.MarkCompleted(cid);
-            Console.WriteLine("Task ID: " + cid + (result ? " completed" : " not completed. Task doesn't exist"));
+            Console.WriteLine("Task ID: " + cid + (result ? " complited" : " not complited. Task doesn't exist"));
         }
 
         private void ListSingleTask(string text, string command)
@@ -106,13 +101,13 @@ namespace TaskConsoleClient.UI
 
         private bool IsCommandCorrect(string text)
         {
-            var regexes = commandPatterns.Select(x => new Regex(x)).ToList();
+            var regexes = commandPatterms.Select(x => new Regex(x)).ToList();
             return regexes.Any(regex => regex.IsMatch(text));
         }
 
         private string GetCommand(string text)
         {
-            var regexes = commandPatterns.Select(x => new Regex(x)).ToList();
+            var regexes = commandPatterms.Select(x => new Regex(x)).ToList();
             var regex = regexes.FirstOrDefault(x => x.IsMatch(text));
             var match = regex.Match(text);
             Group group = null;
