@@ -1,14 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
-using EntitiesLibrary;
-using FluentAssertions;
-using TaskConsoleClient.ConreteHandlers;
-using TaskConsoleClient.Manager;
-using NSubstitute;
+using TaskConsoleClient.ConcreteHandlers;
 using TaskManagerHost.WCFServer;
-using Xunit;
 
 namespace TaskConsoleClient.UI
 {

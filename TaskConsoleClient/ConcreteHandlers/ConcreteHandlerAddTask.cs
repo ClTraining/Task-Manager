@@ -4,10 +4,9 @@ using System.Text.RegularExpressions;
 using FluentAssertions;
 using NSubstitute;
 using TaskConsoleClient.Manager;
-using TaskConsoleClient.UI;
 using Xunit;
 
-namespace TaskConsoleClient.ConreteHandlers
+namespace TaskConsoleClient.ConcreteHandlers
 {
     public class ConcreteHandlerAddTask : ICommandHandler
     {

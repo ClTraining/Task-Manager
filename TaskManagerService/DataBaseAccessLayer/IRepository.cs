@@ -1,10 +1,5 @@
-﻿#region Using
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using EntitiesLibrary;
-
-#endregion
-
 
 namespace TaskManagerHost.DataBaseAccessLayer
 {

@@ -1,4 +1,3 @@
-
 ﻿namespace EntitiesLibrary
 {
     public class ContractTask

@@ -1,17 +1,11 @@
-﻿#region Using
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceModel;
 using System.Threading;
 using EntitiesLibrary;
 using FluentAssertions;
 using TaskManagerHost.WCFServer;
 using Xunit;
-
-#endregion
-
 
 namespace TaskManagerHost.DataBaseAccessLayer
 {

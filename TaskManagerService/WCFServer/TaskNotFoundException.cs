@@ -1,9 +1,4 @@
-﻿#region Using
-
-using System;
-using System.Runtime.Serialization;
-
-#endregion
+﻿using System;
 
 namespace TaskManagerHost.WCFServer
 {

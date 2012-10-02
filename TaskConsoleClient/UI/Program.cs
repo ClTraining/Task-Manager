@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using Ninject;
+﻿using Ninject;
 using Ninject.Modules;
-using TaskConsoleClient.ConreteHandlers;
+using TaskConsoleClient.ConcreteHandlers;
 using TaskConsoleClient.Manager;
-﻿using System;
+using System;
 
 namespace TaskConsoleClient.UI
 {

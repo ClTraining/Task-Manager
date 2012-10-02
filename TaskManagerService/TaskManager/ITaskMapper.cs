@@ -1,9 +1,4 @@
-﻿#region Using
-
-using EntitiesLibrary;
-
-#endregion
-
+﻿using EntitiesLibrary;
 
 namespace TaskManagerHost.TaskManager
 {

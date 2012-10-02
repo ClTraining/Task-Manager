@@ -1,11 +1,6 @@
-﻿#region Using
-
-using EntitiesLibrary;
+﻿using EntitiesLibrary;
 using FluentAssertions;
 using Xunit;
-
-#endregion
-
 
 namespace TaskManagerHost.TaskManager
 {

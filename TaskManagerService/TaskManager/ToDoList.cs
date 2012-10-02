@@ -1,7 +1,4 @@
-﻿#region Using
-
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using EntitiesLibrary;
@@ -10,8 +7,6 @@ using NSubstitute;
 using TaskManagerHost.DataBaseAccessLayer;
 using TaskManagerHost.WCFServer;
 using Xunit;
-
-#endregion
 
 
 namespace TaskManagerHost.TaskManager

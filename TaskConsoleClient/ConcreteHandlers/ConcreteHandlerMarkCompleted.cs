@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskConsoleClient.Manager;
-using TaskConsoleClient.UI;
 using TaskManagerHost.WCFServer;
 using Xunit;
 
-namespace TaskConsoleClient.ConreteHandlers
+namespace TaskConsoleClient.ConcreteHandlers
 {
     public class ConcreteHandlerMarkCompleted : ICommandHandler
     {

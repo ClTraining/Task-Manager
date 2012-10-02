@@ -67,12 +67,12 @@
     <Compile Include="Manager\NetTcpConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\CommandHelper.cs" />
-    <Compile Include="ConreteHandlers\ConcreteHandlerAddTask.cs" />
-    <Compile Include="ConreteHandlers\ConcreteHandlerMarkCompleted.cs" />
-    <Compile Include="ConreteHandlers\ConcreteHandlerShowAll.cs" />
-    <Compile Include="ConreteHandlers\ConcreteHandlerShowSingleTask.cs" />
+    <Compile Include="ConcreteHandlers\ConcreteHandlerAddTask.cs" />
+    <Compile Include="ConcreteHandlers\ConcreteHandlerMarkCompleted.cs" />
+    <Compile Include="ConcreteHandlers\ConcreteHandlerShowAll.cs" />
+    <Compile Include="ConcreteHandlers\ConcreteHandlerShowSingleTask.cs" />
     <Compile Include="UI\ConsoleHelper.cs" />
-    <Compile Include="ConreteHandlers\ICommandHandler.cs" />
+    <Compile Include="ConcreteHandlers\ICommandHandler.cs" />
     <Compile Include="UI\Program.cs" />
   </ItemGroup>
   <ItemGroup>
