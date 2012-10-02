@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using EntitiesLibrary;
 using FluentAssertions;
 using Xunit;
@@ -14,12 +15,15 @@ namespace TaskManagerHost.DataBaseAccessLayer
     public class MemoRepository : IRepository
     {
         readonly List<ServiceTask> taskList = new List<ServiceTask>();
+        private int currentId = 0;
 
         public int AddTask(string name)
         {
-            taskList.Add(new ServiceTask {Name = name, Id = GetNewId()});
+            var serviceTask = new ServiceTask {Name = name, Id = GetNewId()};
 
-            return taskList.Select(x => x.Id).Last();
+            taskList.Add(serviceTask);
+
+            return serviceTask.Id;
         }
 
         public ServiceTask GetTaskById(int id)
@@ -36,7 +40,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
         {
             var result = true;
 
-            var taskToEdit = taskList.FirstOrDefault(t => t.Id == id);
+            var taskToEdit = GetTaskById(id);
 
             if (taskToEdit == null)
                 result = false;
@@ -48,14 +52,8 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         private int GetNewId()
         {
-           var newId = 0;
-
-            if (taskList.Any())
-            {
-                newId = taskList.Max(x => x.Id);
-            }
-
-            return ++newId;
+            Interlocked.Increment(ref currentId);
+            return currentId;
         }
     }
 
@@ -72,7 +70,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
         }
 
         [Fact]
-        public void should_throw_exception_when_task_was_not_found()
+        public void should_return_null_when_task_was_not_found()
         {
             var task = repository.GetTaskById(1);
             task.Should().BeNull();
@@ -82,8 +80,8 @@ namespace TaskManagerHost.DataBaseAccessLayer
         public void should_get_task_by_id()
         {
             var addedTasks = taskNames.Select(repository.AddTask);
-            var gettedTasks = addedTasks.Select(repository.GetTaskById).ToList();
-            gettedTasks.Select(x=> x.Name.Should().Be(taskNames.ToArray()[gettedTasks.ToList().IndexOf(x)]));
+            var receivedTasks = addedTasks.Select(repository.GetTaskById).ToList();
+            receivedTasks.Select(x => x.Name.Should().Be(taskNames.ToArray()[receivedTasks.ToList().IndexOf(x)]));
         }
 
         [Fact]
@@ -97,21 +95,26 @@ namespace TaskManagerHost.DataBaseAccessLayer
         public void should_edit_task_by_id()
         {
             var addedTasks = taskNames.Select(repository.AddTask).ToList();
-            var compl = addedTasks.Select(repository.MarkCompleted).ToList();
-            var getedTasks = addedTasks.Select(repository.GetTaskById).ToList();
-            foreach (var task in getedTasks)
+            addedTasks.Select(repository.MarkCompleted).ToList();
+            var receivedTasks = addedTasks.Select(repository.GetTaskById).ToList();
+            foreach (var task in receivedTasks)
             {
                 task.IsCompleted.Should().Be(true);
             }
         }
 
         [Fact]
-        public void should_get_all_tasks()
+        public void should_return_empty_list()
         {
             var taskList = repository.GetAllTasks();
-            taskList.Should().BeEquivalentTo(new List<ServiceTask>());
-            var addedTasks = taskNames.Select(repository.AddTask).ToList();
-            taskList = repository.GetAllTasks().ToList();
+            taskList.Should().BeEquivalentTo(new List<ServiceTask>());            
+        }
+
+        [Fact]
+        public void should_get_all_tasks()
+        {
+            taskNames.Select(repository.AddTask).ToList();
+            var taskList = repository.GetAllTasks().ToList();
             foreach (var task in taskList)
             {
                 task.Name.Should().Be(taskNames.ToArray()[taskList.IndexOf(task)]);
