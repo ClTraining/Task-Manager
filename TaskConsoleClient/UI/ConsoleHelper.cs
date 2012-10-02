@@ -12,14 +12,6 @@ namespace TaskConsoleClient.UI
 {
     class ConsoleHelper
     {
-        private readonly List<string> commandPatterms = new List<string>
-                                      {
-                                          @"^(add)\s",
-                                          @"^(list)$",
-                                          @"^(list\s)\d+$",
-                                          @"^(completed)\s\d+$"
-                                      };
-
         private readonly ICommandManager commandManager;
 
         public ConsoleHelper(ICommandManager commandManager)
@@ -29,8 +21,8 @@ namespace TaskConsoleClient.UI
 
         public void ExecuteCommand(string text)
         {
-            if (!IsCommandSupported(text)) return;
-            var command = GetCommand(text);
+            if (!CommandHelper.Check(text)) return;
+            var command = CommandHelper.GetCommand(text);
             switch (command)
             {
                 case "add":
@@ -41,9 +33,9 @@ namespace TaskConsoleClient.UI
                     break;
                 case "list ":
                 case "list\t":
-                    ListSingleTask(text, command);
+                    ShowSingleTask(text, command);
                     break;
-                case "completed":
+                case "complete":
                     MarkTaskCompleted(text, command);
                     break;
             }
@@ -56,7 +48,7 @@ namespace TaskConsoleClient.UI
             Console.WriteLine("Task ID: " + cid + (" complited"));
         }
 
-        private void ListSingleTask(string text, string command)
+        private void ShowSingleTask(string text, string command)
         {
             var lid = int.Parse(text.Substring(command.Length));
             var task = commandManager.GetTaskById(lid);
@@ -66,55 +58,25 @@ namespace TaskConsoleClient.UI
                 Console.WriteLine("Task not found (ID: {0}", lid);
                 return;
             }
-            ViewTaskInfo(task);
+            ShowTaskInfo(task);
         }
-
+        
+        private void ShowTaskInfo(ContractTask task)
+        {
+            Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
+        }
+        
         private void ListTasks()
         {
             commandManager
                 .GetAllTasks()
-                .ForEach(x => { if (x != null) ViewTaskInfo(x); });
+                .ForEach(x => { if (x != null) ShowTaskInfo(x); });
         }
-
-        private void ViewTaskInfo(ContractTask task)
-        {
-            Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
-        }
-
+        
         private void AddTask(string text)
         {
             var resultId = commandManager.AddTask(text.Substring(4));
             Console.WriteLine("Task added. Task ID: " + resultId);
-        }
-
-        private bool IsCommandSupported(string text)
-        {
-            var result = true;
-            if (!IsCommandCorrect(text))
-            {
-                result = false;
-                Console.WriteLine("Command is not supported");
-            }
-
-            return result;
-        }
-
-        private bool IsCommandCorrect(string text)
-        {
-            var regexes = commandPatterms.Select(x => new Regex(x)).ToList();
-            return regexes.Any(regex => regex.IsMatch(text));
-        }
-
-        private string GetCommand(string text)
-        {
-            var regexes = commandPatterms.Select(x => new Regex(x)).ToList();
-            var regex = regexes.FirstOrDefault(x => x.IsMatch(text));
-            var match = regex.Match(text);
-            Group group = null;
-            if (match.Success)
-                group = match.Groups[1];
-
-            return group.ToString();
         }
     }
 
@@ -160,15 +122,13 @@ namespace TaskConsoleClient.UI
             cm.Received().AddTask("Test task");
         }
 
-        //[Fact]
-        //public void should_recognise_iscomplited_command()
-        //{
-        //    // act
-        //    consoleHelper.ExecuteCommand("completed 1");
-
-        //    // assert
-        //    cm.Received().MarkCompleted(1);
-        //}
+        [Fact]
+        public void should_recognise_iscomplited_command()
+        {
+            // act
+            consoleHelper.ExecuteCommand("complete 1");
+            cm.Received().MarkCompleted(1);
+        }
 
         [Fact]
         public void test_regex_list_all()

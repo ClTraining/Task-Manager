@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
 
@@ -10,12 +11,14 @@ namespace TaskManagerHost.WCFServer
         [OperationContract]
         int AddTask(string task);
 
+        [FaultContract(typeof(NullReferenceException))]
         [OperationContract]
         ContractTask GetTaskById(int id);
 
         [OperationContract]
         List<ContractTask> GetAllTasks();
 
+        [FaultContract(typeof(NullReferenceException))]
         [OperationContract]
         void MarkCompleted(int id);
 

@@ -41,7 +41,6 @@ namespace TaskManagerHost.TaskManager
             return receivedTasks.Select(mapper.ConvertToContract).ToList();
         }
 
-
         public void MarkCompleted(int id)
         {
             repository.MarkCompleted(id);
