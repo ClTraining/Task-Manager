@@ -20,7 +20,7 @@ namespace TaskManagerHost.WCFServer
 
         [FaultContract(typeof(NullReferenceException))]
         [OperationContract]
-        bool MarkCompleted(int id);
+        void MarkCompleted(int id);
 
         [OperationContract]
         bool TestConnection();

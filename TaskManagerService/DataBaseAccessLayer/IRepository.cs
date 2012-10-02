@@ -13,6 +13,6 @@ namespace TaskManagerHost.DataBaseAccessLayer
         int AddTask(string name);
         ServiceTask GetTaskById(int id);
         List<ServiceTask> GetAllTasks();
-        bool MarkCompleted(int id);
+        void MarkCompleted(int id);
     }
 }
