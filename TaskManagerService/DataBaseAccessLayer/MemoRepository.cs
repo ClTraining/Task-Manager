@@ -22,7 +22,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public int AddTask(string name)
         {
-            var serviceTask = new ServiceTask {Name = name, Id = GetNewId()};
+            var serviceTask = new ServiceTask { Name = name, Id = GetNewId() };
 
             taskList.Add(serviceTask);
 
@@ -31,15 +31,12 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public ServiceTask GetTaskById(int id)
         {
-            var task = taskList.FirstOrDefault(t => t.Id == id);
 
-            if (task == null)
-            {
+            if(taskList.All(x => x.Id != id))
                 throw new FaultException<TaskNotFoundException>(new TaskNotFoundException("Task with specified id does not exist.", id),
-                    new FaultReason("Task with specified id does not exist."));
-            }
+                  new FaultReason("Task with specified id does not exist."));
 
-            return task;
+            return taskList.FirstOrDefault(x => x.Id == id);
         }
 
         public List<ServiceTask> GetAllTasks()
@@ -50,7 +47,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
         public void MarkCompleted(int id)
         {
             var taskToEdit = GetTaskById(id);
-            
+
             taskToEdit.IsCompleted = true;
         }
 
@@ -119,7 +116,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
         {
             var repository = new MemoRepository();
             var taskList = repository.GetAllTasks();
-            taskList.Should().BeEquivalentTo(new List<ServiceTask>());            
+            taskList.Should().BeEquivalentTo(new List<ServiceTask>());
         }
 
         [Fact]

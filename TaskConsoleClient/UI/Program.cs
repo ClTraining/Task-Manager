@@ -1,5 +1,7 @@
-﻿using Ninject;
+﻿using System.Collections.Generic;
+using Ninject;
 using Ninject.Modules;
+using TaskConsoleClient.ConreteHandlers;
 using TaskConsoleClient.Manager;
 ﻿using System;
 
@@ -19,7 +21,7 @@ namespace TaskConsoleClient.UI
             var kernel = new StandardKernel(module);
 
             for (string s; ((s = Console.ReadLine()) != null); )
-                kernel.Get<ConsoleHelper>().ExecuteCommand(s);
+                kernel.Get<ConsoleHelper>().Execute(s);
         }
 
         private static bool TestConnection()
@@ -32,6 +34,10 @@ namespace TaskConsoleClient.UI
     {
         public override void Load()
         {
+            Bind<ICommandHandler>().To<ConcreteHandlerAddTask>();
+            Bind<ICommandHandler>().To<ConcreteHandlerMarkCompleted>();
+            Bind<ICommandHandler>().To<ConcreteHandlerShowAll>();
+            Bind<ICommandHandler>().To<ConcreteHandlerShowSingleTask>();
             Bind<ICommandManager>().To<CommandManager>();
             Bind<IConnection>().To<NetTcpConnection>();
         }

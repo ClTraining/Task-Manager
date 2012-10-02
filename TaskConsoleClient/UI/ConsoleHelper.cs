@@ -7,6 +7,7 @@ using FluentAssertions;
 using TaskConsoleClient.ConreteHandlers;
 using TaskConsoleClient.Manager;
 using NSubstitute;
+using TaskManagerHost.WCFServer;
 using Xunit;
 
 namespace TaskConsoleClient.UI
@@ -20,9 +21,20 @@ namespace TaskConsoleClient.UI
             this.handler = handler;
         }
 
-        public void Foo(string input)
+        public void Execute(string input)
         {
-            handler.First(x => x.Matches(input));
+            try
+            {
+                handler.First(x => x.Matches(input)).Execute();
+            }
+            catch (TaskNotFoundException e)
+            {
+                Console.WriteLine("Task not found. Task ID: {0}", e.TaskId);
+            }
+            catch(InvalidOperationException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 }

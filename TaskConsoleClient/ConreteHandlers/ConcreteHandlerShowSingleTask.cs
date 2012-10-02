@@ -5,6 +5,7 @@ using FluentAssertions;
 using NSubstitute;
 using TaskConsoleClient.Manager;
 using TaskConsoleClient.UI;
+using TaskManagerHost.WCFServer;
 using Xunit;
 
 namespace TaskConsoleClient.ConreteHandlers
@@ -35,8 +36,15 @@ namespace TaskConsoleClient.ConreteHandlers
 
         public void Execute()
         {
-            var task = manager.GetTaskById(ID);
-            Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
+            try
+            {
+                var task = manager.GetTaskById(ID);
+                Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
+            }
+            catch (TaskNotFoundException e)
+            {
+                Console.WriteLine("Task not found. Task ID: {0}", e.TaskId);
+            }
         }
     }
 
