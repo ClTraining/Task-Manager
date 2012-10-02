@@ -55,7 +55,7 @@ namespace TaskConsoleClient.UI
 
             if (task == null)
             {
-                Console.WriteLine("Task not found (ID: {0}", lid);
+                Console.WriteLine("Task not found (ID: {0})", lid);
                 return;
             }
             ShowTaskInfo(task);
