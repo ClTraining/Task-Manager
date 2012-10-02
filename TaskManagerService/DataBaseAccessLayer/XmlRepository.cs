@@ -1,11 +1,13 @@
 ﻿#region Using
 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using EntitiesLibrary;
 using FluentAssertions;
+using TaskManagerHost.WCFServer;
 using Xunit;
 
 #endregion
@@ -70,24 +72,18 @@ namespace TaskManagerHost.DataBaseAccessLayer
             return TaskList.ToList();
         }
 
-        public bool MarkCompleted(int id)
+        public void MarkCompleted(int id)
         {
-            var result = true;
-
             var taskToEdit = taskList.FirstOrDefault(t => t.Id == id);
 
             if (taskToEdit == null)
             {
-                result = false;
+                throw new TaskNotFoundException("Task with id does not exist.", id);
             }
-            else
-            {
-                taskToEdit.IsCompleted = true;
-            }
+
+            taskToEdit.IsCompleted = true;
 
             TaskList = taskList;
-
-            return result;
         }
 
         public void DeleteAllTasks()
@@ -135,10 +131,10 @@ namespace TaskManagerHost.DataBaseAccessLayer
         {
             repository.DeleteAllTasks();
             var addedTasks = taskNames.Select(repository.AddTask);
-            var getedTasks = addedTasks.Select(repository.GetTaskById).ToList();
-            foreach (var task in getedTasks)
+            var receivedTasks = addedTasks.Select(repository.GetTaskById).ToList();
+            foreach (var task in receivedTasks)
             {
-                task.Name.Should().Be(taskNames.ToArray()[getedTasks.ToList().IndexOf(task)]);
+                task.Name.Should().Be(taskNames.ToArray()[receivedTasks.ToList().IndexOf(task)]);
             }
         }
 
@@ -146,31 +142,40 @@ namespace TaskManagerHost.DataBaseAccessLayer
         public void should_throw_exception_when_task_was_not_found_for_save_task()
         {
             repository.DeleteAllTasks();
-            var result = repository.MarkCompleted(10);
-            result.Should().Be(false);
+            Action act = () =>repository.MarkCompleted(10);
+            act.ShouldThrow<TaskNotFoundException>().WithMessage("Task with id does not exist.");
         }
 
         [Fact]
         public void should_edit_task_by_id()
         {
             repository.DeleteAllTasks();
-            var addedTasks = taskNames.Select(repository.AddTask).ToList();
-            var compl = addedTasks.Select(repository.MarkCompleted).ToList();
-            var getedTasks = addedTasks.Select(repository.GetTaskById).ToList();
-            foreach (var task in getedTasks)
+            var addedTaskIds = taskNames.Select(repository.AddTask).ToList();
+            foreach (var addedTaskId in addedTaskIds)
+            {
+                repository.MarkCompleted(addedTaskId);
+            }
+            var receivedTasks = addedTaskIds.Select(repository.GetTaskById).ToList();
+            foreach (var task in receivedTasks)
             {
                 task.IsCompleted.Should().Be(true);
             }
         }
 
         [Fact]
-        public void should_get_all_tasks()
+        public void should_return_empty_list()
         {
             repository.DeleteAllTasks();
             var taskList = repository.GetAllTasks();
             taskList.Should().BeEquivalentTo(new List<ServiceTask>());
-            var addedTasks = taskNames.Select(repository.AddTask).ToList();
-            taskList = repository.GetAllTasks().ToList();
+        }
+
+        [Fact]
+        public void should_get_all_tasks()
+        {
+            repository.DeleteAllTasks();
+            taskNames.Select(repository.AddTask).ToList();
+            var taskList = repository.GetAllTasks().ToList();
             foreach (var task in taskList)
             {
                 task.Name.Should().Be(taskNames.ToArray()[taskList.IndexOf(task)]);

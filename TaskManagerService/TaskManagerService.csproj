@@ -77,9 +77,22 @@
     <Compile Include="WCFServer\ITaskManagerService.cs" />
     <Compile Include="WCFServer\TaskManagerApplication.cs" />
     <Compile Include="WCFServer\TaskManagerService.cs" />
+    <Compile Include="WCFServer\TaskNotFoundException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\EntitiesLibrary.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\Ninject.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\FluentAssertions.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="bin\Debug\NSubstitute.dll" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">

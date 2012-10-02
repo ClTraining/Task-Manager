@@ -42,9 +42,9 @@ namespace TaskManagerHost.TaskManager
         }
 
 
-        public bool MarkCompleted(int id)
+        public void MarkCompleted(int id)
         {
-            return repository.MarkCompleted(id);
+            repository.MarkCompleted(id);
         }
     }
 
@@ -98,9 +98,8 @@ namespace TaskManagerHost.TaskManager
         [Fact]
         public void should_mark_task_as_completed_by_id()
         {
-            repository.MarkCompleted(1).Returns(true);
-            var res = todolist.MarkCompleted(1);
-            res.Should().Be(true);
+            todolist.MarkCompleted(1);
+            repository.Received().MarkCompleted(1);
         }
     }
 }

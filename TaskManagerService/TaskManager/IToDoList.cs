@@ -13,6 +13,6 @@ namespace TaskManagerHost.TaskManager
         int AddTask(string name);
         ContractTask GetTaskById(int id);
         List<ContractTask> GetAllTasks();
-        bool MarkCompleted(int id);
+        void MarkCompleted(int id);
     }
 }
