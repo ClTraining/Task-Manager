@@ -68,8 +68,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
             if (task == null)
             {
-                throw new FaultException<TaskNotFoundException>(new TaskNotFoundException(id),
-                    new FaultReason("Task with specified id does not exist."));
+                throw new TaskNotFoundException(id);
             }
 
             return task;
@@ -126,7 +125,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
         {
             repository.DeleteAllTasks();
             Action act = () => repository.GetTaskById(1);
-            act.ShouldThrow<FaultException>("Task with specified id does not exist.");
+            act.ShouldThrow<TaskNotFoundException>();
         }
 
         [Fact]
@@ -146,7 +145,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
         {
             repository.DeleteAllTasks();
             Action act = () =>repository.MarkCompleted(10);
-            act.ShouldThrow<FaultException>().WithMessage("Task with specified id does not exist.");
+            act.ShouldThrow<TaskNotFoundException>();
         }
 
         [Fact]
