@@ -66,6 +66,7 @@
     <Compile Include="Manager\IConnection.cs" />
     <Compile Include="Manager\NetTcpConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\CommandHelper.cs" />
     <Compile Include="UI\ConsoleHelper.cs" />
     <Compile Include="UI\Program.cs" />
   </ItemGroup>
