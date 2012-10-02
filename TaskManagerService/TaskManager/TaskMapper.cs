@@ -1,11 +1,7 @@
-﻿#region Using
-
-using AutoMapper;
+﻿using AutoMapper;
 using EntitiesLibrary;
 using FluentAssertions;
 using Xunit;
-
-#endregion
 
 
 namespace TaskManagerHost.TaskManager
