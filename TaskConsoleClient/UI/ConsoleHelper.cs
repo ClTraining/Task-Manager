@@ -59,10 +59,10 @@ namespace TaskConsoleClient.UI
                 Console.WriteLine("Task not found (ID: {0}", lid);
                 return;
             }
-            ViewTaskInfo(task);
+            ShowTaskInfo(task);
         }
         
-        private void ViewTaskInfo(ContractTask task)
+        private void ShowTaskInfo(ContractTask task)
         {
             Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
         }
@@ -71,7 +71,7 @@ namespace TaskConsoleClient.UI
         {
             commandManager
                 .GetAllTasks()
-                .ForEach(x => { if (x != null) ViewTaskInfo(x); });
+                .ForEach(x => { if (x != null) ShowTaskInfo(x); });
         }
         
         private void AddTask(string text)
