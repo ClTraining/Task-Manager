@@ -82,18 +82,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="bin\Debug\EntitiesLibrary.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bin\Debug\Ninject.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bin\Debug\FluentAssertions.dll" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="bin\Debug\NSubstitute.dll" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">
       <Project>{20ae42ef-7dc6-478b-b1a3-825fbf16e6c7}</Project>
       <Name>EntitiesLibrary</Name>

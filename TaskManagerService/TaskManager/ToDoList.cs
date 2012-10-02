@@ -37,8 +37,8 @@ namespace TaskManagerHost.TaskManager
 
         public List<ContractTask> GetAllTasks()
         {
-            var newTasks = repository.GetAllTasks();
-            return newTasks.Select(mapper.ConvertToContract).ToList();
+            var receivedTasks = repository.GetAllTasks();
+            return receivedTasks.Select(mapper.ConvertToContract).ToList();
         }
 
 
@@ -83,10 +83,13 @@ namespace TaskManagerHost.TaskManager
         [Fact]
         public void should_get_all_tasks()
         {
-            var serviceTasks = new List<ServiceTask> { new ServiceTask { Id = 1, Name = "some" } };
-            repository.GetAllTasks().Returns(serviceTasks);
+            var serviceTask = new ServiceTask {Id = 1, Name = "some"};
+            var serviceTasks = new List<ServiceTask> {serviceTask};
+            var contractTask = new ContractTask {Id = 1, Name = "some"};
+            var contractTasks = new List<ContractTask> {contractTask};
 
-            var contractTasks = serviceTasks.Select(task => mapper.ConvertToContract(task)).ToList();
+            repository.GetAllTasks().Returns(serviceTasks);
+            mapper.ConvertToContract(serviceTask).Returns(contractTask);
 
             var res = todolist.GetAllTasks();
             res.Should().BeEquivalentTo(contractTasks);
