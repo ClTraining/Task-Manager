@@ -113,7 +113,7 @@ namespace TaskConsoleClient.UI
             Group group = null;
             if (match.Success)
                 group = match.Groups[1];
-
+            
             return group.ToString();
         }
     }
