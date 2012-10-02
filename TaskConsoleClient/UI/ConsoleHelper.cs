@@ -45,7 +45,7 @@ namespace TaskConsoleClient.UI
         {
             var cid = int.Parse(text.Substring(command.Length));
             commandManager.MarkCompleted(cid);
-            Console.WriteLine("Task ID: " + cid + (" complited"));
+            Console.WriteLine("Task ID: " + cid + (" completed"));
         }
 
         private void ShowSingleTask(string text, string command)
@@ -55,7 +55,7 @@ namespace TaskConsoleClient.UI
 
             if (task == null)
             {
-                Console.WriteLine("Task not found (ID: {0}", lid);
+                Console.WriteLine("Task not found (ID: {0})", lid);
                 return;
             }
             ShowTaskInfo(task);
