@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.ServiceModel;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskManagerHost.DataBaseAccessLayer;
-using TaskManagerHost.WCFServer;
 using Xunit;
 
 
@@ -29,21 +27,14 @@ namespace TaskManagerHost.TaskManager
 
         public ContractTask GetTaskById(int id)
         {
-            try
-            {
-                var newTask = repository.GetTaskById(id);
-                return mapper.ConvertToContract(newTask);
-            }
-            catch (TaskNotFoundException e)
-            {
-                throw new FaultException<TaskNotFoundException>(new TaskNotFoundException(e.TaskId), new FaultReason("BECAUSE!"));
-            }
+            return mapper.ConvertToContract(repository.GetTaskById(id));
         }
 
         public List<ContractTask> GetAllTasks()
         {
-            var receivedTasks = repository.GetAllTasks();
-            return receivedTasks.Select(mapper.ConvertToContract).ToList();
+            return repository.GetAllTasks()
+                .Select(mapper.ConvertToContract)
+                .ToList();
         }
 
         public void MarkCompleted(int id)

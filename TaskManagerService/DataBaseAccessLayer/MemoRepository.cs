@@ -12,7 +12,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
     public class MemoRepository : IRepository
     {
         readonly List<ServiceTask> taskList = new List<ServiceTask>();
-        private int currentId = 0;
+        private int currentId;
 
         public int AddTask(string name)
         {
@@ -25,14 +25,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public ServiceTask GetTaskById(int id)
         {
-            var task = taskList.FirstOrDefault(t => t.Id == id);
-
-            if (task == null)
-            {
-                throw new TaskNotFoundException(id);
-            }
-
-            return task;
+            return taskList.FirstOrDefault(t => t.Id == id);
         }
 
         public List<ServiceTask> GetAllTasks()
@@ -67,28 +60,12 @@ namespace TaskManagerHost.DataBaseAccessLayer
         }
 
         [Fact]
-        public void should_throw_exception_when_task_was_not_found()
-        {
-            var repository = new MemoRepository();
-            Action act = () => repository.GetTaskById(1);
-            act.ShouldThrow<TaskNotFoundException>();
-        }
-
-        [Fact]
         public void should_get_task_by_id()
         {
             var repository = new MemoRepository();
             var addedTasks = taskNames.Select(repository.AddTask);
             var receivedTasks = addedTasks.Select(repository.GetTaskById).ToList();
             receivedTasks.Select(x => x.Name.Should().Be(taskNames.ToArray()[receivedTasks.ToList().IndexOf(x)]));
-        }
-
-        [Fact]
-        public void should_throw_exception_when_task_was_not_found_for_save_task()
-        {
-            var repository = new MemoRepository();
-            Action act = () => repository.MarkCompleted(10);
-            act.ShouldThrow<TaskNotFoundException>();
         }
 
         [Fact]

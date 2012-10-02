@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.ServiceModel;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
@@ -81,11 +83,11 @@ namespace TaskConsoleClient.Manager
             result.Should().BeEquivalentTo(list);
         }
 
-        //[Fact]
-        //public void should_return_true_if_call_mark_completed()
-        //{
-        //    commandManager.MarkCompleted(1);
-        //    connection.GetClient().Received().MarkCompleted(1);
-        //}
+        [Fact]
+        public void should_return_true_if_call_mark_completed()
+        {
+            commandManager.MarkCompleted(1);
+            connection.GetClient().Received().MarkCompleted(1);
+        }
     }
 }

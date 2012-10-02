@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
@@ -26,7 +25,12 @@ namespace TaskManagerHost.WCFServer
 
         public ContractTask GetTaskById(int id)
         {
-            return taskList.GetTaskById(id);
+            ContractTask task = taskList.GetTaskById(id);
+
+            if (task == null)
+                throw new FaultException<TaskNotFoundException>(new TaskNotFoundException(id), new FaultReason("123"));
+
+            return task;
         }
 
         public List<ContractTask> GetAllTasks()

@@ -11,7 +11,7 @@ namespace TaskConsoleClient.UI
 {
     public class CommandHelper
     {
-        private static List<string> commandPatterns = new List<string>
+        private static readonly List<string> commandPatterns = new List<string>
                                       {
                                           @"^(add)\s",
                                           @"^(list)$",

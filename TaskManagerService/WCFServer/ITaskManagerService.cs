@@ -10,15 +10,15 @@ namespace TaskManagerHost.WCFServer
         [OperationContract]
         int AddTask(string task);
 
-        [FaultContract(typeof(TaskNotFoundException))]
         [OperationContract]
+        [FaultContract(typeof(TaskNotFoundException))]
         ContractTask GetTaskById(int id);
 
         [OperationContract]
         List<ContractTask> GetAllTasks();
 
-        [FaultContract(typeof(TaskNotFoundException))]
         [OperationContract]
+        [FaultContract(typeof(TaskNotFoundException))]
         void MarkCompleted(int id);
 
         [OperationContract]

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ServiceModel;
 using System.Text.RegularExpressions;
 using EntitiesLibrary;
 using FluentAssertions;
@@ -35,14 +36,14 @@ namespace TaskConsoleClient.ConcreteHandlers
 
         public void Execute()
         {
+            var task = manager.GetTaskById(ID);
             try
             {
-                var task = manager.GetTaskById(ID);
                 Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
             }
-            catch (TaskNotFoundException e)
+            catch (FaultException e)
             {
-                Console.WriteLine("Task not found. Task ID: {0}", e.TaskId);
+                Console.WriteLine("Task not found. Task ID: {0}", e.Message);
             }
         }
     }

@@ -41,7 +41,7 @@ namespace TaskConsoleClient.ConcreteHandlers
             }
             catch (TaskNotFoundException e)
             {
-                Console.WriteLine("Task not found. ID: {0}", e.TaskId);
+                Console.WriteLine("Task not found. ID: {0}", e.Id);
             }
         }
     }

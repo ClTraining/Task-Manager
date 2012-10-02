@@ -23,7 +23,7 @@ namespace TaskConsoleClient.UI
             }
             catch (TaskNotFoundException e)
             {
-                Console.WriteLine("Task not found. Task ID: {0}", e.TaskId);
+                Console.WriteLine("Task not found. Task ID: {0}", e.Id);
             }
             catch(InvalidOperationException e)
             {
