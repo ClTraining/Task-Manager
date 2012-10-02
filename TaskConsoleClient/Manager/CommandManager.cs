@@ -81,5 +81,13 @@ namespace TaskConsoleClient.Manager
             // assert
             result.Should().BeEquivalentTo(list);
         }
+
+        [Fact]
+        public void should_return_true_if_call_mark_completed()
+        {
+            connection.GetClient().MarkCompleted(1).Returns(true);
+            var result = commandManager.MarkCompleted(1);
+            result.Should().Be(true);
+        }
     }
 }
