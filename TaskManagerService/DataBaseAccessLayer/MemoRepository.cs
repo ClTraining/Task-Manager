@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Threading;
 using EntitiesLibrary;
 using FluentAssertions;
@@ -16,7 +17,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
 {
     public class MemoRepository : IRepository
     {
-        List<ServiceTask> taskList = new List<ServiceTask>();
+        readonly List<ServiceTask> taskList = new List<ServiceTask>();
         private int currentId = 0;
 
         public int AddTask(string name)
@@ -30,7 +31,15 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public ServiceTask GetTaskById(int id)
         {
-            return taskList.FirstOrDefault(t => t.Id == id);
+            var task = taskList.FirstOrDefault(t => t.Id == id);
+
+            if (task == null)
+            {
+                throw new FaultException<TaskNotFoundException>(new TaskNotFoundException("Task with specified id does not exist.", id),
+                    new FaultReason("Task with specified id does not exist."));
+            }
+
+            return task;
         }
 
         public List<ServiceTask> GetAllTasks()
@@ -41,11 +50,6 @@ namespace TaskManagerHost.DataBaseAccessLayer
         public void MarkCompleted(int id)
         {
             var taskToEdit = GetTaskById(id);
-
-            if (taskToEdit == null)
-            {
-                throw new TaskNotFoundException("Task with id does not exist.", id);
-            }
             
             taskToEdit.IsCompleted = true;
         }
@@ -70,11 +74,11 @@ namespace TaskManagerHost.DataBaseAccessLayer
         }
 
         [Fact]
-        public void should_return_null_when_task_was_not_found()
+        public void should_throw_exception_when_task_was_not_found()
         {
             var repository = new MemoRepository();
-            var task = repository.GetTaskById(1);
-            task.Should().BeNull();
+            Action act = () => repository.GetTaskById(1);
+            act.ShouldThrow<FaultException>().WithMessage("Task with specified id does not exist.");
         }
 
         [Fact]
@@ -91,7 +95,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
         {
             var repository = new MemoRepository();
             Action act = () => repository.MarkCompleted(10);
-            act.ShouldThrow<TaskNotFoundException>().WithMessage("Task with id does not exist.");
+            act.ShouldThrow<FaultException>().WithMessage("Task with specified id does not exist.");
         }
 
         [Fact]

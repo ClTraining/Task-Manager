@@ -81,10 +81,18 @@ namespace TaskManagerHost.WCFServer
             res.Should().BeEquivalentTo(listTasks);
         }
 
-        //[Fact]
-        //public void should_send_id_receive_completed_value()
-        //{
-        //    service.MarkCompleted(1);
-        //}
+        [Fact]
+        public void should_send_id_receive_completed_value()
+        {
+            service.MarkCompleted(1);
+            list.Received().MarkCompleted(1);
+        }
+
+        [Fact]
+        public void test_connection_should_return_always_true()
+        {
+            var result = service.TestConnection();
+            result.Should().Be(true);
+        }
     }
 }

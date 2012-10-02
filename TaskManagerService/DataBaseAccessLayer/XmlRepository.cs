@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.ServiceModel;
 using System.Xml.Serialization;
 using EntitiesLibrary;
 using FluentAssertions;
@@ -47,6 +48,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
             {
                 TaskList = new List<ServiceTask>();
             }
+
             taskList = TaskList;
         }
 
@@ -62,7 +64,13 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public ServiceTask GetTaskById(int id)
         {
-            var task = TaskList.FirstOrDefault(t => t.Id == id);
+            var task = taskList.FirstOrDefault(t => t.Id == id);
+
+            if (task == null)
+            {
+                throw new FaultException<TaskNotFoundException>(new TaskNotFoundException("Task with specified id does not exist.", id),
+                    new FaultReason("Task with specified id does not exist."));
+            }
 
             return task;
         }
@@ -74,12 +82,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public void MarkCompleted(int id)
         {
-            var taskToEdit = taskList.FirstOrDefault(t => t.Id == id);
-
-            if (taskToEdit == null)
-            {
-                throw new TaskNotFoundException("Task with id does not exist.", id);
-            }
+            var taskToEdit = GetTaskById(id);
 
             taskToEdit.IsCompleted = true;
 
@@ -122,8 +125,8 @@ namespace TaskManagerHost.DataBaseAccessLayer
         public void should_throw_exception_when_task_was_not_found()
         {
             repository.DeleteAllTasks();
-            var task = repository.GetTaskById(1);
-            task.Should().BeNull();
+            Action act = () => repository.GetTaskById(1);
+            act.ShouldThrow<FaultException>("Task with specified id does not exist.");
         }
 
         [Fact]
@@ -143,7 +146,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
         {
             repository.DeleteAllTasks();
             Action act = () =>repository.MarkCompleted(10);
-            act.ShouldThrow<TaskNotFoundException>().WithMessage("Task with id does not exist.");
+            act.ShouldThrow<FaultException>().WithMessage("Task with specified id does not exist.");
         }
 
         [Fact]
