@@ -68,7 +68,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
             if (task == null)
             {
-                throw new FaultException<TaskNotFoundException>(new TaskNotFoundException("Task with specified id does not exist.", id),
+                throw new FaultException<TaskNotFoundException>(new TaskNotFoundException(id),
                     new FaultReason("Task with specified id does not exist."));
             }
 

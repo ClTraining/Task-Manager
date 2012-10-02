@@ -31,10 +31,14 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public ServiceTask GetTaskById(int id)
         {
-
             if(taskList.All(x => x.Id != id))
                 throw new FaultException<TaskNotFoundException>(new TaskNotFoundException("Task with specified id does not exist.", id),
                   new FaultReason("Task with specified id does not exist."));
+            
+            //if (task == null)
+            //{
+            //    throw new FaultException<TaskNotFoundException>(new TaskNotFoundException(id),
+            //        new FaultReason("Task with specified id does not exist."));
 
             return taskList.FirstOrDefault(x => x.Id == id);
         }
