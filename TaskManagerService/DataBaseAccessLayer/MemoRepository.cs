@@ -62,7 +62,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
     public class MemoRepositoryTests
     {
         private readonly IRepository repository = new MemoRepository();
-        private readonly List<string> taskNames = new List<string> { "test task", "another task", "my task" };
+        private readonly List<string> taskNames = new List<string> { "test task", "another task", "my task" }; 
 
         [Fact]
         public void should_save_task_and_generate_new_id()
