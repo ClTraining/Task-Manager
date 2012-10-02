@@ -1,11 +1,14 @@
 ﻿#region Using
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskManagerHost.DataBaseAccessLayer;
+using TaskManagerHost.WCFServer;
 using Xunit;
 
 #endregion
@@ -31,8 +34,15 @@ namespace TaskManagerHost.TaskManager
 
         public ContractTask GetTaskById(int id)
         {
-            var newTask = repository.GetTaskById(id);
-            return mapper.ConvertToContract(newTask);
+            try
+            {
+                var newTask = repository.GetTaskById(id);
+                return mapper.ConvertToContract(newTask);
+            }
+            catch (TaskNotFoundException e)
+            {
+                throw new FaultException<TaskNotFoundException>(new TaskNotFoundException(e.TaskId), new FaultReason("BECAUSE!"));
+            }
         }
 
         public List<ContractTask> GetAllTasks()
