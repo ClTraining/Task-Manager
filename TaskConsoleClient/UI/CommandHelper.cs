@@ -33,7 +33,7 @@ namespace TaskConsoleClient.UI
             return result;
         }
 
-        private static bool IsCommandCorrect(string text)
+        public static bool IsCommandCorrect(string text)
         {
             
             var regexes = commandPatterns.Select(x => new Regex(x)).ToList();
