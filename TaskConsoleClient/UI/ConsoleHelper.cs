@@ -25,7 +25,16 @@ namespace TaskConsoleClient.UI
         {
             try
             {
-                commandHandlers.First(x => x.Matches(command)).Execute(command);
+                var commandHandler = commandHandlers.FirstOrDefault(x => x.Matches(command));
+
+                if (commandHandler != null)
+                {
+                    commandHandler.Execute(command);
+                }
+                else
+                {
+                    Console.WriteLine("Command is not correct.");
+                }
             }
             catch (FaultException<ExceptionDetail> e)
             {
@@ -72,6 +81,22 @@ namespace TaskConsoleClient.UI
             helper.Execute(command);
 
             sb.ToString().Should().Be("Task not found: (Id = 100)\r\n");
+        }
+
+        [Fact]
+        public void should_correct_handle_wrond_command()
+        {
+            var handler = Substitute.For<ICommandHandler>();
+            const string command = "wrong command";
+            handler.Matches(command).Returns(false);
+            var helper = new ConsoleHelper(new List<ICommandHandler> {handler});
+
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+
+            helper.Execute(command);
+
+            sb.ToString().Should().Be("Command is not correct.\r\n");
         }
     }
 

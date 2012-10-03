@@ -13,6 +13,7 @@ namespace TaskConsoleClient.ConcreteHandlers
     public class ConcreteHandlerShowSingleTask : ICommandHandler
     {
         private readonly ICommandManager manager;
+        private const string Pattern = @"^(list\s)(\d+)$";
 
         public ConcreteHandlerShowSingleTask(ICommandManager manager)
         {
@@ -21,7 +22,7 @@ namespace TaskConsoleClient.ConcreteHandlers
 
         public bool Matches(string input)
         {
-            var regex = new Regex(@"^(list\s)(\d+)$");
+            var regex = new Regex(Pattern);
 
             return regex.IsMatch(input);
         }
@@ -29,7 +30,7 @@ namespace TaskConsoleClient.ConcreteHandlers
         public void Execute(string input)
         {
             var taskId = 0;
-            var regex = new Regex(@"^(list\s)(\d+)$");
+            var regex = new Regex(Pattern);
 
             var match = regex.Match(input);
             if (match.Success)

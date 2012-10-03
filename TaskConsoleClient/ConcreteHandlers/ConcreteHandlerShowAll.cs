@@ -12,6 +12,7 @@ namespace TaskConsoleClient.ConcreteHandlers
     public class ConcreteHandlerShowAll : ICommandHandler
     {
         private ICommandManager manager;
+        private const string Pattern = @"^(list)$";
 
         public ConcreteHandlerShowAll(ICommandManager manager)
         {
@@ -20,7 +21,7 @@ namespace TaskConsoleClient.ConcreteHandlers
 
         public bool Matches(string input)
         {
-            var regex = new Regex(@"^(list)$");
+            var regex = new Regex(Pattern);
             return regex.IsMatch(input);
         }
 

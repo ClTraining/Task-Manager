@@ -10,6 +10,7 @@ namespace TaskConsoleClient.ConcreteHandlers
     public class ConcreteHandlerAddTask : ICommandHandler
     {
         private readonly ICommandManager manager;
+        private const string Pattern = @"^(add)\s";
 
         public ConcreteHandlerAddTask(ICommandManager manager)
         {
@@ -18,7 +19,7 @@ namespace TaskConsoleClient.ConcreteHandlers
 
         public bool Matches(string input)
         {
-            var regex = new Regex(@"^(add)\s");
+            var regex = new Regex(Pattern);
             return regex.IsMatch(input);
         }
 
@@ -34,7 +35,7 @@ namespace TaskConsoleClient.ConcreteHandlers
     {
         private readonly ICommandManager manager = Substitute.For<ICommandManager>();
         private readonly ConcreteHandlerAddTask handler;
-        const string taskName = "add 1";
+        const string TaskName = "add 1";
 
         public ConcreteHandlerAddTaskTests()
         {
@@ -52,7 +53,7 @@ namespace TaskConsoleClient.ConcreteHandlers
         [Fact]
         public void should_send_string_return_id()
         {
-            handler.Execute(taskName);
+            handler.Execute(TaskName);
             manager.Received().AddTask("1");
         }
     }

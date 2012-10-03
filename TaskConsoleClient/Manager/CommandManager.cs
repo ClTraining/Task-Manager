@@ -17,8 +17,7 @@ namespace TaskConsoleClient.Manager
 
         public int AddTask(string task)
         {
-            var res = conn.GetClient().AddTask(task);
-            return res;
+            return conn.GetClient().AddTask(task);
         }
 
         public ContractTask GetTaskById(int id)

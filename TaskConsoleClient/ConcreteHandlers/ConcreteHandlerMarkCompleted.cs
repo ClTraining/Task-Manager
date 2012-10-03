@@ -10,6 +10,7 @@ namespace TaskConsoleClient.ConcreteHandlers
     public class ConcreteHandlerMarkCompleted : ICommandHandler
     {
         private readonly ICommandManager manager;
+        private const string Pattern = @"^(complete\s)(\d+)$";
 
         public ConcreteHandlerMarkCompleted(ICommandManager manager)
         {
@@ -18,14 +19,14 @@ namespace TaskConsoleClient.ConcreteHandlers
 
         public bool Matches(string input)
         {
-            var regex = new Regex(@"^(complete\s)(\d+)$");
+            var regex = new Regex(Pattern);
             return regex.IsMatch(input);
         }
 
         public void Execute(string input)
         {
             var id = 0;
-            var regex = new Regex(@"^(complete\s)(\d+)$");
+            var regex = new Regex(Pattern);
             var match = regex.Match(input);
             if (match.Success)
             {
