@@ -25,16 +25,16 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public ServiceTask GetTaskById(int id)
         {
-            ServiceTask task=null;
+            ServiceTask task = null;
             try
             {
                 task = taskList.FirstOrDefault(t => t.Id == id);
                 if (task == null)
-                    throw new NullReferenceException();
+                    throw new TaskNotFoundException(id);
             }
-            catch (NullReferenceException)
+            catch (TaskNotFoundException e)
             {
-                Console.WriteLine("Sorry, but Task with this ID was not found");
+                Console.WriteLine("Sorry, but Task with ID: {0} was not found", e.Id);
             }
             return task;
         }
