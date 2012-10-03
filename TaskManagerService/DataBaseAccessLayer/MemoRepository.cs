@@ -16,7 +16,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public int AddTask(string name)
         {
-            var serviceTask = new ServiceTask {Name = name, Id = GetNewId()};
+            var serviceTask = new ServiceTask { Name = name, Id = GetNewId() };
 
             taskList.Add(serviceTask);
 
@@ -25,7 +25,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public ServiceTask GetTaskById(int id)
         {
-            ServiceTask task;
+            ServiceTask task=null;
             try
             {
                 task = taskList.FirstOrDefault(t => t.Id == id);
@@ -34,7 +34,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
             }
             catch (NullReferenceException)
             {
-                throw new TaskNotFoundException(id);
+                Console.WriteLine("Sorry, but Task with this ID was not found");
             }
             return task;
         }
@@ -98,7 +98,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
         {
             var repository = new MemoRepository();
             var taskList = repository.GetAllTasks();
-            taskList.Should().BeEquivalentTo(new List<ServiceTask>());            
+            taskList.Should().BeEquivalentTo(new List<ServiceTask>());
         }
 
         [Fact]
