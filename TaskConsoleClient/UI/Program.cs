@@ -35,10 +35,10 @@ namespace TaskConsoleClient.UI
         public override void Load()
         {
             this.Bind(x => x.FromThisAssembly()
-                .SelectAllClasses()
-                .InNamespaceOf<ICommandHandler>()
-                .BindAllInterfaces()
-                .Configure(b => b.InThreadScope()));
+                               .SelectAllClasses()
+                               .InNamespaceOf<ICommandHandler>()
+                               .BindAllInterfaces()
+                               .Configure(b => b.InThreadScope()));
 
             Bind<ICommandManager>().To<CommandManager>();
             Bind<IConnection>().To<NetTcpConnection>();

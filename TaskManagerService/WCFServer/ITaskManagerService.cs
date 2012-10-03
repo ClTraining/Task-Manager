@@ -15,6 +15,7 @@ namespace TaskManagerHost.WCFServer
         ContractTask GetTaskById(int id);
 
         [OperationContract]
+        [FaultContract(typeof(TaskNotFoundFault))]
         List<ContractTask> GetAllTasks();
 
         [OperationContract]

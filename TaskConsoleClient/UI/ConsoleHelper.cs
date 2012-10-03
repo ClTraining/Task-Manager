@@ -25,17 +25,14 @@ namespace TaskConsoleClient.UI
         {
             try
             {
-                commandHandlers.First(x => x.Matches(command)).Execute();
+                commandHandlers.First(x => x.Matches(command)).Execute(command);
             }
             catch (FaultException<ExceptionDetail> e)
             {
-                Console.Write("Task not found: (Id = {0})", e.Detail.Message);
+                Console.WriteLine("Task not found: (Id = {0})", e.Detail.Message);
             }
         }
     }
-
-    // todo: should find matched and execute
-    // todo: should process task not found exception
 
     public class ConsoleHelperTests
     {
@@ -44,14 +41,14 @@ namespace TaskConsoleClient.UI
         {
             var matching = Substitute.For<ICommandHandler>();
             var notMatching = Substitute.For<ICommandHandler>();
-            var consoleHelper = new ConsoleHelper(new List<ICommandHandler>{notMatching, matching});
+            var consoleHelper = new ConsoleHelper(new List<ICommandHandler> { notMatching, matching });
 
-            string command = "command";
+            const string command = "command";
             matching.Matches(command).Returns(true);
 
             consoleHelper.Execute(command);
 
-            matching.Received().Execute();
+            matching.Received().Execute(command);
         }
 
         [Fact]
@@ -65,18 +62,18 @@ namespace TaskConsoleClient.UI
             var faultException = new FaultException<ExceptionDetail>(new ExceptionDetail(new TaskNotFoundException(100)));
 
             handler
-                .When(h => h.Execute())
+                .When(h => h.Execute(command))
                 .Do(x => { throw faultException; });
 
-            
+
             var sb = new StringBuilder();
             Console.SetOut(new StringWriter(sb));
 
             helper.Execute(command);
 
-            sb.ToString().Should().Be("Task not found: (Id = 100)");
+            sb.ToString().Should().Be("Task not found: (Id = 100)\r\n");
         }
     }
 
-    
+
 }

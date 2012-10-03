@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.ServiceModel;
 using System.Threading;
 using EntitiesLibrary;
 using FluentAssertions;
@@ -35,6 +34,9 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public List<ServiceTask> GetAllTasks()
         {
+            if(taskList.Count <= 0)
+                throw new TaskNotFoundException("Empty");
+
             return taskList.ToList();
         }
 
@@ -91,8 +93,8 @@ namespace TaskManagerHost.DataBaseAccessLayer
         [Fact]
         public void should_return_empty_list()
         {
-            var taskList = repository.GetAllTasks();
-            taskList.Should().BeEquivalentTo(new List<ServiceTask>());
+            Action action = () => repository.GetAllTasks();
+            action.ShouldThrow<TaskNotFoundException>().WithMessage("Empty");
         }
 
         [Fact]

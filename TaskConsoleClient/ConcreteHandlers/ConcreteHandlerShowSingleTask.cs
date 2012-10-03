@@ -1,4 +1,6 @@
-﻿﻿using System;
+﻿using System;
+using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using EntitiesLibrary;
 using FluentAssertions;
@@ -8,9 +10,8 @@ using Xunit;
 
 namespace TaskConsoleClient.ConcreteHandlers
 {
-    class ConcreteHandlerShowSingleTask : ICommandHandler
+    public class ConcreteHandlerShowSingleTask : ICommandHandler
     {
-        public int ID { get; set; }
         private readonly ICommandManager manager;
 
         public ConcreteHandlerShowSingleTask(ICommandManager manager)
@@ -22,27 +23,29 @@ namespace TaskConsoleClient.ConcreteHandlers
         {
             var regex = new Regex(@"^(list\s)(\d+)$");
 
+            return regex.IsMatch(input);
+        }
+
+        public void Execute(string input)
+        {
+            var taskId = 0;
+            var regex = new Regex(@"^(list\s)(\d+)$");
+
             var match = regex.Match(input);
             if (match.Success)
             {
                 var group = match.Groups[2];
-                ID = int.Parse(group.ToString());
+                taskId = int.Parse(group.ToString());
             }
-
-            return regex.IsMatch(input);
-        }
-
-        public void Execute()
-        {
-            var task = manager.GetTaskById(ID);
+            var task = manager.GetTaskById(taskId);
             Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
         }
     }
 
     public class ConcreteHandlerShowSingleTaskTests
     {
-        readonly ICommandManager manager = Substitute.For<ICommandManager>();
-        readonly ConcreteHandlerShowSingleTask handler;
+        private readonly ICommandManager manager = Substitute.For<ICommandManager>();
+        private readonly ConcreteHandlerShowSingleTask handler;
 
         public ConcreteHandlerShowSingleTaskTests()
         {
@@ -57,22 +60,22 @@ namespace TaskConsoleClient.ConcreteHandlers
         }
 
         [Fact]
-        public void should_execute_id_from_input()
+        public void should_check_if_command_is_incorrect()
         {
-            handler.Matches("list 1");
-            handler.ID.Should().Be(1);
+            var res = handler.Matches("lista 1");
+            res.Should().BeFalse();
         }
 
         [Fact]
         public void should_check_if_manager_send_request()
         {
-            var task = new ContractTask { Id = 1 };
-            manager.GetTaskById(1).Returns(task);
+            var ct = new ContractTask {Id = 1, IsCompleted = true, Name = "bla-bla"};
+            manager.GetTaskById(1).Returns(ct);
 
-            handler.ID = manager.GetTaskById(1).Id;
-
-            handler.Execute();
-            manager.Received().GetTaskById(handler.ID);
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+            handler.Execute("list 1");
+            sb.ToString().Should().BeEquivalentTo("ID: 1\tTask: bla-bla\tCompleted: +\r\n");
         }
     }
 }

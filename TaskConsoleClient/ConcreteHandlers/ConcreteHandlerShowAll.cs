@@ -24,13 +24,12 @@ namespace TaskConsoleClient.ConcreteHandlers
             return regex.IsMatch(input);
         }
 
-        public void Execute()
+        public void Execute(string input)
         {
             manager
                 .GetAllTasks()
                 .ForEach(x =>
                          Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
-
         }
     }
     public class ConcreteHandlerShowAllTests
@@ -54,7 +53,7 @@ namespace TaskConsoleClient.ConcreteHandlers
         public void should_execute_the_command()
         {
             manager.GetAllTasks().Returns(new List<ContractTask>());
-            handler.Execute();
+            handler.Execute("list 1");
             manager.Received().GetAllTasks();
         }
     }

@@ -3,6 +3,6 @@
     public interface ICommandHandler
     {
         bool Matches(string input);
-        void Execute();
+        void Execute(string input);
     }
 }

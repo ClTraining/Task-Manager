@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using FluentAssertions;
 using NSubstitute;
@@ -10,8 +9,6 @@ namespace TaskConsoleClient.ConcreteHandlers
 {
     public class ConcreteHandlerAddTask : ICommandHandler
     {
-        public string TaskName { get; private set; }
-
         private readonly ICommandManager manager;
 
         public ConcreteHandlerAddTask(ICommandManager manager)
@@ -21,15 +18,14 @@ namespace TaskConsoleClient.ConcreteHandlers
 
         public bool Matches(string input)
         {
-            var regex=new Regex(@"^(add)\s");
-            TaskName = input.Substring(4);
+            var regex = new Regex(@"^(add)\s");
             return regex.IsMatch(input);
         }
 
-        public void Execute()
+        public void Execute(string input)
         {
-            var t = new List<ConcreteHandlerShowSingleTask>();
-            var resultId = manager.AddTask(TaskName);
+            var name = input.Substring(4);
+            var resultId = manager.AddTask(name);
             Console.WriteLine("Task added. Task ID: " + resultId);
         }
     }
@@ -38,6 +34,7 @@ namespace TaskConsoleClient.ConcreteHandlers
     {
         private readonly ICommandManager manager = Substitute.For<ICommandManager>();
         private readonly ConcreteHandlerAddTask handler;
+        const string taskName = "add 1";
 
         public ConcreteHandlerAddTaskTests()
         {
@@ -53,18 +50,10 @@ namespace TaskConsoleClient.ConcreteHandlers
         }
 
         [Fact]
-        public void should_extract_name_from_input()
-        {
-            handler.Matches("add adadadadada");
-            handler.TaskName.Should().Be("adadadadada");
-        }
-
-        [Fact]
         public void should_send_string_return_id()
         {
-            manager.AddTask(handler.TaskName).Returns(1);
-            handler.Execute();
-            manager.Received().AddTask(handler.TaskName);
+            handler.Execute(taskName);
+            manager.Received().AddTask("1");
         }
     }
 }
