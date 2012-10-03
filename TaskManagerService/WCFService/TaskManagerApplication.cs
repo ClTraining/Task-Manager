@@ -3,9 +3,7 @@ using System.ServiceModel;
 using Ninject;
 using Ninject.Modules;
 using TaskManagerHost.Repositories;
-using TaskManagerHost.Repositories;
 using TaskManagerHost.TaskManager;
-using TaskManagerHost.WCFService;
 
 namespace TaskManagerHost.WCFService
 {

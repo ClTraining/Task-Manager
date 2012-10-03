@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using EntitiesLibrary;
 using FluentAssertions;
-using TaskManagerHost.Repositories;
 using TaskManagerHost.WCFService;
 using Xunit;
 

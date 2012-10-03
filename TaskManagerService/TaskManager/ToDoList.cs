@@ -4,7 +4,6 @@ using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskManagerHost.Repositories;
-using TaskManagerHost.Repositories;
 using Xunit;
 
 namespace TaskManagerHost.TaskManager

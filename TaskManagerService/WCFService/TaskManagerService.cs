@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskManagerHost.TaskManager;
-using TaskManagerHost.WCFService;
 using Xunit;
 
 namespace TaskManagerHost.WCFService

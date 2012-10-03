@@ -77,7 +77,7 @@
     <Compile Include="WCFService\ITaskManagerService.cs" />
     <Compile Include="WCFService\TaskManagerApplication.cs" />
     <Compile Include="WCFService\TaskManagerService.cs" />
-    <Compile Include="WCFService\TaskNotFoundFault.cs" />
+    <Compile Include="WCFService\TaskNotFoundException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
