@@ -6,7 +6,6 @@ using NSubstitute;
 using TaskManagerHost.DataBaseAccessLayer;
 using Xunit;
 
-
 namespace TaskManagerHost.TaskManager
 {
     public class ToDoList : IToDoList

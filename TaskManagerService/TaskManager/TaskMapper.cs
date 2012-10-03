@@ -3,7 +3,6 @@ using EntitiesLibrary;
 using FluentAssertions;
 using Xunit;
 
-
 namespace TaskManagerHost.TaskManager
 {
     public class TaskMapper:ITaskMapper

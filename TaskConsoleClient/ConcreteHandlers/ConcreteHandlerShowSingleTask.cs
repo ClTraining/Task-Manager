@@ -5,7 +5,6 @@ using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskConsoleClient.Manager;
-using TaskManagerHost.WCFServer;
 using Xunit;
 
 namespace TaskConsoleClient.ConcreteHandlers
@@ -36,14 +35,18 @@ namespace TaskConsoleClient.ConcreteHandlers
 
         public void Execute()
         {
-            var task = manager.GetTaskById(ID);
             try
             {
+                var task = manager.GetTaskById(ID);
                 Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
             }
             catch (FaultException e)
             {
                 Console.WriteLine("Task not found. Task ID: {0}", e.Message);
+            }
+            catch(NullReferenceException)
+            {
+                Console.WriteLine("Task not found.");
             }
         }
     }

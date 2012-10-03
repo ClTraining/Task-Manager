@@ -25,7 +25,18 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public ServiceTask GetTaskById(int id)
         {
-            return taskList.FirstOrDefault(t => t.Id == id);
+            ServiceTask task;
+            try
+            {
+                task = taskList.FirstOrDefault(t => t.Id == id);
+                if (task == null)
+                    throw new NullReferenceException();
+            }
+            catch (NullReferenceException)
+            {
+                throw new TaskNotFoundException(id);
+            }
+            return task;
         }
 
         public List<ServiceTask> GetAllTasks()
@@ -35,9 +46,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public void MarkCompleted(int id)
         {
-            var taskToEdit = GetTaskById(id);
-            
-            taskToEdit.IsCompleted = true;
+            GetTaskById(id).IsCompleted = true;
         }
 
         private int GetNewId()

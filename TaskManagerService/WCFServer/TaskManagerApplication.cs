@@ -5,7 +5,6 @@ using Ninject.Modules;
 using TaskManagerHost.DataBaseAccessLayer;
 using TaskManagerHost.TaskManager;
 
-
 namespace TaskManagerHost.WCFServer
 {
     static class TaskManagerApplication
