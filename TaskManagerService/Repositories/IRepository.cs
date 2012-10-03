@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using EntitiesLibrary;
 
-namespace TaskManagerHost.DataBaseAccessLayer
+namespace TaskManagerHost.Repositories
 {
     public interface IRepository
     {

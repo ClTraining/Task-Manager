@@ -2,7 +2,8 @@ using System;
 using System.ServiceModel;
 using Ninject;
 using Ninject.Modules;
-using TaskManagerHost.DataBaseAccessLayer;
+using TaskManagerHost.Repositories;
+using TaskManagerHost.Repositories;
 using TaskManagerHost.TaskManager;
 using TaskManagerHost.WCFService;
 
