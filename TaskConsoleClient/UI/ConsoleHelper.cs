@@ -7,7 +7,7 @@ using System.Text;
 using FluentAssertions;
 using NSubstitute;
 using TaskConsoleClient.UI.ConcreteHandlers;
-using TaskManagerHost.WCFService;
+using TaskManagerService.WCFService;
 using Xunit;
 
 namespace TaskConsoleClient.UI

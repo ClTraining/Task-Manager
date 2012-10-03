@@ -2,10 +2,11 @@ using System;
 using System.ServiceModel;
 using Ninject;
 using Ninject.Modules;
-using TaskManagerHost.Repositories;
-using TaskManagerHost.TaskManager;
+using TaskManagerService.Repositories;
+using TaskManagerService.TaskManager;
+using TaskManagerService.Repositories;
 
-namespace TaskManagerHost.WCFService
+namespace TaskManagerService.WCFService
 {
     static class TaskManagerApplication
     {

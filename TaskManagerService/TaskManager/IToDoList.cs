@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using EntitiesLibrary;
 
-namespace TaskManagerHost.TaskManager
+namespace TaskManagerService.TaskManager
 {
     public interface IToDoList
     {

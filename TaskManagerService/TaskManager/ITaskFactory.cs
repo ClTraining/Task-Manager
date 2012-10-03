@@ -1,6 +1,6 @@
 ﻿using EntitiesLibrary;
 
-namespace TaskManagerHost.TaskManager
+namespace TaskManagerService.TaskManager
 {
     public interface ITaskFactory
     {

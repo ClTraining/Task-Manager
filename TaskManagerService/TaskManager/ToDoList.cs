@@ -3,10 +3,11 @@ using System.Linq;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
-using TaskManagerHost.Repositories;
+using TaskManagerService.Repositories;
+using TaskManagerService.Repositories;
 using Xunit;
 
-namespace TaskManagerHost.TaskManager
+namespace TaskManagerService.TaskManager
 {
     public class ToDoList : IToDoList
     {

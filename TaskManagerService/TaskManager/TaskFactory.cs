@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Xunit;
 
-namespace TaskManagerHost.TaskManager
+namespace TaskManagerService.TaskManager
 {
     public class TaskFactory : ITaskFactory
     {

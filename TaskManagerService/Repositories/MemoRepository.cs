@@ -4,10 +4,11 @@ using System.Linq;
 using System.Threading;
 using EntitiesLibrary;
 using FluentAssertions;
-using TaskManagerHost.WCFService;
+using TaskManagerService.WCFService;
+using TaskManagerService.Repositories;
 using Xunit;
 
-namespace TaskManagerHost.Repositories
+namespace TaskManagerService.Repositories
 {
     public class MemoRepository : IRepository
     {

@@ -3,10 +3,10 @@ using System.ServiceModel;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
-using TaskManagerHost.TaskManager;
+using TaskManagerService.TaskManager;
 using Xunit;
 
-namespace TaskManagerHost.WCFService
+namespace TaskManagerService.WCFService
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, IncludeExceptionDetailInFaults = true)]
     public class TaskManagerService : ITaskManagerService

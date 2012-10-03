@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TaskManagerHost.WCFService
+namespace TaskManagerService.WCFService
 {
     public class TaskNotFoundException : Exception
     {

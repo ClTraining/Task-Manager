@@ -1,4 +1,4 @@
-using TaskManagerHost.WCFService;
+using TaskManagerService.WCFService;
 
 namespace TaskConsoleClient.Manager
 {
