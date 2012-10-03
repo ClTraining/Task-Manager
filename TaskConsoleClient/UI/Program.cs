@@ -1,9 +1,10 @@
 ﻿using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
-using TaskConsoleClient.ConcreteHandlers;
+using TaskConsoleClient.UI;
 using TaskConsoleClient.Manager;
 using System;
+using TaskConsoleClient.UI.ConcreteHandlers;
 
 namespace TaskConsoleClient.UI
 {

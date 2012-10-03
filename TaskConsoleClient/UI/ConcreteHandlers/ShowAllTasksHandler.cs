@@ -5,16 +5,17 @@ using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskConsoleClient.Manager;
+using TaskConsoleClient.UI.ConcreteHandlers;
 using Xunit;
 
-namespace TaskConsoleClient.ConcreteHandlers
+namespace TaskConsoleClient.UI
 {
-    public class ConcreteHandlerShowAll : ICommandHandler
+    public class ShowAllTasksHandler : ICommandHandler
     {
         private ICommandManager manager;
         private const string Pattern = @"^(list)$";
 
-        public ConcreteHandlerShowAll(ICommandManager manager)
+        public ShowAllTasksHandler(ICommandManager manager)
         {
             this.manager = manager;
         }
@@ -40,7 +41,7 @@ namespace TaskConsoleClient.ConcreteHandlers
 
         public ConcreteHandlerShowAllTests()
         {
-            handler = new ConcreteHandlerShowAll(manager);
+            handler = new ShowAllTasksHandler(manager);
         }
 
         [Fact]

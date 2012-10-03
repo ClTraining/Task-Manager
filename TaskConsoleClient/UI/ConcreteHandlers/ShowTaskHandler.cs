@@ -6,16 +6,17 @@ using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskConsoleClient.Manager;
+using TaskConsoleClient.UI.ConcreteHandlers;
 using Xunit;
 
-namespace TaskConsoleClient.ConcreteHandlers
+namespace TaskConsoleClient.UI
 {
-    public class ConcreteHandlerShowSingleTask : ICommandHandler
+    public class ShowTaskHandler : ICommandHandler
     {
         private readonly ICommandManager manager;
         private const string Pattern = @"^(list\s)(\d+)$";
 
-        public ConcreteHandlerShowSingleTask(ICommandManager manager)
+        public ShowTaskHandler(ICommandManager manager)
         {
             this.manager = manager;
         }
@@ -46,11 +47,11 @@ namespace TaskConsoleClient.ConcreteHandlers
     public class ConcreteHandlerShowSingleTaskTests
     {
         private readonly ICommandManager manager = Substitute.For<ICommandManager>();
-        private readonly ConcreteHandlerShowSingleTask handler;
+        private readonly ShowTaskHandler handler;
 
         public ConcreteHandlerShowSingleTaskTests()
         {
-            handler = new ConcreteHandlerShowSingleTask(manager);
+            handler = new ShowTaskHandler(manager);
         }
 
         [Fact]

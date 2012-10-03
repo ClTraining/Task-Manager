@@ -6,7 +6,8 @@ using System.ServiceModel;
 using System.Text;
 using FluentAssertions;
 using NSubstitute;
-using TaskConsoleClient.ConcreteHandlers;
+using TaskConsoleClient.UI;
+using TaskConsoleClient.UI.ConcreteHandlers;
 using TaskManagerHost.WCFServer;
 using Xunit;
 

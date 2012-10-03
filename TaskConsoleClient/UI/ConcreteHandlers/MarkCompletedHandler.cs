@@ -7,12 +7,12 @@ using Xunit;
 
 namespace TaskConsoleClient.ConcreteHandlers
 {
-    public class ConcreteHandlerMarkCompleted : ICommandHandler
+    public class MarkCompletedHandler : ICommandHandler
     {
         private readonly ICommandManager manager;
         private const string Pattern = @"^(complete\s)(\d+)$";
 
-        public ConcreteHandlerMarkCompleted(ICommandManager manager)
+        public MarkCompletedHandler(ICommandManager manager)
         {
             this.manager = manager;
         }
@@ -42,11 +42,11 @@ namespace TaskConsoleClient.ConcreteHandlers
     public class ConcreteHandlerMarkCompletedTests
     {
         private readonly ICommandManager manager = Substitute.For<ICommandManager>();
-        private readonly ConcreteHandlerMarkCompleted handler;
+        private readonly MarkCompletedHandler handler;
 
         public ConcreteHandlerMarkCompletedTests()
         {
-            handler = new ConcreteHandlerMarkCompleted(manager);
+            handler = new MarkCompletedHandler(manager);
         }
 
         [Fact]

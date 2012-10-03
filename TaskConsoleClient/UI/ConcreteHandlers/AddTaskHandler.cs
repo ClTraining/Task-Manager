@@ -2,17 +2,18 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
 using NSubstitute;
+using TaskConsoleClient.UI;
 using TaskConsoleClient.Manager;
 using Xunit;
 
-namespace TaskConsoleClient.ConcreteHandlers
+namespace TaskConsoleClient.UI.ConcreteHandlers
 {
-    public class ConcreteHandlerAddTask : ICommandHandler
+    public class AddTaskHandler : ICommandHandler
     {
         private readonly ICommandManager manager;
         private const string Pattern = @"^(add)\s";
 
-        public ConcreteHandlerAddTask(ICommandManager manager)
+        public AddTaskHandler(ICommandManager manager)
         {
             this.manager = manager;
         }
@@ -34,12 +35,12 @@ namespace TaskConsoleClient.ConcreteHandlers
     public class ConcreteHandlerAddTaskTests
     {
         private readonly ICommandManager manager = Substitute.For<ICommandManager>();
-        private readonly ConcreteHandlerAddTask handler;
+        private readonly AddTaskHandler handler;
         const string TaskName = "add 1";
 
         public ConcreteHandlerAddTaskTests()
         {
-            handler = new ConcreteHandlerAddTask(manager);
+            handler = new AddTaskHandler(manager);
         }
 
         [Fact]
