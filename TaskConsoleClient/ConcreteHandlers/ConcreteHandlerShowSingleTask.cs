@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ServiceModel;
 using System.Text.RegularExpressions;
 using EntitiesLibrary;
 using FluentAssertions;
@@ -35,19 +34,8 @@ namespace TaskConsoleClient.ConcreteHandlers
 
         public void Execute()
         {
-            try
-            {
-                var task = manager.GetTaskById(ID);
-                Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
-            }
-            catch (FaultException e)
-            {
-                Console.WriteLine("Task not found. Task ID: {0}", e.Message);
-            }
-            catch(NullReferenceException)
-            {
-                Console.WriteLine("Task not found.");
-            }
+            var task = manager.GetTaskById(ID);
+            Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
         }
     }
 
@@ -78,7 +66,7 @@ namespace TaskConsoleClient.ConcreteHandlers
         [Fact]
         public void should_check_if_manager_send_request()
         {
-            var task = new ContractTask {Id = 1};
+            var task = new ContractTask { Id = 1 };
             manager.GetTaskById(1).Returns(task);
 
             handler.ID = manager.GetTaskById(1).Id;

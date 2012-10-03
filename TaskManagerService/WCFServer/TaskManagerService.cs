@@ -9,7 +9,7 @@ using Xunit;
 
 namespace TaskManagerHost.WCFServer
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, IncludeExceptionDetailInFaults = true)]
     public class TaskManagerService : ITaskManagerService
     {
         private readonly IToDoList taskList;
@@ -26,20 +26,7 @@ namespace TaskManagerHost.WCFServer
 
         public ContractTask GetTaskById(int id)
         {
-            ContractTask task = null;
-            try
-            {
-                task = taskList.GetTaskById(id);
-            }
-            catch (TaskNotFoundException e)
-            {
-                throw new FaultException<TaskNotFoundException>(e, new FaultReason("123"));
-            }
-
-            //if (task == null)
-            //    throw new FaultException<TaskNotFoundException>(new TaskNotFoundException(id), new FaultReason("123"));
-
-            return task;
+            return taskList.GetTaskById(id);
         }
 
         public List<ContractTask> GetAllTasks()

@@ -59,14 +59,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public ServiceTask GetTaskById(int id)
         {
-            var task = taskList.FirstOrDefault(t => t.Id == id);
-
-            if (task == null)
-            {
-                throw new TaskNotFoundException(id);
-            }
-
-            return task;
+            return taskList.FirstOrDefault(t => t.Id == id);
         }
 
         public List<ServiceTask> GetAllTasks()
@@ -116,14 +109,6 @@ namespace TaskManagerHost.DataBaseAccessLayer
         }
 
         [Fact]
-        public void should_throw_exception_when_task_was_not_found()
-        {
-            repository.DeleteAllTasks();
-            Action act = () => repository.GetTaskById(1);
-            act.ShouldThrow<TaskNotFoundException>();
-        }
-
-        [Fact]
         public void should_get_task_by_id()
         {
             repository.DeleteAllTasks();
@@ -133,14 +118,6 @@ namespace TaskManagerHost.DataBaseAccessLayer
             {
                 task.Name.Should().Be(taskNames.ToArray()[receivedTasks.ToList().IndexOf(task)]);
             }
-        }
-
-        [Fact]
-        public void should_throw_exception_when_task_was_not_found_for_save_task()
-        {
-            repository.DeleteAllTasks();
-            Action act = () =>repository.MarkCompleted(10);
-            act.ShouldThrow<TaskNotFoundException>();
         }
 
         [Fact]
