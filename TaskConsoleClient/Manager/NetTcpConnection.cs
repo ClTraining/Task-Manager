@@ -10,7 +10,7 @@ namespace TaskConsoleClient.Manager
 
         public NetTcpConnection()
         {
-            factory = new ChannelFactory<ITaskManagerService>("tcpEP");
+            factory = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
         }
 
         public ITaskManagerService GetClient()

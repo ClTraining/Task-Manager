@@ -26,8 +26,7 @@ namespace TaskManagerHost.WCFServer
 
         public ContractTask GetTaskById(int id)
         {
-            var task = taskList.GetTaskById(id);
-            return task;
+            return taskList.GetTaskById(id);
         }
 
         public List<ContractTask> GetAllTasks()

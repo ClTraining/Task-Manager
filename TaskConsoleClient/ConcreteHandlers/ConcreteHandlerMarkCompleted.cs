@@ -34,15 +34,8 @@ namespace TaskConsoleClient.ConcreteHandlers
 
         public void Execute()
         {
-            try
-            {
-                manager.MarkCompleted(ID);
-                Console.WriteLine("Task ID: {0} completed.", ID);
-            }
-            catch (TaskNotFoundException e)
-            {
-                Console.WriteLine("Task not found. ID: {0}", e.Id);
-            }
+            manager.MarkCompleted(ID);
+            Console.WriteLine("Task ID: {0} completed.", ID);
         }
     }
 

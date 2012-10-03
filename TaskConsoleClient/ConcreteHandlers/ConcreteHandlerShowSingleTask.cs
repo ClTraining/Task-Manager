@@ -1,5 +1,4 @@
-﻿using System;
-using System.ServiceModel;
+﻿﻿using System;
 using System.Text.RegularExpressions;
 using EntitiesLibrary;
 using FluentAssertions;
@@ -9,7 +8,7 @@ using Xunit;
 
 namespace TaskConsoleClient.ConcreteHandlers
 {
-    public class ConcreteHandlerShowSingleTask : ICommandHandler
+    class ConcreteHandlerShowSingleTask : ICommandHandler
     {
         public int ID { get; set; }
         private readonly ICommandManager manager;
@@ -35,15 +34,8 @@ namespace TaskConsoleClient.ConcreteHandlers
 
         public void Execute()
         {
-            try
-            {
-                var task = manager.GetTaskById(ID);
-                Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
-            }
-            catch (FaultException e)
-            {
-                Console.WriteLine("Task not found. Task ID: {0}", e.Message);
-            }
+            var task = manager.GetTaskById(ID);
+            Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
         }
     }
 

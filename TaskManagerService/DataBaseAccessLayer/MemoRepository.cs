@@ -26,19 +26,11 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public ServiceTask GetTaskById(int id)
         {
-            ServiceTask task;
-            try
-            {
-                task = taskList.FirstOrDefault(t => t.Id == id);
-                if (task == null)
-                    throw new TaskNotFoundException(id);
-            }
-            catch (TaskNotFoundException exception)
-            {
-                throw new FaultException<TaskNotFoundException>(new TaskNotFoundException(exception.Id));
-            }
+            var index = id - 1;
+            if (index < 0 || index >= taskList.Count)
+                throw new TaskNotFoundException(id);
 
-            return task;
+            return taskList[index];
         }
 
         public List<ServiceTask> GetAllTasks()
@@ -48,6 +40,7 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public void MarkCompleted(int id)
         {
+            Console.Out.WriteLine("id = {0}", id);
             GetTaskById(id).IsCompleted = true;
         }
 
@@ -61,11 +54,18 @@ namespace TaskManagerHost.DataBaseAccessLayer
     public class MemoRepositoryTests
     {
         private readonly List<string> taskNames = new List<string> { "test task", "another task", "my task" };
+        readonly MemoRepository repository = new MemoRepository();
+
+        [Fact]
+        public void should_throw_exception_if_index_not_found()
+        {
+            Action action = () => repository.GetTaskById(4);
+            action.ShouldThrow<TaskNotFoundException>().WithMessage("4");
+        }
 
         [Fact]
         public void should_save_task_and_generate_new_id()
         {
-            var repository = new MemoRepository();
             var tTask = repository.AddTask(taskNames[0]);
             tTask.Should().Be(1);
         }
@@ -73,32 +73,24 @@ namespace TaskManagerHost.DataBaseAccessLayer
         [Fact]
         public void should_get_task_by_id()
         {
-            var repository = new MemoRepository();
             var addedTasks = taskNames.Select(repository.AddTask);
             var receivedTasks = addedTasks.Select(repository.GetTaskById).ToList();
             receivedTasks.Select(x => x.Name.Should().Be(taskNames.ToArray()[receivedTasks.ToList().IndexOf(x)]));
         }
 
         [Fact]
-        public void should_edit_task_by_id()
+        public void should_mark_task_by_id()
         {
-            var repository = new MemoRepository();
-            var addedTaskIds = taskNames.Select(repository.AddTask).ToList();
-            foreach (var addedTaskId in addedTaskIds)
-            {
-                repository.MarkCompleted(addedTaskId);
-            }
-            var receivedTasks = addedTaskIds.Select(repository.GetTaskById).ToList();
-            foreach (var task in receivedTasks)
-            {
-                task.IsCompleted.Should().Be(true);
-            }
+            var taskId = repository.AddTask("tt");
+
+            repository.MarkCompleted(taskId);
+
+            repository.GetTaskById(taskId).IsCompleted.Should().BeTrue();
         }
 
         [Fact]
         public void should_return_empty_list()
         {
-            var repository = new MemoRepository();
             var taskList = repository.GetAllTasks();
             taskList.Should().BeEquivalentTo(new List<ServiceTask>());
         }
@@ -106,7 +98,6 @@ namespace TaskManagerHost.DataBaseAccessLayer
         [Fact]
         public void should_get_all_tasks()
         {
-            var repository = new MemoRepository();
             taskNames.Select(repository.AddTask).ToList();
             var taskList = repository.GetAllTasks().ToList();
             foreach (var task in taskList)
