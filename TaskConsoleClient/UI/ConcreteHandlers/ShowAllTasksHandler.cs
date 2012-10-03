@@ -5,14 +5,13 @@ using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskConsoleClient.Manager;
-using TaskConsoleClient.UI.ConcreteHandlers;
 using Xunit;
 
-namespace TaskConsoleClient.UI
+namespace TaskConsoleClient.UI.ConcreteHandlers
 {
     public class ShowAllTasksHandler : ICommandHandler
     {
-        private ICommandManager manager;
+        private readonly ICommandManager manager;
         private const string Pattern = @"^(list)$";
 
         public ShowAllTasksHandler(ICommandManager manager)

@@ -2,7 +2,6 @@
 using System.Text.RegularExpressions;
 using FluentAssertions;
 using NSubstitute;
-using TaskConsoleClient.UI;
 using TaskConsoleClient.Manager;
 using Xunit;
 

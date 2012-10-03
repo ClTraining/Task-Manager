@@ -5,7 +5,7 @@ using NSubstitute;
 using TaskConsoleClient.Manager;
 using Xunit;
 
-namespace TaskConsoleClient.ConcreteHandlers
+namespace TaskConsoleClient.UI.ConcreteHandlers
 {
     public class MarkCompletedHandler : ICommandHandler
     {

@@ -65,8 +65,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataBaseAccessLayer\IRepository.cs" />
-    <Compile Include="DataBaseAccessLayer\MemoRepository.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\MemoRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TaskManager\ITaskFactory.cs" />
     <Compile Include="TaskManager\ITaskMapper.cs" />
@@ -74,10 +74,10 @@
     <Compile Include="TaskManager\TaskFactory.cs" />
     <Compile Include="TaskManager\TaskMapper.cs" />
     <Compile Include="TaskManager\ToDoList.cs" />
-    <Compile Include="WCFServer\ITaskManagerService.cs" />
-    <Compile Include="WCFServer\TaskManagerApplication.cs" />
-    <Compile Include="WCFServer\TaskManagerService.cs" />
-    <Compile Include="WCFServer\TaskNotFoundFault.cs" />
+    <Compile Include="WCFService\ITaskManagerService.cs" />
+    <Compile Include="WCFService\TaskManagerApplication.cs" />
+    <Compile Include="WCFService\TaskManagerService.cs" />
+    <Compile Include="WCFService\TaskNotFoundFault.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

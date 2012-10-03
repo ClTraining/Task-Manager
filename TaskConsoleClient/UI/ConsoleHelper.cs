@@ -6,9 +6,8 @@ using System.ServiceModel;
 using System.Text;
 using FluentAssertions;
 using NSubstitute;
-using TaskConsoleClient.UI;
 using TaskConsoleClient.UI.ConcreteHandlers;
-using TaskManagerHost.WCFServer;
+using TaskManagerHost.WCFService;
 using Xunit;
 
 namespace TaskConsoleClient.UI
@@ -29,13 +28,9 @@ namespace TaskConsoleClient.UI
                 var commandHandler = commandHandlers.FirstOrDefault(x => x.Matches(command));
 
                 if (commandHandler != null)
-                {
                     commandHandler.Execute(command);
-                }
                 else
-                {
                     Console.WriteLine("Command is not correct.");
-                }
             }
             catch (FaultException<ExceptionDetail> e)
             {

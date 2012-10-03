@@ -6,10 +6,9 @@ using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskConsoleClient.Manager;
-using TaskConsoleClient.UI.ConcreteHandlers;
 using Xunit;
 
-namespace TaskConsoleClient.UI
+namespace TaskConsoleClient.UI.ConcreteHandlers
 {
     public class ShowTaskHandler : ICommandHandler
     {

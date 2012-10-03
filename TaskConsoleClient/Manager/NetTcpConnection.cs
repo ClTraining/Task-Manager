@@ -1,6 +1,6 @@
 using System;
 using System.ServiceModel;
-using TaskManagerHost.WCFServer;
+using TaskManagerHost.WCFService;
 
 namespace TaskConsoleClient.Manager
 {
@@ -28,7 +28,7 @@ namespace TaskConsoleClient.Manager
             }
             catch (EndpointNotFoundException)
             {
-                Console.Write("Wrong address. Press Enter and try else.");
+                Console.Write("Wrong server address.");
                 Console.ReadLine();
             }
             return test;
