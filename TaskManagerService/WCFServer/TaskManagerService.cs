@@ -9,7 +9,7 @@ using Xunit;
 
 namespace TaskManagerHost.WCFServer
 {
-    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single)]
+    [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, IncludeExceptionDetailInFaults = true)]
     public class TaskManagerService : ITaskManagerService
     {
         private readonly IToDoList taskList;
@@ -26,19 +26,7 @@ namespace TaskManagerHost.WCFServer
 
         public ContractTask GetTaskById(int id)
         {
-            ContractTask task = null;
-            try
-            {
-                task = taskList.GetTaskById(id);
-            }
-            catch (TaskNotFoundException e)
-            {
-                throw new FaultException<TaskNotFoundException>(e, new FaultReason("123"));
-            }
-
-            //if (task == null)
-            //    throw new FaultException<TaskNotFoundException>(new TaskNotFoundException(id), new FaultReason("123"));
-
+            var task = taskList.GetTaskById(id);
             return task;
         }
 
@@ -61,7 +49,7 @@ namespace TaskManagerHost.WCFServer
     public class TaskManagerServiceTests
     {
         private readonly ITaskManagerService service;
-        private readonly IToDoList list = Substitute.For<IToDoList>(); 
+        private readonly IToDoList list = Substitute.For<IToDoList>();
 
         public TaskManagerServiceTests()
         {
@@ -79,7 +67,7 @@ namespace TaskManagerHost.WCFServer
         [Fact]
         public void should_get_task_by_id_and_return_task()
         {
-            var task = new ContractTask {Id = 1};
+            var task = new ContractTask { Id = 1 };
             list.GetTaskById(1).Returns(task);
             var res = service.GetTaskById(1);
             res.Should().Be(task);
@@ -88,7 +76,7 @@ namespace TaskManagerHost.WCFServer
         [Fact]
         public void should_get_all_taasks()
         {
-            var listTasks = new List<ContractTask> {new ContractTask {Id = 1, Name = "some", IsCompleted = false}};
+            var listTasks = new List<ContractTask> { new ContractTask { Id = 1, Name = "some", IsCompleted = false } };
             list.GetAllTasks().Returns(listTasks);
             var res = service.GetAllTasks();
             res.Should().BeEquivalentTo(listTasks);

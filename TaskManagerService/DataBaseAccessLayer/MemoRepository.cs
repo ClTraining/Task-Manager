@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Threading;
 using EntitiesLibrary;
 using FluentAssertions;
@@ -25,17 +26,18 @@ namespace TaskManagerHost.DataBaseAccessLayer
 
         public ServiceTask GetTaskById(int id)
         {
-            ServiceTask task = null;
+            ServiceTask task;
             try
             {
                 task = taskList.FirstOrDefault(t => t.Id == id);
                 if (task == null)
                     throw new TaskNotFoundException(id);
             }
-            catch (TaskNotFoundException e)
+            catch (TaskNotFoundException exception)
             {
-                Console.WriteLine("Sorry, but Task with ID: {0} was not found", e.Id);
+                throw new FaultException<TaskNotFoundException>(new TaskNotFoundException(exception.Id));
             }
+
             return task;
         }
 

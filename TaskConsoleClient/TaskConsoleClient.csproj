@@ -45,6 +45,9 @@
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net40\Ninject.dll</HintPath>
     </Reference>
+    <Reference Include="Ninject.Extensions.Conventions">
+      <HintPath>..\packages\Ninject.Extensions.Conventions.3.0.0.11\lib\net45-full\Ninject.Extensions.Conventions.dll</HintPath>
+    </Reference>
     <Reference Include="NSubstitute">
       <HintPath>..\packages\NSubstitute.1.4.3.0\lib\NET40\NSubstitute.dll</HintPath>
     </Reference>
@@ -66,7 +69,6 @@
     <Compile Include="Manager\IConnection.cs" />
     <Compile Include="Manager\NetTcpConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\CommandHelper.cs" />
     <Compile Include="ConcreteHandlers\ConcreteHandlerAddTask.cs" />
     <Compile Include="ConcreteHandlers\ConcreteHandlerMarkCompleted.cs" />
     <Compile Include="ConcreteHandlers\ConcreteHandlerShowAll.cs" />

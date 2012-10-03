@@ -9,7 +9,7 @@ using Xunit;
 
 namespace TaskConsoleClient.ConcreteHandlers
 {
-    internal class ConcreteHandlerShowAll : ICommandHandler
+    public class ConcreteHandlerShowAll : ICommandHandler
     {
         private ICommandManager manager;
 

@@ -9,7 +9,7 @@ using Xunit;
 
 namespace TaskConsoleClient.ConcreteHandlers
 {
-    class ConcreteHandlerShowSingleTask : ICommandHandler
+    public class ConcreteHandlerShowSingleTask : ICommandHandler
     {
         public int ID { get; set; }
         private readonly ICommandManager manager;
@@ -44,10 +44,6 @@ namespace TaskConsoleClient.ConcreteHandlers
             {
                 Console.WriteLine("Task not found. Task ID: {0}", e.Message);
             }
-            catch(NullReferenceException)
-            {
-                Console.WriteLine("Task not found.");
-            }
         }
     }
 
@@ -78,7 +74,7 @@ namespace TaskConsoleClient.ConcreteHandlers
         [Fact]
         public void should_check_if_manager_send_request()
         {
-            var task = new ContractTask {Id = 1};
+            var task = new ContractTask { Id = 1 };
             manager.GetTaskById(1).Returns(task);
 
             handler.ID = manager.GetTaskById(1).Id;

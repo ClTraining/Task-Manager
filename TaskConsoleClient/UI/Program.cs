@@ -1,4 +1,5 @@
 ﻿using Ninject;
+using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using TaskConsoleClient.ConcreteHandlers;
 using TaskConsoleClient.Manager;
@@ -33,10 +34,12 @@ namespace TaskConsoleClient.UI
     {
         public override void Load()
         {
-            Bind<ICommandHandler>().To<ConcreteHandlerAddTask>();
-            Bind<ICommandHandler>().To<ConcreteHandlerMarkCompleted>();
-            Bind<ICommandHandler>().To<ConcreteHandlerShowAll>();
-            Bind<ICommandHandler>().To<ConcreteHandlerShowSingleTask>();
+            this.Bind(x => x.FromThisAssembly()
+                .SelectAllClasses()
+                .InNamespaceOf<ICommandHandler>()
+                .BindAllInterfaces()
+                .Configure(b => b.InThreadScope()));
+
             Bind<ICommandManager>().To<CommandManager>();
             Bind<IConnection>().To<NetTcpConnection>();
         }

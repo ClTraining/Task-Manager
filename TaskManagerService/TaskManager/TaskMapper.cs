@@ -5,11 +5,11 @@ using Xunit;
 
 namespace TaskManagerHost.TaskManager
 {
-    public class TaskMapper:ITaskMapper
+    public class TaskMapper : ITaskMapper
     {
         public TaskMapper()
         {
-            Mapper.CreateMap<ServiceTask,ContractTask>();
+            Mapper.CreateMap<ServiceTask, ContractTask>();
             Mapper.CreateMap<ContractTask, ServiceTask>();
         }
 
@@ -26,8 +26,8 @@ namespace TaskManagerHost.TaskManager
 
     public class TaskMapperTests
     {
-        private readonly ServiceTask serviceTask = new ServiceTask {Id = 10, Name = "service", IsCompleted = true};
-        private readonly ContractTask contractTask = new ContractTask {Id = 11, Name = "contract", IsCompleted = false};
+        private readonly ServiceTask serviceTask = new ServiceTask { Id = 10, Name = "service", IsCompleted = true };
+        private readonly ContractTask contractTask = new ContractTask { Id = 11, Name = "contract", IsCompleted = false };
         private readonly TaskMapper taskMapper = new TaskMapper();
 
         [Fact]
