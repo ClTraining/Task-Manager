@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using ConnectToWcf;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
-using TaskManagerConsole.Manager;
 using Xunit;
 
-namespace TaskManagerConsole.UI.ConcreteHandlers
+namespace TaskManagerConsole.ConcreteHandlers
 {
     public class ShowAllTasksHandler : ICommandHandler
     {

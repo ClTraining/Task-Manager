@@ -4,8 +4,7 @@ using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using System;
-using TaskManagerConsole.UI;
-using TaskManagerConsole.UI.ConcreteHandlers;
+using TaskManagerConsole.ConcreteHandlers;
 using TaskManagerService.WCFService;
 
 namespace TaskManagerConsole

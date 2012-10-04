@@ -8,16 +8,10 @@ namespace ConnectToWcf
 {
     public class ClientConnection : IClientConnection
     {
-        private readonly ChannelFactory<ITaskManagerService> client;
-            
-            public ClientConnection()
-            {
-                client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
-                client.Open();
-            }
-
         public int AddTask(string task)
         {
+            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
+            client.Open();
             try
             {
                 return client.CreateChannel().AddTask(task);
@@ -31,6 +25,8 @@ namespace ConnectToWcf
 
         public ContractTask GetTaskById(int id)
         {
+            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
+            client.Open();
             try
             {
                 return client.CreateChannel().GetTaskById(id);
@@ -43,6 +39,8 @@ namespace ConnectToWcf
 
         public List<ContractTask> GetAllTasks()
         {
+            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
+            client.Open();
             try
             {
                 return client.CreateChannel().GetAllTasks();
@@ -55,6 +53,8 @@ namespace ConnectToWcf
 
         public void MarkCompleted(int id)
         {
+            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
+            client.Open();
             try
             {
                 client.CreateChannel().MarkCompleted(id);

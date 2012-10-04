@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using ConnectToWcf;
 using FluentAssertions;
 using NSubstitute;
-using TaskManagerConsole.Manager;
 using Xunit;
 
-namespace TaskManagerConsole.UI.ConcreteHandlers
+namespace TaskManagerConsole.ConcreteHandlers
 {
     public class MarkCompletedHandler : ICommandHandler
     {
