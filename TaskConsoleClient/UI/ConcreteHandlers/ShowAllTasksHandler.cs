@@ -30,7 +30,7 @@ namespace TaskConsoleClient.UI.ConcreteHandlers
             manager
                 .GetAllTasks()
                 .ForEach(x =>
-                         Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
+                         Console.WriteLine("ID: {0}\tTask: {1}\t\t\t\tCompleted: {2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
         }
     }
     public class ConcreteHandlerShowAllTests
