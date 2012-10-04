@@ -4,7 +4,6 @@ using Ninject;
 using Ninject.Modules;
 using TaskManagerService.Repositories;
 using TaskManagerService.TaskManager;
-using TaskManagerService.Repositories;
 
 namespace TaskManagerService.WCFService
 {

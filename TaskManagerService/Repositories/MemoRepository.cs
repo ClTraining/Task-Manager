@@ -5,7 +5,6 @@ using System.Threading;
 using EntitiesLibrary;
 using FluentAssertions;
 using TaskManagerService.WCFService;
-using TaskManagerService.Repositories;
 using Xunit;
 
 namespace TaskManagerService.Repositories
