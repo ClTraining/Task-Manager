@@ -6,12 +6,12 @@ using System.ServiceModel;
 using System.Text;
 using FluentAssertions;
 using NSubstitute;
-using TaskConsoleClient.Manager;
-using TaskConsoleClient.UI.ConcreteHandlers;
+using TaskManagerConsole.Manager;
+using TaskManagerConsole.UI.ConcreteHandlers;
 using TaskManagerService.WCFService;
 using Xunit;
 
-namespace TaskConsoleClient.UI
+namespace TaskManagerConsole.UI
 {
     public class ConsoleHelper
     {

@@ -8,8 +8,8 @@
     <ProjectGuid>{31322583-1E72-46B1-806A-0BF333B84058}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TaskConsoleClient</RootNamespace>
-    <AssemblyName>TaskConsoleClient</AssemblyName>
+    <RootNamespace>TaskManagerConsole</RootNamespace>
+    <AssemblyName>TaskManagerConsole</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -64,22 +64,24 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Manager\ClientConnection.cs" />
-    <Compile Include="Manager\IClientConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UI\ConcreteHandlers\AddTaskHandler.cs" />
-    <Compile Include="UI\ConcreteHandlers\MarkCompletedHandler.cs" />
-    <Compile Include="UI\ConcreteHandlers\ShowAllTasksHandler.cs" />
-    <Compile Include="UI\ConcreteHandlers\ShowTaskHandler.cs" />
-    <Compile Include="UI\ConsoleHelper.cs" />
-    <Compile Include="UI\ConcreteHandlers\ICommandHandler.cs" />
-    <Compile Include="UI\Program.cs" />
+    <Compile Include="ConcreteHandlers\AddTaskHandler.cs" />
+    <Compile Include="ConcreteHandlers\MarkCompletedHandler.cs" />
+    <Compile Include="ConcreteHandlers\ShowAllTasksHandler.cs" />
+    <Compile Include="ConcreteHandlers\ShowTaskHandler.cs" />
+    <Compile Include="ConsoleHelper.cs" />
+    <Compile Include="ConcreteHandlers\ICommandHandler.cs" />
+    <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ConnectToWcf\ConnectToWcf.csproj">
+      <Project>{98346f47-73d5-423c-8439-473926635211}</Project>
+      <Name>ConnectToWcf</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">
       <Project>{20AE42EF-7DC6-478B-B1A3-825FBF16E6C7}</Project>
       <Name>EntitiesLibrary</Name>

@@ -1,5 +1,6 @@
 using System;
 using System.ServiceModel;
+using System.ServiceModel.Channels;
 using Ninject;
 using Ninject.Modules;
 using TaskManagerService.Repositories;
@@ -15,7 +16,7 @@ namespace TaskManagerService.WCFService
         {
             Console.Title = "Task Manager Service";
             var kernel = new StandardKernel(new TaskManagerModule());
-
+            
             using (var serviceHost = new ServiceHost(kernel.Get<ITaskManagerService>(), baseAddresses))
             {
                 serviceHost.Open();

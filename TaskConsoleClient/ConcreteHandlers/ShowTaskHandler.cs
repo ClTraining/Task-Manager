@@ -5,10 +5,10 @@ using System.Text.RegularExpressions;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
-using TaskConsoleClient.Manager;
+using TaskManagerConsole.Manager;
 using Xunit;
 
-namespace TaskConsoleClient.UI.ConcreteHandlers
+namespace TaskManagerConsole.UI.ConcreteHandlers
 {
     public class ShowTaskHandler : ICommandHandler
     {

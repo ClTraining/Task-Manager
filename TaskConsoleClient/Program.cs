@@ -1,16 +1,14 @@
-﻿using System.Collections.Generic;
-using System.ServiceModel;
-using NSubstitute;
+﻿using System.ServiceModel;
+using ConnectToWcf;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
-using TaskConsoleClient.Manager;
 using System;
-using TaskConsoleClient.UI.ConcreteHandlers;
+using TaskManagerConsole.UI;
+using TaskManagerConsole.UI.ConcreteHandlers;
 using TaskManagerService.WCFService;
-using Xunit;
 
-namespace TaskConsoleClient.UI
+namespace TaskManagerConsole
 {
     public static class Program
     {

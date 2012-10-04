@@ -3,7 +3,7 @@ using EntitiesLibrary;
 
 namespace TaskConsoleClient.Manager
 {
-    public interface ICommandManager
+    public interface IClientConnection
     {
         int AddTask(string task);
         ContractTask GetTaskById(int id);
