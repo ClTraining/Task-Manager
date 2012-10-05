@@ -1,42 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using ConnectToWcf;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
+using TaskConsoleClient.Manager;
 using Xunit;
 
-namespace TaskManagerConsole.ConcreteHandlers
+namespace TaskConsoleClient.UI.CommandHandlers
 {
-    public class ShowAllTasksHandler : ICommandHandler
+    public class ShowAllTasksHandler : BaseHandler
     {
-        private readonly IClientConnection manager;
-        private const string Pattern = @"^(list)$";
+        private readonly ICommandManager manager;
 
-        public ShowAllTasksHandler(IClientConnection manager)
+        public ShowAllTasksHandler(ICommandManager manager)
         {
+            Pattern = @"^(list)$";
             this.manager = manager;
         }
 
-        public bool Matches(string input)
-        {
-            var regex = new Regex(Pattern);
-            return regex.IsMatch(input);
-        }
-
-        public void Execute(string input)
+        public override void Execute(string input)
         {
             manager
                 .GetAllTasks()
                 .ForEach(x =>
-                         Console.WriteLine("ID: {0}\tTask: {1}\t\t\t\tCompleted: {2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
+                         Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
         }
     }
     public class ConcreteHandlerShowAllTests
     {
-        readonly IClientConnection manager = Substitute.For<IClientConnection>();
-        readonly ICommandHandler handler;
+        readonly ICommandManager manager = Substitute.For<ICommandManager>();
+        readonly ShowAllTasksHandler handler;
 
         public ConcreteHandlerShowAllTests()
         {

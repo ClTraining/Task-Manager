@@ -1,39 +1,38 @@
 ﻿using System;
-using System.Text.RegularExpressions;
-using ConnectToWcf;
 using FluentAssertions;
 using NSubstitute;
+using TaskConsoleClient.Manager;
 using Xunit;
 
-namespace TaskManagerConsole.ConcreteHandlers
+namespace TaskConsoleClient.UI.CommandHandlers
 {
-    public class AddTaskHandler : ICommandHandler
+    public class AddTaskHandler : BaseHandler
     {
-        private readonly IClientConnection manager;
-        private const string Pattern = @"^(add)\s";
-
-        public AddTaskHandler(IClientConnection manager)
+        private readonly ICommandManager manager;
+        
+        public AddTaskHandler(ICommandManager manager)
         {
+            Pattern = @"^(add)\s";
             this.manager = manager;
         }
 
-        public bool Matches(string input)
+        public override void Execute(string input)
         {
-            var regex = new Regex(Pattern);
-            return regex.IsMatch(input);
-        }
-
-        public void Execute(string input)
-        {
-            var name = input.Substring(4);
+            var name = GetParameter(input);
             var resultId = manager.AddTask(name);
             Console.WriteLine("Task added. Task ID: " + resultId);
         }
+
+        private string GetParameter(string input)
+        {
+            return input.Substring(4);
+        }
+
     }
 
     public class ConcreteHandlerAddTaskTests
     {
-        private readonly IClientConnection manager = Substitute.For<IClientConnection>();
+        private readonly ICommandManager manager = Substitute.For<ICommandManager>();
         private readonly AddTaskHandler handler;
         const string TaskName = "add 1";
 

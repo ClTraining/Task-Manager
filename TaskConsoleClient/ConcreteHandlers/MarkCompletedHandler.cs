@@ -1,29 +1,30 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using ConnectToWcf;
 using FluentAssertions;
 using NSubstitute;
+using TaskConsoleClient.Manager;
 using Xunit;
 
-namespace TaskManagerConsole.ConcreteHandlers
+namespace TaskConsoleClient.UI.CommandHandlers
 {
-    public class MarkCompletedHandler : ICommandHandler
+    public class MarkCompletedHandler : BaseHandler
     {
-        private readonly IClientConnection manager;
-        private const string Pattern = @"^(complete\s)(\d+)$";
+        private readonly ICommandManager manager;
 
-        public MarkCompletedHandler(IClientConnection manager)
+        public MarkCompletedHandler(ICommandManager manager)
         {
+            Pattern = @"^(complete\s)(\d+)$";
             this.manager = manager;
         }
 
-        public bool Matches(string input)
+        public override void Execute(string input)
         {
-            var regex = new Regex(Pattern);
-            return regex.IsMatch(input);
+            var id = GetParameter(input);
+            manager.MarkCompleted(id);
+            Console.WriteLine("Task ID: {0} completed.", id);
         }
 
-        public void Execute(string input)
+        private int GetParameter(string input)
         {
             var id = 0;
             var regex = new Regex(Pattern);
@@ -33,15 +34,14 @@ namespace TaskManagerConsole.ConcreteHandlers
                 var group = match.Groups[2];
                 id = int.Parse(group.ToString());
             }
-
-            manager.MarkCompleted(id);
-            Console.WriteLine("Task ID: {0} completed.", id);
+            return id;
         }
+        
     }
 
     public class ConcreteHandlerMarkCompletedTests
     {
-        private readonly IClientConnection manager = Substitute.For<IClientConnection>();
+        private readonly ICommandManager manager = Substitute.For<ICommandManager>();
         private readonly MarkCompletedHandler handler;
 
         public ConcreteHandlerMarkCompletedTests()
