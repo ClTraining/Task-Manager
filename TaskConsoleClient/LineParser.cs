@@ -12,11 +12,11 @@ namespace TaskManagerConsole
 {
     public class LineParser
     {
-        private readonly List<ICommandHandler> comands;
+        private readonly List<ICommandHandler> commands;
 
-        public LineParser(List<ICommandHandler> comands)
+        public LineParser(List<ICommandHandler> commands)
         {
-            this.comands = comands;
+            this.commands = commands;
         }
 
         public List<string> SplitInput(string input)
@@ -26,25 +26,23 @@ namespace TaskManagerConsole
             return result;
         }
 
-        public void ExecuteComand(string input)
+        public void Executecommand(string input)
         {
             try
             {
                 var args = SplitInput(input);
-                var comand = comands.FirstOrDefault(x => x.Name == args[0]);
-                if (comand != null)
-                {
-                    var argument = comand.Convert(args[1]);
-                    comand.Execute(argument);
-                }
+                var command = commands.FirstOrDefault(x => x.Name == args[0]);
+                if (command != null)
+                    command.Execute(args[1]);
+
                 else
-                    Console.WriteLine("This comand is incorrect. Please, try again!");
+                    Console.WriteLine("This command is incorrect. Please, try again!");
             }
             catch (FaultException<ExceptionDetail> e)
             {
                 Console.WriteLine("Task not found: (Id = {0})", e.Detail.Message);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 Console.WriteLine("Argument type is incorrect");
             }
@@ -66,9 +64,9 @@ namespace TaskManagerConsole
         }
 
         [Fact]
-        public void execute_command_should_call_proper_comand()
+        public void execute_command_should_call_proper_command()
         {
-            lp.ExecuteComand("add liliki");
+            lp.Executecommand("add liliki");
 
             cEx.Received();
         }

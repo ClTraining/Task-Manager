@@ -8,7 +8,7 @@ using Xunit;
 
 namespace TaskManagerConsole.ConcreteHandlers
 {
-    public class List : Command<int>
+    public class List : Command<string>
     {
         private readonly IClientConnection manager;
 
@@ -19,9 +19,9 @@ namespace TaskManagerConsole.ConcreteHandlers
             Name = fullName.Substring(fullName.LastIndexOf('.') + 1).ToLower();
         }
 
-        protected override void Execute(int input)
+        protected override void Execute(string input)
         {
-            if (input == 0)
+            if (string.IsNullOrEmpty(input))
             {
                 manager
                     .GetAllTasks()
@@ -30,7 +30,8 @@ namespace TaskManagerConsole.ConcreteHandlers
             }
             else
             {
-                var task = manager.GetTaskById(input);
+                var argument = int.Parse(input);
+                var task = manager.GetTaskById(argument);
                 Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
             }
         }

@@ -11,7 +11,8 @@ namespace TaskManagerConsole.ConcreteHandlers
 
         public void Execute(object argument)
         {
-            Execute((T)argument);
+            var converted = Convert(argument);
+            Execute((T)converted);
         }
 
         public object Convert(object input)

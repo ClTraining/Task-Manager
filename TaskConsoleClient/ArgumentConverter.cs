@@ -14,8 +14,6 @@ namespace TaskManagerConsole
         public T Convert(string input)
         {
             var argument = input;
-            if (string.IsNullOrEmpty(input))
-                argument = "0";
             TypeConverter tc = TypeDescriptor.GetConverter(typeof(T));
             return (T)tc.ConvertFrom(argument);
         }
