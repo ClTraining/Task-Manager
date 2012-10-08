@@ -8,10 +8,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Complete : Command<int>
     {
-        public Complete(IClientConnection client) : base (typeof(Complete))
-        {
-            base.client = client;
-        }
+        public Complete(IClientConnection client) : base (client, typeof(Complete)) { }
 
         protected override void Execute(int input)
         {

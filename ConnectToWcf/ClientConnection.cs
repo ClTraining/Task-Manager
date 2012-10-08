@@ -23,13 +23,13 @@ namespace ConnectToWcf
         }
 
 
-        public ContractTask GetTaskById(int id)
+        public List<ContractTask> GetTaskById(int id)
         {
             var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
             client.Open();
             try
             {
-                return client.CreateChannel().GetTaskById(id);
+                return new List<ContractTask> {client.CreateChannel().GetTaskById(id)};
             }
             finally
             {

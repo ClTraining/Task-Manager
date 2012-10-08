@@ -8,10 +8,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Add : Command<string>
     {
-        public Add(IClientConnection client) : base(typeof(Add))
-        {
-            base.client = client;
-        }
+        public Add(IClientConnection client) : base(client, typeof(Add)) { }
 
         protected override void Execute(string input)
         {

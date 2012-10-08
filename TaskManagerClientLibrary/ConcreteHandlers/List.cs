@@ -8,26 +8,15 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class List : Command<string>
     {
-        public List(IClientConnection client) : base (typeof(List))
-        {
-            base.client = client;
-        }
+        public List(IClientConnection client) : base (client, typeof(List)) { }
 
         protected override void Execute(string input)
         {
-            if (string.IsNullOrEmpty(input))
-            {
-                client
-                    .GetAllTasks()
-                    .ForEach(x =>
-                        Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
-            }
-            else
-            {
-                var argument = int.Parse(input);
-                var task = client.GetTaskById(argument);
-                Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
-            }
+            var tasks = string.IsNullOrEmpty(input) 
+                ? client.GetAllTasks() 
+                : client.GetTaskById(int.Parse(input));
+
+            tasks.ForEach(x => Console.WriteLine("ID: {0}\tTask: {1}\t\t\tCompleted: {2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
         }
     }
 
