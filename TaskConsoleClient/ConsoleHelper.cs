@@ -14,9 +14,9 @@ namespace TaskManagerConsole
 {
     public class ConsoleHelper
     {
-        private readonly IEnumerable<ICommandHandler> commandHandlers;
+        private readonly IEnumerable<BaseHandler> commandHandlers;
 
-        public ConsoleHelper(IEnumerable<ICommandHandler> commandHandlers)
+        public ConsoleHelper(IEnumerable<BaseHandler> commandHandlers)
         {
             this.commandHandlers = commandHandlers;
         }
@@ -44,9 +44,9 @@ namespace TaskManagerConsole
         [Fact]
         public void should_find_matching_handler_and_execute_id()
         {
-            var matching = Substitute.For<ICommandHandler>();
-            var notMatching = Substitute.For<ICommandHandler>();
-            var consoleHelper = new ConsoleHelper(new List<ICommandHandler> { notMatching, matching });
+            var matching = Substitute.For<BaseHandler>();
+            var notMatching = Substitute.For<BaseHandler>();
+            var consoleHelper = new ConsoleHelper(new List<BaseHandler> { notMatching, matching });
 
             const string command = "command";
             matching.Matches(command).Returns(true);
@@ -59,10 +59,10 @@ namespace TaskManagerConsole
         [Fact]
         public void should_throw_exception_if_id_not_found()
         {
-            var handler = Substitute.For<ICommandHandler>();
+            var handler = Substitute.For<BaseHandler>();
             const string command = "list 100";
             handler.Matches(command).Returns(true);
-            var helper = new ConsoleHelper(new List<ICommandHandler> { handler });
+            var helper = new ConsoleHelper(new List<BaseHandler> { handler });
 
             var faultException = new FaultException<ExceptionDetail>(new ExceptionDetail(new TaskNotFoundException(100)));
 
@@ -82,10 +82,10 @@ namespace TaskManagerConsole
         [Fact]
         public void should_correct_handle_wrond_command()
         {
-            var handler = Substitute.For<ICommandHandler>();
+            var handler = Substitute.For<BaseHandler>();
             const string command = "wrong command";
             handler.Matches(command).Returns(false);
-            var helper = new ConsoleHelper(new List<ICommandHandler> {handler});
+            var helper = new ConsoleHelper(new List<BaseHandler> { handler });
 
             var sb = new StringBuilder();
             Console.SetOut(new StringWriter(sb));

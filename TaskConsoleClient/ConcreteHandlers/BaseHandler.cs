@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace TaskConsoleClient.UI.CommandHandlers
+namespace TaskManagerConsole.ConcreteHandlers
 {
     public abstract class BaseHandler
     {

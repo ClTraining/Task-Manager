@@ -40,8 +40,8 @@ namespace TaskManagerConsole
         {
             this.Bind(x => x.FromThisAssembly()
                                .SelectAllClasses()
-                               .InNamespaceOf<ICommandHandler>()
-                               .BindAllInterfaces()
+                               .InNamespaceOf<BaseHandler>()
+                               .BindBase()
                                .Configure(b => b.InThreadScope()));
 
             Bind<IClientConnection>().To<ClientConnection>();

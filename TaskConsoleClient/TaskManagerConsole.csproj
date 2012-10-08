@@ -64,13 +64,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConcreteHandlers\BaseHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ConcreteHandlers\AddTaskHandler.cs" />
-    <Compile Include="ConcreteHandlers\MarkCompletedHandler.cs" />
-    <Compile Include="ConcreteHandlers\ShowAllTasksHandler.cs" />
-    <Compile Include="ConcreteHandlers\ShowTaskHandler.cs" />
+    <Compile Include="ConcreteHandlers\Add.cs" />
+    <Compile Include="ConcreteHandlers\Completed.cs" />
+    <Compile Include="ConcreteHandlers\List.cs" />
+    <Compile Include="ConcreteHandlers\ListSingle.cs" />
     <Compile Include="ConsoleHelper.cs" />
-    <Compile Include="ConcreteHandlers\ICommandHandler.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
