@@ -19,16 +19,16 @@ namespace TaskManagerClientLibrary
         [Fact]
         public void should_convert_int()
         {
-            var TC = new ArgumentConverter<int>();
-            var i = TC.Convert("123");
+            var tc = new ArgumentConverter<int>();
+            var i = tc.Convert("123");
             i.Should().Be(123);
         }
 
         [Fact]
         public void should_get_string()
         {
-            var Tc = new ArgumentConverter<string>();
-            var result = Tc.Convert("13dsd");
+            var tc = new ArgumentConverter<string>();
+            var result = tc.Convert("13dsd");
             result.Should().Be("13dsd");
         }
     }

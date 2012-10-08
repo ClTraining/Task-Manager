@@ -19,7 +19,7 @@ namespace TaskManagerClientLibrary
             this.commands = commands;
         }
 
-        public List<string> SplitInput(string input)
+        public List<string> GetArguments(string input)
         {
             var args = input.Split(' ').ToList();
 
@@ -27,7 +27,7 @@ namespace TaskManagerClientLibrary
         }
         public void ExecuteCommand(string input)
         {
-            var args = SplitInput(input);
+            var args = GetArguments(input);
             try
             {
                 commands.First(a => a.Name == args[0]).Execute(args[1]);
@@ -57,7 +57,7 @@ namespace TaskManagerClientLibrary
         [Fact]
         public void should_split_the_input_on_command_and_argument()
         {
-            var command = lp.SplitInput("hello world");
+            var command = lp.GetArguments("hello world");
 
             command.Should().ContainInOrder(new[] { "hello", "world" });
         }
