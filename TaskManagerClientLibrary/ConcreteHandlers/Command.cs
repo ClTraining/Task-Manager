@@ -1,6 +1,4 @@
-﻿using System.Text.RegularExpressions;
-
-namespace TaskManagerConsole.ConcreteHandlers
+namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public abstract class Command<T> : ICommandHandler
     {

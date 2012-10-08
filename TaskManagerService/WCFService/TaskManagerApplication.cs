@@ -1,10 +1,10 @@
 using System;
 using System.ServiceModel;
-using System.ServiceModel.Channels;
 using Ninject;
 using Ninject.Modules;
-using TaskManagerService.Repositories;
-using TaskManagerService.TaskManager;
+using TaskManagerServiceLibrary;
+using TaskManagerServiceLibrary.Repositories;
+using TaskManagerServiceLibrary.TaskManager;
 
 namespace TaskManagerService.WCFService
 {
@@ -31,7 +31,7 @@ namespace TaskManagerService.WCFService
     {
         public override void Load()
         {
-            Bind<ITaskManagerService>().To<TaskManagerService>();
+            Bind<ITaskManagerService>().To<TaskManagerServiceLibrary.TaskManagerService>();
             Bind<IRepository>().To<MemoRepository>();
             Bind<ITaskFactory>().To<TaskFactory>();
             Bind<IToDoList>().To<ToDoList>();

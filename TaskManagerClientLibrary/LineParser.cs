@@ -1,14 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using ConnectToWcf;
 using FluentAssertions;
-using TaskManagerConsole.ConcreteHandlers;
-using Xunit;
 using NSubstitute;
+using TaskManagerClientLibrary.ConcreteHandlers;
+using Xunit;
 
-namespace TaskManagerConsole
+namespace TaskManagerClientLibrary
 {
     public class LineParser
     {
@@ -39,7 +39,7 @@ namespace TaskManagerConsole
             }
             catch (FaultException<ExceptionDetail> e)
             {
-                Console.WriteLine("Task not found: (Id = {0})", e.Detail.Message);
+                Console.WriteLine((string) "Task not found: (Id = {0})", (object) e.Detail.Message);
             }
             catch (Exception)
             {

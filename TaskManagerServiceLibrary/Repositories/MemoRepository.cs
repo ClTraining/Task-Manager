@@ -1,13 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using EntitiesLibrary;
 using FluentAssertions;
-using TaskManagerService.WCFService;
 using Xunit;
 
-namespace TaskManagerService.Repositories
+namespace TaskManagerServiceLibrary.Repositories
 {
     public class MemoRepository : IRepository
     {

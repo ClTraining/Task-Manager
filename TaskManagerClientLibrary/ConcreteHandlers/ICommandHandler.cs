@@ -1,4 +1,4 @@
-﻿namespace TaskManagerConsole.ConcreteHandlers
+namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public interface ICommandHandler
     {

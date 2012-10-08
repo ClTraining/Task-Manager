@@ -1,10 +1,10 @@
-﻿using System;
+using System;
 using ConnectToWcf;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace TaskManagerConsole.ConcreteHandlers
+namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Add : Command<string>
     {

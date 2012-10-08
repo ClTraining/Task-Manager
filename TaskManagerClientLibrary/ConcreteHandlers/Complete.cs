@@ -1,11 +1,10 @@
-﻿using System;
-using System.Text.RegularExpressions;
+using System;
 using ConnectToWcf;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace TaskManagerConsole.ConcreteHandlers
+namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Complete : Command<int>
     {

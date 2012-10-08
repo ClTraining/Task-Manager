@@ -4,8 +4,9 @@ using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using System;
-using TaskManagerConsole.ConcreteHandlers;
-using TaskManagerService.WCFService;
+using TaskManagerClientLibrary;
+using TaskManagerClientLibrary.ConcreteHandlers;
+using TaskManagerServiceLibrary;
 
 namespace TaskManagerConsole
 {
@@ -39,11 +40,10 @@ namespace TaskManagerConsole
     {
         public override void Load()
         {
-            this.Bind(x => x.FromThisAssembly()
-                               .SelectAllClasses()
+            this.Bind(x => x.FromAssemblyContaining<ICommandHandler>().SelectAllClasses()
                                .InNamespaceOf<ICommandHandler>()
                                .BindAllInterfaces()
-                               .Configure(b => b.InThreadScope()));
+                               );
 
             Bind<IClientConnection>().To<ClientConnection>();
         }

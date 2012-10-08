@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using ConnectToWcf;
-using EntitiesLibrary;
 using FluentAssertions;
-using NSubstitute;
 using Xunit;
 
-namespace TaskManagerConsole.ConcreteHandlers
+namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class List : Command<string>
     {

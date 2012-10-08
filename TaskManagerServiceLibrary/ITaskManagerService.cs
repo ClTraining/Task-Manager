@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
 
-namespace TaskManagerService.WCFService
+namespace TaskManagerServiceLibrary
 {
     [ServiceContract]
     public interface ITaskManagerService

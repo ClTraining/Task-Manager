@@ -1,6 +1,6 @@
-﻿using System;
+using System;
 
-namespace TaskManagerService.WCFService
+namespace TaskManagerServiceLibrary
 {
     public class TaskNotFoundException : Exception
     {

@@ -1,6 +1,6 @@
-﻿using EntitiesLibrary;
+using EntitiesLibrary;
 
-namespace TaskManagerService.TaskManager
+namespace TaskManagerServiceLibrary.TaskManager
 {
     public interface ITaskMapper
     {
