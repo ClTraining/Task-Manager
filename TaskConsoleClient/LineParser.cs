@@ -44,6 +44,10 @@ namespace TaskManagerConsole
             {
                 Console.WriteLine("Task not found: (Id = {0})", e.Detail.Message);
             }
+            catch(Exception)
+            {
+                Console.WriteLine("Argument type is incorrect");
+            }
         }
     }
 
