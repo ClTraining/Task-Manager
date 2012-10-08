@@ -8,36 +8,34 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Add : Command<string>
     {
-        private readonly IClientConnection manager;
-        public Add(IClientConnection manager)
+        public Add(IClientConnection client) : base(typeof(Add))
         {
-            this.manager = manager;
-            Name = typeof(Add).Name.ToLower();
+            base.client = client;
         }
 
         protected override void Execute(string input)
         {
-            var resultId = manager.AddTask(input);
-            Console.WriteLine("Task added. Task ID: " + resultId);
+            var result = client.AddTask(input);
+            Console.WriteLine("Task added. Task ID: " + result);
         }
     }
 
     public class AddTests
     {
-        private readonly IClientConnection manager = Substitute.For<IClientConnection>();
+        private readonly IClientConnection client = Substitute.For<IClientConnection>();
         private readonly Add handler;
-        const string TaskName = "sometask1";
+        const string taskName = "sometask1";
 
         public AddTests()
         {
-            handler = new Add(manager);
+            handler = new Add(client);
         }
 
         [Fact]
         public void should_send_string_return_id()
         {
-            handler.Execute(TaskName);
-            manager.Received().AddTask("sometask1");
+            handler.Execute(taskName);
+            client.Received().AddTask("sometask1");
         }
 
         [Fact]

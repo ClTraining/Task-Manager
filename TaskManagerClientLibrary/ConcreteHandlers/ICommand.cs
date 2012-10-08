@@ -1,6 +1,6 @@
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
-    public interface ICommandHandler
+    public interface ICommand
     {
         string Name { get; set; }
         void Execute(object argument);

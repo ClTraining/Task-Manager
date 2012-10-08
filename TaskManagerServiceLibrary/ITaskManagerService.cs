@@ -17,7 +17,7 @@ namespace TaskManagerServiceLibrary
         List<ContractTask> GetAllTasks();
 
         [OperationContract]
-        void MarkCompleted(int id);
+        void Complete(int id);
 
         [OperationContract]
         bool TestConnection();

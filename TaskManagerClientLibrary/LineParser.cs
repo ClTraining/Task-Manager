@@ -12,46 +12,46 @@ namespace TaskManagerClientLibrary
 {
     public class LineParser
     {
-        private readonly List<ICommandHandler> commands;
+        private readonly List<ICommand> commands;
 
-        public LineParser(List<ICommandHandler> commands)
+        public LineParser(List<ICommand> commands)
         {
             this.commands = commands;
         }
 
         public List<string> SplitInput(string input)
         {
-            var words = input.Split(' ').ToList();
+            var args = input.Split(' ').ToList();
 
-            var result = new List<string> { words[0], words.Count > 1 ? string.Join(" ", words.Skip(1)) : string.Empty };
-            return result;
+            return new List<string> { args[0], args.Count > 1 ? string.Join(" ", args.Skip(1)) : string.Empty };
         }
         public void ExecuteCommand(string input)
         {
+            var args = SplitInput(input);
             try
             {
-                var args = SplitInput(input);
-                var command = commands.FirstOrDefault(x => x.Name == args[0]);
-                if (command != null)
-                    command.Execute(args[1]);
-                else
-                    Console.WriteLine("This command is incorrect. Please, try again!");
+                commands.First(a => a.Name == args[0]).Execute(args[1]);
             }
             catch (FaultException<ExceptionDetail> e)
             {
-                Console.WriteLine((string) "Task not found: (Id = {0})", (object) e.Detail.Message);
+                Console.WriteLine("Task not found: (Id = {0})", e.Detail.Message);
             }
-            catch (Exception)
+            catch (InvalidOperationException)
             {
-                Console.WriteLine("Argument type is incorrect");
+                Console.WriteLine("This command is incorrect. Please, try again!");
             }
         }
     }
 
     public class LineParserTester
     {
-        private readonly LineParser lp = new LineParser(new List<ICommandHandler> { new List(new ClientConnection()) });
-        private readonly ICommandHandler cEx = Substitute.For<ICommandHandler>();
+        private readonly IClientConnection client = Substitute.For<IClientConnection>();
+        private readonly LineParser lp;
+
+        public LineParserTester()
+        {
+            lp = new LineParser(new List<ICommand> { new List(client) });
+        }
 
 
         [Fact]
@@ -60,13 +60,6 @@ namespace TaskManagerClientLibrary
             var command = lp.SplitInput("hello world");
 
             command.Should().ContainInOrder(new[] { "hello", "world" });
-        }
-
-        [Fact]
-        public void execute_command_should_call_proper_command()
-        {
-            lp.ExecuteCommand("add liliki");
-            cEx.Received();
         }
     }
 }

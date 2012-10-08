@@ -1,25 +1,23 @@
 using System;
 using ConnectToWcf;
 using FluentAssertions;
+using NSubstitute;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class List : Command<string>
     {
-        private readonly IClientConnection manager;
-
-        public List(IClientConnection manager)
+        public List(IClientConnection client) : base (typeof(List))
         {
-            this.manager = manager;
-            Name = typeof(List).Name.ToLower();
+            base.client = client;
         }
 
         protected override void Execute(string input)
         {
             if (string.IsNullOrEmpty(input))
             {
-                manager
+                client
                     .GetAllTasks()
                     .ForEach(x =>
                         Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
@@ -27,7 +25,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             else
             {
                 var argument = int.Parse(input);
-                var task = manager.GetTaskById(argument);
+                var task = client.GetTaskById(argument);
                 Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
             }
         }
@@ -35,7 +33,13 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
     public class ListTester
     {
-        private readonly List list = new List(new ClientConnection());
+        private readonly IClientConnection client = Substitute.For<IClientConnection>();
+        private readonly List list;
+
+        public ListTester()
+        {
+            list = new List(client);
+        }
 
         [Fact]
         public void list_name_should_be_the_same_as_class_name()

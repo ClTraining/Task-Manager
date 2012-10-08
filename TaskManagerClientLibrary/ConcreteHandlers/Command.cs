@@ -1,9 +1,20 @@
+using System;
+using ConnectToWcf;
+
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
-    public abstract class Command<T> : ICommandHandler
+    public abstract class Command<T> : ICommand
     {
-        protected ArgumentConverter<T> ArgConverter;
+        private readonly ArgumentConverter<T> converter;
+        protected IClientConnection client;
+
         public string Name { get; set; }
+
+        protected Command(Type derived)
+        {
+            Name = derived.Name.ToLower();
+            converter = new ArgumentConverter<T>();
+        }
 
         protected abstract void Execute(T input);
 
@@ -15,7 +26,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public object Convert(object input)
         {
-            var converter = new ArgumentConverter<T>();
             return converter.Convert((string)input);
         }
     }

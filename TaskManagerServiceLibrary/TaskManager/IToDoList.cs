@@ -8,6 +8,6 @@ namespace TaskManagerServiceLibrary.TaskManager
         int AddTask(string name);
         ContractTask GetTaskById(int id);
         List<ContractTask> GetAllTasks();
-        void MarkCompleted(int id);
+        void Complete(int id);
     }
 }

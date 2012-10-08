@@ -33,9 +33,9 @@ namespace TaskManagerServiceLibrary
             return taskList.GetAllTasks();
         }
 
-        public void MarkCompleted(int id)
+        public void Complete(int id)
         {
-            taskList.MarkCompleted(id);
+            taskList.Complete(id);
         }
 
         public bool TestConnection()
@@ -83,8 +83,8 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_send_id_receive_completed_value()
         {
-            service.MarkCompleted(1);
-            list.Received().MarkCompleted(1);
+            service.Complete(1);
+            list.Received().Complete(1);
         }
 
         [Fact]

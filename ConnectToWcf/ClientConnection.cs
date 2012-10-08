@@ -51,13 +51,13 @@ namespace ConnectToWcf
             }
         }
 
-        public void MarkCompleted(int id)
+        public void Complete(int id)
         {
             var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
             client.Open();
             try
             {
-                client.CreateChannel().MarkCompleted(id);
+                client.CreateChannel().Complete(id);
             }
             finally
             {

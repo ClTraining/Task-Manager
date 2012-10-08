@@ -8,29 +8,26 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Complete : Command<int>
     {
-        private readonly IClientConnection manager;
-
-        public Complete(IClientConnection manager)
+        public Complete(IClientConnection client) : base (typeof(Complete))
         {
-            this.manager = manager;
-            Name = typeof(Complete).Name.ToLower();
+            base.client = client;
         }
 
         protected override void Execute(int input)
         {
-            manager.MarkCompleted(input);
+            client.Complete(input);
             Console.WriteLine("Task ID: {0} completed.", input);
         }
 
     }
-    public class ConcreteHandlerMarkCompletedTests
+    public class ConcreteHandlerCompleteTests
     {
-        private readonly IClientConnection manager = Substitute.For<IClientConnection>();
+        private readonly IClientConnection client = Substitute.For<IClientConnection>();
         private readonly Complete handler;
 
-        public ConcreteHandlerMarkCompletedTests()
+        public ConcreteHandlerCompleteTests()
         {
-            handler = new Complete(manager);
+            handler = new Complete(client);
         }
 
         [Fact]
@@ -40,5 +37,4 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             result.Should().Be(222);
         }
     }
-
 }

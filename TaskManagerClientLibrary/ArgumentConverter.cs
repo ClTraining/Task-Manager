@@ -9,15 +9,15 @@ namespace TaskManagerClientLibrary
         public T Convert(string input)
         {
             var argument = input;
-            TypeConverter tc = TypeDescriptor.GetConverter(typeof(T));
+            var tc = TypeDescriptor.GetConverter(typeof(T));
             return (T)tc.ConvertFrom(argument);
         }
     }
 
-    public class ArgumnetConverterTests
+    public class ArgumentConverterTests
     {
         [Fact]
-        public void should_convert_Int()
+        public void should_convert_int()
         {
             var TC = new ArgumentConverter<int>();
             var i = TC.Convert("123");

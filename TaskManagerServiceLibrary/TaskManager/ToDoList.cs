@@ -36,9 +36,9 @@ namespace TaskManagerServiceLibrary.TaskManager
                 .ToList();
         }
 
-        public void MarkCompleted(int id)
+        public void Complete(int id)
         {
-            repository.MarkCompleted(id);
+            repository.Complete(id);
         }
     }
 
@@ -92,8 +92,8 @@ namespace TaskManagerServiceLibrary.TaskManager
         [Fact]
         public void should_mark_task_as_completed_by_id()
         {
-            todolist.MarkCompleted(1);
-            repository.Received().MarkCompleted(1);
+            todolist.Complete(1);
+            repository.Received().Complete(1);
         }
     }
 }

@@ -8,6 +8,6 @@ namespace ConnectToWcf
         int AddTask(string task);
         ContractTask GetTaskById(int id);
         List<ContractTask> GetAllTasks();
-        void MarkCompleted(int id);
+        void Complete(int id);
     }
 }

@@ -39,7 +39,7 @@ namespace TaskManagerServiceLibrary.Repositories
             return taskList.ToList();
         }
 
-        public void MarkCompleted(int id)
+        public void Complete(int id)
         {
             Console.Out.WriteLine("id = {0}", id);
             GetTaskById(id).IsCompleted = true;
@@ -84,7 +84,7 @@ namespace TaskManagerServiceLibrary.Repositories
         {
             var taskId = repository.AddTask("tt");
 
-            repository.MarkCompleted(taskId);
+            repository.Complete(taskId);
 
             repository.GetTaskById(taskId).IsCompleted.Should().BeTrue();
         }
