@@ -6,54 +6,46 @@ using Xunit;
 
 namespace TaskManagerConsole.ConcreteHandlers
 {
-    public class Add : BaseHandler
+    public class Add : Command<string>
     {
         private readonly IClientConnection manager;
-
         public Add(IClientConnection manager)
         {
-            Pattern = @"^(add)\s";
             this.manager = manager;
+            var fullName = this.ToString();
+            Name = fullName.Substring(fullName.LastIndexOf('.') + 1).ToLower();
         }
 
-        public override void Execute(string input)
+        protected override void Execute(string input)
         {
-            var name = GetParameter(input);
-            var resultId = manager.AddTask(name);
+            var resultId = manager.AddTask(input);
             Console.WriteLine("Task added. Task ID: " + resultId);
         }
-
-        private string GetParameter(string input)
-        {
-            return input.Substring(4);
-        }
-
     }
 
-    public class ConcreteHandlerAddTaskTests
+    public class AddTests
     {
         private readonly IClientConnection manager = Substitute.For<IClientConnection>();
         private readonly Add handler;
-        const string TaskName = "add 1";
+        const string TaskName = "sometask1";
 
-        public ConcreteHandlerAddTaskTests()
+        public AddTests()
         {
             handler = new Add(manager);
-        }
-
-        [Fact]
-        public void should_check_the_input_for_correctness()
-        {
-            var matches = handler.Matches("add adadadadada");
-
-            matches.Should().BeTrue();
         }
 
         [Fact]
         public void should_send_string_return_id()
         {
             handler.Execute(TaskName);
-            manager.Received().AddTask("1");
+            manager.Received().AddTask("sometask1");
+        }
+
+        [Fact]
+        public void should_convert_to_string()
+        {
+            var result = handler.Convert("dhgfdhg");
+            result.Should().Be("dhgfdhg");
         }
     }
 }

@@ -8,47 +8,42 @@ using Xunit;
 
 namespace TaskManagerConsole.ConcreteHandlers
 {
-    public class List : BaseHandler
+    public class List : Command<int>
     {
         private readonly IClientConnection manager;
 
         public List(IClientConnection manager)
         {
-            Pattern = @"^(list)$";
             this.manager = manager;
+            var fullName = this.ToString();
+            Name = fullName.Substring(fullName.LastIndexOf('.') + 1).ToLower();
         }
 
-        public override void Execute(string input)
+        protected override void Execute(int input)
         {
-            manager
-                .GetAllTasks()
-                .ForEach(x =>
-                         Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
+            if (input == 0)
+            {
+                manager
+                    .GetAllTasks()
+                    .ForEach(x =>
+                        Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
+            }
+            else
+            {
+                var task = manager.GetTaskById(input);
+                Console.WriteLine("ID: {0}\tTask: {1}\tCompleted: {2}", task.Id, task.Name, task.IsCompleted ? "+" : "-");
+            }
         }
     }
-    public class ConcreteHandlerShowAllTests
+
+    public class ListTester
     {
-        readonly IClientConnection manager = Substitute.For<IClientConnection>();
-        readonly List handler;
-
-        public ConcreteHandlerShowAllTests()
-        {
-            handler = new List(manager);
-        }
+        private readonly List list = new List(new ClientConnection());
 
         [Fact]
-        public void should_check_if_string_matches_pattern()
+        public void list_name_should_be_the_same_as_class_name()
         {
-            var matches = handler.Matches("list");
-            matches.Should().BeTrue();
-        }
-
-        [Fact]
-        public void should_execute_the_command()
-        {
-            manager.GetAllTasks().Returns(new List<ContractTask>());
-            handler.Execute("list 1");
-            manager.Received().GetAllTasks();
+            list.Name.Should().BeEquivalentTo("list");
         }
     }
 }

@@ -23,7 +23,7 @@ namespace TaskManagerConsole
             var kernel = new StandardKernel(module);
 
             for (string s; ((s = Console.ReadLine()) != null); )
-                kernel.Get<ConsoleHelper>().Execute(s);
+                kernel.Get<LineParser>().ExecuteComand(s);
         }
 
         private static bool TestConnection()
@@ -40,8 +40,8 @@ namespace TaskManagerConsole
         {
             this.Bind(x => x.FromThisAssembly()
                                .SelectAllClasses()
-                               .InNamespaceOf<BaseHandler>()
-                               .BindBase()
+                               .InNamespaceOf<ICommandHandler>()
+                               .BindAllInterfaces()
                                .Configure(b => b.InThreadScope()));
 
             Bind<IClientConnection>().To<ClientConnection>();
