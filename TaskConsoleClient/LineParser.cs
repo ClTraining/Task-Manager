@@ -21,8 +21,9 @@ namespace TaskManagerConsole
 
         public List<string> SplitInput(string input)
         {
-            var result = input.Split(' ').ToList();
-            result.Add(string.Empty);
+            var words = input.Split(' ').ToList();
+
+            var result = new List<string> { words[0], words.Count > 1 ? string.Join(" ", words.Skip(1)) : string.Empty };
             return result;
         }
         public void ExecuteCommand(string input)

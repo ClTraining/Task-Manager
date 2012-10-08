@@ -14,8 +14,7 @@ namespace TaskManagerConsole.ConcreteHandlers
         public Complete(IClientConnection manager)
         {
             this.manager = manager;
-            var fullName = this.ToString();
-            Name = fullName.Substring(fullName.LastIndexOf('.') + 1).ToLower();
+            Name = typeof(Complete).Name.ToLower();
         }
 
         protected override void Execute(int input)
