@@ -25,8 +25,7 @@ namespace TaskManagerConsole
             result.Add(string.Empty);
             return result;
         }
-
-        public void Executecommand(string input)
+        public void ExecuteCommand(string input)
         {
             try
             {
@@ -34,7 +33,6 @@ namespace TaskManagerConsole
                 var command = commands.FirstOrDefault(x => x.Name == args[0]);
                 if (command != null)
                     command.Execute(args[1]);
-
                 else
                     Console.WriteLine("This command is incorrect. Please, try again!");
             }
@@ -66,8 +64,7 @@ namespace TaskManagerConsole
         [Fact]
         public void execute_command_should_call_proper_command()
         {
-            lp.Executecommand("add liliki");
-
+            lp.ExecuteCommand("add liliki");
             cEx.Received();
         }
     }

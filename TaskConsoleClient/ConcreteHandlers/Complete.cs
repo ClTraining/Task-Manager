@@ -36,13 +36,6 @@ namespace TaskManagerConsole.ConcreteHandlers
         }
 
         [Fact]
-        public void should_execute_command()
-        {
-            handler.Execute(1);
-            manager.Received().MarkCompleted(1);
-        }
-
-        [Fact]
         public void should_convert_to_int()
         {
             var result = handler.Convert("222");

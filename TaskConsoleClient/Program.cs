@@ -23,7 +23,8 @@ namespace TaskManagerConsole
             var kernel = new StandardKernel(module);
 
             for (string s; ((s = Console.ReadLine()) != null); )
-                kernel.Get<LineParser>().Executecommand(s);
+
+                kernel.Get<LineParser>().ExecuteCommand(s);
         }
 
         private static bool TestConnection()
