@@ -12,11 +12,11 @@ namespace TaskManagerConsole
 {
     public class LineParser
     {
-        private readonly List<ICommandHandler> comands;
+        private readonly List<ICommandHandler> commands;
 
         public LineParser(List<ICommandHandler> comands)
         {
-            this.comands = comands;
+            this.commands = comands;
         }
 
         public List<string> SplitInput(string input)
@@ -26,19 +26,19 @@ namespace TaskManagerConsole
             return result;
         }
 
-        public void ExecuteComand(string input)
+        public void ExecuteCommand(string input)
         {
             try
             {
                 var args = SplitInput(input);
-                var comand = comands.FirstOrDefault(x => x.Name == args[0]);
-                if (comand != null)
+                var command = commands.FirstOrDefault(x => x.Name == args[0]);
+                if (command != null)
                 {
-                    var argument = comand.Convert(args[1]);
-                    comand.Execute(argument);
+                    var argument = command.Convert(args[1]);
+                    command.Execute(argument);
                 }
                 else
-                    Console.WriteLine("This comand is incorrect. Please, try again!");
+                    Console.WriteLine("This command is incorrect. Please, try again!");
             }
             catch (FaultException<ExceptionDetail> e)
             {
@@ -68,7 +68,7 @@ namespace TaskManagerConsole
         [Fact]
         public void execute_command_should_call_proper_comand()
         {
-            lp.ExecuteComand("add liliki");
+            lp.ExecuteCommand("add liliki");
 
             cEx.Received();
         }
