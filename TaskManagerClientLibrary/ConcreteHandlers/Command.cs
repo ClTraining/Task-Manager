@@ -8,7 +8,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     public abstract class Command<T> : ICommand
     {
         private readonly ArgumentConverter<T> converter;
-        protected IClientConnection client;
+        protected readonly IClientConnection client;
 
         public string Name { get; set; }
 
