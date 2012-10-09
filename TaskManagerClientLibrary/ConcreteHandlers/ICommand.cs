@@ -2,7 +2,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public interface ICommand
     {
-        string Name { get; set; }
+        string Name { get; }
         void Execute(object argument);
     }
 }

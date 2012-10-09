@@ -1,7 +1,5 @@
 using System;
 using ConnectToWcf;
-using FluentAssertions;
-using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
