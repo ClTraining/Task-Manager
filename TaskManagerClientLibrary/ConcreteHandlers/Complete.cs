@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Text;
 using ConnectToWcf;
 using FluentAssertions;
 using NSubstitute;
@@ -8,7 +10,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Complete : Command<int>
     {
-        public Complete(IClientConnection client) : base (client, typeof(Complete)) { }
+        public Complete(IClientConnection client)
+            : base(client, typeof(Complete)) { }
 
         protected override void Execute(int input)
         {
@@ -17,6 +20,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         }
 
     }
+
     public class ConcreteHandlerCompleteTests
     {
         private readonly IClientConnection client = Substitute.For<IClientConnection>();

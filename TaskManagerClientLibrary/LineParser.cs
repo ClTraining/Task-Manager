@@ -1,8 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.ServiceModel;
+using System.Text;
 using ConnectToWcf;
+using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskManagerClientLibrary.ConcreteHandlers;
@@ -19,7 +22,7 @@ namespace TaskManagerClientLibrary
             this.commands = commands;
         }
 
-        public List<string> GetArguments(string input)
+        private List<string> GetArguments(string input)
         {
             var args = input.Split(' ').ToList();
 
@@ -50,16 +53,30 @@ namespace TaskManagerClientLibrary
 
         public LineParserTester()
         {
-            lp = new LineParser(new List<ICommand> { new List(client) });
+            lp = new LineParser(new List<ICommand> { new Add(client), new Complete(client), new List(client) });
         }
 
+        [Fact]
+        public void should_throw_exception_if_for_wrong_command()
+        {
+            var sb = new StringBuilder();
+
+            Console.SetOut(new StringWriter(sb));
+            lp.ExecuteCommand("adkkkd world");
+            sb.ToString().ShouldBeEquivalentTo("This command is incorrect. Please, try again!\r\n");
+        }
 
         [Fact]
-        public void should_split_the_input_on_command_and_argument()
+        public void should_show_message_if_task_doesnt_exists()
         {
-            var command = lp.GetArguments("hello world");
+            var ID = 5;
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+            var task = new ContractTask { Id = ID, IsCompleted = false, Name = "test" };
+            client.GetTaskById(ID).Returns(new List<ContractTask> { task });
+            lp.ExecuteCommand(string.Format("list {0}", ID));
+            sb.ToString().ShouldBeEquivalentTo(string.Format("ID: {0}	Task: {1}\t\t\tCompleted: -\r\n", ID, task.Name));
 
-            command.Should().ContainInOrder(new[] { "hello", "world" });
         }
     }
 }
