@@ -43,6 +43,10 @@ namespace TaskManagerClientLibrary
             {
                 Console.WriteLine("This command is incorrect. Please, try again!");
             }
+            catch
+            {
+                Console.WriteLine("Arguments are incorrect.");
+            }
         }
     }
 
