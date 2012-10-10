@@ -9,11 +9,11 @@ namespace ConnectToWcf
     public class ClientConnection : IClientConnection
     {
         private readonly string serviceAddress;
-        private readonly BasicHttpBinding binding;
+        private readonly NetTcpBinding binding;
         public ClientConnection(string address)
         {
             serviceAddress = address;
-            binding = new BasicHttpBinding();
+            binding = new NetTcpBinding();
         }
 
         public int AddTask(string task)
