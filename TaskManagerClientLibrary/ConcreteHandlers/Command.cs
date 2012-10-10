@@ -1,6 +1,5 @@
 using System;
 using ConnectToWcf;
-using Ninject;
 using TaskManagerService;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
