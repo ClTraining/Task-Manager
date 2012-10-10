@@ -14,11 +14,6 @@ namespace TaskManagerConsole
     {
         public static void Main()
         {
-            Console.Title = "Task Manager Client";
-            Console.WriteLine(TestConnection()
-                ? "Connection established."
-                : "Wrong server address.");
-
             var module = new TaskManagerModule();
 
             var kernel = new StandardKernel(module);
