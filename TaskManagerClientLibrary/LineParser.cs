@@ -34,7 +34,7 @@ namespace TaskManagerClientLibrary
             var args = GetArguments(input);
             try
             {
-                commands.First(a => a.Name == args[0]).Execute(args[1].Trim(new[] { '\"' }));
+                commands.First(a => a.Name == args[0]).Execute(args[1].Trim(new[] { '\"', '\'' }));
             }
             catch (FaultException<ExceptionDetail> e)
             {
@@ -85,7 +85,13 @@ namespace TaskManagerClientLibrary
             client.GetTaskById(id).Returns(new List<ContractTask> { task });
             lp.ExecuteCommand(string.Format("list {0}", id));
             sb.ToString().ShouldBeEquivalentTo(string.Format("ID: {0}	Task: {1}\t\t\tCompleted: -\r\n", id, task.Name));
+        }
 
+        [Fact]
+        public void should_ignore_both_types_of_quotes()
+        {
+            lp.ExecuteCommand("add \"hello world\"");
+            client.Received().AddTask("hello world");
         }
     }
 }
