@@ -34,7 +34,7 @@ namespace TaskManagerServiceLibrary.Repositories
         public List<ServiceTask> GetAllTasks()
         {
             if(taskList.Count <= 0)
-                throw new TaskNotFoundException("Empty");
+                throw new TaskNotFoundException();
 
             return taskList.ToList();
         }
@@ -61,7 +61,7 @@ namespace TaskManagerServiceLibrary.Repositories
         public void should_throw_exception_if_index_not_found()
         {
             Action action = () => repository.GetTaskById(4);
-            action.ShouldThrow<TaskNotFoundException>().WithMessage("4");
+            action.ShouldThrow<TaskNotFoundException>();
         }
 
         [Fact]
@@ -93,7 +93,7 @@ namespace TaskManagerServiceLibrary.Repositories
         public void should_return_empty_list()
         {
             Action action = () => repository.GetAllTasks();
-            action.ShouldThrow<TaskNotFoundException>().WithMessage("Empty");
+            action.ShouldThrow<TaskNotFoundException>();
         }
 
         [Fact]

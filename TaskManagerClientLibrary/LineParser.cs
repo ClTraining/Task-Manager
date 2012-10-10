@@ -9,6 +9,7 @@ using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskManagerClientLibrary.ConcreteHandlers;
+using TaskManagerServiceLibrary;
 using Xunit;
 
 namespace TaskManagerClientLibrary
@@ -37,7 +38,7 @@ namespace TaskManagerClientLibrary
             }
             catch (FaultException<ExceptionDetail> e)
             {
-                Console.WriteLine("Task not found: (Id = {0})", e.Detail.Message);
+                Console.WriteLine(e.Detail.Message);
             }
             catch (InvalidOperationException)
             {

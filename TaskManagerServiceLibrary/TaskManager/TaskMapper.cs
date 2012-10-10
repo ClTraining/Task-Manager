@@ -13,11 +13,6 @@ namespace TaskManagerServiceLibrary.TaskManager
             Mapper.CreateMap<ContractTask, ServiceTask>();
         }
 
-        public ServiceTask ConvertToService(ContractTask task)
-        {
-            return Mapper.Map<ContractTask, ServiceTask>(task);
-        }
-
         public ContractTask ConvertToContract(ServiceTask task)
         {
             return Mapper.Map<ServiceTask, ContractTask>(task);
@@ -27,70 +22,14 @@ namespace TaskManagerServiceLibrary.TaskManager
     public class TaskMapperTests
     {
         private readonly ServiceTask serviceTask = new ServiceTask { Id = 10, Name = "service", IsCompleted = true };
-        private readonly ContractTask contractTask = new ContractTask { Id = 11, Name = "contract", IsCompleted = false };
+        private readonly ContractTask contractTask = new ContractTask() { Id = 10, Name = "service", IsCompleted = true };
         private readonly TaskMapper taskMapper = new TaskMapper();
 
         [Fact]
-        public void should_convert_service_to_contract()
+        public void contract_task_should_be_equivalent_to_service_task()
         {
-            var result = taskMapper.ConvertToContract(serviceTask);
-            result.Should().BeOfType<ContractTask>();
-        }
-
-        [Fact]
-        public void should_have_same_name_convert_service_to_contract()
-        {
-            var result = taskMapper.ConvertToContract(serviceTask);
-            result.Name.Should().Be(serviceTask.Name);
-        }
-
-        [Fact]
-        public void should_have_same_id_convert_service_to_contract()
-        {
-            var result = taskMapper.ConvertToContract(serviceTask);
-            result.Id.Should().Be(serviceTask.Id);
-        }
-
-        [Fact]
-        public void should_have_same_isCompleted_convert_service_to_contract()
-        {
-            var result = taskMapper.ConvertToContract(serviceTask);
-            result.IsCompleted.Should().Be(serviceTask.IsCompleted);
-        }
-
-        [Fact]
-        public void should_convert_contract_to_service()
-        {
-            var result = taskMapper.ConvertToService(contractTask);
-            result.Should().BeOfType<ServiceTask>();
-        }
-
-        [Fact]
-        public void should_have_same_name_convert_contract_to_service()
-        {
-            var result = taskMapper.ConvertToService(contractTask);
-            result.Name.Should().Be(contractTask.Name);
-        }
-
-        [Fact]
-        public void should_have_same_id_convert_contract_to_service()
-        {
-            var result = taskMapper.ConvertToService(contractTask);
-            result.Id.Should().Be(contractTask.Id);
-        }
-
-        [Fact]
-        public void should_have_same_isCompleted_convert_contract_to_service()
-        {
-            var result = taskMapper.ConvertToService(contractTask);
-            result.IsCompleted.Should().Be(contractTask.IsCompleted);
-        }
-
-        [Fact]
-        public void should_return_null_if_null_passed_convert_from_contract()
-        {
-            var result = taskMapper.ConvertToService(null);
-            result.Should().BeNull();
+            var res = taskMapper.ConvertToContract(serviceTask);
+            res.ShouldBeEquivalentTo(contractTask);
         }
 
         [Fact]
