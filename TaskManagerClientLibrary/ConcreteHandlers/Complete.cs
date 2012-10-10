@@ -31,7 +31,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void should_send_string_return_id()
         {
-            handler.Execute(5);
+            handler.Execute("5");
             client.Received().Complete(5);
         }
     }

@@ -24,7 +24,6 @@ namespace TaskManagerConsole
             var kernel = new StandardKernel(module);
 
             for (string s; ((s = Console.ReadLine()) != null); )
-
                 kernel.Get<LineParser>().ExecuteCommand(s);
         }
 
