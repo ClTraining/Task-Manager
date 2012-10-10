@@ -9,7 +9,6 @@ using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskManagerClientLibrary.ConcreteHandlers;
-using TaskManagerServiceLibrary;
 using Xunit;
 
 namespace TaskManagerClientLibrary
@@ -23,18 +22,12 @@ namespace TaskManagerClientLibrary
             this.commands = commands;
         }
 
-        private List<string> GetArguments(string input)
-        {
-            var args = input.Split(' ').ToList();
-
-            return new List<string> { args[0], args.Count > 1 ? string.Join(" ", args.Skip(1)) : string.Empty };
-        }
         public void ExecuteCommand(string input)
         {
-            var args = GetArguments(input);
+            var args = input.Split(new[] { ' ' }, 2).ToList();
             try
             {
-                commands.First(a => a.Name == args[0]).Execute(args[1].Trim(new[] { '\"' }));
+                commands.First(a => a.Name == args[0]).Execute(args.Count > 1 ? args[1].Trim(new[] { '\"' }) : string.Empty);
             }
             catch (FaultException<ExceptionDetail> e)
             {

@@ -10,7 +10,7 @@ namespace TaskManagerService
 {
     static class TaskManagerApplication
     {
-        static readonly Uri baseAddresses = new Uri("net.tcp://localhost:44444");
+        static readonly Uri baseAddresses = new Uri("http://localhost:44444");
 
         private static void Main()
         {

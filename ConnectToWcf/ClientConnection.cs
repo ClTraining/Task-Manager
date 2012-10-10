@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.ServiceModel;
 using EntitiesLibrary;
 using TaskManagerServiceLibrary;
@@ -8,56 +9,51 @@ namespace ConnectToWcf
 {
     public class ClientConnection : IClientConnection
     {
-        public int AddTask(string task)
+        private readonly string endPoint;
+        private readonly BasicHttpBinding binding;
+        public ClientConnection()
         {
-            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
-            client.Open();
-            try
-            {
-                return client.CreateChannel().AddTask(task);
-            }
-            finally
-            {
-                CloseClient(client);
-            }
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            endPoint = config.AppSettings.Settings["connectionAddress"].Value;
+            binding = new BasicHttpBinding();
         }
 
+        public int AddTask(string task)
+        {
+            return GetSomethingFromServer(t => t.AddTask(task));
+        }
 
         public List<ContractTask> GetTaskById(int id)
         {
-            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
-            client.Open();
-            try
-            {
-                return new List<ContractTask> {client.CreateChannel().GetTaskById(id)};
-            }
-            finally
-            {
-                CloseClient(client);
-            }
+            return GetSomethingFromServer(s => new List<ContractTask> {s.GetTaskById(id)});
         }
 
         public List<ContractTask> GetAllTasks()
         {
-            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
-            client.Open();
-            try
-            {
-                return client.CreateChannel().GetAllTasks();
-            }
-            finally
-            {
-                CloseClient(client);
-            }
+            return GetSomethingFromServer(s => s.GetAllTasks());
         }
 
         public void Complete(int id)
         {
-            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
+            DoSomethingOnServer(s => s.Complete(id));
+        }
+
+        private void DoSomethingOnServer(Action<ITaskManagerService> action)
+        {
+            GetSomethingFromServer<object>(s =>
+            {
+                action(s);
+                return null;
+            });
+        }
+
+        private T GetSomethingFromServer<T>(Func<ITaskManagerService, T> func)
+        {
+            var client = new ChannelFactory<ITaskManagerService>(binding, endPoint);
             client.Open();
             try
             {
-                client.CreateChannel().Complete(id);
+                return func(client.CreateChannel());
             }
             finally
             {
