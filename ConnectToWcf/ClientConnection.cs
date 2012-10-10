@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.ServiceModel;
 using EntitiesLibrary;
 using TaskManagerServiceLibrary;
@@ -9,12 +8,11 @@ namespace ConnectToWcf
 {
     public class ClientConnection : IClientConnection
     {
-        private readonly string endPoint;
+        private readonly string serviceAddress;
         private readonly BasicHttpBinding binding;
-        public ClientConnection()
+        public ClientConnection(string address)
         {
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            endPoint = config.AppSettings.Settings["connectionAddress"].Value;
+            serviceAddress = address;
             binding = new BasicHttpBinding();
         }
 
@@ -49,7 +47,7 @@ namespace ConnectToWcf
 
         private T GetSomethingFromServer<T>(Func<ITaskManagerService, T> func)
         {
-            var client = new ChannelFactory<ITaskManagerService>(binding, endPoint);
+            var client = new ChannelFactory<ITaskManagerService>(binding, serviceAddress);
             client.Open();
             try
             {

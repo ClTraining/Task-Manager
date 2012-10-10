@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using ConnectToWcf;
 using Ninject;
 using Ninject.Extensions.Conventions;
@@ -33,7 +34,10 @@ namespace TaskManagerClientLibrary
                                );
             Bind<ArgumentConverter<string>>().To<ArgumentConverter<string>>();
             Bind<ArgumentConverter<int>>().To<ArgumentConverter<int>>();
-            Bind<IClientConnection>().To<ClientConnection>();
+
+            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var address = config.AppSettings.Settings["connectionAddress"].Value;
+            Bind<IClientConnection>().To<ClientConnection>().WithConstructorArgument("address",address);
         }
     }
 }
