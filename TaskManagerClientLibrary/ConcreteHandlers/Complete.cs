@@ -16,8 +16,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             client.Complete(input);
             Console.WriteLine("Task ID: {0} completed.", input);
         }
-
-    }
+        }
 
     public class ConcreteHandlerCompleteTests
     {
@@ -32,8 +31,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void should_send_string_return_id()
         {
-            handler.Execute(0);
-            client.Received().Complete(0);
+            handler.Execute(5);
+            client.Received().Complete(5);
         }
     }
 }
