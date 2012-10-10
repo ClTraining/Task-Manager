@@ -27,7 +27,7 @@ namespace TaskManagerClientLibrary
             var args = input.Split(new[] { ' ' }, 2).ToList();
             try
             {
-                commands.First(a => a.Name == args[0]).Execute(args.Count > 1 ? args[1].Trim(new[] { '\"' }) : string.Empty);
+                commands.First(a => a.Name == args[0]).Execute(args.Count > 1 ? args[1].Trim(new[] { '\"', '\'' }) : string.Empty);
             }
             catch (FaultException<ExceptionDetail> e)
             {
@@ -40,22 +40,42 @@ namespace TaskManagerClientLibrary
         }
     }
 
+
+
     public class LineParserTester
     {
-        private readonly IClientConnection client = Substitute.For<IClientConnection>();
         private readonly LineParser lp;
+        private readonly List<ICommand> commands;
+        private readonly ICommand command1 = Substitute.For<ICommand>();
+        private readonly ICommand command2 = Substitute.For<ICommand>();
+        private readonly ICommand command3 = Substitute.For<ICommand>();
 
         public LineParserTester()
         {
-            lp = new LineParser(new List<ICommand> { new Add(client, new ArgumentConverter<string>()), new Complete(client, new ArgumentConverter<int>()), 
-                                                        new List(client, new ArgumentConverter<string>()) });
+            commands = new List<ICommand> { command1, command2, command3 };
+
+            lp = new LineParser(commands);
         }
 
         [Fact]
-        public void execute_tester()
+        public void should_call_proper_command()
         {
-            lp.ExecuteCommand("add test message");
-            client.Received().AddTask("test message");
+            command1.Name.Returns("add");
+            command2.Name.Returns("command");
+            command3.Name.Returns("hello");
+
+            lp.ExecuteCommand("add foo");
+            command1.Received().Execute("foo");
+        }
+
+        [Fact]
+        public void should_call_the_first_command()
+        {
+            command1.Name.Returns("add");
+            command2.Name.Returns("add");
+
+            lp.ExecuteCommand("add aaa");
+            command1.Received().Execute("aaa");
         }
 
         [Fact]
@@ -69,16 +89,19 @@ namespace TaskManagerClientLibrary
         }
 
         [Fact]
-        public void should_show_message_if_task_doesnt_exists()
+        public void should_ignore_double_quotes()
         {
-            const int id = 5;
-            var sb = new StringBuilder();
-            Console.SetOut(new StringWriter(sb));
-            var task = new ContractTask { Id = id, IsCompleted = false, Name = "test" };
-            client.GetTaskById(id).Returns(new List<ContractTask> { task });
-            lp.ExecuteCommand(string.Format("list {0}", id));
-            sb.ToString().ShouldBeEquivalentTo(string.Format("ID: {0}	Task: {1}\t\t\tCompleted: -\r\n", id, task.Name));
+            command1.Name.Returns("add");
+            lp.ExecuteCommand("add \"hello world\"");
+            command1.Received().Execute("hello world");
+        }
 
+        [Fact]
+        public void should_ignore_single_quotes()
+        {
+            command1.Name.Returns("add");
+            lp.ExecuteCommand("add \'hello world\'");
+            command1.Received().Execute("hello world");
         }
     }
 }
