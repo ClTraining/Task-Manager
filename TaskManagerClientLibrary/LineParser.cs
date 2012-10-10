@@ -34,7 +34,7 @@ namespace TaskManagerClientLibrary
             var args = GetArguments(input);
             try
             {
-                commands.First(a => a.Name == args[0]).Execute(args[1].Trim(new[]{'\"'}));
+                commands.First(a => a.Name == args[0]).Execute(args[1].Trim(new[] { '\"' }));
             }
             catch (FaultException<ExceptionDetail> e)
             {
@@ -54,7 +54,8 @@ namespace TaskManagerClientLibrary
 
         public LineParserTester()
         {
-            lp = new LineParser(new List<ICommand> { new Add(client), new Complete(client), new List(client) });
+            lp = new LineParser(new List<ICommand> { new Add(client, new ArgumentConverter<string>()), new Complete(client, new ArgumentConverter<int>()), 
+                                                        new List(client, new ArgumentConverter<string>()) });
         }
 
         [Fact]

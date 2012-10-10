@@ -8,10 +8,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Complete : Command<int>
     {
-        public Complete(IClientConnection client)
-            : base(client, typeof(Complete)) { }
+        public Complete(IClientConnection client, ArgumentConverter<int> converter)
+            : base(client, typeof(Complete), converter) { }
 
-        protected override void Execute(int input)
+        protected override void ExecuteWithGenericInput(int input)
         {
             client.Complete(input);
             Console.WriteLine("Task ID: {0} completed.", input);
@@ -26,14 +26,14 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public ConcreteHandlerCompleteTests()
         {
-            handler = new Complete(client);
+            handler = new Complete(client, new ArgumentConverter<int>());
         }
 
         [Fact]
-        public void should_convert_to_int()
+        public void should_send_string_return_id()
         {
-            var result = handler.Convert("222");
-            result.Should().Be(222);
+            handler.Execute(0);
+            client.Received().Complete(0);
         }
     }
 }

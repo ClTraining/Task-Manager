@@ -8,9 +8,9 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class List : Command<string>
     {
-        public List(IClientConnection client) : base (client, typeof(List)) { }
+        public List(IClientConnection client, ArgumentConverter<string> converter) : base(client, typeof(List), converter) { }
 
-        protected override void Execute(string input)
+        protected override void ExecuteWithGenericInput(string input)
         {
             var tasks = string.IsNullOrEmpty(input) 
                 ? client.GetAllTasks() 
@@ -27,7 +27,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public ListTester()
         {
-            list = new List(client);
+            list = new List(client,new ArgumentConverter<string>());
         }
 
         [Fact]

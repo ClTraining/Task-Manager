@@ -8,9 +8,8 @@ namespace TaskManagerClientLibrary
     {
         public T Convert(string input)
         {
-            var argument = input;
             var tc = TypeDescriptor.GetConverter(typeof(T));
-            return (T)tc.ConvertFrom(argument);
+            return (T)tc.ConvertFrom(input);
         }
     }
 

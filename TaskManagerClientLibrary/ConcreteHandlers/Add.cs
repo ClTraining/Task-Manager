@@ -8,9 +8,9 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Add : Command<string>
     {
-        public Add(IClientConnection client) : base(client, typeof(Add)) { }
+        public Add(IClientConnection client, ArgumentConverter<string> converter) : base(client, typeof(Add), converter) { }
 
-        protected override void Execute(string input)
+        protected override void ExecuteWithGenericInput(string input)
         {
             var result = client.AddTask(input);
             Console.WriteLine("Task added. Task ID: " + result);
@@ -25,7 +25,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public AddTests()
         {
-            handler = new Add(client);
+            handler = new Add(client, new ArgumentConverter<string>());
         }
 
         [Fact]
@@ -33,13 +33,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         {
             handler.Execute(taskName);
             client.Received().AddTask("sometask1");
-        }
-
-        [Fact]
-        public void should_convert_to_string()
-        {
-            var result = handler.Convert("dhgfdhg");
-            result.Should().Be("dhgfdhg");
         }
     }
 }

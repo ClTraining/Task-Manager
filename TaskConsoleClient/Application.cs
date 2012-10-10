@@ -44,7 +44,8 @@ namespace TaskManagerConsole
                                .InNamespaceOf<ICommand>()
                                .BindAllInterfaces()
                                );
-
+            Bind<ArgumentConverter<string>>().To<ArgumentConverter<string>>();
+            Bind<ArgumentConverter<int>>().To<ArgumentConverter<int>>();
             Bind<IClientConnection>().To<ClientConnection>();
         }
     }

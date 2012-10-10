@@ -1,5 +1,7 @@
 using System;
 using ConnectToWcf;
+using Ninject;
+using TaskManagerService;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
@@ -8,26 +10,26 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         private readonly ArgumentConverter<T> converter;
         protected readonly IClientConnection client;
 
-        public string Name { get; set; }
+        public string Name { get; private set; }
 
-        protected Command(IClientConnection client, Type derived)
+        protected Command(IClientConnection client, Type derived, ArgumentConverter<T> converter )
         {
             this.client = client;
             Name = derived.Name.ToLower();
-            converter = new ArgumentConverter<T>();
+            this.converter = converter;
         }
 
-        protected abstract void Execute(T input);
+        protected abstract void ExecuteWithGenericInput(T input);
 
         public void Execute(object argument)
         {
             var converted = Convert(argument);
-            Execute((T)converted);
+            ExecuteWithGenericInput((T)converted);
         }
 
-        public object Convert(object input)
+        private object Convert(object input)
         {
-            return converter.Convert((string)input);
+            return converter.Convert((input is T ? (T) input : default(T)).ToString());
         }
     }
 }
