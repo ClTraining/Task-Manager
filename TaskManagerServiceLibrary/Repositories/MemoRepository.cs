@@ -34,7 +34,7 @@ namespace TaskManagerServiceLibrary.Repositories
         public List<ServiceTask> GetAllTasks()
         {
             if(taskList.Count <= 0)
-                throw new TaskNotFoundException();
+                throw new TaskNotFoundException(-1);
 
             return taskList.ToList();
         }

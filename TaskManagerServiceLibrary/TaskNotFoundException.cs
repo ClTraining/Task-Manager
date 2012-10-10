@@ -4,7 +4,10 @@ namespace TaskManagerServiceLibrary
 {
     public class TaskNotFoundException : Exception
     {
-        public TaskNotFoundException() : base("Task list empty") { }
-        public TaskNotFoundException(int id) : base(string.Format("Task not found: (Id = {0})", id)) { }
+        public int TaskId { get; set; }
+        public TaskNotFoundException(int taskId):base(string.Format("Task not found: (Id = {0})", taskId))
+        {
+            TaskId = taskId;
+        }
     }
 }
