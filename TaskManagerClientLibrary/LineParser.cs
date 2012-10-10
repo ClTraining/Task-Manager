@@ -33,7 +33,7 @@ namespace TaskManagerClientLibrary
             var args = GetArguments(input);
             try
             {
-                commands.First(a => a.Name == args[0]).Execute(args[1].Trim(new char[]{'\"'}));
+                commands.First(a => a.Name == args[0]).Execute(args[1].Trim(new[]{'\"'}));
             }
             catch (FaultException<ExceptionDetail> e)
             {
@@ -42,10 +42,6 @@ namespace TaskManagerClientLibrary
             catch (InvalidOperationException)
             {
                 Console.WriteLine("This command is incorrect. Please, try again!");
-            }
-            catch
-            {
-                Console.WriteLine("Arguments are incorrect.");
             }
         }
     }
@@ -61,6 +57,13 @@ namespace TaskManagerClientLibrary
         }
 
         [Fact]
+        public void execute_tester()
+        {
+            lp.ExecuteCommand("add test message");
+            client.Received().AddTask("test message");
+        }
+
+        [Fact]
         public void should_throw_exception_if_for_wrong_command()
         {
             var sb = new StringBuilder();
@@ -73,13 +76,13 @@ namespace TaskManagerClientLibrary
         [Fact]
         public void should_show_message_if_task_doesnt_exists()
         {
-            var ID = 5;
+            const int id = 5;
             var sb = new StringBuilder();
             Console.SetOut(new StringWriter(sb));
-            var task = new ContractTask { Id = ID, IsCompleted = false, Name = "test" };
-            client.GetTaskById(ID).Returns(new List<ContractTask> { task });
-            lp.ExecuteCommand(string.Format("list {0}", ID));
-            sb.ToString().ShouldBeEquivalentTo(string.Format("ID: {0}	Task: {1}\t\t\tCompleted: -\r\n", ID, task.Name));
+            var task = new ContractTask { Id = id, IsCompleted = false, Name = "test" };
+            client.GetTaskById(id).Returns(new List<ContractTask> { task });
+            lp.ExecuteCommand(string.Format("list {0}", id));
+            sb.ToString().ShouldBeEquivalentTo(string.Format("ID: {0}	Task: {1}\t\t\tCompleted: -\r\n", id, task.Name));
 
         }
     }
