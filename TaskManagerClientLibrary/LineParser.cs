@@ -33,7 +33,7 @@ namespace TaskManagerClientLibrary
             var args = GetArguments(input);
             try
             {
-                commands.First(a => a.Name == args[0]).Execute(args[1]);
+                commands.First(a => a.Name == args[0]).Execute(args[1].Trim(new char[]{'\"'}));
             }
             catch (FaultException<ExceptionDetail> e)
             {
