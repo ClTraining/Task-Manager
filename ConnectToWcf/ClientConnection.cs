@@ -36,10 +36,9 @@ namespace ConnectToWcf
             {
                 return new List<ContractTask> { client.CreateChannel().GetTaskById(id) };
             }
-            catch (FaultException<ExceptionDetail> e)
+            catch (FaultException<ExceptionDetail>)
             {
-                Console.WriteLine(e.Detail.Message);
-                throw new NullReferenceException();
+                throw new TaskNotFoundException(id);
             }
             finally
             {
@@ -55,10 +54,9 @@ namespace ConnectToWcf
             {
                 return client.CreateChannel().GetAllTasks();
             }
-            catch (FaultException<ExceptionDetail> e)
+            catch (FaultException<ExceptionDetail>)
             {
-                Console.WriteLine(e.Detail.Message);
-                throw new NullReferenceException();
+                throw new TaskNotFoundException("List is empty!");
             }
             finally
             {
@@ -74,10 +72,9 @@ namespace ConnectToWcf
             {
                 client.CreateChannel().Complete(id);
             }
-            catch (FaultException<ExceptionDetail> e)
+            catch (FaultException<ExceptionDetail>)
             {
-                Console.WriteLine(e.Detail.Message);
-                throw new NullReferenceException();
+                throw new TaskNotFoundException(id);
             }
             finally
             {

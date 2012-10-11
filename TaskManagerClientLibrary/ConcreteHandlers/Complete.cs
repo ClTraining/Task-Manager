@@ -2,6 +2,7 @@ using System;
 using ConnectToWcf;
 using FluentAssertions;
 using NSubstitute;
+using TaskManagerServiceLibrary;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
@@ -18,7 +19,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
                 client.Complete(input);
                 Console.WriteLine("Task ID: {0} completed.", input);
             }
-            catch (NullReferenceException) { }
+            catch (TaskNotFoundException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 
