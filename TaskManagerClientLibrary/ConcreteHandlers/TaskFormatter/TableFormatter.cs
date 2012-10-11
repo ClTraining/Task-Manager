@@ -11,6 +11,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
 {
     public class TableFormatter : ITaskFormatter
     {
+        public IEnumerable<int> CountRange { get; private set; }
+
         public TableFormatter()
         {
             CountRange = Enumerable.Range(2, 1000);
@@ -20,8 +22,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
         {
             Console.Write("table");
         }
-
-        public IEnumerable<int> CountRange { get; set; }
     }
 
     public class TableFormatterTests

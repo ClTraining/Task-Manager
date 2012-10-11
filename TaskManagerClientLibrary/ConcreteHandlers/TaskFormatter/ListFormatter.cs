@@ -11,6 +11,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
 {
     public class ListFormatter : ITaskFormatter
     {
+        public IEnumerable<int> CountRange { get; private set; }
+
         public ListFormatter()
         {
             CountRange = Enumerable.Range(1, 1);
@@ -22,8 +24,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
                                            "Name:\t\t{1}\n" +
                                            "Completed:\t{2}\n\n", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
         }
-
-        public IEnumerable<int> CountRange { get; set; }
     }
 
     public class ListFormatterTests
