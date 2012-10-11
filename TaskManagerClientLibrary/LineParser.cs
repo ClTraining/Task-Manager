@@ -34,74 +34,73 @@ namespace TaskManagerClientLibrary
             else
                 command.Execute(args.Count > 1 ? args[1].Trim(new[] { '\"', '\'' }) : string.Empty);
         }
+        
+    }
+    public class LineParserTests
+    {
+        private readonly LineParser lp;
+        private readonly List<ICommand> commands;
+        private readonly ICommand command1 = Substitute.For<ICommand>();
+        private readonly ICommand command2 = Substitute.For<ICommand>();
+        private readonly ICommand command3 = Substitute.For<ICommand>();
 
-
-
-        public class LineParserTests
+        public LineParserTests()
         {
-            private readonly LineParser lp;
-            private readonly List<ICommand> commands;
-            private readonly ICommand command1 = Substitute.For<ICommand>();
-            private readonly ICommand command2 = Substitute.For<ICommand>();
-            private readonly ICommand command3 = Substitute.For<ICommand>();
+            commands = new List<ICommand> { command1, command2, command3 };
 
-            public LineParserTests()
-            {
-                commands = new List<ICommand> { command1, command2, command3 };
+            lp = new LineParser(commands);
+        }
 
-                lp = new LineParser(commands);
-            }
+        [Fact]
+        public void should_call_proper_command()
+        {
+            command1.Name.Returns("add");
+            command2.Name.Returns("command");
+            command3.Name.Returns("hello");
 
-            [Fact]
-            public void should_call_proper_command()
-            {
-                command1.Name.Returns("add");
-                command2.Name.Returns("command");
-                command3.Name.Returns("hello");
+            lp.ExecuteCommand("add foo");
+            command1.Received().Execute("foo");
+        }
 
-                lp.ExecuteCommand("add foo");
-                command1.Received().Execute("foo");
-            }
+        [Fact]
+        public void should_call_the_first_command()
+        {
+            command1.Name.Returns("add");
+            command2.Name.Returns("add");
 
-            [Fact]
-            public void should_call_the_first_command()
-            {
-                command1.Name.Returns("add");
-                command2.Name.Returns("add");
+            lp.ExecuteCommand("add aaa");
+            command2.DidNotReceiveWithAnyArgs().Execute("aaa");
+        }
 
-                lp.ExecuteCommand("add aaa");
-                command1.Received().Execute("aaa");
-            }
+        [Fact]
+        public void should_inform_if_no_such_command()
+        {
+            var sb=new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
 
-            [Fact]
-            public void should_throw_exception_if_for_wrong_command()
-            {
-                command1.Name.Returns("add");
-                command2.Name.Returns("command");
-                command3.Name.Returns("hello");
+            command1.Name.Returns("add");
+            command2.Name.Returns("command");
+            command3.Name.Returns("hello");
 
-                var sb = new StringBuilder();
+            lp.ExecuteCommand("ababa bababab");
+            sb.ToString().Should().BeEquivalentTo("No such command\r\n");
+        }
 
-                Console.SetOut(new StringWriter(sb));
-                lp.ExecuteCommand("adkkkd world");
-                sb.ToString().ShouldBeEquivalentTo("This command is incorrect. Please, try again!\r\n");
-            }
+        [Fact]
+        public void should_ignore_double_quotes()
+        {
+            command1.Name.Returns("add");
+            lp.ExecuteCommand("add \"hello world\"");
+            command1.Received().Execute("hello world");
+        }
 
-            [Fact]
-            public void should_ignore_double_quotes()
-            {
-                command1.Name.Returns("add");
-                lp.ExecuteCommand("add \"hello world\"");
-                command1.Received().Execute("hello world");
-            }
-
-            [Fact]
-            public void should_ignore_single_quotes()
-            {
-                command1.Name.Returns("add");
-                lp.ExecuteCommand("add \'hello world\'");
-                command1.Received().Execute("hello world");
-            }
+        [Fact]
+        public void should_ignore_single_quotes()
+        {
+            command1.Name.Returns("add");
+            lp.ExecuteCommand("add \'hello world\'");
+            command1.Received().Execute("hello world");
         }
     }
+
 }
