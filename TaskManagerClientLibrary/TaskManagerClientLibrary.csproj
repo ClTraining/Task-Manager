@@ -61,8 +61,11 @@
     <Compile Include="ConcreteHandlers\Complete.cs" />
     <Compile Include="ConcreteHandlers\ICommand.cs" />
     <Compile Include="ConcreteHandlers\List.cs" />
+    <Compile Include="ConcreteHandlers\TaskFormatter\ListFormatter.cs" />
+    <Compile Include="ConcreteHandlers\TaskFormatter\TableFormatter.cs" />
     <Compile Include="LineParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ConcreteHandlers\TaskFormatter\ITaskFormatter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

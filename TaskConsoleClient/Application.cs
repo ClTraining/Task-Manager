@@ -6,6 +6,7 @@ using Ninject.Modules;
 using System;
 using TaskManagerClientLibrary;
 using TaskManagerClientLibrary.ConcreteHandlers;
+using TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter;
 using TaskManagerServiceLibrary;
 
 namespace TaskManagerConsole
@@ -34,10 +35,11 @@ namespace TaskManagerConsole
     {
         public override void Load()
         {
-            this.Bind(x => x.FromAssemblyContaining<ICommand>().SelectAllClasses()
+            this.Bind(x => x.FromAssemblyContaining<ICommand>()
+                               .SelectAllClasses()
                                .InNamespaceOf<ICommand>()
                                .BindAllInterfaces()
-                               );
+                );
             Bind<ArgumentConverter<string>>().To<ArgumentConverter<string>>();
             Bind<ArgumentConverter<int>>().To<ArgumentConverter<int>>();
             Bind<IClientConnection>().To<ClientConnection>();
