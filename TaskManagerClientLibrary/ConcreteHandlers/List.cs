@@ -41,14 +41,14 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public ListTester()
         {
+            formatter1.CountRange.Returns(Enumerable.Range(1, 1));
+            formatter2.CountRange.Returns(Enumerable.Range(2, 10));
             list = new List(client, new ArgumentConverter<string>(), new List<ITaskFormatter>() { formatter1, formatter2 });
         }
 
         [Fact]
         public void should_check_receiving_one_task()
         {
-            formatter1.CountRange.Returns(Enumerable.Range(1, 1));
-            formatter2.CountRange.Returns(Enumerable.Range(2, 10));
             var taskList = new List<ContractTask> { new ContractTask { Id = 1, Name = "some", IsCompleted = false } };
             client.GetTaskById(1).Returns(taskList);
             list.ExecuteWithGenericInput("1");
@@ -58,8 +58,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void should_check_receiving_all_task()
         {
-            formatter1.CountRange.Returns(Enumerable.Range(1, 1));
-            formatter2.CountRange.Returns(Enumerable.Range(2, 10));
             var taskList = new List<ContractTask>
                                {
                                    new ContractTask { Id = 1, Name = "task1", IsCompleted = false },
