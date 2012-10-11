@@ -32,14 +32,14 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         }
     }
 
-    public class ListTester
+    public class ListTests
     {
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
         private readonly ITaskFormatter formatter1 = Substitute.For<ITaskFormatter>();
         private readonly ITaskFormatter formatter2 = Substitute.For<ITaskFormatter>();
         private readonly List list;
 
-        public ListTester()
+        public ListTests()
         {
             formatter1.CountRange.Returns(Enumerable.Range(1, 1));
             formatter2.CountRange.Returns(Enumerable.Range(2, 10));

@@ -46,7 +46,7 @@ namespace TaskManagerClientLibrary
 
 
 
-    public class LineParserTester
+    public class LineParserTests
     {
         private readonly LineParser lp;
         private readonly List<ICommand> commands;
@@ -54,7 +54,7 @@ namespace TaskManagerClientLibrary
         private readonly ICommand command2 = Substitute.For<ICommand>();
         private readonly ICommand command3 = Substitute.For<ICommand>();
 
-        public LineParserTester()
+        public LineParserTests()
         {
             commands = new List<ICommand> { command1, command2, command3 };
 
