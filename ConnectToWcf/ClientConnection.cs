@@ -16,6 +16,11 @@ namespace ConnectToWcf
             {
                 return client.CreateChannel().AddTask(task);
             }
+            catch (FaultException<ExceptionDetail> e)
+            {
+                Console.WriteLine(e.Detail.Message);
+                throw new NullReferenceException();
+            }
             finally
             {
                 CloseClient(client);
@@ -34,9 +39,12 @@ namespace ConnectToWcf
             catch (FaultException<ExceptionDetail> e)
             {
                 Console.WriteLine(e.Detail.Message);
+                throw new NullReferenceException();
+            }
+            finally
+            {
                 CloseClient(client);
             }
-            return null;
         }
 
         public List<ContractTask> GetAllTasks()
@@ -50,9 +58,12 @@ namespace ConnectToWcf
             catch (FaultException<ExceptionDetail> e)
             {
                 Console.WriteLine(e.Detail.Message);
+                throw new NullReferenceException();
+            }
+            finally
+            {
                 CloseClient(client);
             }
-            return null;
         }
 
         public void Complete(int id)
@@ -66,8 +77,11 @@ namespace ConnectToWcf
             catch (FaultException<ExceptionDetail> e)
             {
                 Console.WriteLine(e.Detail.Message);
-                CloseClient(client);
                 throw new NullReferenceException();
+            }
+            finally
+            {
+                CloseClient(client);
             }
         }
 

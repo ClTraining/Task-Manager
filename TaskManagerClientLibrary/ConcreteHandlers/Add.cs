@@ -12,8 +12,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected override void ExecuteWithGenericInput(string input)
         {
-            var result = client.AddTask(input);
-            Console.WriteLine("Task added. Task ID: " + result);
+            try
+            {
+                var result = client.AddTask(input);
+                Console.WriteLine("Task added. Task ID: " + result);
+            }
+            catch (NullReferenceException) { }
         }
     }
 

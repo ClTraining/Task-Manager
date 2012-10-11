@@ -11,17 +11,20 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class List : Command<string>
     {
+
         public List(IClientConnection client, ArgumentConverter<string> converter) : base(client, typeof(List), converter) { }
 
         protected override void ExecuteWithGenericInput(string input)
         {
-            var tasks = (input == string.Empty)
-                             ? client.GetAllTasks()
-                             : client.GetTaskById(int.Parse(input));
-
-            if (tasks == null)
-                return;
-
+            List<ContractTask> tasks = null;
+            try
+            {
+                tasks = (string.IsNullOrEmpty(input))
+                            ? client.GetAllTasks()
+                            : client.GetTaskById(int.Parse(input));
+            }
+            catch (NullReferenceException) { return; }
+            
             var delim = tasks.Count > 1 ? '\t' : '\n';
 
             if (tasks.Count > 1)
