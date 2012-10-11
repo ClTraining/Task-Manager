@@ -36,6 +36,11 @@ namespace ConnectToWcf
             UpdateDataOnServer(s => s.Complete(id));
         }
 
+        public bool TestConnection()
+        {
+            return GetDataFromServer(s => s.TestConnection());
+        }
+
         private void UpdateDataOnServer(Action<ITaskManagerService> action)
         {
             GetDataFromServer<object>(s =>

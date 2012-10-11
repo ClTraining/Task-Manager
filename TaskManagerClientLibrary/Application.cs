@@ -5,6 +5,7 @@ using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using TaskManagerClientLibrary.ConcreteHandlers;
+using System.Linq;
 
 namespace TaskManagerClientLibrary
 {
@@ -13,6 +14,8 @@ namespace TaskManagerClientLibrary
         public void Run()
         {
             Console.Title = "Task Manager Client";
+
+            Console.WriteLine("Hello " + Environment.UserName);
 
             var module = new TaskManagerModule();
 
@@ -36,7 +39,10 @@ namespace TaskManagerClientLibrary
 
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var address = config.AppSettings.Settings["connectionAddress"].Value;
-            Bind<IClientConnection>().To<ClientConnection>().WithConstructorArgument("address",address);
+            Bind<IClientConnection>().To<ClientConnection>().WithConstructorArgument("address", address);
+
+            if(new ClientConnection(address).TestConnection())
+                Console.WriteLine("Task Manager connected to " + address.Split(new []{'/', ':'})[3]);
         }
     }
 }
