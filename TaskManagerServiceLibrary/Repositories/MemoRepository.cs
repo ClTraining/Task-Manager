@@ -33,9 +33,6 @@ namespace TaskManagerServiceLibrary.Repositories
 
         public List<ServiceTask> GetAllTasks()
         {
-            if(taskList.Count <= 0)
-                throw new TaskNotFoundException(-1);
-
             return taskList.ToList();
         }
 
@@ -82,17 +79,15 @@ namespace TaskManagerServiceLibrary.Repositories
         public void should_mark_task_by_id()
         {
             var taskId = repository.AddTask("tt");
-
             repository.Complete(taskId);
-
             repository.GetTaskById(taskId).IsCompleted.Should().BeTrue();
         }
 
         [Fact]
         public void should_return_empty_list()
         {
-            Action action = () => repository.GetAllTasks();
-            action.ShouldThrow<TaskNotFoundException>();
+            var result = repository.GetAllTasks();
+            result.ShouldBeEquivalentTo(new List<ServiceTask>());
         }
 
         [Fact]

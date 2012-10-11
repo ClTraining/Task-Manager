@@ -9,7 +9,6 @@ using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskManagerClientLibrary.ConcreteHandlers;
-using TaskManagerServiceLibrary;
 using Xunit;
 
 namespace TaskManagerClientLibrary
@@ -23,88 +22,86 @@ namespace TaskManagerClientLibrary
             this.commands = commands;
         }
 
-        private List<string> GetArguments(string input)
-        {
-            var args = input.Split(' ').ToList();
-
-            return new List<string> { args[0], args.Count > 1 ? string.Join(" ", args.Skip(1)) : string.Empty };
-        }
         public void ExecuteCommand(string input)
         {
-            var args = GetArguments(input);
+
+            var args = input.Split(new[] { ' ' }, 2).ToList();
 
             var command = commands.FirstOrDefault(a => a.Name == args[0]);
-            if (command != null)
-                command.Execute(args[1].Trim(new[] { '\"', '\'' }));
+            if (command == null)
+                Console.WriteLine("No such command");
+
             else
-                Console.WriteLine("This command is incorrect. Please, try again!");
-        }
-    }
-
-    public class LineParserTester
-    {
-        private readonly LineParser lp;
-        private readonly List<ICommand> commands;
-        private readonly ICommand command1 = Substitute.For<ICommand>();
-        private readonly ICommand command2 = Substitute.For<ICommand>();
-        private readonly ICommand command3 = Substitute.For<ICommand>();
-
-        public LineParserTester()
-        {
-            commands = new List<ICommand> { command1, command2, command3 };
-
-            lp = new LineParser(commands);
+                command.Execute(args.Count > 1 ? args[1].Trim(new[] { '\"', '\'' }) : string.Empty);
         }
 
-        [Fact]
-        public void should_call_proper_command()
+
+
+        public class LineParserTests
         {
-            command1.Name.Returns("add");
-            command2.Name.Returns("command");
-            command3.Name.Returns("hello");
+            private readonly LineParser lp;
+            private readonly List<ICommand> commands;
+            private readonly ICommand command1 = Substitute.For<ICommand>();
+            private readonly ICommand command2 = Substitute.For<ICommand>();
+            private readonly ICommand command3 = Substitute.For<ICommand>();
 
-            lp.ExecuteCommand("add foo");
-            command1.Received().Execute("foo");
-        }
+            public LineParserTests()
+            {
+                commands = new List<ICommand> { command1, command2, command3 };
 
-        [Fact]
-        public void should_call_the_first_command()
-        {
-            command1.Name.Returns("add");
-            command2.Name.Returns("add");
+                lp = new LineParser(commands);
+            }
 
-            lp.ExecuteCommand("add aaa");
-            command1.Received().Execute("aaa");
-        }
+            [Fact]
+            public void should_call_proper_command()
+            {
+                command1.Name.Returns("add");
+                command2.Name.Returns("command");
+                command3.Name.Returns("hello");
 
-        [Fact]
-        public void should_throw_exception_if_for_wrong_command()
-        {
-            command1.Name.Returns("add");
-            command2.Name.Returns("command");
-            command3.Name.Returns("hello");
+                lp.ExecuteCommand("add foo");
+                command1.Received().Execute("foo");
+            }
 
-            var sb = new StringBuilder();
+            [Fact]
+            public void should_call_the_first_command()
+            {
+                command1.Name.Returns("add");
+                command2.Name.Returns("add");
 
-            Console.SetOut(new StringWriter(sb));
-            lp.ExecuteCommand("adkkkd world");
-            sb.ToString().ShouldBeEquivalentTo("This command is incorrect. Please, try again!\r\n");
-        }
+                lp.ExecuteCommand("add aaa");
+                command1.Received().Execute("aaa");
+            }
 
-        [Fact]
-        public void should_ignore_double_quotes()
-        {
-            command1.Name.Returns("add");
-            lp.ExecuteCommand("add \"hello world\"");
-            command1.Received().Execute("hello world");
-        }
+            [Fact]
+            public void should_throw_exception_if_for_wrong_command()
+            {
+                command1.Name.Returns("add");
+                command2.Name.Returns("command");
+                command3.Name.Returns("hello");
 
-        [Fact]
-        public void should_ignore_single_quotes()
-        {
-            command1.Name.Returns("add");
-            lp.ExecuteCommand("add \'hello world\'");
-            command1.Received().Execute("hello world");
+                var sb = new StringBuilder();
+
+                Console.SetOut(new StringWriter(sb));
+                lp.ExecuteCommand("adkkkd world");
+                sb.ToString().ShouldBeEquivalentTo("This command is incorrect. Please, try again!\r\n");
+            }
+
+            [Fact]
+            public void should_ignore_double_quotes()
+            {
+                command1.Name.Returns("add");
+                lp.ExecuteCommand("add \"hello world\"");
+                command1.Received().Execute("hello world");
+            }
+
+            [Fact]
+            public void should_ignore_single_quotes()
+            {
+                command1.Name.Returns("add");
+                lp.ExecuteCommand("add \'hello world\'");
+                command1.Received().Execute("hello world");
+            }
         }
     }
 }

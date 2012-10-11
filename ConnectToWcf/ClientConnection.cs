@@ -8,73 +8,78 @@ namespace ConnectToWcf
 {
     public class ClientConnection : IClientConnection
     {
+        private readonly string serviceAddress;
+        private readonly NetTcpBinding binding;
+        public ClientConnection(string address)
+        {
+            serviceAddress = address;
+            binding = new NetTcpBinding();
+        }
+
         public int AddTask(string task)
         {
-            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
-            client.Open();
             try
             {
-                return client.CreateChannel().AddTask(task);
+                return GetDataFromServer(t => t.AddTask(task));
             }
-            catch (FaultException<ExceptionDetail> e)
+            catch (FaultException<ExceptionDetail>)
             {
-                Console.WriteLine(e.Detail.Message);
-                throw new NullReferenceException();
-            }
-            finally
-            {
-                CloseClient(client);
+                throw new TaskNotFoundException("Wrong operation!");
             }
         }
 
-
         public List<ContractTask> GetTaskById(int id)
         {
-            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
-            client.Open();
             try
             {
-                return new List<ContractTask> { client.CreateChannel().GetTaskById(id) };
+                return GetDataFromServer(s => new List<ContractTask> { s.GetTaskById(id) });
             }
             catch (FaultException<ExceptionDetail>)
             {
                 throw new TaskNotFoundException(id);
-            }
-            finally
-            {
-                CloseClient(client);
             }
         }
 
         public List<ContractTask> GetAllTasks()
         {
-            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
-            client.Open();
             try
             {
-                return client.CreateChannel().GetAllTasks();
+                return GetDataFromServer(s => s.GetAllTasks());
             }
             catch (FaultException<ExceptionDetail>)
             {
-                throw new TaskNotFoundException("List is empty!");
-            }
-            finally
-            {
-                CloseClient(client);
+                throw new TaskNotFoundException("Wrong operation!");
             }
         }
 
         public void Complete(int id)
         {
-            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
-            client.Open();
             try
             {
-                client.CreateChannel().Complete(id);
+                UpdateDataOnServer(s => s.Complete(id));
             }
             catch (FaultException<ExceptionDetail>)
             {
                 throw new TaskNotFoundException(id);
+            }
+        }
+
+        private void UpdateDataOnServer(Action<ITaskManagerService> action)
+        {
+            GetDataFromServer<object>(s =>
+            {
+                action(s);
+                return null;
+            });
+        }
+
+        private T GetDataFromServer<T>(Func<ITaskManagerService, T> func)
+        {
+            var client = new ChannelFactory<ITaskManagerService>(binding, serviceAddress);
+            client.Open();
+            try
+            {
+                return func(client.CreateChannel());
             }
             finally
             {
