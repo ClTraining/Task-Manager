@@ -21,17 +21,22 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
             var delim = tasks.Count > 1 ? '\t' : '\n';
 
-            if (tasks.Count > 1)
+            if (tasks.Count == 0)
             {
-                Console.WriteLine(" ID\t|\tName\t\t|\tCompleted");
-                tasks.ForEach(x => Console.WriteLine(" {0}\t|" + delim + "{1}" + delim + "\t|\t{2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
+                Console.WriteLine("Task list is empty"); 
             }
-            else
+            else if (tasks.Count == 1)
             {
                 Console.WriteLine();
                 Console.WriteLine("ID: {0}" + delim + "Name: {1}" + delim + "Completed: {2}", tasks[0].Id, tasks[0].Name,
                                   tasks[0].IsCompleted ? "+" : "-");
             }
+            else if (tasks.Count > 1)
+            {
+                Console.WriteLine(" ID\t|\tName\t\t|\tCompleted");
+                tasks.ForEach(x => Console.WriteLine(" {0}\t|" + delim + "{1}" + delim + "\t|\t{2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
+            }
+            
         }
     }
 
