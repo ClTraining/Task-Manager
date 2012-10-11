@@ -8,56 +8,50 @@ namespace ConnectToWcf
 {
     public class ClientConnection : IClientConnection
     {
-        public int AddTask(string task)
+        private readonly string serviceAddress;
+        private readonly NetTcpBinding binding;
+        public ClientConnection(string address)
         {
-            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
-            client.Open();
-            try
-            {
-                return client.CreateChannel().AddTask(task);
-            }
-            finally
-            {
-                CloseClient(client);
-            }
+            serviceAddress = address;
+            binding = new NetTcpBinding();
         }
 
+        public int AddTask(string task)
+        {
+            return GetDataFromServer(t => t.AddTask(task));
+        }
 
         public List<ContractTask> GetTaskById(int id)
         {
-            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
-            client.Open();
-            try
-            {
-                return new List<ContractTask> {client.CreateChannel().GetTaskById(id)};
-            }
-            finally
-            {
-                CloseClient(client);
-            }
+            return GetDataFromServer(s => new List<ContractTask> {s.GetTaskById(id)});
         }
 
         public List<ContractTask> GetAllTasks()
         {
-            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
-            client.Open();
-            try
-            {
-                return client.CreateChannel().GetAllTasks();
-            }
-            finally
-            {
-                CloseClient(client);
-            }
+            return GetDataFromServer(s => s.GetAllTasks());
         }
 
         public void Complete(int id)
         {
-            var client = new ChannelFactory<ITaskManagerService>("tcpEndPoint");
+            UpdateDataOnServer(s => s.Complete(id));
+        }
+
+        private void UpdateDataOnServer(Action<ITaskManagerService> action)
+        {
+            GetDataFromServer<object>(s =>
+            {
+                action(s);
+                return null;
+            });
+        }
+
+        private T GetDataFromServer<T>(Func<ITaskManagerService, T> func)
+        {
+            var client = new ChannelFactory<ITaskManagerService>(binding, serviceAddress);
             client.Open();
             try
             {
-                client.CreateChannel().Complete(id);
+                return func(client.CreateChannel());
             }
             finally
             {

@@ -26,7 +26,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             Show(tasks);
         }
 
-        public void Show(List<ContractTask> tasks)
+        private void Show(List<ContractTask> tasks)
         {
             formatter.First(a => a.CountRange.Contains(tasks.Count)).Show(tasks);
         }
@@ -35,26 +35,31 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     public class ListTester
     {
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
-        private readonly List<ITaskFormatter> formatter = Substitute.For<List<ITaskFormatter>>();
+        private readonly ITaskFormatter formatter1 = Substitute.For<ITaskFormatter>();
+        private readonly ITaskFormatter formatter2 = Substitute.For<ITaskFormatter>();
         private readonly List list;
 
         public ListTester()
         {
-            list = new List(client,new ArgumentConverter<string>(), formatter);
+            list = new List(client, new ArgumentConverter<string>(), new List<ITaskFormatter>() { formatter1, formatter2 });
         }
 
         [Fact]
         public void should_check_receiving_one_task()
         {
-            var taskList = new List<ContractTask> {new ContractTask {Id = 1, Name = "some", IsCompleted = false}};
+            formatter1.CountRange.Returns(Enumerable.Range(1, 1));
+            formatter2.CountRange.Returns(Enumerable.Range(2, 10));
+            var taskList = new List<ContractTask> { new ContractTask { Id = 1, Name = "some", IsCompleted = false } };
             client.GetTaskById(1).Returns(taskList);
             list.ExecuteWithGenericInput("1");
-            list.Show(taskList);
+            formatter1.Received().Show(taskList);
         }
 
         [Fact]
         public void should_check_receiving_all_task()
         {
+            formatter1.CountRange.Returns(Enumerable.Range(1, 1));
+            formatter2.CountRange.Returns(Enumerable.Range(2, 10));
             var taskList = new List<ContractTask>
                                {
                                    new ContractTask { Id = 1, Name = "task1", IsCompleted = false },
@@ -62,6 +67,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
                                };
             client.GetAllTasks().Returns(taskList);
             list.ExecuteWithGenericInput("");
+            formatter2.Received().Show(taskList);
         }
     }
 }
+

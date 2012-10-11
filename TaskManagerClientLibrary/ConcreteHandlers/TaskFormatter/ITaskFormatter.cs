@@ -7,6 +7,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
     public interface ITaskFormatter
     {
         void Show(List<ContractTask> tasks);
-        IEnumerable<int> CountRange { get; set; }
+        IEnumerable<int> CountRange { get; }
     }
 }

@@ -18,12 +18,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         }
         }
 
-    public class ConcreteHandlerCompleteTests
+    public class CompleteTests
     {
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
         private readonly Complete handler;
 
-        public ConcreteHandlerCompleteTests()
+        public CompleteTests()
         {
             handler = new Complete(client, new ArgumentConverter<int>());
         }
