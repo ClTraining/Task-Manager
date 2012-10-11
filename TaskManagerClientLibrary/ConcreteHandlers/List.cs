@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using ConnectToWcf;
+using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
+using System.Linq;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
@@ -16,7 +19,19 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
                 ? client.GetAllTasks() 
                 : client.GetTaskById(int.Parse(input));
 
-            tasks.ForEach(x => Console.WriteLine("ID: {0}\tTask: {1}\t\t\tCompleted: {2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
+            var delim = tasks.Count > 1 ? '\t' : '\n';
+
+            if (tasks.Count > 1)
+            {
+                Console.WriteLine(" ID\t|\tName\t\t|\tCompleted");
+                tasks.ForEach(x => Console.WriteLine(" {0}\t|" + delim + "{1}" + delim + "\t|\t{2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
+            }
+            else
+            {
+                Console.WriteLine();
+                Console.WriteLine("ID: {0}" + delim + "Name: {1}" + delim + "Completed: {2}", tasks[0].Id, tasks[0].Name,
+                                  tasks[0].IsCompleted ? "+" : "-");
+            }
         }
     }
 

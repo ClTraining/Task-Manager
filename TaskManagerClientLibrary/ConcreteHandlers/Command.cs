@@ -28,7 +28,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         private object Convert(object input)
         {
-            return converter.Convert((input is T ? (T) input : default(T)).ToString());
+            return converter.Convert((string)input);
         }
     }
 }
