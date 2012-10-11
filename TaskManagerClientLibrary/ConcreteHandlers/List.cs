@@ -35,12 +35,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         }
     }
 
-    public class ListTester
+    public class ListTests
     {
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
         private readonly List list;
 
-        public ListTester()
+        public ListTests()
         {
             list = new List(client,new ArgumentConverter<string>());
         }
