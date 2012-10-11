@@ -27,18 +27,20 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
     public class AddTests
     {
+        private readonly ArgumentConverter<string> converter = Substitute.For<ArgumentConverter<string>>(); 
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
         private readonly Add handler;
         const string taskName = "sometask1";
 
         public AddTests()
         {
-            handler = new Add(client, new ArgumentConverter<string>());
+            handler = new Add(client, converter);
         }
 
         [Fact]
         public void should_send_string_return_id()
         {
+            converter.Convert(taskName).Returns(taskName);
             handler.Execute(taskName);
             client.Received().AddTask("sometask1");
         }
