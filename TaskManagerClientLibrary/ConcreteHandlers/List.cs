@@ -15,9 +15,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected override void ExecuteWithGenericInput(string input)
         {
-            var tasks = string.IsNullOrEmpty(input) 
-                ? client.GetAllTasks() 
-                : client.GetTaskById(int.Parse(input));
+            var tasks = (input == string.Empty)
+                             ? client.GetAllTasks()
+                             : client.GetTaskById(int.Parse(input));
+
+            if (tasks == null)
+                return;
 
             var delim = tasks.Count > 1 ? '\t' : '\n';
 
@@ -42,7 +45,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public ListTester()
         {
-            list = new List(client,new ArgumentConverter<string>());
+            list = new List(client, new ArgumentConverter<string>());
         }
 
         [Fact]

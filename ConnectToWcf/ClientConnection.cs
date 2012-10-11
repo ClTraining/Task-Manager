@@ -29,12 +29,14 @@ namespace ConnectToWcf
             client.Open();
             try
             {
-                return new List<ContractTask> {client.CreateChannel().GetTaskById(id)};
+                return new List<ContractTask> { client.CreateChannel().GetTaskById(id) };
             }
-            finally
+            catch (FaultException<ExceptionDetail> e)
             {
+                Console.WriteLine(e.Detail.Message);
                 CloseClient(client);
             }
+            return null;
         }
 
         public List<ContractTask> GetAllTasks()
@@ -45,10 +47,12 @@ namespace ConnectToWcf
             {
                 return client.CreateChannel().GetAllTasks();
             }
-            finally
+            catch (FaultException<ExceptionDetail> e)
             {
+                Console.WriteLine(e.Detail.Message);
                 CloseClient(client);
             }
+            return null;
         }
 
         public void Complete(int id)
@@ -59,9 +63,11 @@ namespace ConnectToWcf
             {
                 client.CreateChannel().Complete(id);
             }
-            finally
+            catch (FaultException<ExceptionDetail> e)
             {
+                Console.WriteLine(e.Detail.Message);
                 CloseClient(client);
+                throw new NullReferenceException();
             }
         }
 

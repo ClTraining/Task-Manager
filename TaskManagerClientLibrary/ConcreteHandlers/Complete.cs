@@ -13,10 +13,14 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected override void ExecuteWithGenericInput(int input)
         {
-            client.Complete(input);
-            Console.WriteLine("Task ID: {0} completed.", input);
+            try
+            {
+                client.Complete(input);
+                Console.WriteLine("Task ID: {0} completed.", input);
+            }
+            catch (NullReferenceException) { }
         }
-        }
+    }
 
     public class ConcreteHandlerCompleteTests
     {

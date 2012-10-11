@@ -32,22 +32,14 @@ namespace TaskManagerClientLibrary
         public void ExecuteCommand(string input)
         {
             var args = GetArguments(input);
-            try
-            {
-                commands.First(a => a.Name == args[0]).Execute(args[1].Trim(new[] { '\"', '\'' }));
-            }
-            catch (FaultException<ExceptionDetail> e)
-            {
-                Console.WriteLine(e.Detail.Message);
-            }
-            catch (InvalidOperationException)
-            {
+
+            var command = commands.FirstOrDefault(a => a.Name == args[0]);
+            if (command != null)
+                command.Execute(args[1].Trim(new[] { '\"', '\'' }));
+            else
                 Console.WriteLine("This command is incorrect. Please, try again!");
-            }
         }
     }
-
-
 
     public class LineParserTester
     {
@@ -88,6 +80,10 @@ namespace TaskManagerClientLibrary
         [Fact]
         public void should_throw_exception_if_for_wrong_command()
         {
+            command1.Name.Returns("add");
+            command2.Name.Returns("command");
+            command3.Name.Returns("hello");
+
             var sb = new StringBuilder();
 
             Console.SetOut(new StringWriter(sb));
