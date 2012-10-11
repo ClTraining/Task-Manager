@@ -18,7 +18,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             this.converter = converter;
         }
 
-        protected abstract void ExecuteWithGenericInput(T input);
+        public abstract void ExecuteWithGenericInput(T input);
 
         public void Execute(object argument)
         {

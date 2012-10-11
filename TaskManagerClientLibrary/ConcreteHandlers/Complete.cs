@@ -11,7 +11,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         public Complete(IClientConnection client, ArgumentConverter<int> converter)
             : base(client, typeof(Complete), converter) { }
 
-        protected override void ExecuteWithGenericInput(int input)
+        public override void ExecuteWithGenericInput(int input)
         {
             client.Complete(input);
             Console.WriteLine("Task ID: {0} completed.", input);
