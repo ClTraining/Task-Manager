@@ -32,8 +32,7 @@ namespace TaskManagerClientLibrary
                                .InNamespaceOf<ICommand>()
                                .BindAllInterfaces()
                                );
-            Bind<ArgumentConverter<string>>().To<ArgumentConverter<string>>();
-            Bind<ArgumentConverter<int>>().To<ArgumentConverter<int>>();
+            Bind<ArgumentConverter<object>>().ToSelf();
 
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var address = config.AppSettings.Settings["connectionAddress"].Value;
