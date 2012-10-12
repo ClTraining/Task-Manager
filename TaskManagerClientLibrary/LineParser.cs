@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.ServiceModel;
 using System.Text;
 using FluentAssertions;
 using NSubstitute;
@@ -20,32 +19,20 @@ namespace TaskManagerClientLibrary
             this.commands = commands;
         }
 
-        private List<string> GetArguments(string input)
-        {
-            var args = input.Split(' ').ToList();
-
-            return new List<string> { args[0], args.Count > 1 ? string.Join(" ", args.Skip(1)) : string.Empty };
-        }
         public void ExecuteCommand(string input)
         {
-            var args = GetArguments(input);
-            try
-            {
-                commands.First(a => a.Name == args[0]).Execute(args[1].Trim(new[] { '\"', '\'' }));
-            }
-            catch (FaultException<ExceptionDetail> e)
-            {
-                Console.WriteLine(e.Detail.Message);
-            }
-            catch (InvalidOperationException)
-            {
-                Console.WriteLine("This command is incorrect. Please, try again!");
-            }
+
+            var args = input.Split(new[] { ' ' }, 2).ToList();
+
+            var command = commands.FirstOrDefault(a => a.Name == args[0]);
+            if (command == null)
+                Console.WriteLine("No such command");
+
+            else
+                command.Execute(args.Count > 1 ? args[1].Trim(new[] { '\"', '\'' }) : null);
         }
+
     }
-
-
-
     public class LineParserTests
     {
         private readonly LineParser lp;
@@ -79,17 +66,38 @@ namespace TaskManagerClientLibrary
             command2.Name.Returns("add");
 
             lp.ExecuteCommand("add aaa");
+
             command1.Received().Execute("aaa");
+            command2.DidNotReceiveWithAnyArgs().Execute("aaa");
         }
 
         [Fact]
-        public void should_throw_exception_if_for_wrong_command()
+        public void should_inform_if_no_such_command()
+        {
+            command1.Name.Returns("add");
+            command2.Name.Returns("command");
+            command3.Name.Returns("hello");
+
+            lp.ExecuteCommand("ababa bababab");
+
+            command1.DidNotReceiveWithAnyArgs().Execute("aaa");
+            command2.DidNotReceiveWithAnyArgs().Execute("aaa");
+            command3.DidNotReceiveWithAnyArgs().Execute("aaa");
+        }
+
+        [Fact]
+        public void for_wrong_command_should_inform_user_that_command_does_not_exists()
         {
             var sb = new StringBuilder();
-
             Console.SetOut(new StringWriter(sb));
-            lp.ExecuteCommand("adkkkd world");
-            sb.ToString().ShouldBeEquivalentTo("This command is incorrect. Please, try again!\r\n");
+
+            command1.Name.Returns("add");
+            command2.Name.Returns("command");
+            command3.Name.Returns("abrakadabra");
+
+            lp.ExecuteCommand("hello world");
+
+            sb.ToString().ShouldBeEquivalentTo("No such command\r\n");
         }
 
         [Fact]
@@ -108,5 +116,6 @@ namespace TaskManagerClientLibrary
             command1.Received().Execute("hello world");
         }
     }
+
 }
 
