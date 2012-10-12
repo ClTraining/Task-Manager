@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using ConnectToWcf;
 using TaskManagerServiceLibrary;
@@ -23,8 +22,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             this.textWriter = textWriter;
         }
 
-        public abstract void ExecuteWithGenericInput(T input);
-
         public void Execute(object argument)
         {
             try
@@ -37,6 +34,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
                 OutText(e.Message);
             }
         }
+
+        protected abstract void ExecuteWithGenericInput(T input);
 
         protected void OutText(string text)
         {

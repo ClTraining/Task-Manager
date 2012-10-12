@@ -1,7 +1,6 @@
 using System.IO;
 using ConnectToWcf;
 using NSubstitute;
-using TaskManagerServiceLibrary;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
@@ -11,7 +10,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         public Complete(IClientConnection client, ArgumentConverter<int> converter, TextWriter textWriter)
             : base(client, converter, textWriter) { }
 
-        public override void ExecuteWithGenericInput(int input)
+        protected override void ExecuteWithGenericInput(int input)
         {
             client.Complete(input);
             OutText(string.Format("Task ID: {0} completed.", input));

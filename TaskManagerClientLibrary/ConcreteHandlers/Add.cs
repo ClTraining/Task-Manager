@@ -9,7 +9,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     {
         public Add(IClientConnection client, ArgumentConverter<string> converter, TextWriter textWriter) : base(client, converter, textWriter) { }
 
-        public override void ExecuteWithGenericInput(string input)
+        protected override void ExecuteWithGenericInput(string input)
         {
             var result = client.AddTask(input);
             OutText("Task added. Task ID: " + result);

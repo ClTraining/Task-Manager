@@ -64,6 +64,11 @@ namespace ConnectToWcf
             }
         }
 
+        public bool TestConnection()
+        {
+            return GetDataFromServer(s => s.TestConnection());
+        }
+
         private void UpdateDataOnServer(Action<ITaskManagerService> action)
         {
             GetDataFromServer<object>(s =>

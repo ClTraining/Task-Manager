@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using ConnectToWcf;
 using EntitiesLibrary;
 using NSubstitute;
@@ -20,7 +19,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             getFormatter = formatter;
         }
 
-        public override void ExecuteWithGenericInput(string input)
+        protected override void ExecuteWithGenericInput(string input)
         {
             if (string.IsNullOrEmpty(input))
                 ExecutePr(s => s.GetAllTasks(), getFormatter(input));
@@ -42,33 +41,33 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         private readonly ITaskFormatter formatter2 = Substitute.For<ITaskFormatter>();
         private readonly List list;
 
-        //public ListTests()
-        //{
-        //    formatter1.CountRange.Returns(Enumerable.Range(1, 1));
-        //    formatter2.CountRange.Returns(Enumerable.Range(2, 10));
-        //    list = new List(client, new ArgumentConverter<string>(), new List<ITaskFormatter>() { formatter1, formatter2 }, new StringWriter());
-        //}
+        public ListTests()
+        {
 
-        //[Fact]
-        //public void should_check_receiving_one_task()
-        //{
-        //    var taskList = new List<ContractTask> { new ContractTask { Id = 1, Name = "some", IsCompleted = false } };
-        //    client.GetTaskById(1).Returns(taskList);
-        //    list.ExecuteWithGenericInput("1");
-        //    formatter1.Received().Show(taskList);
-        //}
+            list = new List(client, new ArgumentConverter<string>(), new StringWriter(), c => formatter1);
+        }
 
-        //[Fact]
-        //public void should_check_receiving_all_task()
-        //{
-        //    var taskList = new List<ContractTask>
-        //                       {
-        //                           new ContractTask { Id = 1, Name = "task1", IsCompleted = false },
-        //                           new ContractTask{Id = 2, Name = "task2", IsCompleted = true}
-        //                       };
-        //    client.GetAllTasks().Returns(taskList);
-        //    list.ExecuteWithGenericInput("");
-        //    formatter2.Received().Show(taskList);
-        //}
+        [Fact]
+        public void should_check_receiving_one_task()
+        {
+            var taskList = new List<ContractTask> { new ContractTask { Id = 1, Name = "some", IsCompleted = false } };
+            client.GetTaskById(1).Returns(taskList);
+            list.Execute("1");
+            formatter1.Received().Show(taskList);
+        }
+
+        [Fact]
+        public void should_check_receiving_all_task()
+        {
+            var taskList = new List<ContractTask>
+                               {
+                                   new ContractTask { Id = 1, Name = "task1", IsCompleted = false },
+                                   new ContractTask{Id = 2, Name = "task2", IsCompleted = true}
+                               };
+            client.GetAllTasks().Returns(taskList);
+            list.Execute("");
+            formatter1.Received().Show(taskList);
+        }
     }
+
 }

@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Configuration;
 using ConnectToWcf;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using TaskManagerClientLibrary.ConcreteHandlers;
 using TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter;
+
 
 namespace TaskManagerClientLibrary
 {
@@ -16,11 +16,14 @@ namespace TaskManagerClientLibrary
             Console.Title = "Task Manager Client";
 
             var module = new TaskManagerModule();
-
             var kernel = new StandardKernel(module);
 
-            for (string s; ((s = Console.ReadLine()) != null);)
+            var notifier = kernel.Get<UserNotifier>();
 
+            var greeting = notifier.GenerateGreeting();
+            Console.WriteLine(greeting);
+
+            for (string s; ((s = Console.ReadLine()) != null); )
                 kernel.Get<LineParser>().ExecuteCommand(s);
         }
     }
@@ -32,12 +35,9 @@ namespace TaskManagerClientLibrary
             this.Bind(x => x.FromAssemblyContaining<ICommand>().SelectAllClasses()
                                .InNamespaceOf<ICommand>()
                                .BindAllInterfaces().Configure(b => b.WithConstructorArgument("textWriter", Console.Out))
-                               );
-            Bind<ArgumentConverter<object>>().ToSelf();
+                );
 
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var address = config.AppSettings.Settings["connectionAddress"].Value;
-            Bind<IClientConnection>().To<ClientConnection>().WithConstructorArgument("address",address);
+            Bind<ArgumentConverter<object>>().ToSelf();
 
             var factoryTaskFormatterMethod = new Func<string, ITaskFormatter>
                 (input =>
@@ -50,6 +50,13 @@ namespace TaskManagerClientLibrary
                      });
 
             Bind<Func<string, ITaskFormatter>>().ToConstant(factoryTaskFormatterMethod);
+
+            var configManager = new ConfigurationManager();
+            var address = configManager.GetAddress();
+
+            Bind<UserNotifier>().ToSelf().WithConstructorArgument("address", address);
+            Bind<IClientConnection>().To<ClientConnection>().WithConstructorArgument("address", address);
+
         }
     }
 }
