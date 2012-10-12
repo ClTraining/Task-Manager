@@ -25,8 +25,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
                 tasks = (input == null)
                             ? client.GetAllTasks()
                             : client.GetTaskById(input.Value);
-
-
             }
             catch (TaskNotFoundException e)
             {
@@ -110,11 +108,11 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void should_inform_user_about_exceptions()
         {
-            var sb=new StringBuilder();
+            var sb = new StringBuilder();
             Console.SetOut(new StringWriter(sb));
 
             client.GetTaskById(5).Returns(x => { throw new TaskNotFoundException(5); });
-            
+
             converter.Convert("5").Returns(5);
             handler.Execute("5");
 
