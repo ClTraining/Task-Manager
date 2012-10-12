@@ -11,6 +11,11 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
     {
         private const string format = "\nID:\t\t{0}\n" + "Name:\t\t{1}\n" + "Completed:\t{2}\n\n";
 
+        public bool CouldUse(string input)
+        {
+            return String.IsNullOrEmpty(input);
+        }
+
         public string Show(List<ContractTask> tasks)
         {
             var taskString = new StringBuilder();

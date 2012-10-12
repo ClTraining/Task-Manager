@@ -7,7 +7,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Add : Command<string>
     {
-        public Add(IClientConnection client, ArgumentConverter<string> converter, TextWriter textWriter) : base(client, converter, textWriter) { }
+        public Add(IClientConnection client, ArgumentConverter<string> converter, TextWriter textWriter) : base(client, converter, textWriter)
+        {
+            int a=0;
+        }
 
         protected override void ExecuteWithGenericInput(string input)
         {

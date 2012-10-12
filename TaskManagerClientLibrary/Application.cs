@@ -39,18 +39,6 @@ namespace TaskManagerClientLibrary
 
             Bind<ArgumentConverter<object>>().ToSelf();
 
-            var factoryTaskFormatterMethod = new Func<string, ITaskFormatter>
-                (input =>
-                     {
-                         if (string.IsNullOrEmpty(input))
-                         {
-                             return Kernel.Get<TableFormatter>();
-                         }
-                         return Kernel.Get<ListFormatter>();
-                     });
-
-            Bind<Func<string, ITaskFormatter>>().ToConstant(factoryTaskFormatterMethod);
-
             var configManager = new ConfigurationManager();
             var address = configManager.GetAddress();
 
