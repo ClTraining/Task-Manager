@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using ConnectToWcf;
 using EntitiesLibrary;
 using FluentAssertions;
@@ -10,19 +12,21 @@ using System.Linq;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
-    public class List : Command<string>
+    public class List : Command<int?>
     {
 
-        public List(IClientConnection client, ArgumentConverter<string> converter) : base(client, typeof(List), converter) { }
+        public List(IClientConnection client, ArgumentConverter<int?> converter) : base(client, typeof(List), converter) { }
 
-        protected override void ExecuteWithGenericInput(string input)
+        protected override void ExecuteWithGenericInput(int? input)
         {
-            List<ContractTask> tasks = null;
+            List<ContractTask> tasks;
             try
             {
-                tasks = (string.IsNullOrEmpty(input))
+                tasks = (input == null)
                             ? client.GetAllTasks()
-                            : client.GetTaskById(int.Parse(input));
+                            : client.GetTaskById(input.Value);
+
+
             }
             catch (TaskNotFoundException e)
             {
@@ -53,7 +57,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
     public class ListTests
     {
-        private readonly ArgumentConverter<string> converter = Substitute.For<ArgumentConverter<string>>();
+        private readonly ArgumentConverter<int?> converter = Substitute.For<ArgumentConverter<int?>>();
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
         private readonly List handler;
 
@@ -74,10 +78,47 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             const string id = "5";
             client.GetTaskById(5).Returns(new List<ContractTask>());
 
-            converter.Convert(id).Returns(id);
+            converter.Convert(id).Returns(int.Parse(id));
             handler.Execute(id);
 
             client.Received().GetTaskById(5);
+        }
+
+        [Fact]
+        public void if_input_is_null_should_get_all_tasks()
+        {
+            client.GetAllTasks().Returns(new List<ContractTask> { new ContractTask(), new ContractTask() });
+
+            converter.Convert(null).Returns(null as int?);
+            handler.Execute(null);
+
+            client.Received().GetAllTasks();
+        }
+
+        [Fact]
+        public void should_print_the_info_on_selected_task()
+        {
+            const string id = "5";
+            client.GetTaskById(5).Returns(new List<ContractTask> { new ContractTask() });
+
+            converter.Convert(id).Returns(int.Parse(id));
+            handler.Execute(id);
+
+            client.Received().GetTaskById(5);
+        }
+
+        [Fact]
+        public void should_inform_user_about_exceptions()
+        {
+            var sb=new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+
+            client.GetTaskById(5).Returns(x => { throw new TaskNotFoundException(5); });
+            
+            converter.Convert("5").Returns(5);
+            handler.Execute("5");
+
+            sb.ToString().ShouldBeEquivalentTo("Task not found: (Id = 5)\r\n");
         }
     }
 }

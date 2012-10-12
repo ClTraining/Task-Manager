@@ -32,7 +32,7 @@ namespace TaskManagerClientLibrary
                 Console.WriteLine("No such command");
 
             else
-                command.Execute(args.Count > 1 ? args[1].Trim(new[] { '\"', '\'' }) : string.Empty);
+                command.Execute(args.Count > 1 ? args[1].Trim(new[] { '\"', '\'' }) : null);
         }
 
     }
