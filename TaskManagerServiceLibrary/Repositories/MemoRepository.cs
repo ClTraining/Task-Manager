@@ -38,7 +38,6 @@ namespace TaskManagerServiceLibrary.Repositories
 
         public void Complete(int id)
         {
-            Console.Out.WriteLine("id = {0}", id);
             GetTaskById(id).IsCompleted = true;
         }
 

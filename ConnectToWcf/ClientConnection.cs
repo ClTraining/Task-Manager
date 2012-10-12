@@ -18,22 +18,50 @@ namespace ConnectToWcf
 
         public int AddTask(string task)
         {
-            return GetDataFromServer(t => t.AddTask(task));
+            try
+            {
+                return GetDataFromServer(t => t.AddTask(task));
+            }
+            catch (FaultException<ExceptionDetail>)
+            {
+                throw new TaskNotFoundException("Wrong operation!");
+            }
         }
 
         public List<ContractTask> GetTaskById(int id)
         {
-            return GetDataFromServer(s => new List<ContractTask> {s.GetTaskById(id)});
+            try
+            {
+                return GetDataFromServer(s => new List<ContractTask> { s.GetTaskById(id) });
+            }
+            catch (FaultException<ExceptionDetail>)
+            {
+                throw new TaskNotFoundException(id);
+            }
         }
 
         public List<ContractTask> GetAllTasks()
         {
-            return GetDataFromServer(s => s.GetAllTasks());
+            try
+            {
+                return GetDataFromServer(s => s.GetAllTasks());
+            }
+            catch (FaultException<ExceptionDetail>)
+            {
+                throw new TaskNotFoundException("Wrong operation!");
+            }
         }
 
         public void Complete(int id)
         {
-            UpdateDataOnServer(s => s.Complete(id));
+            try
+            {
+                UpdateDataOnServer(s => s.Complete(id));
+            }
+            catch (FaultException<ExceptionDetail>)
+            {
+                throw new TaskNotFoundException(id);
+            }
         }
 
         public bool TestConnection()
