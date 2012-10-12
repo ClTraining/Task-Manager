@@ -18,11 +18,13 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
             CountRange = Enumerable.Range(1, 1);
         }
 
-        public void Show(List<ContractTask> tasks)
+        public string Show(List<ContractTask> tasks)
         {
-            tasks.ForEach(x=>Console.Write("\nID:\t\t{0}\n" +
+            var taskString = new StringBuilder();
+            tasks.ForEach(x => taskString.Append(String.Format("\nID:\t\t{0}\n" +
                                            "Name:\t\t{1}\n" +
-                                           "Completed:\t{2}\n\n", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
+                                           "Completed:\t{2}\n\n", x.Id, x.Name, x.IsCompleted ? "+" : "-")));
+            return taskString.ToString();
         }
     }
 

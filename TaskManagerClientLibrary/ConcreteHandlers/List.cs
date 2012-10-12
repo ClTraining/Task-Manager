@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using ConnectToWcf;
 using EntitiesLibrary;
@@ -12,7 +13,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     {
         private readonly List<ITaskFormatter> formatter;
 
-        public List(IClientConnection client, ArgumentConverter<string> converter, List<ITaskFormatter> formatter) : base(client, typeof(List), converter)
+        public List(IClientConnection client, ArgumentConverter<string> converter, List<ITaskFormatter> formatter, TextWriter textWriter)
+            : base(client, typeof(List), converter, textWriter)
         {
             this.formatter = formatter;
         }
@@ -27,7 +29,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         private void Show(List<ContractTask> tasks)
         {
-            formatter.First(a => a.CountRange.Contains(tasks.Count)).Show(tasks);
+            textWriter.Write(formatter.First(a => a.CountRange.Contains(tasks.Count)).Show(tasks));
         }
     }
 
@@ -42,7 +44,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         {
             formatter1.CountRange.Returns(Enumerable.Range(1, 1));
             formatter2.CountRange.Returns(Enumerable.Range(2, 10));
-            list = new List(client, new ArgumentConverter<string>(), new List<ITaskFormatter>() { formatter1, formatter2 });
+            list = new List(client, new ArgumentConverter<string>(), new List<ITaskFormatter>() { formatter1, formatter2 }, new StringWriter());
         }
 
         [Fact]

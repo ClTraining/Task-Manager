@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using ConnectToWcf;
 using FluentAssertions;
 using NSubstitute;
@@ -9,18 +10,18 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Add : Command<string>
     {
-        public Add(IClientConnection client, ArgumentConverter<string> converter) : base(client, typeof(Add), converter) { }
+        public Add(IClientConnection client, ArgumentConverter<string> converter, TextWriter textWriter) : base(client, typeof(Add), converter, textWriter) { }
 
         public override void ExecuteWithGenericInput(string input)
         {
             try
             {
                 var result = client.AddTask(input);
-                Console.WriteLine("Task added. Task ID: " + result);
+                textWriter.WriteLine("Task added. Task ID: " + result);
             }
             catch (TaskNotFoundException e)
             {
-                Console.WriteLine(e.Message);
+                textWriter.WriteLine(e.Message);
             }
         }
     }
@@ -34,7 +35,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public AddTests()
         {
-            handler = new Add(client, converter);
+            handler = new Add(client, converter, new StringWriter());
         }
 
         [Fact]

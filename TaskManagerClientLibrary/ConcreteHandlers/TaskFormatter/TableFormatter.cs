@@ -23,16 +23,17 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
             format = "{0,-" + PosId + "} | {1," + PosName + "} | {2," + PosCompleted + "}";
         }
 
-        public void Show(List<ContractTask> tasks)
+        public string Show(List<ContractTask> tasks)
         {
-            PrintHeader();
-            tasks.ForEach(x => Console.WriteLine(format, x.Id, (x.Name.Length>PosName) ? x.Name.Remove(PosName):x.Name, x.IsCompleted ? "+" : "-"));
-            
+            var taskString = new StringBuilder();
+            taskString.AppendLine(PrintHeader());
+            tasks.ForEach(x => taskString.AppendLine(String.Format(format, x.Id, (x.Name.Length > PosName) ? x.Name.Remove(PosName) : x.Name, x.IsCompleted ? "+" : "-")));
+            return taskString.ToString();
         }
 
-        private void PrintHeader()
+        private string PrintHeader()
         {
-            Console.WriteLine(format, "Id", "Name", "Completed");
+            return string.Format(format, "Id", "Name", "Completed");
         }
     }
 

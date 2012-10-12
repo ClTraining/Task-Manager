@@ -31,7 +31,7 @@ namespace TaskManagerClientLibrary
         {
             this.Bind(x => x.FromAssemblyContaining<ICommand>().SelectAllClasses()
                                .InNamespaceOf<ICommand>()
-                               .BindAllInterfaces()
+                               .BindAllInterfaces().Configure(b => b.WithConstructorArgument("textWriter", Console.Out))
                                );
             Bind<ArgumentConverter<object>>().ToSelf();
 

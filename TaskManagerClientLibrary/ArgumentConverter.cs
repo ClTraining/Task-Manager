@@ -4,9 +4,9 @@ using Xunit;
 
 namespace TaskManagerClientLibrary
 {
-    public class ArgumentConverter<T>
+    public sealed class ArgumentConverter<T>
     {
-        public virtual T Convert(string input)
+        public T Convert(string input)
         {
             var tc = TypeDescriptor.GetConverter(typeof(T));
             return (T)tc.ConvertFrom(input);
