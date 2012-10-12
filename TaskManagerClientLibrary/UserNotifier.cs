@@ -4,6 +4,8 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FluentAssertions;
+using Xunit;
 
 namespace TaskManagerClientLibrary
 {
@@ -15,12 +17,28 @@ namespace TaskManagerClientLibrary
         {
             this.address = address;
         }
-        
-        public void Greet()
+
+        public string GenerateGreeting()
         {
-            Console.WriteLine("Hello " + Environment.UserName);
-            Console.WriteLine("\nServer address is: " + address.Split(new[] { '/', ':' })[3] );
-            Console.WriteLine("Type \'?\' to see available commands");
+            var sb = new StringBuilder();
+            sb.Append("Hello " + Environment.UserName);
+            sb.Append("\nServer address is: " + address.Split(new[] { '/', ':' })[3]);
+            sb.Append("\nType \'?\' to see available commands");
+            return sb.ToString();
+        }
+    }
+
+    public class UserNotifierTester
+    {
+        [Fact]
+        public void should_generate_message()
+        {
+            const string test = "blabla";
+            var notifier = new UserNotifier(string.Format("1/1/1:{0}", test));
+
+            var greeting = notifier.GenerateGreeting();
+
+            greeting.Should().BeEquivalentTo("Hello " + Environment.UserName + "\nServer address is: " + test + "\nType \'?\' to see available commands");
         }
     }
 }

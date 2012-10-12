@@ -20,10 +20,10 @@ namespace TaskManagerClientLibrary
 
             var notifier = kernel.Get<UserNotifier>();
 
-            notifier.Greet();
+            var greeting = notifier.GenerateGreeting();
+            Console.WriteLine(greeting);
 
             for (string s; ((s = Console.ReadLine()) != null); )
-
                 kernel.Get<LineParser>().ExecuteCommand(s);
         }
     }
@@ -40,7 +40,6 @@ namespace TaskManagerClientLibrary
             Bind<ArgumentConverter<object>>().ToSelf();
 
             Bind<ConfigurationManager>().ToSelf();
-
 
             var configManager = new ConfigurationManager();
             var address = configManager.GetAddress();
