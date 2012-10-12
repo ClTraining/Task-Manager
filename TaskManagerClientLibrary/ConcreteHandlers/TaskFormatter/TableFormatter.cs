@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Text;
 using EntitiesLibrary;
@@ -11,7 +10,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
 {
     public class TableFormatter : ITaskFormatter
     {
-        public IEnumerable<int> CountRange { get; private set; }
         private const int PosId = 5;
         private const int PosName = 15;
         private const int PosCompleted = 13;
@@ -19,7 +17,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
 
         public TableFormatter()
         {
-            CountRange = Enumerable.Range(2, 1000);
             format = "{0,-" + PosId + "} | {1," + PosName + "} | {2," + PosCompleted + "}";
         }
 
@@ -27,7 +24,9 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
         {
             var taskString = new StringBuilder();
             taskString.AppendLine(PrintHeader());
+
             tasks.ForEach(x => taskString.AppendLine(String.Format(format, x.Id, (x.Name.Length > PosName) ? x.Name.Remove(PosName) : x.Name, x.IsCompleted ? "+" : "-")));
+
             return taskString.ToString();
         }
 
@@ -44,8 +43,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
         {
             var formatter = new TableFormatter();
             var sb = new StringBuilder();
-            Console.SetOut(new StringWriter(sb));
-            formatter.Show(new List<ContractTask>());
+            sb.Append(formatter.Show(new List<ContractTask>()));
             sb.ToString().Should().Be("Id    |            Name |     Completed\r\n");
         }
 
@@ -54,8 +52,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
         {
             var formatter = new TableFormatter();
             var sb = new StringBuilder();
-            Console.SetOut(new StringWriter(sb));
-            formatter.Show(new List<ContractTask>(){new ContractTask(){Id = 1, Name = "abcd123456789000000000000"}});
+            sb.Append(formatter.Show(new List<ContractTask>() { new ContractTask() { Id = 1, Name = "abcd123456789000000000000" } }));
             sb.ToString().Should().Be("Id    |            Name |     Completed\r\n1     | abcd12345678900 |             -\r\n");
         }
     }

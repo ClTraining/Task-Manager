@@ -38,6 +38,18 @@ namespace TaskManagerClientLibrary
             Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var address = config.AppSettings.Settings["connectionAddress"].Value;
             Bind<IClientConnection>().To<ClientConnection>().WithConstructorArgument("address",address);
+
+            var factoryTaskFormatterMethod = new Func<string, ITaskFormatter>
+                (input =>
+                     {
+                         if (string.IsNullOrEmpty(input))
+                         {
+                             return Kernel.Get<TableFormatter>();
+                         }
+                         return Kernel.Get<ListFormatter>();
+                     });
+
+            Bind<Func<string, ITaskFormatter>>().ToConstant(factoryTaskFormatterMethod);
         }
     }
 }

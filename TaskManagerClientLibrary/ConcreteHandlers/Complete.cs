@@ -1,7 +1,5 @@
-using System;
 using System.IO;
 using ConnectToWcf;
-using FluentAssertions;
 using NSubstitute;
 using TaskManagerServiceLibrary;
 using Xunit;
@@ -11,19 +9,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     public class Complete : Command<int>
     {
         public Complete(IClientConnection client, ArgumentConverter<int> converter, TextWriter textWriter)
-            : base(client, typeof(Complete), converter, textWriter) { }
+            : base(client, converter, textWriter) { }
 
         public override void ExecuteWithGenericInput(int input)
         {
-            try
-            {
-                client.Complete(input);
-                textWriter.WriteLine("Task ID: {0} completed.", input);
-            }
-            catch (TaskNotFoundException e)
-            {
-                textWriter.WriteLine(e.Message);
-            }
+            client.Complete(input);
+            OutText(string.Format("Task ID: {0} completed.", input));
         }
     }
 
