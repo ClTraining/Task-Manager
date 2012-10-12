@@ -34,7 +34,7 @@ namespace TaskManagerClientLibrary
             else
                 command.Execute(args.Count > 1 ? args[1].Trim(new[] { '\"', '\'' }) : string.Empty);
         }
-        
+
     }
     public class LineParserTests
     {
@@ -69,13 +69,15 @@ namespace TaskManagerClientLibrary
             command2.Name.Returns("add");
 
             lp.ExecuteCommand("add aaa");
+
+            command1.Received().Execute("aaa");
             command2.DidNotReceiveWithAnyArgs().Execute("aaa");
         }
 
         [Fact]
         public void should_inform_if_no_such_command()
         {
-            var sb=new StringBuilder();
+            var sb = new StringBuilder();
             Console.SetOut(new StringWriter(sb));
 
             command1.Name.Returns("add");
@@ -83,7 +85,10 @@ namespace TaskManagerClientLibrary
             command3.Name.Returns("hello");
 
             lp.ExecuteCommand("ababa bababab");
-            sb.ToString().Should().BeEquivalentTo("No such command\r\n");
+
+            command1.DidNotReceiveWithAnyArgs().Execute("aaa");
+            command2.DidNotReceiveWithAnyArgs().Execute("aaa");
+            command3.DidNotReceiveWithAnyArgs().Execute("aaa");
         }
 
         [Fact]
