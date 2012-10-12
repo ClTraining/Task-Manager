@@ -67,7 +67,6 @@
     <Compile Include="ConcreteHandlers\ICommand.cs" />
     <Compile Include="ConcreteHandlers\List.cs" />
     <Compile Include="LineParser.cs" />
-    <Compile Include="Meet.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
