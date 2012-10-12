@@ -96,7 +96,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         }
 
         [Fact]
-        public void should_print_the_info_on_selected_task()
+        public void if_get_task_by_id_should_call_specifical_printer_for_it()
         {
             const string id = "5";
             client.GetTaskById(5).Returns(new List<ContractTask> { new ContractTask() });
