@@ -77,9 +77,6 @@ namespace TaskManagerClientLibrary
         [Fact]
         public void should_inform_if_no_such_command()
         {
-            var sb = new StringBuilder();
-            Console.SetOut(new StringWriter(sb));
-
             command1.Name.Returns("add");
             command2.Name.Returns("command");
             command3.Name.Returns("hello");
@@ -89,6 +86,21 @@ namespace TaskManagerClientLibrary
             command1.DidNotReceiveWithAnyArgs().Execute("aaa");
             command2.DidNotReceiveWithAnyArgs().Execute("aaa");
             command3.DidNotReceiveWithAnyArgs().Execute("aaa");
+        }
+
+        [Fact]
+        public void for_wrong_command_should_inform_user_that_command_does_not_exists()
+        {
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+
+            command1.Name.Returns("add");
+            command2.Name.Returns("command");
+            command3.Name.Returns("abrakadabra");
+
+            lp.ExecuteCommand("hello world");
+
+            sb.ToString().ShouldBeEquivalentTo("No such command\r\n");
         }
 
         [Fact]
