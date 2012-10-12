@@ -6,7 +6,7 @@ namespace TaskManagerClientLibrary
 {
     public class ArgumentConverter<T>
     {
-        public T Convert(string input)
+        public virtual T Convert(string input)
         {
             var tc = TypeDescriptor.GetConverter(typeof(T));
             return (T)tc.ConvertFrom(input);
