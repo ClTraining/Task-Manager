@@ -37,7 +37,7 @@ namespace TaskManagerClientLibrary
                                );
             Bind<ArgumentConverter<object>>().ToSelf();
 
-            Configuration config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            var config = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
             var address = config.AppSettings.Settings["connectionAddress"].Value;
             Bind<IClientConnection>().To<ClientConnection>().WithConstructorArgument("address", address);
 

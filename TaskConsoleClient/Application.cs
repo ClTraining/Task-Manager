@@ -9,7 +9,6 @@ namespace TaskManagerConsole
             var kernel = new StandardKernel();
 
             kernel.Get<TaskManagerClientLibrary.Application>().Run();
-
         }
     }
 }
