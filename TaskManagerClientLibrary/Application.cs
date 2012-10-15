@@ -25,7 +25,7 @@ namespace TaskManagerClientLibrary
 
             for (string s; ((s = Console.ReadLine()) != null); )
             {
-                if (s == "exit".ToLower()) break;
+                if (s.ToLower() == "exit") break;
                 kernel.Get<LineParser>().ExecuteCommand(s);
             }
 
