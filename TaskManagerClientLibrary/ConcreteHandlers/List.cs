@@ -40,6 +40,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     public class ListTests
     {
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
+        private readonly ArgumentConverter<int?> converter = Substitute.For<ArgumentConverter<int?>>(); 
         private readonly ITaskFormatter formatter1 = Substitute.For<ITaskFormatter>();
         private readonly ITaskFormatter formatter2 = Substitute.For<ITaskFormatter>();
         private readonly List list;
@@ -47,12 +48,13 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         public ListTests()
         {
 
-            list = new List(client, new ArgumentConverter<int?>(), new StringWriter(), new List<ITaskFormatter>{ formatter1,formatter2});
+            list = new List(client, converter, new StringWriter(), new List<ITaskFormatter> { formatter1, formatter2 });
         }
 
         [Fact]
         public void should_check_receiving_one_task()
         {
+            converter.Convert("1").Returns(1);
             var taskList = new List<ContractTask> { new ContractTask { Id = 1, Name = "some", IsCompleted = false } };
             formatter1.CouldUse(1).Returns(true);
             client.GetTaskById(1).Returns(taskList);
@@ -63,9 +65,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void should_execute_in_client_receiving_show_all_tasks()
         {
+            converter.Convert("").Returns((int?) null);
             formatter2.CouldUse(null).Returns(true);
-            var taskList = new List<ContractTask> { new ContractTask { Id = 1, Name = "task 1", IsCompleted = false } };
-            client.GetTaskById(1).Returns(taskList);
             list.Execute("");
             client.Received().GetAllTasks();
         }
@@ -73,6 +74,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void should_check_receiving_all_task()
         {
+            converter.Convert("").Returns((int?)null);
             var taskList = new List<ContractTask>
                                {
                                    new ContractTask { Id = 1, Name = "task1", IsCompleted = false },
@@ -87,9 +89,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void should_execute_in_client_receiving_show_one_tasks()
         {
+            converter.Convert("1").Returns(1);
             formatter1.CouldUse(1).Returns(true);
-            var taskList = new List<ContractTask> { new ContractTask { Id = 1, Name = "task 2", IsCompleted = true } };
-            client.GetTaskById(1).Returns(taskList);
             list.Execute("1");
             client.Received().GetTaskById(1);
         }

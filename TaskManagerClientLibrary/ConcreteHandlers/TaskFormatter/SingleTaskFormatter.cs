@@ -9,7 +9,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
 {
     public class SingleTaskFormatter : ITaskFormatter
     {
-        private const string format = "\nID:\t\t{0}\n" + "Name:\t\t{1}\n" + "Completed:\t{2}\n\n";
+        private const string Format = "\nID:\t\t{0}\n" + "Name:\t\t{1}\n" + "Completed:\t{2}\n\n";
 
         public bool CouldUse(int? input)
         {
@@ -20,7 +20,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
         {
             var taskString = new StringBuilder();
 
-            tasks.ForEach(x => taskString.Append(String.Format(format, x.Id, x.Name, x.IsCompleted ? "+" : "-")));
+            tasks.ForEach(x => taskString.Append(String.Format(Format, x.Id, x.Name, x.IsCompleted ? "+" : "-")));
 
             return taskString.ToString();
         }
