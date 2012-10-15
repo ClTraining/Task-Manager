@@ -11,6 +11,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public string Name { get; private set; }
 
+        protected Command(Type derived, ArgumentConverter<T> converter) : this(null, derived, converter) { }
         protected Command(IClientConnection client, Type derived, ArgumentConverter<T> converter)
         {
             this.client = client;
@@ -18,11 +19,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             this.converter = converter;
         }
 
-        protected Command(Type derived, ArgumentConverter<T> converter)
-        {
-            Name = derived.Name.ToLower();
-            this.converter = converter;
-        }
 
         protected abstract void ExecuteWithGenericInput(T input);
 
