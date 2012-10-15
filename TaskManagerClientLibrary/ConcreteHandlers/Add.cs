@@ -33,7 +33,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void should_execute_on_client_add_task()
         {
-            converter.Convert(taskName).Returns(taskName);
             handler.Execute(taskName);
             client.Received().AddTask("sometask1");
         }
