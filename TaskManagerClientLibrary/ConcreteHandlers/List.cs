@@ -10,24 +10,24 @@ using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
-    public class List : Command<string>
+    public class List : Command<int?>
     {
         private readonly List<ITaskFormatter> formatters;
 
-        public List(IClientConnection client, ArgumentConverter<string> converter, TextWriter textWriter, List<ITaskFormatter> formatters)
+        public List(IClientConnection client, ArgumentConverter<int?> converter, TextWriter textWriter, List<ITaskFormatter> formatters)
             : base(client,  converter, textWriter)
         {
             this.formatters = formatters;
         }
 
-        protected override void ExecuteWithGenericInput(string input)
+        protected override void ExecuteWithGenericInput(int? input)
         {
             var taskFormatter = formatters.FirstOrDefault(f => f.CouldUse(input));
 
-            if (string.IsNullOrEmpty(input))
+            if (input == null)
                 ExecutePr(s => s.GetAllTasks(), taskFormatter);
             else
-                ExecutePr(s => s.GetTaskById(int.Parse(input)), taskFormatter);
+                ExecutePr(s => s.GetTaskById(input.Value), taskFormatter);
         }
 
         private void ExecutePr(Func<IClientConnection, List<ContractTask>> func,ITaskFormatter formatter)
@@ -47,14 +47,14 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         public ListTests()
         {
 
-            list = new List(client, new ArgumentConverter<string>(), new StringWriter(), new List<ITaskFormatter>{ formatter1,formatter2});
+            list = new List(client, new ArgumentConverter<int?>(), new StringWriter(), new List<ITaskFormatter>{ formatter1,formatter2});
         }
 
         [Fact]
         public void should_check_receiving_one_task()
         {
             var taskList = new List<ContractTask> { new ContractTask { Id = 1, Name = "some", IsCompleted = false } };
-            formatter1.CouldUse("1").Returns(true);
+            formatter1.CouldUse(1).Returns(true);
             client.GetTaskById(1).Returns(taskList);
             list.Execute("1");
             formatter1.Received().Show(taskList);
@@ -63,7 +63,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void should_execute_in_client_receiving_show_all_tasks()
         {
-            formatter2.CouldUse("").Returns(true);
+            formatter2.CouldUse(null).Returns(true);
             var taskList = new List<ContractTask> { new ContractTask { Id = 1, Name = "task 1", IsCompleted = false } };
             client.GetTaskById(1).Returns(taskList);
             list.Execute("");
@@ -78,7 +78,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
                                    new ContractTask { Id = 1, Name = "task1", IsCompleted = false },
                                    new ContractTask{Id = 2, Name = "task2", IsCompleted = true}
                                };
-            formatter2.CouldUse("").Returns(true);
+            formatter2.CouldUse(null).Returns(true);
             client.GetAllTasks().Returns(taskList);
             list.Execute("");
             formatter2.Received().Show(taskList);
@@ -87,7 +87,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void should_execute_in_client_receiving_show_one_tasks()
         {
-            formatter1.CouldUse("1").Returns(true);
+            formatter1.CouldUse(1).Returns(true);
             var taskList = new List<ContractTask> { new ContractTask { Id = 1, Name = "task 2", IsCompleted = true } };
             client.GetTaskById(1).Returns(taskList);
             list.Execute("1");
