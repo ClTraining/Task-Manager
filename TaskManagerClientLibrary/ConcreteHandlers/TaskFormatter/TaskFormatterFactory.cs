@@ -8,14 +8,28 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
 {
     public class TaskFormatterFactory
     {
-        private SingleTaskFormatter singleTaskFormatter;
-        private ListTaskFormatter listTaskFormatter;
+        private readonly SingleTaskFormatter singleTaskFormatter;
+        private readonly ListTaskFormatter listTaskFormatter;
 
         public TaskFormatterFactory(SingleTaskFormatter singleTaskFormatter, ListTaskFormatter listTaskFormatter)
         {
             this.listTaskFormatter = listTaskFormatter;
             this.singleTaskFormatter = singleTaskFormatter;
         }
+
+        public virtual ITaskFormatter GetListFormatter()
+        {
+            return listTaskFormatter;
+        }
+
+        public virtual ITaskFormatter GetSingleFormatter()
+        {
+            return singleTaskFormatter;
+        }
+    }
+
+    public class TaskFormatterFactoryTests
+    {
 
     }
 }
