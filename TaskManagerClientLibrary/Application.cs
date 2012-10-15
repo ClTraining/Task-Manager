@@ -4,7 +4,6 @@ using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using TaskManagerClientLibrary.ConcreteHandlers;
-using TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter;
 
 
 namespace TaskManagerClientLibrary

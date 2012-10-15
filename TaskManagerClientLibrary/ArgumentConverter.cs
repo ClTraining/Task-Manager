@@ -4,7 +4,7 @@ using Xunit;
 
 namespace TaskManagerClientLibrary
 {
-    public sealed class ArgumentConverter<T>
+    public class ArgumentConverter<T>
     {
         public T Convert(string input)
         {
