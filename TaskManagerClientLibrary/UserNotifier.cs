@@ -24,7 +24,6 @@ namespace TaskManagerClientLibrary
             sb.Append("Hello " + Environment.UserName);
             sb.Append("\nServer address is: " + address.Split(new[] { '/', ':' })[3]);
             sb.Append("\nType \'?\' to see available commands");
-            sb.Append("\nOr type \"exit\" to exit");
             return sb.ToString();
         }
     }
@@ -39,7 +38,7 @@ namespace TaskManagerClientLibrary
 
             var greeting = notifier.GenerateGreeting();
 
-            greeting.Should().Be("Hello " + Environment.UserName + "\nServer address is: " + test + "\nType \'?\' to see available commands" + "\nOr type \"exit\" to exit");
+            greeting.Should().Be("Hello " + Environment.UserName + "\nServer address is: " + test + "\nType \'?\' to see available commands");
         }
     }
 }

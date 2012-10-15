@@ -64,9 +64,11 @@
     <Compile Include="ConcreteHandlers\Add.cs" />
     <Compile Include="ConcreteHandlers\Command.cs" />
     <Compile Include="ConcreteHandlers\Complete.cs" />
+    <Compile Include="ConcreteHandlers\Exit.cs" />
     <Compile Include="ConcreteHandlers\ICommand.cs" />
     <Compile Include="ConcreteHandlers\List.cs" />
     <Compile Include="ConfigManager.cs" />
+    <Compile Include="ExitManager.cs" />
     <Compile Include="UserNotifier.cs" />
     <Compile Include="LineParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

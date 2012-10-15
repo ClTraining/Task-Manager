@@ -22,6 +22,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             List<ContractTask> tasks;
             try
             {
+                
                 tasks = (input == null)
                             ? client.GetAllTasks()
                             : client.GetTaskById(input.Value);
