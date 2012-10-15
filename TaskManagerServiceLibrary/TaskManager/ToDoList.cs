@@ -40,6 +40,11 @@ namespace TaskManagerServiceLibrary.TaskManager
         {
             repository.Complete(id);
         }
+
+        public void RenameTask(RenameTaskArgs args)
+        {
+            repository.RenameTask(args);
+        }
     }
 
 

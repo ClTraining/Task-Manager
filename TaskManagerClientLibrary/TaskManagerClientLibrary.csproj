@@ -65,8 +65,10 @@
     <Compile Include="ConcreteHandlers\Complete.cs" />
     <Compile Include="ConcreteHandlers\ICommand.cs" />
     <Compile Include="ConcreteHandlers\List.cs" />
+    <Compile Include="ConcreteHandlers\Rename.cs" />
     <Compile Include="ConcreteHandlers\TaskFormatter\SingleTaskFormatter.cs" />
     <Compile Include="ConcreteHandlers\TaskFormatter\ListTaskFormatter.cs" />
+    <Compile Include="ConcreteHandlers\TaskFormatter\TaskFormatterFactory.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="LineParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
