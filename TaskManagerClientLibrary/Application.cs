@@ -27,7 +27,6 @@ namespace TaskManagerClientLibrary
             {
                 kernel.Get<LineParser>().ExecuteCommand(s);
             }
-
         }
     }
 
@@ -43,7 +42,6 @@ namespace TaskManagerClientLibrary
             Bind<ArgumentConverter<object>>().ToSelf();
 
             Bind<ConfigurationManager>().ToSelf();
-            Bind<ExitManager>().ToSelf();
 
             var configManager = new ConfigurationManager();
             var address = configManager.GetAddress();

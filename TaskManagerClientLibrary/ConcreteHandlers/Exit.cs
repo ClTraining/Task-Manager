@@ -1,38 +1,33 @@
-using System;
-using ConnectToWcf;
-using FluentAssertions;
 using NSubstitute;
-using TaskManagerServiceLibrary;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Exit : Command<string>
     {
-        private readonly ExitManager manager;
+        private readonly EnvironmentWrapper manager;
 
-        public Exit(IClientConnection client, ArgumentConverter<string> converter, ExitManager manager)
-            : base(client, typeof(Exit), converter)
+        public Exit(ArgumentConverter<string> converter, EnvironmentWrapper manager)
+            : base(typeof(Exit), converter)
         {
             this.manager = manager;
         }
 
         protected override void ExecuteWithGenericInput(string input)
         {
-            manager.Close();
+            manager.Exit();
         }
     }
 
     public class ExitTests
     {
         private readonly ArgumentConverter<string> converter = Substitute.For<ArgumentConverter<string>>();
-        private readonly IClientConnection client = Substitute.For<IClientConnection>();
-        private readonly ExitManager manager = Substitute.For<ExitManager>();
+        private readonly EnvironmentWrapper manager = Substitute.For<EnvironmentWrapper>();
         private readonly Exit handler;
 
         public ExitTests()
         {
-            handler = new Exit(client, converter, manager);
+            handler = new Exit(converter, manager);
         }
 
         [Fact]
@@ -41,7 +36,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             converter.Convert(null).Returns((string)null);
             handler.Execute(null);
 
-            manager.Received().Close();
+            manager.Received().Exit();
         }
     }
 }

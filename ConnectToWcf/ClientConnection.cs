@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Net.Mime;
 using System.ServiceModel;
 using EntitiesLibrary;
 using TaskManagerServiceLibrary;
-using System.Windows.Forms;
 
 namespace ConnectToWcf
 {
