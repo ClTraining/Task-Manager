@@ -22,12 +22,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     public class ExitTests
     {
         private readonly ArgumentConverter<string> converter = Substitute.For<ArgumentConverter<string>>();
-        private readonly EnvironmentWrapper manager = Substitute.For<EnvironmentWrapper>();
+        private readonly EnvironmentWrapper wrapper = Substitute.For<EnvironmentWrapper>();
         private readonly Exit handler;
 
         public ExitTests()
         {
-            handler = new Exit(converter, manager);
+            handler = new Exit(converter, wrapper);
         }
 
         [Fact]
@@ -36,7 +36,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             converter.Convert(null).Returns((string)null);
             handler.Execute(null);
 
-            manager.Received().Exit();
+            wrapper.Received().Exit();
         }
     }
 }
