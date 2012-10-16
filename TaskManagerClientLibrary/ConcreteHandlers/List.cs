@@ -16,9 +16,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     {
         private readonly TaskFormatterFactory taskFormatterFactory;
 
-        public List(IClientConnection client, ArgumentConverter<int?> converter, TextWriter textWriter,  TaskFormatterFactory taskFormatterFactory)
-            : base(client,  converter, textWriter)
-
+        public List(IClientConnection client, ArgumentConverter<int?> converter, TextWriter textWriter, TaskFormatterFactory taskFormatterFactory)
+            : base(client, converter, textWriter)
         {
             this.taskFormatterFactory = taskFormatterFactory;
         }
@@ -31,17 +30,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
                 ExecutePr(s => s.GetTaskById(input.Value), taskFormatterFactory.GetSingleFormatter());
         }
 
-        private void ExecutePr(Func<IClientConnection, List<ContractTask>> func,ITaskFormatter formatter)
+        private void ExecutePr(Func<IClientConnection, List<ContractTask>> func, ITaskFormatter formatter)
         {
-            try
-            {
-                var tasks = func(client);
-                OutText(formatter.Show(tasks));
-            }
-            catch (TaskNotFoundException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            var tasks = func(client);
+            OutText(formatter.Show(tasks));
         }
     }
 
@@ -75,7 +67,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void should_execute_in_client_receiving_show_all_tasks()
         {
-            converter.Convert("").Returns((int?) null);
+            converter.Convert("").Returns((int?)null);
             list.Execute("");
             client.Received().GetAllTasks();
         }

@@ -10,21 +10,15 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Rename : Command<RenameTaskArgs>
     {
-        public Rename(IClientConnection client, ArgumentConverter<RenameTaskArgs> converter, TextWriter textWriter) : base(client, converter, textWriter)
+        public Rename(IClientConnection client, ArgumentConverter<RenameTaskArgs> converter, TextWriter textWriter)
+            : base(client, converter, textWriter)
         {
         }
 
         protected override void ExecuteWithGenericInput(RenameTaskArgs input)
         {
-            try
-            {
-                client.RenameTask(input);
-                OutText(string.Format("Task ID: {0} renamed.", input.Id));
-            }
-            catch (TaskNotFoundException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            client.RenameTask(input);
+            OutText(string.Format("Task ID: {0} renamed.", input.Id));
         }
     }
 
@@ -36,13 +30,13 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         private readonly Rename renameCommand;
         public RenameTests()
         {
-            renameCommand = new Rename(client, converter,textWriter);
+            renameCommand = new Rename(client, converter, textWriter);
         }
 
         [Fact]
         public void should_send_to_client_rename_task()
         {
-            var renameTaskArgs = new RenameTaskArgs {Id = 1, Name = "taskName"};
+            var renameTaskArgs = new RenameTaskArgs { Id = 1, Name = "taskName" };
             converter.Convert("1 taskName").Returns(renameTaskArgs);
             renameCommand.Execute("1 taskName");
             client.Received().RenameTask(renameTaskArgs);

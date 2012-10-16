@@ -125,8 +125,4 @@ namespace ConnectToWcf
             }
         }
     }
-
-    public class ClientConnectionTests
-    {
-    }
 }

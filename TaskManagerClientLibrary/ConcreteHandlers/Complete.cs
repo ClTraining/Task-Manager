@@ -18,16 +18,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected override void ExecuteWithGenericInput(int input)
         {
-            try
-            {
-                client.Complete(input);
-                OutText(string.Format("Task ID: {0} completed.", input));
-
-            }
-            catch (TaskNotFoundException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            client.Complete(input);
+            OutText(string.Format("Task ID: {0} completed.", input));
         }
 
 
