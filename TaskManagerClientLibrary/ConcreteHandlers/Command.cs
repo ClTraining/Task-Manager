@@ -1,6 +1,4 @@
-using System;
 using ConnectToWcf;
-using TaskManagerService;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {

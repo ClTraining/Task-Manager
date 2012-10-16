@@ -1,6 +1,5 @@
 using System;
 using ConnectToWcf;
-using FluentAssertions;
 using NSubstitute;
 using TaskManagerServiceLibrary;
 using Xunit;

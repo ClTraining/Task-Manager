@@ -8,7 +8,6 @@ using FluentAssertions;
 using NSubstitute;
 using TaskManagerServiceLibrary;
 using Xunit;
-using System.Linq;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
