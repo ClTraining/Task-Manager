@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace EntitiesLibrary
+﻿namespace EntitiesLibrary
 {
     public class ContractTask
     {

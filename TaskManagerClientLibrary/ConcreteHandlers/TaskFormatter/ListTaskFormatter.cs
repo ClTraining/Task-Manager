@@ -19,15 +19,23 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
             format = "{0,-" + PosId + "} | {1," + PosName + "} | {2," + PosCompleted + "}";
         }
 
+        #region ITaskFormatter Members
+
         public virtual string Show(List<ContractTask> tasks)
         {
             var taskString = new StringBuilder();
             taskString.AppendLine(PrintHeader());
 
-            tasks.ForEach(x => taskString.AppendLine(String.Format(format, x.Id, (x.Name.Length > PosName) ? x.Name.Remove(PosName) : x.Name, x.IsCompleted ? "+" : "-")));
+            tasks.ForEach(
+                x =>
+                taskString.AppendLine(String.Format(format, x.Id,
+                                                    (x.Name.Length > PosName) ? x.Name.Remove(PosName) : x.Name,
+                                                    x.IsCompleted ? "+" : "-")));
 
             return taskString.ToString();
         }
+
+        #endregion
 
         private string PrintHeader()
         {
@@ -51,8 +59,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
         {
             var formatter = new ListTaskFormatter();
             var sb = new StringBuilder();
-            sb.Append(formatter.Show(new List<ContractTask>() { new ContractTask() { Id = 1, Name = "abcd123456789000000000000" } }));
-            sb.ToString().Should().Be("Id    |            Name |     Completed\r\n1     | abcd12345678900 |             -\r\n");
+            sb.Append(
+                formatter.Show(new List<ContractTask> {new ContractTask {Id = 1, Name = "abcd123456789000000000000"}}));
+            sb.ToString().Should().Be(
+                "Id    |            Name |     Completed\r\n1     | abcd12345678900 |             -\r\n");
         }
     }
 }

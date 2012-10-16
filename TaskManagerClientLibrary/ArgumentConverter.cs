@@ -1,4 +1,3 @@
-using System;
 using System.ComponentModel;
 using FluentAssertions;
 using Xunit;
@@ -9,8 +8,8 @@ namespace TaskManagerClientLibrary
     {
         public virtual T Convert(string input)
         {
-            var tc = TypeDescriptor.GetConverter(typeof(T));
-            return (T)tc.ConvertFrom(input);
+            var tc = TypeDescriptor.GetConverter(typeof (T));
+            return (T) tc.ConvertFrom(input);
         }
     }
 
@@ -20,7 +19,7 @@ namespace TaskManagerClientLibrary
         public void should_convert_int()
         {
             var tc = new ArgumentConverter<int>();
-            var i = tc.Convert("123");
+            int i = tc.Convert("123");
             i.Should().Be(123);
         }
 
@@ -28,9 +27,8 @@ namespace TaskManagerClientLibrary
         public void should_get_string()
         {
             var tc = new ArgumentConverter<string>();
-            var result = tc.Convert("13dsd");
+            string result = tc.Convert("13dsd");
             result.Should().Be("13dsd");
         }
-
     }
 }

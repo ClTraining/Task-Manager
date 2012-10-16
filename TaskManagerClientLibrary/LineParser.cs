@@ -21,29 +21,28 @@ namespace TaskManagerClientLibrary
 
         public void ExecuteCommand(string input)
         {
-
-            var args = input.Split(new[] { ' ' }, 2).ToList();
+            var args = input.Split(new[] {' '}, 2).ToList();
 
             var command = commands.FirstOrDefault(a => a.Name == args[0]);
             if (command == null)
                 Console.WriteLine("No such command");
 
             else
-                command.Execute(args.Count > 1 ? args[1].Trim(new[] { '\"', '\'' }) : null);
+                command.Execute(args.Count > 1 ? args[1].Trim(new[] {'\"', '\''}) : null);
         }
-
     }
+
     public class LineParserTests
     {
-        private readonly LineParser lp;
-        private readonly List<ICommand> commands;
         private readonly ICommand command1 = Substitute.For<ICommand>();
         private readonly ICommand command2 = Substitute.For<ICommand>();
         private readonly ICommand command3 = Substitute.For<ICommand>();
+        private readonly List<ICommand> commands;
+        private readonly LineParser lp;
 
         public LineParserTests()
         {
-            commands = new List<ICommand> { command1, command2, command3 };
+            commands = new List<ICommand> {command1, command2, command3};
 
             lp = new LineParser(commands);
         }
@@ -116,6 +115,4 @@ namespace TaskManagerClientLibrary
             command1.Received().Execute("hello world");
         }
     }
-
 }
-

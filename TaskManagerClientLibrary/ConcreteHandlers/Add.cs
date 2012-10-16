@@ -1,5 +1,4 @@
 using System.IO;
-using System.IO;
 using ConnectToWcf;
 using NSubstitute;
 using Xunit;
@@ -22,10 +21,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
     public class AddTests
     {
-        private readonly ArgumentConverter<string> converter = Substitute.For<ArgumentConverter<string>>();
+        private const string taskName = "sometask1";
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
+        private readonly ArgumentConverter<string> converter = Substitute.For<ArgumentConverter<string>>();
         private readonly Add handler;
-        const string taskName = "sometask1";
 
         public AddTests()
         {

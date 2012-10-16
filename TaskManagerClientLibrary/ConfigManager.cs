@@ -6,8 +6,9 @@ namespace TaskManagerClientLibrary
     {
         public string GetAddress()
         {
-            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var address = config.AppSettings.Settings["connectionAddress"].Value;
+            var config =
+                System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            string address = config.AppSettings.Settings["connectionAddress"].Value;
             return address;
         }
     }

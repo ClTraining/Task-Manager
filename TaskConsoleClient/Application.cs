@@ -1,4 +1,4 @@
-﻿﻿using Ninject;
+﻿using Ninject;
 
 namespace TaskManagerConsole
 {
@@ -12,5 +12,3 @@ namespace TaskManagerConsole
         }
     }
 }
-
-

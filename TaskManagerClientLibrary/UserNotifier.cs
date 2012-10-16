@@ -18,7 +18,7 @@ namespace TaskManagerClientLibrary
         {
             var sb = new StringBuilder();
             sb.Append("Hello " + Environment.UserName);
-            sb.Append("\nServer address is: " + address.Split(new[] { '/', ':' })[3]);
+            sb.Append("\nServer address is: " + address.Split(new[] {'/', ':'})[3]);
             sb.Append("\nType \'?\' to see available commands");
             return sb.ToString();
         }
@@ -32,9 +32,10 @@ namespace TaskManagerClientLibrary
             const string test = "blabla";
             var notifier = new UserNotifier(string.Format("1/1/1:{0}", test));
 
-            var greeting = notifier.GenerateGreeting();
+            string greeting = notifier.GenerateGreeting();
 
-            greeting.Should().Be("Hello " + Environment.UserName + "\nServer address is: " + test + "\nType \'?\' to see available commands");
+            greeting.Should().Be("Hello " + Environment.UserName + "\nServer address is: " + test +
+                                 "\nType \'?\' to see available commands");
         }
     }
 }

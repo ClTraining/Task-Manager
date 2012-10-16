@@ -6,8 +6,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
 {
     public class TaskFormatterFactory
     {
-        private readonly SingleTaskFormatter singleTaskFormatter;
         private readonly ListTaskFormatter listTaskFormatter;
+        private readonly SingleTaskFormatter singleTaskFormatter;
 
         public TaskFormatterFactory(SingleTaskFormatter singleTaskFormatter, ListTaskFormatter listTaskFormatter)
         {
@@ -28,9 +28,9 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
 
     public class TaskFormatterFactoryTests
     {
-        private readonly TaskFormatterFactory taskFormatterFactory;
         private readonly ListTaskFormatter listFormatter = Substitute.For<ListTaskFormatter>();
         private readonly SingleTaskFormatter singleFormatter = Substitute.For<SingleTaskFormatter>();
+        private readonly TaskFormatterFactory taskFormatterFactory;
 
         public TaskFormatterFactoryTests()
         {
@@ -40,14 +40,14 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
         [Fact]
         public void should_return_list_formatter()
         {
-            var result = taskFormatterFactory.GetListFormatter();
+            ITaskFormatter result = taskFormatterFactory.GetListFormatter();
             result.Should().BeSameAs(listFormatter);
         }
 
         [Fact]
         public void should_return_single_formatter()
         {
-            var result = taskFormatterFactory.GetSingleFormatter();
+            ITaskFormatter result = taskFormatterFactory.GetSingleFormatter();
             result.Should().BeSameAs(singleFormatter);
         }
     }

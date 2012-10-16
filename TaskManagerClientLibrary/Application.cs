@@ -5,7 +5,6 @@ using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using TaskManagerClientLibrary.ConcreteHandlers;
 
-
 namespace TaskManagerClientLibrary
 {
     public class Application
@@ -20,10 +19,10 @@ namespace TaskManagerClientLibrary
 
             var notifier = kernel.Get<UserNotifier>();
 
-            var greeting = notifier.GenerateGreeting();
+            string greeting = notifier.GenerateGreeting();
             Console.WriteLine(greeting);
 
-            for (string s; ((s = Console.ReadLine()) != null); )
+            for (string s; ((s = Console.ReadLine()) != null);)
             {
                 kernel.Get<LineParser>().ExecuteCommand(s);
             }
@@ -42,11 +41,10 @@ namespace TaskManagerClientLibrary
             Bind<ArgumentConverter<object>>().ToSelf();
 
             var configManager = new ConfigurationManager();
-            var address = configManager.GetAddress();
+            string address = configManager.GetAddress();
 
             Bind<UserNotifier>().ToSelf().WithConstructorArgument("address", address);
             Bind<IClientConnection>().To<ClientConnection>().WithConstructorArgument("address", address);
-
         }
     }
 }

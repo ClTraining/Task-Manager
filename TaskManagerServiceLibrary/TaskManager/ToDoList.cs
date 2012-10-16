@@ -10,14 +10,16 @@ namespace TaskManagerServiceLibrary.TaskManager
 {
     public class ToDoList : IToDoList
     {
-        private readonly IRepository repository;
         private readonly ITaskMapper mapper;
+        private readonly IRepository repository;
 
         public ToDoList(IRepository repository, ITaskMapper mapper)
         {
             this.repository = repository;
             this.mapper = mapper;
         }
+
+        #region IToDoList Members
 
         public int AddTask(string name)
         {
@@ -45,14 +47,16 @@ namespace TaskManagerServiceLibrary.TaskManager
         {
             repository.RenameTask(args);
         }
+
+        #endregion
     }
 
 
     public class ToDoListTests
     {
-        private readonly IRepository repository = Substitute.For<IRepository>();
         private readonly ITaskMapper mapper = Substitute.For<ITaskMapper>();
-        private readonly  IToDoList todolist;
+        private readonly IRepository repository = Substitute.For<IRepository>();
+        private readonly IToDoList todolist;
 
         public ToDoListTests()
         {
@@ -63,7 +67,7 @@ namespace TaskManagerServiceLibrary.TaskManager
         public void should_save_task_and_generate_new_id()
         {
             repository.AddTask("new task").Returns(1);
-            var newtask = todolist.AddTask("new task");
+            int newtask = todolist.AddTask("new task");
             newtask.Should().Be(1);
         }
 
@@ -75,7 +79,7 @@ namespace TaskManagerServiceLibrary.TaskManager
             repository.GetTaskById(1).Returns(serviceTask);
             mapper.ConvertToContract(serviceTask).Returns(contractTask);
 
-            var res = todolist.GetTaskById(1);
+            ContractTask res = todolist.GetTaskById(1);
             res.Should().Be(contractTask);
         }
 
@@ -90,7 +94,7 @@ namespace TaskManagerServiceLibrary.TaskManager
             repository.GetAllTasks().Returns(serviceTasks);
             mapper.ConvertToContract(serviceTask).Returns(contractTask);
 
-            var res = todolist.GetAllTasks();
+            List<ContractTask> res = todolist.GetAllTasks();
             res.Should().BeEquivalentTo(contractTasks);
         }
 
@@ -104,7 +108,7 @@ namespace TaskManagerServiceLibrary.TaskManager
         [Fact]
         public void should_send_rename_task_to_repository()
         {
-            var args = new RenameTaskArgs() {Id = 1, Name = "task name"};
+            var args = new RenameTaskArgs {Id = 1, Name = "task name"};
             todolist.RenameTask(args);
             repository.Received().RenameTask(args);
         }

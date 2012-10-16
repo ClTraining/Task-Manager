@@ -70,7 +70,7 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_get_task_by_id_and_return_task()
         {
-            var task = new ContractTask { Id = 1 };
+            var task = new ContractTask {Id = 1};
             list.GetTaskById(1).Returns(task);
             var res = service.GetTaskById(1);
             res.Should().Be(task);
@@ -79,7 +79,7 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_get_all_taasks()
         {
-            var listTasks = new List<ContractTask> { new ContractTask { Id = 1, Name = "some", IsCompleted = false } };
+            var listTasks = new List<ContractTask> {new ContractTask {Id = 1, Name = "some", IsCompleted = false}};
             list.GetAllTasks().Returns(listTasks);
             var res = service.GetAllTasks();
             res.Should().BeEquivalentTo(listTasks);

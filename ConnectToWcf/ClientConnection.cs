@@ -10,6 +10,7 @@ namespace ConnectToWcf
     {
         private readonly string serviceAddress;
         private readonly NetTcpBinding binding;
+
         public ClientConnection(string address)
         {
             serviceAddress = address;
@@ -44,7 +45,7 @@ namespace ConnectToWcf
         {
             try
             {
-                return GetDataFromServer(s => new List<ContractTask> { s.GetTaskById(id) });
+                return GetDataFromServer(s => new List<ContractTask> {s.GetTaskById(id)});
             }
             catch (FaultException<ExceptionDetail>)
             {
@@ -76,18 +77,13 @@ namespace ConnectToWcf
             }
         }
 
-        public bool TestConnection()
-        {
-            return GetDataFromServer(s => s.TestConnection());
-        }
-
         private void UpdateDataOnServer(Action<ITaskManagerService> action)
         {
             GetDataFromServer<object>(s =>
-            {
-                action(s);
-                return null;
-            });
+                                          {
+                                              action(s);
+                                              return null;
+                                          });
         }
 
         private T GetDataFromServer<T>(Func<ITaskManagerService, T> func)

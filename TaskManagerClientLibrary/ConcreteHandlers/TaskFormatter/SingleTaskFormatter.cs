@@ -11,6 +11,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
     {
         private const string Format = "\nID:\t\t{0}\n" + "Name:\t\t{1}\n" + "Completed:\t{2}\n\n";
 
+        #region ITaskFormatter Members
+
         public virtual string Show(List<ContractTask> tasks)
         {
             var taskString = new StringBuilder();
@@ -19,6 +21,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
 
             return taskString.ToString();
         }
+
+        #endregion
     }
 
     public class SingleTaskFormatterTests
@@ -31,8 +35,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
             var formatter = new SingleTaskFormatter();
             sb.Append(formatter.Show(tasks));
             sb.ToString().Should().Be("\nID:\t\t1\n" +
-                                               "Name:\t\ttask1\n" +
-                                               "Completed:\t-\n\n");
+                                      "Name:\t\ttask1\n" +
+                                      "Completed:\t-\n\n");
         }
     }
 }
