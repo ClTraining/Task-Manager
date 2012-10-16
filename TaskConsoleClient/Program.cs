@@ -2,7 +2,7 @@
 
 namespace TaskManagerConsole
 {
-    public static class Application
+    public static class Program
     {
         public static void Main()
         {

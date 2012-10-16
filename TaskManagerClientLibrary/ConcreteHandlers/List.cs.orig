@@ -8,17 +8,21 @@ using FluentAssertions;
 using NSubstitute;
 using TaskManagerServiceLibrary;
 using Xunit;
-using System.Linq;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class List : Command<int?>
     {
 
-        public List(IClientConnection client, ArgumentConverter<int?> converter) : base(client, converter)
+<<<<<<< HEAD
+        public List(IClientConnection client, ArgumentConverter<int?> converter) : base(client, converter) { }
+=======
+        public List(IClientConnection client, ArgumentConverter<int?> converter)
+            : base(client, typeof(List).Name.ToLower(), converter)
         {
             Description = "Displays task list or single task by ID";
         }
+>>>>>>> bda5e98ba7e4bb58ef6b3d32250adfd799b9ffb6
 
         protected override void ExecuteWithGenericInput(int? input)
         {

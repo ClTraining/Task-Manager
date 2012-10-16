@@ -1,6 +1,4 @@
-using System;
 using ConnectToWcf;
-using TaskManagerService;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
@@ -12,13 +10,23 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         public string Name { get; set; }
         public string Description { get; set; }
 
+<<<<<<< HEAD
         protected Command() : this(null, null) { }
-
         protected Command(IClientConnection client, ArgumentConverter<T> converter)
         {
             this.client = client;
             Name = GetType().Name.ToLower();
+=======
+        protected Command(string name)
+        {
+            Name = name;
+        }
+        protected Command(IClientConnection client, string name, ArgumentConverter<T> converter)
+        {
+            this.client = client;
+>>>>>>> bda5e98ba7e4bb58ef6b3d32250adfd799b9ffb6
             this.converter = converter;
+            Name = name;
         }
 
 

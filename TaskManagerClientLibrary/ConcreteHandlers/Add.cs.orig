@@ -1,6 +1,5 @@
 using System;
 using ConnectToWcf;
-using FluentAssertions;
 using NSubstitute;
 using TaskManagerServiceLibrary;
 using Xunit;
@@ -9,10 +8,15 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Add : Command<string>
     {
-        public Add(IClientConnection client, ArgumentConverter<string> converter) : base(client, converter)
+<<<<<<< HEAD
+        public Add(IClientConnection client, ArgumentConverter<string> converter) : base(client, converter) { }
+=======
+        public Add(IClientConnection client, ArgumentConverter<string> converter) 
+            : base(client, typeof(Add).Name.ToLower(), converter)
         {
             Description = "add task to server";
         }
+>>>>>>> bda5e98ba7e4bb58ef6b3d32250adfd799b9ffb6
 
         protected override void ExecuteWithGenericInput(string input)
         {
