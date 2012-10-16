@@ -40,11 +40,6 @@ namespace TaskManagerServiceLibrary.TaskManager
         {
             repository.Complete(id);
         }
-
-        public void RenameTask(RenameTaskArgs args)
-        {
-            repository.RenameTask(args);
-        }
     }
 
 
@@ -99,14 +94,6 @@ namespace TaskManagerServiceLibrary.TaskManager
         {
             todolist.Complete(1);
             repository.Received().Complete(1);
-        }
-
-        [Fact]
-        public void should_send_rename_task_to_repository()
-        {
-            var args = new RenameTaskArgs() {Id = 1, Name = "task name"};
-            todolist.RenameTask(args);
-            repository.Received().RenameTask(args);
         }
     }
 }

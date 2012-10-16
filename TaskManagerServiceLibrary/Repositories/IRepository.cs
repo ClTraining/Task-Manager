@@ -9,6 +9,5 @@ namespace TaskManagerServiceLibrary.Repositories
         ServiceTask GetTaskById(int id);
         List<ServiceTask> GetAllTasks();
         void Complete(int id);
-        void RenameTask(RenameTaskArgs args);
     }
 }

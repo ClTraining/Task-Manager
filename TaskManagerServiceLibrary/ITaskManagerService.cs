@@ -21,8 +21,5 @@ namespace TaskManagerServiceLibrary
 
         [OperationContract]
         bool TestConnection();
-
-        [OperationContract]
-        void RenameTask(RenameTaskArgs args);
     }
 }

@@ -41,11 +41,6 @@ namespace TaskManagerServiceLibrary.Repositories
             GetTaskById(id).IsCompleted = true;
         }
 
-        public void RenameTask(RenameTaskArgs args)
-        {
-            GetTaskById(args.Id).Name = args.Name;
-        }
-
         private int GetNewId()
         {
             Interlocked.Increment(ref currentId);
@@ -104,14 +99,6 @@ namespace TaskManagerServiceLibrary.Repositories
             {
                 task.Name.Should().Be(taskNames.ToArray()[taskList.IndexOf(task)]);
             }
-        }
-
-        [Fact]
-        public void should_rename_task()
-        {
-            var taskId = repository.AddTask("tt");
-            repository.RenameTask(new RenameTaskArgs(){Id = taskId, Name = "New name"});
-            repository.GetTaskById(taskId).Name.Should().Be("New name");
         }
 
     }
