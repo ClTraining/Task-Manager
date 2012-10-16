@@ -1,4 +1,4 @@
-namespace TaskManagerClientLibrary.ConcreteHandlers.DisplayResultClasses
+namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
 {
     public interface IDisplayHelp
     {

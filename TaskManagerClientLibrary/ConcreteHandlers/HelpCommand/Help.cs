@@ -1,21 +1,19 @@
 ﻿using System.Collections.Generic;
 using NSubstitute;
-using Ninject;
-using TaskManagerClientLibrary.ConcreteHandlers.DisplayResultClasses;
 using Xunit;
 
-namespace TaskManagerClientLibrary.ConcreteHandlers
+namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
 {
     public class Help : Command<string>
     {
-        private readonly IKernel kernel;
         private readonly IDisplayHelp display;
+        private readonly ICommandsProvider provider;
 
-        public Help(IKernel kernel, IDisplayHelp display)
+        public Help(IDisplayHelp display, ICommandsProvider provider)
         {
             Name = "?";
-            this.kernel = kernel;
             this.display = display;
+            this.provider = provider;
             Description = "Causes help";
         }
 
@@ -26,32 +24,31 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected override void ExecuteWithGenericInput(string input)
         {
-            var commands = kernel.GetAll<ICommand>();
-
-            foreach (var command in commands)
-                display.Show(command);
+            foreach (var command in provider.Commands)
+                display.Show(command);    
         }
     }
 
     public class HelpTests
     {
-        private readonly IKernel kernel = Substitute.For<IKernel>();
+        private readonly ICommandsProvider provider = Substitute.For<ICommandsProvider>();
         private readonly IDisplayHelp display = Substitute.For<IDisplayHelp>();
-        private readonly IEnumerable<ICommand> commands = Substitute.For<IEnumerable<ICommand>>();
+        private readonly ICommand command = Substitute.For<ICommand>();
         readonly Help help;
 
         public HelpTests()
         {
-            help = new Help(kernel, display);
+            help = new Help(display, provider);
         }
 
         [Fact]
         public void execute_method_test()
         {
-            kernel.GetAll<ICommand>().Returns(commands);
+            IEnumerable<ICommand> commands = new List<ICommand> {command};
+            provider.Commands.Returns(commands);
             help.Execute(null);
-            foreach (var command in commands)
-                display.Received().Show(command);
+            foreach (var c in commands)
+                display.Received().Show(c);
         }
     }
 }
