@@ -1,0 +1,64 @@
+<<<<<<< HEAD
+using System.IO;
+using ConnectToWcf;
+using NSubstitute;
+=======
+using System;
+using System.IO;
+using ConnectToWcf;
+using NSubstitute;
+using TaskManagerClientLibrary;
+using TaskManagerClientLibrary.ConcreteHandlers;
+using TaskManagerServiceLibrary;
+>>>>>>> 7f006b1c93492de3fafa9c3bc734bf3ff9754285
+using Xunit;
+
+namespace TaskManagerClientLibrary.ConcreteHandlers
+{
+    public class Complete : Command<int>
+    {
+        public Complete(IClientConnection client, ArgumentConverter<int> converter, TextWriter textWriter)
+<<<<<<< HEAD
+            : base(client, converter, textWriter) { }
+=======
+            : base(client, converter, textWriter)
+        {
+        }
+>>>>>>> 7f006b1c93492de3fafa9c3bc734bf3ff9754285
+
+        protected override void ExecuteWithGenericInput(int input)
+        {
+            client.Complete(input);
+            OutText(string.Format("Task ID: {0} completed.", input));
+        }
+
+
+<<<<<<< HEAD
+        public CompleteTests()
+        {
+            handler = new Complete(client, converter, new StringWriter());
+        }
+=======
+>>>>>>> 7f006b1c93492de3fafa9c3bc734bf3ff9754285
+
+        public class CompleteTests
+        {
+            private readonly ArgumentConverter<int> converter = Substitute.For<ArgumentConverter<int>>();
+            private readonly IClientConnection client = Substitute.For<IClientConnection>();
+            private readonly Complete handler;
+
+            public CompleteTests()
+            {
+                handler = new Complete(client, converter, new StringWriter());
+            }
+
+            [Fact]
+            public void should_send_string_return_id()
+            {
+                converter.Convert("5").Returns(5);
+                handler.Execute("5");
+                client.Received().Complete(5);
+            }
+        }
+    }
+}

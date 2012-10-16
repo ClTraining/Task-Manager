@@ -1,44 +1,3 @@
-<<<<<<< HEAD
-using System;
-using System.IO;
-using ConnectToWcf;
-using TaskManagerService;
-
-namespace TaskManagerClientLibrary.ConcreteHandlers
-{
-    public abstract class Command<T> : ICommand
-    {
-        private readonly ArgumentConverter<T> converter;
-        protected TextWriter textWriter;
-        protected readonly IClientConnection client;
-
-        public string Name { get; private set; }
-
-        protected Command(IClientConnection client, Type derived, ArgumentConverter<T> converter, TextWriter textWriter)
-        protected Command(Type derived) : this(null, derived, null) { }
-        {
-            this.client = client;
-            Name = derived.Name.ToLower();
-            this.converter = converter;
-            this.textWriter = textWriter;
-        }
-
-
-        protected abstract void ExecuteWithGenericInput(T input);
-
-        public virtual void Execute(object argument)
-        {
-            var converted = Convert(argument);
-            ExecuteWithGenericInput((T)converted);
-        }
-
-        private object Convert(object input)
-        {
-            return converter.Convert((string)input);
-        }
-    }
-}
-=======
 using System;
 using System.IO;
 using ConnectToWcf;
@@ -57,16 +16,23 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             get { return GetType().Name.ToLower(); }
         }
 
-        protected Command(IClientConnection client, ArgumentConverter<T> converter, TextWriter textWriter)
+<<<<<<< HEAD
+        protected Command(IClientConnection client = null, ArgumentConverter<T> converter = null, TextWriter textWriter = null)
         {
             this.client = client;
             this.converter = converter;
             this.textWriter = textWriter;
+=======
+        protected Command() : this(null, null,null) { }
+        protected Command(IClientConnection client, ArgumentConverter<T> converter, TextWriter textWriter)
+        {
+            this.client = client;
+            this.converter = converter;
+            this.textWriter = textWriter;       
+>>>>>>> 7f006b1c93492de3fafa9c3bc734bf3ff9754285
         }
 
-        public abstract void ExecuteWithGenericInput(T input);
-
-        public void Execute(object argument)
+        public virtual void Execute(object argument)
         {
             try
             {
@@ -79,6 +45,28 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             }
         }
 
+        protected abstract void ExecuteWithGenericInput(T input);
+
+<<<<<<< HEAD
+        public virtual void Execute(object argument)
+        {
+            try
+            {
+                var converted = Convert(argument);
+                ExecuteWithGenericInput((T)converted);
+            }
+            catch (TaskNotFoundException e)
+            {
+                OutText(e.Message);
+            }
+            catch (Exception e)
+            {
+                OutText("Wrong command arguments");
+            }
+        }
+
+=======
+>>>>>>> 7f006b1c93492de3fafa9c3bc734bf3ff9754285
         protected void OutText(string text)
         {
             textWriter.WriteLine(text);
@@ -90,4 +78,3 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         }
     }
 }
->>>>>>> 8e9ec50... Fixed task formatting

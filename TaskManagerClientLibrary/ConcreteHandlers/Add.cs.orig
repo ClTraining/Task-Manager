@@ -1,4 +1,7 @@
-using System.IO;
+<<<<<<< HEAD
+=======
+using System;
+>>>>>>> 7f006b1c93492de3fafa9c3bc734bf3ff9754285
 using System.IO;
 using ConnectToWcf;
 using NSubstitute;

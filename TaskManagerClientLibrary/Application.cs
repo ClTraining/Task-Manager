@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Configuration;
 using ConnectToWcf;
 using Ninject;
 using Ninject.Extensions.Conventions;
@@ -38,11 +37,9 @@ namespace TaskManagerClientLibrary
             this.Bind(x => x.FromAssemblyContaining<ICommand>().SelectAllClasses()
                                .InNamespaceOf<ICommand>()
                                .BindAllInterfaces().Configure(b => b.WithConstructorArgument("textWriter", Console.Out))
-                               );
+                );
 
             Bind<ArgumentConverter<object>>().ToSelf();
-
-            Bind<ConfigurationManager>().ToSelf();
 
             var configManager = new ConfigurationManager();
             var address = configManager.GetAddress();
