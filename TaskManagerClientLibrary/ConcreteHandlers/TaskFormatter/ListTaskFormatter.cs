@@ -19,12 +19,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
             format = "{0,-" + PosId + "} | {1," + PosName + "} | {2," + PosCompleted + "}";
         }
 
-        public bool CouldUse(int? input)
-        {
-            return input != null;
-        }
-
-        public string Show(List<ContractTask> tasks)
+        public virtual string Show(List<ContractTask> tasks)
         {
             var taskString = new StringBuilder();
             taskString.AppendLine(PrintHeader());
