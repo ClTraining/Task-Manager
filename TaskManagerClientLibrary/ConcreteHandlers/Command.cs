@@ -37,7 +37,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             {
                 OutText(e.Message);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 OutText("Wrong command arguments");
             }
