@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using ConnectToWcf;
 using EntitiesLibrary;
 using NSubstitute;
+using TaskManagerServiceLibrary;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
@@ -14,8 +16,15 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected override void ExecuteWithGenericInput(RenameTaskArgs input)
         {
-            client.RenameTask(input);
-            OutText(string.Format("Task ID: {0} renamed.", input.Id));
+            try
+            {
+                client.RenameTask(input);
+                OutText(string.Format("Task ID: {0} renamed.", input.Id));
+            }
+            catch (TaskNotFoundException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 

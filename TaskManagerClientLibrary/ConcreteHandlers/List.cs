@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using ConnectToWcf;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter;
+using TaskManagerServiceLibrary;
 using Xunit;
 using System.Linq;
 
@@ -33,25 +33,33 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         private void ExecutePr(Func<IClientConnection, List<ContractTask>> func,ITaskFormatter formatter)
         {
-            var tasks = func(client);
-            OutText(formatter.Show(tasks));
+            try
+            {
+                var tasks = func(client);
+                OutText(formatter.Show(tasks));
+            }
+            catch (TaskNotFoundException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
     }
 
     public class ListTests
     {
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
-        private readonly ArgumentConverter<int?> converter = Substitute.For<ArgumentConverter<int?>>(); 
-        private readonly ITaskFormatter formatter1 = Substitute.For<ITaskFormatter>();
-        private readonly ITaskFormatter formatter2 = Substitute.For<ITaskFormatter>();
-        private readonly TaskFormatterFactory taskFormatterFactory = Substitute.For<TaskFormatterFactory>();
+        private readonly ArgumentConverter<int?> converter = Substitute.For<ArgumentConverter<int?>>();
+        private readonly SingleTaskFormatter formatter1 = Substitute.For<SingleTaskFormatter>();
+        private readonly ListTaskFormatter formatter2 = Substitute.For<ListTaskFormatter>();
+        private readonly TaskFormatterFactory taskFormatterFactory;
         private readonly List list;
 
         public ListTests()
         {
+            taskFormatterFactory = Substitute.For<TaskFormatterFactory>(formatter1, formatter2);
             list = new List(client, converter, new StringWriter(), taskFormatterFactory);
             taskFormatterFactory.GetSingleFormatter().Returns(formatter1);
-            taskFormatterFactory.GetListFormatter().Returns(formatter1);
+            taskFormatterFactory.GetListFormatter().Returns(formatter2);
         }
 
         [Fact]
