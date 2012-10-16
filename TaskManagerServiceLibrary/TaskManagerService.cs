@@ -93,6 +93,14 @@ namespace TaskManagerServiceLibrary
         }
 
         [Fact]
+        public void should_send_rename_task()
+        {
+            var args = new RenameTaskArgs() {Id = 1, Name = "task name"};
+            service.RenameTask(args);
+            list.Received().RenameTask(args);
+        }
+
+        [Fact]
         public void test_connection_should_return_always_true()
         {
             var result = service.TestConnection();
