@@ -1,122 +1,98 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
+using System.Linq;
 using ConnectToWcf;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
-using TaskManagerServiceLibrary;
+using TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter;
 using Xunit;
+using System.Linq;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class List : Command<int?>
     {
+        private readonly TaskFormatterFactory taskFormatterFactory;
 
-        public List(IClientConnection client, ArgumentConverter<int?> converter) : base(client, converter) { }
+        public List(IClientConnection client, ArgumentConverter<int?> converter, TextWriter textWriter,  TaskFormatterFactory taskFormatterFactory)
+            : base(client,  converter, textWriter)
+
+        {
+            this.taskFormatterFactory = taskFormatterFactory;
+        }
 
         protected override void ExecuteWithGenericInput(int? input)
         {
-            List<ContractTask> tasks;
-            try
-            {
+            if (input == null)
+                ExecutePr(s => s.GetAllTasks(), taskFormatterFactory.GetListFormatter());
+            else
+                ExecutePr(s => s.GetTaskById(input.Value), taskFormatterFactory.GetSingleFormatter());
+        }
 
-                tasks = (input == null)
-                            ? client.GetAllTasks()
-                            : client.GetTaskById(input.Value);
-            }
-            catch (TaskNotFoundException e)
-            {
-                Console.WriteLine(e.Message);
-                return;
-            }
-
-            var delim = tasks.Count > 1 ? '\t' : '\n';
-
-            if (tasks.Count == 0)
-            {
-                Console.WriteLine("Task list is empty");
-            }
-            else if (tasks.Count == 1)
-            {
-                Console.WriteLine();
-                Console.WriteLine("ID: {0}" + delim + "Name: {1}" + delim + "Completed: {2}", tasks[0].Id, tasks[0].Name,
-                                  tasks[0].IsCompleted ? "+" : "-");
-            }
-            else if (tasks.Count > 1)
-            {
-                Console.WriteLine(" ID\t|\tName\t\t|\tCompleted");
-                tasks.ForEach(x => Console.WriteLine(" {0}\t|" + delim + "{1}" + delim + "\t|\t{2}", x.Id, x.Name, x.IsCompleted ? "+" : "-"));
-            }
-
+        private void ExecutePr(Func<IClientConnection, List<ContractTask>> func,ITaskFormatter formatter)
+        {
+            var tasks = func(client);
+            OutText(formatter.Show(tasks));
         }
     }
 
     public class ListTests
     {
-        private readonly ArgumentConverter<int?> converter = Substitute.For<ArgumentConverter<int?>>();
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
-        private readonly List handler;
+        private readonly ArgumentConverter<int?> converter = Substitute.For<ArgumentConverter<int?>>(); 
+        private readonly ITaskFormatter formatter1 = Substitute.For<ITaskFormatter>();
+        private readonly ITaskFormatter formatter2 = Substitute.For<ITaskFormatter>();
+        private readonly TaskFormatterFactory taskFormatterFactory = Substitute.For<TaskFormatterFactory>();
+        private readonly List list;
 
         public ListTests()
         {
-            handler = new List(client, converter);
+            list = new List(client, converter, new StringWriter(), taskFormatterFactory);
+            taskFormatterFactory.GetSingleFormatter().Returns(formatter1);
+            taskFormatterFactory.GetListFormatter().Returns(formatter1);
         }
 
         [Fact]
-        public void list_name_should_be_the_same_as_class_name()
+        public void should_check_receiving_one_task()
         {
-            handler.Name.Should().BeEquivalentTo("list");
+            converter.Convert("1").Returns(1);
+            var taskList = new List<ContractTask> { new ContractTask { Id = 1, Name = "some", IsCompleted = false } };
+            client.GetTaskById(1).Returns(taskList);
+            list.Execute("1");
+            formatter1.Received().Show(taskList);
         }
 
         [Fact]
-        public void should_send_string_return_id()
+        public void should_execute_in_client_receiving_show_all_tasks()
         {
-            const string id = "5";
-            client.GetTaskById(5).Returns(new List<ContractTask>());
-
-            converter.Convert(id).Returns(int.Parse(id));
-            handler.Execute(id);
-
-            client.Received().GetTaskById(5);
-        }
-
-        [Fact]
-        public void if_input_is_null_should_get_all_tasks()
-        {
-            client.GetAllTasks().Returns(new List<ContractTask> { new ContractTask(), new ContractTask() });
-
-            converter.Convert(null).Returns(null as int?);
-            handler.Execute(null);
-
+            converter.Convert("").Returns((int?) null);
+            list.Execute("");
             client.Received().GetAllTasks();
         }
 
         [Fact]
-        public void if_get_task_by_id_should_call_specifical_printer_for_it()
+        public void should_check_receiving_all_task()
         {
-            const string id = "5";
-            client.GetTaskById(5).Returns(new List<ContractTask> { new ContractTask() });
-
-            converter.Convert(id).Returns(int.Parse(id));
-            handler.Execute(id);
-
-            client.Received().GetTaskById(5);
+            converter.Convert("").Returns((int?)null);
+            var taskList = new List<ContractTask>
+                               {
+                                   new ContractTask { Id = 1, Name = "task1", IsCompleted = false },
+                                   new ContractTask{Id = 2, Name = "task2", IsCompleted = true}
+                               };
+            client.GetAllTasks().Returns(taskList);
+            list.Execute("");
+            formatter2.Received().Show(taskList);
         }
 
         [Fact]
-        public void should_inform_user_about_exceptions()
+        public void should_execute_in_client_receiving_show_one_tasks()
         {
-            var sb = new StringBuilder();
-            Console.SetOut(new StringWriter(sb));
-
-            client.GetTaskById(5).Returns(x => { throw new TaskNotFoundException(5); });
-
-            converter.Convert("5").Returns(5);
-            handler.Execute("5");
-
-            sb.ToString().ShouldBeEquivalentTo("Task not found: (Id = 5)\r\n");
+            converter.Convert("1").Returns(1);
+            list.Execute("1");
+            client.Received().GetTaskById(1);
         }
     }
+
 }

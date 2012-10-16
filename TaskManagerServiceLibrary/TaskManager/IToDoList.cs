@@ -9,5 +9,6 @@ namespace TaskManagerServiceLibrary.TaskManager
         ContractTask GetTaskById(int id);
         List<ContractTask> GetAllTasks();
         void Complete(int id);
+        void RenameTask(RenameTaskArgs args);
     }
 }

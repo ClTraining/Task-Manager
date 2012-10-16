@@ -9,6 +9,7 @@ namespace ConnectToWcf
         List<ContractTask> GetTaskById(int id);
         List<ContractTask> GetAllTasks();
         void Complete(int id);
+        void RenameTask(RenameTaskArgs args);
         bool TestConnection();
     }
 }

@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Configuration;
 using ConnectToWcf;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using TaskManagerClientLibrary.ConcreteHandlers;
-using System.Linq;
+
 
 namespace TaskManagerClientLibrary
 {
@@ -36,18 +35,17 @@ namespace TaskManagerClientLibrary
         {
             this.Bind(x => x.FromAssemblyContaining<ICommand>().SelectAllClasses()
                                .InNamespaceOf<ICommand>()
-                               .BindAllInterfaces()
-                               );
+                               .BindAllInterfaces().Configure(b => b.WithConstructorArgument("textWriter", Console.Out))
+                );
 
             Bind<ArgumentConverter<object>>().ToSelf();
-
-            Bind<ConfigurationManager>().ToSelf();
 
             var configManager = new ConfigurationManager();
             var address = configManager.GetAddress();
 
             Bind<UserNotifier>().ToSelf().WithConstructorArgument("address", address);
             Bind<IClientConnection>().To<ClientConnection>().WithConstructorArgument("address", address);
+
         }
     }
 }

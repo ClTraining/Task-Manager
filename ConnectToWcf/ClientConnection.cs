@@ -16,6 +16,18 @@ namespace ConnectToWcf
             binding = new NetTcpBinding();
         }
 
+        public void RenameTask(RenameTaskArgs args)
+        {
+            try
+            {
+                UpdateDataOnServer(t => t.RenameTask(args));
+            }
+            catch (FaultException<ExceptionDetail>)
+            {
+                throw new TaskNotFoundException("Wrong operation!");
+            }
+        }
+
         public int AddTask(string task)
         {
             try
@@ -112,5 +124,9 @@ namespace ConnectToWcf
                 throw;
             }
         }
+    }
+
+    public class ClientConnectionTests
+    {
     }
 }
