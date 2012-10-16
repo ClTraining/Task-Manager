@@ -9,14 +9,18 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         private readonly ArgumentConverter<T> converter;
         protected readonly IClientConnection client;
 
-        public string Name { get; private set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
 
-        protected Command(Type derived) : this(null, derived, null) { }
-        protected Command(IClientConnection client, Type derived, ArgumentConverter<T> converter)
+        protected Command(string name)
+        {
+            Name = name;
+        }
+        protected Command(IClientConnection client, string name, ArgumentConverter<T> converter)
         {
             this.client = client;
-            Name = derived.Name.ToLower();
             this.converter = converter;
+            Name = name;
         }
 
 

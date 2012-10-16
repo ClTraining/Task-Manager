@@ -8,9 +8,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         private readonly EnvironmentWrapper manager;
 
         public Exit(EnvironmentWrapper manager)
-            : base(typeof(Exit))
+            : base(typeof(Exit).Name.ToLower())
         {
             this.manager = manager;
+            Description = "Exit from client";
         }
 
         public override void Execute(object argument)

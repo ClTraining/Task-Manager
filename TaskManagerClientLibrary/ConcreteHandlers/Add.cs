@@ -9,7 +9,11 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Add : Command<string>
     {
-        public Add(IClientConnection client, ArgumentConverter<string> converter) : base(client, typeof(Add), converter) { }
+        public Add(IClientConnection client, ArgumentConverter<string> converter) 
+            : base(client, typeof(Add).Name.ToLower(), converter)
+        {
+            Description = "add task to server";
+        }
 
         protected override void ExecuteWithGenericInput(string input)
         {

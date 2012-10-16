@@ -15,7 +15,11 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     public class List : Command<int?>
     {
 
-        public List(IClientConnection client, ArgumentConverter<int?> converter) : base(client, typeof(List), converter) { }
+        public List(IClientConnection client, ArgumentConverter<int?> converter)
+            : base(client, typeof(List).Name.ToLower(), converter)
+        {
+            Description = "Displays task list or single task by ID";
+        }
 
         protected override void ExecuteWithGenericInput(int? input)
         {

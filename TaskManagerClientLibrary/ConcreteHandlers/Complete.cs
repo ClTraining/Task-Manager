@@ -10,7 +10,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     public class Complete : Command<int>
     {
         public Complete(IClientConnection client, ArgumentConverter<int> converter)
-            : base(client, typeof(Complete), converter) { }
+            : base(client, typeof(Complete).Name.ToLower(), converter)
+        {
+            Description = "Mark task by ID as completed";
+        }
 
         protected override void ExecuteWithGenericInput(int input)
         {

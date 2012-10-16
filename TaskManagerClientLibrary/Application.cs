@@ -6,6 +6,7 @@ using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using TaskManagerClientLibrary.ConcreteHandlers;
 using System.Linq;
+using TaskManagerClientLibrary.ConcreteHandlers.DisplayResultClasses;
 
 namespace TaskManagerClientLibrary
 {
