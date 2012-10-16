@@ -42,6 +42,11 @@ namespace TaskManagerServiceLibrary
         {
             return true;
         }
+
+        public void RenameTask(RenameTaskArgs args)
+        {
+            taskList.RenameTask(args);
+        }
     }
 
     public class TaskManagerServiceTests
@@ -85,6 +90,14 @@ namespace TaskManagerServiceLibrary
         {
             service.Complete(1);
             list.Received().Complete(1);
+        }
+
+        [Fact]
+        public void should_send_rename_task()
+        {
+            var args = new RenameTaskArgs() {Id = 1, Name = "task name"};
+            service.RenameTask(args);
+            list.Received().RenameTask(args);
         }
 
         [Fact]

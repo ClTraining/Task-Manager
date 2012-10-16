@@ -75,7 +75,10 @@
     <Compile Include="LineParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ConcreteHandlers\TaskFormatter\ITaskFormatter.cs" />
+<<<<<<< HEAD
+=======
     <Compile Include="UserNotifier.cs" />
+>>>>>>> 7f006b1c93492de3fafa9c3bc734bf3ff9754285
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
