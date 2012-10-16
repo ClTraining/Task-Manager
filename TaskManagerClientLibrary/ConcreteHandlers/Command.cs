@@ -11,7 +11,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public string Name { get; private set; }
 
-        protected Command(Type derived, ArgumentConverter<T> converter) : this(null, derived, converter) { }
+        protected Command(Type derived) : this(null, derived, null) { }
         protected Command(IClientConnection client, Type derived, ArgumentConverter<T> converter)
         {
             this.client = client;
@@ -22,7 +22,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected abstract void ExecuteWithGenericInput(T input);
 
-        public void Execute(object argument)
+        public virtual void Execute(object argument)
         {
             var converted = Convert(argument);
             ExecuteWithGenericInput((T)converted);
