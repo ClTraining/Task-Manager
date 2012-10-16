@@ -7,10 +7,15 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     {
         private readonly EnvironmentWrapper manager;
 
-        public Exit(ArgumentConverter<string> converter, EnvironmentWrapper manager)
-            : base(typeof(Exit), converter)
+        public Exit(EnvironmentWrapper manager)
+            : base(typeof(Exit))
         {
             this.manager = manager;
+        }
+
+        public override void Execute(object argument)
+        {
+            ExecuteWithGenericInput((string)argument);
         }
 
         protected override void ExecuteWithGenericInput(string input)
@@ -21,19 +26,17 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
     public class ExitTests
     {
-        private readonly ArgumentConverter<string> converter = Substitute.For<ArgumentConverter<string>>();
         private readonly EnvironmentWrapper wrapper = Substitute.For<EnvironmentWrapper>();
         private readonly Exit handler;
 
         public ExitTests()
         {
-            handler = new Exit(converter, wrapper);
+            handler = new Exit (wrapper);
         }
 
         [Fact]
         public void should_close_application()
         {
-            converter.Convert(null).Returns((string)null);
             handler.Execute(null);
 
             wrapper.Received().Exit();

@@ -5,7 +5,7 @@ using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using TaskManagerClientLibrary.ConcreteHandlers;
-using System.Linq;
+
 
 namespace TaskManagerClientLibrary
 {
@@ -16,6 +16,7 @@ namespace TaskManagerClientLibrary
             Console.Title = "Task Manager Client";
 
             var module = new TaskManagerModule();
+
             var kernel = new StandardKernel(module);
 
             var notifier = kernel.Get<UserNotifier>();
@@ -36,7 +37,7 @@ namespace TaskManagerClientLibrary
         {
             this.Bind(x => x.FromAssemblyContaining<ICommand>().SelectAllClasses()
                                .InNamespaceOf<ICommand>()
-                               .BindAllInterfaces()
+                               .BindAllInterfaces().Configure(b => b.WithConstructorArgument("textWriter", Console.Out))
                                );
 
             Bind<ArgumentConverter<object>>().ToSelf();
@@ -48,6 +49,7 @@ namespace TaskManagerClientLibrary
 
             Bind<UserNotifier>().ToSelf().WithConstructorArgument("address", address);
             Bind<IClientConnection>().To<ClientConnection>().WithConstructorArgument("address", address);
+
         }
     }
 }

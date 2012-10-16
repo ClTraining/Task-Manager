@@ -1,31 +1,48 @@
 using System;
+using System.IO;
 using ConnectToWcf;
-using TaskManagerService;
+using TaskManagerServiceLibrary;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public abstract class Command<T> : ICommand
     {
         private readonly ArgumentConverter<T> converter;
+        private readonly TextWriter textWriter;
         protected readonly IClientConnection client;
 
-        public string Name { get; private set; }
+        public string Name
+        {
+            get { return GetType().Name.ToLower(); }
+        }
 
-        protected Command(Type derived, ArgumentConverter<T> converter) : this(null, derived, converter) { }
-        protected Command(IClientConnection client, Type derived, ArgumentConverter<T> converter)
+        protected Command(IClientConnection client, ArgumentConverter<T> converter, TextWriter textWriter)
+        protected Command(Type derived) : this(null, derived, null) { }
         {
             this.client = client;
-            Name = derived.Name.ToLower();
             this.converter = converter;
+            this.textWriter = textWriter;
         }
 
 
         protected abstract void ExecuteWithGenericInput(T input);
 
-        public void Execute(object argument)
+        public virtual void Execute(object argument)
         {
-            var converted = Convert(argument);
-            ExecuteWithGenericInput((T)converted);
+            try
+            {
+                var converted = Convert(argument);
+                ExecuteWithGenericInput((T)converted);
+            }
+            catch (TaskNotFoundException e)
+            {
+                OutText(e.Message);
+            }
+        }
+
+        protected void OutText(string text)
+        {
+            textWriter.WriteLine(text);
         }
 
         private object Convert(object input)

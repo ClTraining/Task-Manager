@@ -1,27 +1,20 @@
-using System;
+using System.IO;
 using ConnectToWcf;
-using FluentAssertions;
 using NSubstitute;
-using TaskManagerServiceLibrary;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Add : Command<string>
     {
-        public Add(IClientConnection client, ArgumentConverter<string> converter) : base(client, typeof(Add), converter) { }
+        public Add(IClientConnection client, ArgumentConverter<string> converter, TextWriter textWriter) : base(client, converter, textWriter)
+        {
+        }
 
         protected override void ExecuteWithGenericInput(string input)
         {
-            try
-            {
-                var result = client.AddTask(input);
-                Console.WriteLine("Task added. Task ID: " + result);
-            }
-            catch (TaskNotFoundException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            var result = client.AddTask(input);
+            OutText("Task added. Task ID: " + result);
         }
     }
 
@@ -34,13 +27,13 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public AddTests()
         {
-            handler = new Add(client, converter);
+            handler = new Add(client, converter, new StringWriter());
         }
 
         [Fact]
-        public void should_send_string_return_id()
+        public void should_execute_on_client_add_task()
         {
-            converter.Convert(taskName).Returns(taskName);
+            converter.Convert("sometask1").Returns("sometask1");
             handler.Execute(taskName);
             client.Received().AddTask("sometask1");
         }
