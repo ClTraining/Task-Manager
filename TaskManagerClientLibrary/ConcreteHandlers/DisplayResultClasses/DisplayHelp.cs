@@ -31,7 +31,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.DisplayResultClasses
             var sb = new StringBuilder();
 
             Console.SetOut(new StringWriter(sb));
-            displayHelp.Show(commands);
+            displayHelp.Show(command);
             sb.ToString().Should().Be("  " + command.Name + "\n\t" + command.Description + "\n\r\n");
         }
     }

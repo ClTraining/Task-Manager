@@ -37,7 +37,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     {
         private readonly IKernel kernel = Substitute.For<IKernel>();
         private readonly IDisplayHelp display = Substitute.For<IDisplayHelp>();
-        private readonly ICommand command = Substitute.For<ICommand>();
+        private readonly IEnumerable<ICommand> commands = Substitute.For<IEnumerable<ICommand>>();
         readonly Help help;
 
         public HelpTests()
@@ -48,10 +48,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void execute_method_test()
         {
-            IEnumerable<ICommand> commands = new List<ICommand> {command};
             kernel.GetAll<ICommand>().Returns(commands);
             help.Execute(null);
-            display.Received().Show(command);
+            foreach (var command in commands)
+                display.Received().Show(command);
         }
     }
 }
