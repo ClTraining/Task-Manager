@@ -22,12 +22,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         protected override void ExecuteWithGenericInput(int? input)
         {
             if (input == null)
-                ExecutePr(s => s.GetAllTasks(), taskFormatterFactory.GetListFormatter());
+                GetTasksAndPrint(s => s.GetAllTasks(), taskFormatterFactory.GetListFormatter());
             else
-                ExecutePr(s => s.GetTaskById(input.Value), taskFormatterFactory.GetSingleFormatter());
+                GetTasksAndPrint(s => s.GetTaskById(input.Value), taskFormatterFactory.GetSingleFormatter());
         }
 
-        private void ExecutePr(Func<IClientConnection, List<ContractTask>> func, ITaskFormatter formatter)
+        private void GetTasksAndPrint(Func<IClientConnection, List<ContractTask>> func, ITaskFormatter formatter)
         {
             var tasks = func(client);
             OutText(formatter.Show(tasks));
