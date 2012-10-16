@@ -8,7 +8,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         private readonly EnvironmentWrapper manager;
 
         public Exit(EnvironmentWrapper manager)
-            : base(typeof(Exit))
         {
             this.manager = manager;
         }

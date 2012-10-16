@@ -1,6 +1,5 @@
 using System;
 using ConnectToWcf;
-using FluentAssertions;
 using NSubstitute;
 using TaskManagerServiceLibrary;
 using Xunit;
@@ -9,7 +8,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Add : Command<string>
     {
-        public Add(IClientConnection client, ArgumentConverter<string> converter) : base(client, typeof(Add), converter) { }
+        public Add(IClientConnection client, ArgumentConverter<string> converter) : base(client, converter) { }
 
         protected override void ExecuteWithGenericInput(string input)
         {
@@ -27,7 +26,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
     public class AddTests
     {
-        private readonly ArgumentConverter<string> converter = Substitute.For<ArgumentConverter<string>>(); 
+        private readonly ArgumentConverter<string> converter = Substitute.For<ArgumentConverter<string>>();
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
         private readonly Add handler;
         const string taskName = "sometask1";
