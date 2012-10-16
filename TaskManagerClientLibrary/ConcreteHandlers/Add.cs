@@ -10,21 +10,15 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Add : Command<string>
     {
-        public Add(IClientConnection client, ArgumentConverter<string> converter, TextWriter textWriter) : base(client, converter, textWriter)
+        public Add(IClientConnection client, ArgumentConverter<string> converter, TextWriter textWriter)
+            : base(client, converter, textWriter)
         {
         }
 
         protected override void ExecuteWithGenericInput(string input)
         {
-            try
-            {
-                var result = client.AddTask(input);
-                OutText("Task added. Task ID: " + result);
-            }
-            catch (TaskNotFoundException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            var result = client.AddTask(input);
+            OutText("Task added. Task ID: " + result);
         }
     }
 
