@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
-using FluentAssertions;
+﻿using System.Collections.Generic;
 using NSubstitute;
 using Ninject;
 using TaskManagerClientLibrary.ConcreteHandlers.DisplayResultClasses;
@@ -41,7 +37,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     {
         private readonly IKernel kernel = Substitute.For<IKernel>();
         private readonly IDisplayHelp display = Substitute.For<IDisplayHelp>();
-
+        private readonly ICommand command = Substitute.For<ICommand>();
         readonly Help help;
 
         public HelpTests()
@@ -52,9 +48,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void execute_method_test()
         {
-            var list = new List<ICommand>{help};
-            kernel.GetAll<ICommand>().Returns(list);
+            IEnumerable<ICommand> commands = new List<ICommand> {command};
+            kernel.GetAll<ICommand>().Returns(commands);
             help.Execute(null);
+            display.Received().Show(command);
         }
     }
 }
