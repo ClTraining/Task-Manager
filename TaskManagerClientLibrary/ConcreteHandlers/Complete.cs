@@ -1,7 +1,6 @@
 using System.IO;
 using ConnectToWcf;
 using NSubstitute;
-using TaskManagerServiceLibrary;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers

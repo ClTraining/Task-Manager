@@ -16,8 +16,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             get { return GetType().Name.ToLower(); }
         }
 
-        protected Command(IClientConnection client, ArgumentConverter<T> converter, TextWriter textWriter)
-        protected Command(Type derived) : this(null, derived, null) { }
+        protected Command(IClientConnection client = null, ArgumentConverter<T> converter = null, TextWriter textWriter = null)
         {
             this.client = client;
             this.converter = converter;
@@ -37,6 +36,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             catch (TaskNotFoundException e)
             {
                 OutText(e.Message);
+            }
+            catch (Exception e)
+            {
+                OutText("Wrong command arguments");
             }
         }
 

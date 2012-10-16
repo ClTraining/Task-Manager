@@ -10,7 +10,7 @@ namespace EntitiesLibrary
     {
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
-            if (sourceType == typeof(Tuple<int, string>))
+            if (sourceType == typeof(string))
             {
                 return true;
             }
@@ -23,7 +23,7 @@ namespace EntitiesLibrary
             var s = value as string;
             if (s != null)
             {
-                var v = s.Split(new[] { ',', ' ' });
+                var v = s.Split(new[] { ',', ' ' }, 2);
                 return new RenameTaskArgs(){Id = int.Parse(v[0]), Name = v[1]};
             }
             return base.ConvertFrom(context, culture, value);
@@ -43,9 +43,16 @@ namespace EntitiesLibrary
         public void test_convert()
         {
             var tc = TypeDescriptor.GetConverter(typeof(RenameTaskArgs));
-            var canConvert = tc.CanConvertFrom(typeof(string));
-            var result = (RenameTaskArgs)tc.ConvertFrom("1 fgfjh");
-            result.ShouldBeEquivalentTo(new RenameTaskArgs{Id = 1,Name = "fgfjh"});
+            var result = (RenameTaskArgs)tc.ConvertFrom("1 fgfjh ss");
+            result.ShouldBeEquivalentTo(new RenameTaskArgs{Id = 1,Name = "fgfjh ss"});
+        }
+
+        [Fact]
+        public void test_can_convert()
+        {
+            var tc = TypeDescriptor.GetConverter(typeof(RenameTaskArgs));
+            var result = tc.CanConvertFrom(typeof(string));
+            result.Should().Be(true);
         }
     }
 }

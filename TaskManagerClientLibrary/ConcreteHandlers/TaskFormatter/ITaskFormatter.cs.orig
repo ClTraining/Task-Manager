@@ -1,0 +1,24 @@
+<<<<<<< HEAD
+﻿using System.Collections.Generic;
+using EntitiesLibrary;
+
+namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
+{
+    public interface ITaskFormatter
+    {
+        string Show(List<ContractTask> tasks);
+        bool CouldUse(int? input);
+    }
+}
+=======
+﻿using System.Collections.Generic;
+using EntitiesLibrary;
+
+namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
+{
+    public interface ITaskFormatter
+    {
+        string Show(List<ContractTask> tasks);
+    }
+}
+>>>>>>> 2f4cddc... Fixed tests for list command and added test for taskformatterfactory
