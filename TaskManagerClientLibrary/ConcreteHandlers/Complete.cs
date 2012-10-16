@@ -1,4 +1,4 @@
-using System;
+using System.IO;
 using ConnectToWcf;
 using FluentAssertions;
 using NSubstitute;
@@ -9,23 +9,16 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Complete : Command<int>
     {
-        public Complete(IClientConnection client, ArgumentConverter<int> converter)
-            : base(client, converter)
+        public Complete(IClientConnection client, ArgumentConverter<int> converter, TextWriter textWriter)
+            : base(client, converter, textWriter)
         {
             Description = "Mark task by ID as completed";
         }
 
         protected override void ExecuteWithGenericInput(int input)
         {
-            try
-            {
-                client.Complete(input);
-                Console.WriteLine("Task ID: {0} completed.", input);
-            }
-            catch (TaskNotFoundException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            client.Complete(input);
+            OutText(string.Format("Task ID: {0} completed.", input));
         }
     }
 
@@ -38,7 +31,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public CompleteTests()
         {
-            handler = new Complete(client, converter);
+            handler = new Complete(client, converter, new StringWriter());
         }
 
         [Fact]

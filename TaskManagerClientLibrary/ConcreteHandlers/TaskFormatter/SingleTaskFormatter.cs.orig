@@ -1,0 +1,65 @@
+using System;
+using System.Collections.Generic;
+<<<<<<< HEAD:TaskManagerClientLibrary/ConcreteHandlers/TaskFormatter/ListFormatter.cs
+using System.Linq;
+=======
+>>>>>>> 92da69e... Fixed formatters:TaskManagerClientLibrary/ConcreteHandlers/TaskFormatter/SingleTaskFormatter.cs
+using System.Text;
+using EntitiesLibrary;
+using FluentAssertions;
+using Xunit;
+
+namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
+{
+<<<<<<< HEAD:TaskManagerClientLibrary/ConcreteHandlers/TaskFormatter/ListFormatter.cs
+    public class ListFormatter : ITaskFormatter
+    {
+        private const string format = "\nID:\t\t{0}\n" + "Name:\t\t{1}\n" + "Completed:\t{2}\n\n";
+
+        public bool CouldUse(string input)
+        {
+            return String.IsNullOrEmpty(input);
+=======
+    public class SingleTaskFormatter : ITaskFormatter
+    {
+        private const string format = "\nID:\t\t{0}\n" + "Name:\t\t{1}\n" + "Completed:\t{2}\n\n";
+
+        public bool CouldUse(int? input)
+        {
+            return input == null;
+>>>>>>> 92da69e... Fixed formatters:TaskManagerClientLibrary/ConcreteHandlers/TaskFormatter/SingleTaskFormatter.cs
+        }
+
+        public string Show(List<ContractTask> tasks)
+        {
+            var taskString = new StringBuilder();
+
+            tasks.ForEach(x => taskString.Append(String.Format(format, x.Id, x.Name, x.IsCompleted ? "+" : "-")));
+
+            return taskString.ToString();
+        }
+    }
+
+<<<<<<< HEAD:TaskManagerClientLibrary/ConcreteHandlers/TaskFormatter/ListFormatter.cs
+    public class ListFormatterTests
+=======
+    public class SingleTaskFormatterTests
+>>>>>>> 92da69e... Fixed formatters:TaskManagerClientLibrary/ConcreteHandlers/TaskFormatter/SingleTaskFormatter.cs
+    {
+        [Fact]
+        public void should_correctly_out_one_task()
+        {
+            var sb = new StringBuilder();
+            var tasks = new List<ContractTask> {new ContractTask {Id = 1, Name = "task1", IsCompleted = false}};
+<<<<<<< HEAD:TaskManagerClientLibrary/ConcreteHandlers/TaskFormatter/ListFormatter.cs
+            var formatter = new ListFormatter();
+=======
+            var formatter = new SingleTaskFormatter();
+>>>>>>> 92da69e... Fixed formatters:TaskManagerClientLibrary/ConcreteHandlers/TaskFormatter/SingleTaskFormatter.cs
+            sb.Append(formatter.Show(tasks));
+            sb.ToString().Should().Be("\nID:\t\t1\n" +
+                                               "Name:\t\ttask1\n" +
+                                               "Completed:\t-\n\n");
+        }
+    }
+}

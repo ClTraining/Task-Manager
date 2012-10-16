@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Configuration;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Configuration;
 
 namespace TaskManagerClientLibrary
 {
@@ -11,8 +6,9 @@ namespace TaskManagerClientLibrary
     {
         public string GetAddress()
         {
-            var config = System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            var address = config.AppSettings.Settings["connectionAddress"].Value;
+            var config =
+                System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+            string address = config.AppSettings.Settings["connectionAddress"].Value;
             return address;
         }
     }

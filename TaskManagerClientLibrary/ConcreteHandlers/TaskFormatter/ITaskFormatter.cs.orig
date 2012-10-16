@@ -1,0 +1,23 @@
+<<<<<<< HEAD
+﻿using System.Collections.Generic;
+using EntitiesLibrary;
+
+namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
+{
+    public interface ITaskFormatter
+    {
+        string Show(List<ContractTask> tasks);
+    }
+}
+=======
+﻿using System.Collections.Generic;
+using EntitiesLibrary;
+
+namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
+{
+    public interface ITaskFormatter
+    {
+        string Show(List<ContractTask> tasks);
+    }
+}
+>>>>>>> 7f006b1c93492de3fafa9c3bc734bf3ff9754285
