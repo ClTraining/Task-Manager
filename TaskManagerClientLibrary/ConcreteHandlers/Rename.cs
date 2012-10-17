@@ -9,7 +9,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     public class Rename : Command<RenameTaskArgs>
     {
         public Rename(IClientConnection client, ArgumentConverter<RenameTaskArgs> converter, TextWriter textWriter)
-            : base(client, converter, textWriter) { }
+            : base(client, converter, textWriter)
+        {
+            Description = "Renames task";
+        }
 
         protected override void ExecuteWithGenericInput(RenameTaskArgs input)
         {
