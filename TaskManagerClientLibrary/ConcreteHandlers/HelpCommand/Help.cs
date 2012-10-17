@@ -7,13 +7,11 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
     public class Help : Command<string>
     {
         private readonly IDisplayHelp display;
-        private readonly ICommandsProvider provider;
 
-        public Help(IDisplayHelp display, ICommandsProvider provider)
+        public Help(IDisplayHelp display)
         {
             Name = "?";
             this.display = display;
-            this.provider = provider;
             Description = "Causes help";
         }
 
@@ -24,28 +22,28 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
 
         protected override void ExecuteWithGenericInput(string input)
         {
-            foreach (var command in provider.Commands)
+            foreach (var command in CommandContainer.Commands)
                 display.Show(command);    
         }
     }
 
     public class HelpTests
     {
-        private readonly ICommandsProvider provider = Substitute.For<ICommandsProvider>();
+        private readonly ICommandContainer commands = Substitute.For<ICommandContainer>();
         private readonly IDisplayHelp display = Substitute.For<IDisplayHelp>();
         private readonly ICommand command = Substitute.For<ICommand>();
         readonly Help help;
 
         public HelpTests()
         {
-            help = new Help(display, provider);
+            help = new Help(display);
         }
 
         [Fact]
         public void execute_method_test()
         {
             IEnumerable<ICommand> commands = new List<ICommand> {command};
-            provider.Commands.Returns(commands);
+            this.commands.GetCommands().Returns(commands);
             help.Execute(null);
             foreach (var c in commands)
                 display.Received().Show(c);
