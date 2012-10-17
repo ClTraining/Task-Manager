@@ -19,62 +19,27 @@ namespace ConnectToWcf
 
         public void RenameTask(RenameTaskArgs args)
         {
-            try
-            {
-                UpdateDataOnServer(t => t.RenameTask(args));
-            }
-            catch (FaultException<ExceptionDetail>)
-            {
-                throw new TaskNotFoundException("Wrong operation!");
-            }
+            UpdateDataOnServer(t => t.RenameTask(args));
         }
 
         public int AddTask(string task)
         {
-            try
-            {
-                return GetDataFromServer(t => t.AddTask(task));
-            }
-            catch (FaultException<ExceptionDetail>)
-            {
-                throw new TaskNotFoundException("Wrong operation!");
-            }
+            return GetDataFromServer(t => t.AddTask(task));
         }
 
         public List<ContractTask> GetTaskById(int id)
         {
-            try
-            {
-                return GetDataFromServer(s => new List<ContractTask> {s.GetTaskById(id)});
-            }
-            catch (FaultException<ExceptionDetail>)
-            {
-                throw new TaskNotFoundException(id);
-            }
+            return GetDataFromServer(s => new List<ContractTask> { s.GetTaskById(id) });
         }
 
         public List<ContractTask> GetAllTasks()
         {
-            try
-            {
-                return GetDataFromServer(s => s.GetAllTasks());
-            }
-            catch (FaultException<ExceptionDetail>)
-            {
-                throw new TaskNotFoundException("Wrong operation!");
-            }
+            return GetDataFromServer(s => s.GetAllTasks());
         }
 
         public void Complete(int id)
         {
-            try
-            {
-                UpdateDataOnServer(s => s.Complete(id));
-            }
-            catch (FaultException<ExceptionDetail>)
-            {
-                throw new TaskNotFoundException(id);
-            }
+            UpdateDataOnServer(s => s.Complete(id));
         }
 
         private void UpdateDataOnServer(Action<ITaskManagerService> action)
@@ -93,6 +58,10 @@ namespace ConnectToWcf
             try
             {
                 return func(client.CreateChannel());
+            }
+            catch (FaultException<ExceptionDetail> e)
+            {
+                throw new TaskNotFoundException(e.Detail.Message);
             }
             finally
             {

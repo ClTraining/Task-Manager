@@ -26,7 +26,7 @@ namespace TaskManagerServiceLibrary.Repositories
         {
             var index = id - 1;
             if (index < 0 || index >= taskList.Count)
-                throw new TaskNotFoundException(id);
+                throw new TaskNotFoundException(id.ToString());
 
             return taskList[index];
         }
