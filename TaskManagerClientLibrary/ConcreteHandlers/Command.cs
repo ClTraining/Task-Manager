@@ -32,11 +32,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             }
             catch (TaskNotFoundException e)
             {
-                OutText(e.Message);
-            }
-            catch (Exception)
-            {
-                OutText("Wrong command arguments");
+                OutText("Task not found. Id = " + e.Message);
             }
         }
 
