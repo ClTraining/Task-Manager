@@ -18,8 +18,8 @@ namespace EntitiesLibrary
             var s = value as string;
             if (s != null)
             {
-                var argStrings = s.Split(new[] {',', ' '}, 2);
-                return new RenameTaskArgs {Id = int.Parse(argStrings[0]), Name = argStrings[1]};
+                var argStrings = s.Split(new[] {',', ' '}, 2, StringSplitOptions.RemoveEmptyEntries);
+                return new RenameTaskArgs {Id = int.Parse(argStrings[0]), Name = argStrings[1].Trim(new[]{ ' ', '\'', '\"'})};
             }
             return base.ConvertFrom(context, culture, value);
         }
