@@ -1,6 +1,6 @@
 namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
 {
-    public interface IDisplayHelp
+    public interface IHelpDisplayer
     {
         void Show(ICommand command);
     }

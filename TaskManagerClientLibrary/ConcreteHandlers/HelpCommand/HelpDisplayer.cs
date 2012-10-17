@@ -8,7 +8,7 @@ using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
 {
-    public class DisplayHelp : IDisplayHelp
+    public class HelpDisplayer : IHelpDisplayer
     {
         public void Show(ICommand command)
         {
@@ -27,7 +27,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
             command.Description = "task help";
             commands.Add(command);
 
-            var displayHelp = new DisplayHelp();
+            var displayHelp = new HelpDisplayer();
             var sb = new StringBuilder();
 
             Console.SetOut(new StringWriter(sb));
