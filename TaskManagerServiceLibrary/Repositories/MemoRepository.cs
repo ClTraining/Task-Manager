@@ -62,7 +62,7 @@ namespace TaskManagerServiceLibrary.Repositories
         public void should_throw_exception_if_index_not_found()
         {
             Action action = () => repository.GetTaskById(4);
-            action.ShouldThrow<TaskNotFoundException>();
+            action.ShouldThrow<TaskNotFoundException>().WithMessage("4");
         }
 
         [Fact]
