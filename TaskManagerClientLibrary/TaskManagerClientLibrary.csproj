@@ -64,11 +64,11 @@
     <Compile Include="ConcreteHandlers\Add.cs" />
     <Compile Include="ConcreteHandlers\Command.cs" />
     <Compile Include="ConcreteHandlers\Complete.cs" />
-    <Compile Include="ConcreteHandlers\HelpCommand\DisplayHelp.cs" />
     <Compile Include="ConcreteHandlers\Exit.cs" />
     <Compile Include="ConcreteHandlers\HelpCommand\Help.cs" />
+    <Compile Include="ConcreteHandlers\HelpCommand\HelpDisplayer.cs" />
+    <Compile Include="ConcreteHandlers\HelpCommand\IHelpDisplayer.cs" />
     <Compile Include="ConcreteHandlers\ICommand.cs" />
-    <Compile Include="ConcreteHandlers\HelpCommand\IDisplayHelp.cs" />
     <Compile Include="ICommandContainer.cs" />
     <Compile Include="ConcreteHandlers\List.cs" />
     <Compile Include="ConcreteHandlers\Rename.cs" />
