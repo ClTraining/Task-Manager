@@ -21,14 +21,14 @@ namespace TaskManagerClientLibrary
 
         public void ExecuteCommand(string input)
         {
-            var args = input.Split(new[] {' '}, 2).ToList();
+            var args = input.Split(new[] {' '}, 2, StringSplitOptions.RemoveEmptyEntries).ToList();
 
             var command = commands.FirstOrDefault(a => a.Name == args[0]);
             if (command == null)
                 Console.WriteLine("No such command");
 
             else
-                command.Execute(args.Count > 1 ? args[1].Trim(new[] {'\"', '\''}) : null);
+                command.Execute(args.Count > 1 ? args[1].Trim(new[] {' ', '\"', '\''}) : null);
         }
     }
 
