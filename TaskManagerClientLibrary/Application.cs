@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ConnectToWcf;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using TaskManagerClientLibrary.ConcreteHandlers;
-using TaskManagerClientLibrary.ConcreteHandlers.DisplayResultClasses;
+using TaskManagerClientLibrary.ConcreteHandlers.HelpCommand;
+using Xunit;
 
 namespace TaskManagerClientLibrary
 {
@@ -17,7 +20,6 @@ namespace TaskManagerClientLibrary
             var module = new TaskManagerModule();
 
             var kernel = new StandardKernel(module);
-
             var notifier = kernel.Get<UserNotifier>();
 
             string greeting = notifier.GenerateGreeting();
@@ -34,18 +36,29 @@ namespace TaskManagerClientLibrary
     {
         public override void Load()
         {
-            this.Bind(x => x.FromAssemblyContaining<ICommand>().SelectAllClasses()
+            this.Bind(x => x.FromThisAssembly()
+                               .SelectAllClasses()
                                .InNamespaceOf<ICommand>()
                                .BindAllInterfaces().Configure(b => b.WithConstructorArgument("textWriter", Console.Out))
                 );
+
+            Bind<ICommandContainer>()
+                .To<CommandContainer>()
+                .InSingletonScope()
+                .WithConstructorArgument("commands", Kernel.GetAll<ICommand>());
 
             Bind<ArgumentConverter<object>>().ToSelf();
 
             var configManager = new ConfigurationManager();
             string address = configManager.GetAddress();
 
-            Bind<UserNotifier>().ToSelf().WithConstructorArgument("address", address);
-            Bind<IClientConnection>().To<ClientConnection>().WithConstructorArgument("address", address);
+            Bind<UserNotifier>()
+                .ToSelf()
+                .WithConstructorArgument("address", address);
+
+            Bind<IClientConnection>()
+                .To<ClientConnection>()
+                .WithConstructorArgument("address", address);
         }
     }
 }

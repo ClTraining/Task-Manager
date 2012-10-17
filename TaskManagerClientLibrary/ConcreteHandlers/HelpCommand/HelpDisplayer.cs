@@ -6,9 +6,9 @@ using FluentAssertions;
 using NSubstitute;
 using Xunit;
 
-namespace TaskManagerClientLibrary.ConcreteHandlers.DisplayResultClasses
+namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
 {
-    public class DisplayHelp : IDisplayHelp
+    public class HelpDisplayer : IHelpDisplayer
     {
         public void Show(ICommand command)
         {
@@ -27,12 +27,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.DisplayResultClasses
             command.Description = "task help";
             commands.Add(command);
 
-            var displayHelp = new DisplayHelp();
+            var displayHelp = new HelpDisplayer();
             var sb = new StringBuilder();
 
             Console.SetOut(new StringWriter(sb));
             displayHelp.Show(command);
-            sb.ToString().Should().Be("  " + command.Name + "\n\t" + command.Description + "\n\r\n");
+            sb.ToString().Should().Be("  help\n\ttask help\n\r\n");
         }
     }
 }
