@@ -21,7 +21,6 @@ namespace TaskManagerClientLibrary
 
             var kernel = new StandardKernel(module);
             var notifier = kernel.Get<UserNotifier>();
-            CommandContainer.SetCommands(kernel.GetAll<ICommand>());
 
             string greeting = notifier.GenerateGreeting();
             Console.WriteLine(greeting);
@@ -42,6 +41,11 @@ namespace TaskManagerClientLibrary
                                .InNamespaceOf<ICommand>()
                                .BindAllInterfaces().Configure(b => b.WithConstructorArgument("textWriter", Console.Out))
                 );
+
+            Bind<ICommandContainer>()
+                .To<CommandContainer>()
+                .InSingletonScope()
+                .WithConstructorArgument("commands", Kernel.GetAll<ICommand>());
 
             Bind<ArgumentConverter<object>>().ToSelf();
 

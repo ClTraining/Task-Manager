@@ -7,10 +7,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
     public class Help : Command<string>
     {
         private readonly IDisplayHelp display;
+        private readonly ICommandContainer commands;
 
-        public Help(IDisplayHelp display)
+        public Help(IDisplayHelp display, ICommandContainer commands)
         {
             Name = "?";
+            this.commands = commands;
             this.display = display;
             Description = "Causes help";
         }
@@ -22,7 +24,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
 
         protected override void ExecuteWithGenericInput(string input)
         {
-            foreach (var command in CommandContainer.Commands)
+            foreach (var command in commands.GetCommands())
                 display.Show(command);    
         }
     }
@@ -36,7 +38,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
 
         public HelpTests()
         {
-            help = new Help(display);
+            help = new Help(display, commands);
         }
 
         [Fact]
