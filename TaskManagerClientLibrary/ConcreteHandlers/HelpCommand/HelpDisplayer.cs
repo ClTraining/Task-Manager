@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using FluentAssertions;
@@ -18,14 +17,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
 
     public class DisplayHelpTests
     {
-        private readonly List<ICommand> commands = Substitute.For<List<ICommand>>();
         [Fact]
-        public void should_test_show_method()
+        public void should_test_show_task_name_and_description()
         {
             var command = Substitute.For<ICommand>();
             command.Name = "help";
             command.Description = "task help";
-            commands.Add(command);
 
             var displayHelp = new HelpDisplayer();
             var sb = new StringBuilder();
