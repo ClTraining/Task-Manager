@@ -1,17 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using EntitiesLibrary;
+﻿using EntitiesLibrary;
 
 namespace TaskManagerServiceLibrary.Specifications
 {
-    public class ListAllSpecification : ISpecification
+    public class ListAllSpecification : BaseSpecification
     {
-        public bool IsSatisfied(ServiceTask task)
+        public override bool IsSatisfied(ServiceTask task)
         {
-            return task.Id > 0;
+            return Id == null;
         }
     }
 }

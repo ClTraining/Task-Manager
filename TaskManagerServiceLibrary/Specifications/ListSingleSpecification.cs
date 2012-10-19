@@ -2,18 +2,11 @@ using EntitiesLibrary;
 
 namespace TaskManagerServiceLibrary.Specifications
 {
-    public class ListSingleSpecification : ISpecification
+    public class ListSingleSpecification : BaseSpecification
     {
-        private readonly int id;
-
-        public ListSingleSpecification(int id)
+        public override bool IsSatisfied(ServiceTask task)
         {
-            this.id = id;
-        }
-
-        public bool IsSatisfied(ServiceTask task)
-        {
-            return task.Id == id;
+            return task.Id == Id;
         }
     }
 }

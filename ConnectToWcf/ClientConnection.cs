@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 using EntitiesLibrary;
 using TaskManagerServiceLibrary;
+using TaskManagerServiceLibrary.Specifications;
 
 namespace ConnectToWcf
 {
@@ -17,30 +19,35 @@ namespace ConnectToWcf
             binding = new NetTcpBinding();
         }
 
-        public void RenameTask(RenameTaskArgs args)
-        {
-            UpdateDataOnServer(t => t.RenameTask(args));
-        }
+//        public void RenameTask(RenameTaskArgs args)
+//        {
+//            UpdateDataOnServer(t => t.RenameTask(args));
+//        }
 
         public int AddTask(string task)
         {
             return GetDataFromServer(t => t.AddTask(task));
         }
 
-        public List<ContractTask> GetTaskById(int id)
+        public List<ContractTask> GetTasks(int? id)
         {
-            return GetDataFromServer(s => new List<ContractTask> { s.GetTaskById(id) });
+            return GetDataFromServer(s => s.GetTasks(id));
         }
 
-        public List<ContractTask> GetAllTasks()
-        {
-            return GetDataFromServer(s => s.GetAllTasks());
-        }
-
-        public void Complete(int id)
-        {
-            UpdateDataOnServer(s => s.Complete(id));
-        }
+//        public List<ContractTask> GetTaskById(int id)
+//        {
+//            return GetDataFromServer(s => new List<ContractTask> { s.GetTaskById(id) });
+//        }
+//
+//        public List<ContractTask> GetAllTasks()
+//        {
+//            return GetDataFromServer(s => s.GetAllTasks());
+//        }
+//
+//        public void Complete(int id)
+//        {
+//            UpdateDataOnServer(s => s.Complete(id));
+//        }
 
         private void UpdateDataOnServer(Action<ITaskManagerService> action)
         {

@@ -5,6 +5,7 @@ using ConnectToWcf;
 using EntitiesLibrary;
 using NSubstitute;
 using TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter;
+using TaskManagerServiceLibrary.Specifications;
 using Xunit;
 using System.Linq;
 
@@ -13,6 +14,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     public class List : Command<int?>
     {
         private readonly TaskFormatterFactory taskFormatterFactory;
+        private readonly ISpecification spec;
 
         public List(IClientConnection client, ArgumentConverter<int?> converter, TextWriter textWriter,
                    TaskFormatterFactory taskFormatterFactory)
@@ -24,10 +26,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected override void ExecuteWithGenericInput(int? input)
         {
-            if (input == null)
-                GetTasksAndPrint(s => s.GetAllTasks(), taskFormatterFactory.GetListFormatter());
-            else
-                GetTasksAndPrint(s => s.GetTaskById(input.Value), taskFormatterFactory.GetSingleFormatter());
+            GetTasksAndPrint(s => s.GetTasks(input), input == null
+                                                         ? taskFormatterFactory.GetListFormatter()
+                                                         : taskFormatterFactory.GetSingleFormatter()
+                );
         }
 
         private void GetTasksAndPrint(Func<IClientConnection, List<ContractTask>> func, ITaskFormatter formatter)

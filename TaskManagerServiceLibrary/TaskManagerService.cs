@@ -14,15 +14,13 @@ namespace TaskManagerServiceLibrary
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, IncludeExceptionDetailInFaults = true)]
     public class TaskManagerService : ITaskManagerService
     {
-        private readonly ISpecification spec;
         private readonly IRepository repository;
         private readonly IToDoList taskList;
 
-        public TaskManagerService(IRepository repository, IToDoList list, ISpecification spec)
+        public TaskManagerService(IRepository repository, IToDoList list)
         {
             this.repository = repository;
             taskList = list;
-            this.spec = spec;
         }
 
         public int AddTask(string task)
@@ -30,34 +28,9 @@ namespace TaskManagerServiceLibrary
             return taskList.AddTask(task);
         }
 
-        public List<ContractTask> GetTasks()
+        public List<ContractTask> GetTasks(ContractTask specification)
         {
-            return repository.GetTasks(spec);
-        }
-
-        public ContractTask GetTaskById(int id)
-        {
-            return taskList.GetTaskById(id);
-        }
-
-        public List<ContractTask> GetAllTasks()
-        {
-            return taskList.GetAllTasks();
-        }
-
-        public void Complete(int id)
-        {
-            taskList.Complete(id);
-        }
-
-        public bool TestConnection()
-        {
-            return true;
-        }
-
-        public void RenameTask(RenameTaskArgs args)
-        {
-            taskList.RenameTask(args);
+            return repository.GetTasks(specification);
         }
     }
 
@@ -70,7 +43,7 @@ namespace TaskManagerServiceLibrary
 
         public TaskManagerServiceTests()
         {
-            service = new TaskManagerService(repo, list, spec);
+            service = new TaskManagerService(repo, list);
         }
 
         [Fact]
