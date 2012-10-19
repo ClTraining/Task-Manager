@@ -60,7 +60,7 @@
   <ItemGroup>
     <Compile Include="Application.cs" />
     <Compile Include="ArgumentConverter.cs" />
-    <Compile Include="CommandContainer.cs" />
+    <Compile Include="ComandContainer\CommandContainer.cs" />
     <Compile Include="ConcreteHandlers\Add.cs" />
     <Compile Include="ConcreteHandlers\Command.cs" />
     <Compile Include="ConcreteHandlers\Complete.cs" />
@@ -69,7 +69,7 @@
     <Compile Include="ConcreteHandlers\HelpCommand\HelpDisplayer.cs" />
     <Compile Include="ConcreteHandlers\HelpCommand\IHelpDisplayer.cs" />
     <Compile Include="ConcreteHandlers\ICommand.cs" />
-    <Compile Include="ICommandContainer.cs" />
+    <Compile Include="ComandContainer\ICommandContainer.cs" />
     <Compile Include="ConcreteHandlers\List.cs" />
     <Compile Include="ConcreteHandlers\Rename.cs" />
     <Compile Include="ConcreteHandlers\TaskFormatter\SingleTaskFormatter.cs" />
