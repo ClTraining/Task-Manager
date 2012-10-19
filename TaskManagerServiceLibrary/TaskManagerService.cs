@@ -28,7 +28,12 @@ namespace TaskManagerServiceLibrary
             return taskList.AddTask(task);
         }
 
-        public List<ContractTask> GetTasks(ContractTask specification)
+        public List<ContractTask> GetTasks(int? id)
+        {
+            return null;
+        }
+
+        public List<ContractTask> GetTasks(ISpecification specification)
         {
             return repository.GetTasks(specification);
         }
