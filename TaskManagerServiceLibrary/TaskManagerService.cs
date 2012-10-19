@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.ServiceModel;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
+using TaskManagerServiceLibrary.Repositories;
+using TaskManagerServiceLibrary.Specifications;
 using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
 
@@ -11,11 +14,15 @@ namespace TaskManagerServiceLibrary
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, IncludeExceptionDetailInFaults = true)]
     public class TaskManagerService : ITaskManagerService
     {
+        private ISpecification spec;
+        private readonly IRepository repository;
         private readonly IToDoList taskList;
 
-        public TaskManagerService(IToDoList list)
+        public TaskManagerService(IRepository repository, IToDoList list, ISpecification spec)
         {
+            this.repository = repository;
             taskList = list;
+            this.spec = spec;
         }
 
         public int AddTask(string task)
@@ -23,15 +30,20 @@ namespace TaskManagerServiceLibrary
             return taskList.AddTask(task);
         }
 
-        public ContractTask GetTaskById(int id)
+        public List<ContractTask> GetTasks()
         {
-            return taskList.GetTaskById(id);
+            return repository.GetTasks(spec);
         }
 
-        public List<ContractTask> GetAllTasks()
-        {
-            return taskList.GetAllTasks();
-        }
+//        public ContractTask GetTaskById(int id)
+//        {
+//            return taskList.GetTaskById(id);
+//        }
+
+//        public List<ContractTask> GetAllTasks()
+//        {
+//            return taskList.GetAllTasks();
+//        }
 
         public void Complete(int id)
         {

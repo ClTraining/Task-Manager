@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
+using TaskManagerServiceLibrary.Specifications;
 
 namespace TaskManagerServiceLibrary
 {
@@ -10,12 +11,15 @@ namespace TaskManagerServiceLibrary
         [OperationContract]
         int AddTask(string task);
 
-        [OperationContract]
-        ContractTask GetTaskById(int id);
+        //[OperationContract]
+        //ContractTask GetTaskById(int id);
 
+        //[OperationContract]
+        //List<ContractTask> GetAllTasks();
+        
         [OperationContract]
-        List<ContractTask> GetAllTasks();
-
+        List<ContractTask> GetTasks();
+        
         [OperationContract]
         void Complete(int id);
 

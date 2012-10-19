@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading;
 using EntitiesLibrary;
 using FluentAssertions;
+using TaskManagerServiceLibrary.Specifications;
+using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
 
 namespace TaskManagerServiceLibrary.Repositories
@@ -22,29 +24,39 @@ namespace TaskManagerServiceLibrary.Repositories
             return serviceTask.Id;
         }
 
-        public ServiceTask GetTaskById(int id)
+        public List<ContractTask> GetTasks(ISpecification spec)
         {
-            var index = id - 1;
-            if (index < 0 || index >= taskList.Count)
-                throw new TaskNotFoundException(id.ToString());
+            var taskMapper = new TaskMapper();
 
-            return taskList[index];
+            return taskList
+                .Where(spec.IsSatisfied)
+                .Select(taskMapper.ConvertToContract)
+                .ToList();
         }
 
-        public List<ServiceTask> GetAllTasks()
-        {
-            return taskList.ToList();
-        }
+        //public ServiceTask GetTaskById(int id)
+        //{
+        //    var index = id - 1;
+        //    if (index < 0 || index >= taskList.Count)
+        //        throw new TaskNotFoundException(id.ToString());
 
-        public void Complete(int id)
-        {
-            GetTaskById(id).IsCompleted = true;
-        }
+        //    return taskList[index];
+        //}
 
-        public void RenameTask(RenameTaskArgs args)
-        {
-            GetTaskById(args.Id).Name = args.Name;
-        }
+        //public List<ServiceTask> GetAllTasks()
+        //{
+        //    return taskList.ToList();
+        //}
+
+//        public void Complete(int id)
+//        {
+//            GetTaskById(id).IsCompleted = true;
+//        }
+//
+//        public void RenameTask(RenameTaskArgs args)
+//        {
+//            GetTaskById(args.Id).Name = args.Name;
+//        }
 
         private int GetNewId()
         {

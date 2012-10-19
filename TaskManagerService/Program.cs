@@ -2,8 +2,10 @@ using System;
 using System.ServiceModel;
 using Ninject;
 using Ninject.Modules;
+using Ninject.Extensions.Conventions;
 using TaskManagerServiceLibrary;
 using TaskManagerServiceLibrary.Repositories;
+using TaskManagerServiceLibrary.Specifications;
 using TaskManagerServiceLibrary.TaskManager;
 
 namespace TaskManagerService
@@ -36,6 +38,12 @@ namespace TaskManagerService
             Bind<ITaskFactory>().To<TaskFactory>();
             Bind<IToDoList>().To<ToDoList>();
             Bind<ITaskMapper>().To<TaskMapper>();
+
+            this.Bind(a => a.FromThisAssembly()
+                               .SelectAllClasses()
+                               .InNamespaceOf<ISpecification>()
+                               .BindAllInterfaces()
+                );
         }
     }
 

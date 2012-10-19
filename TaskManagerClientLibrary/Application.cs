@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using ConnectToWcf;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using TaskManagerClientLibrary.ConcreteHandlers;
-using TaskManagerClientLibrary.ConcreteHandlers.HelpCommand;
-using Xunit;
 
 namespace TaskManagerClientLibrary
 {
