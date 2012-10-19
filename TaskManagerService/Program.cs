@@ -1,8 +1,8 @@
 using System;
 using System.ServiceModel;
 using Ninject;
-using Ninject.Modules;
 using Ninject.Extensions.Conventions;
+using Ninject.Modules;
 using TaskManagerServiceLibrary;
 using TaskManagerServiceLibrary.Repositories;
 using TaskManagerServiceLibrary.Specifications;

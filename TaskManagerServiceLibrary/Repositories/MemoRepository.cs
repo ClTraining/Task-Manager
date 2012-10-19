@@ -34,29 +34,29 @@ namespace TaskManagerServiceLibrary.Repositories
                 .ToList();
         }
 
-        //public ServiceTask GetTaskById(int id)
-        //{
-        //    var index = id - 1;
-        //    if (index < 0 || index >= taskList.Count)
-        //        throw new TaskNotFoundException(id.ToString());
+        public ServiceTask GetTaskById(int id)
+        {
+            var index = id - 1;
+            if (index < 0 || index >= taskList.Count)
+                throw new TaskNotFoundException(id.ToString());
 
-        //    return taskList[index];
-        //}
+            return taskList[index];
+        }
 
-        //public List<ServiceTask> GetAllTasks()
-        //{
-        //    return taskList.ToList();
-        //}
+        public List<ServiceTask> GetAllTasks()
+        {
+            return taskList.ToList();
+        }
 
-//        public void Complete(int id)
-//        {
-//            GetTaskById(id).IsCompleted = true;
-//        }
-//
-//        public void RenameTask(RenameTaskArgs args)
-//        {
-//            GetTaskById(args.Id).Name = args.Name;
-//        }
+        public void Complete(int id)
+        {
+            GetTaskById(id).IsCompleted = true;
+        }
+
+        public void RenameTask(RenameTaskArgs args)
+        {
+            GetTaskById(args.Id).Name = args.Name;
+        }
 
         private int GetNewId()
         {

@@ -14,7 +14,7 @@ namespace TaskManagerServiceLibrary
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, IncludeExceptionDetailInFaults = true)]
     public class TaskManagerService : ITaskManagerService
     {
-        private ISpecification spec;
+        private readonly ISpecification spec;
         private readonly IRepository repository;
         private readonly IToDoList taskList;
 
@@ -35,15 +35,15 @@ namespace TaskManagerServiceLibrary
             return repository.GetTasks(spec);
         }
 
-//        public ContractTask GetTaskById(int id)
-//        {
-//            return taskList.GetTaskById(id);
-//        }
+        public ContractTask GetTaskById(int id)
+        {
+            return taskList.GetTaskById(id);
+        }
 
-//        public List<ContractTask> GetAllTasks()
-//        {
-//            return taskList.GetAllTasks();
-//        }
+        public List<ContractTask> GetAllTasks()
+        {
+            return taskList.GetAllTasks();
+        }
 
         public void Complete(int id)
         {
@@ -65,10 +65,12 @@ namespace TaskManagerServiceLibrary
     {
         private readonly ITaskManagerService service;
         private readonly IToDoList list = Substitute.For<IToDoList>();
+        private readonly IRepository repo = Substitute.For<IRepository>();
+        private readonly ISpecification spec = Substitute.For<ISpecification>();
 
         public TaskManagerServiceTests()
         {
-            service = new TaskManagerService(list);
+            service = new TaskManagerService(repo, list, spec);
         }
 
         [Fact]
