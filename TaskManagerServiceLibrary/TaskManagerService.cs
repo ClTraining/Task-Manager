@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
@@ -18,7 +19,9 @@ namespace TaskManagerServiceLibrary
             taskList = list;
         }
 
-        public int AddTask(string task)
+        #region ITaskManagerService Members
+
+        public int AddTask(AddTaskArgs task)
         {
             return taskList.AddTask(task);
         }
@@ -33,9 +36,9 @@ namespace TaskManagerServiceLibrary
             return taskList.GetAllTasks();
         }
 
-        public void Complete(int id)
+        public void MarkTaskAsCompleted(CompleteTaskArgs args)
         {
-            taskList.Complete(id);
+            taskList.MarkTaskAsCompleted(args);
         }
 
         public bool TestConnection()
@@ -47,12 +50,19 @@ namespace TaskManagerServiceLibrary
         {
             taskList.RenameTask(args);
         }
-    }
 
+        public void SetTaskDueDate(SetDateArgs args)
+        {
+            taskList.SetTaskDueDate(args);
+        }
+
+        #endregion
+    }
+    
     public class TaskManagerServiceTests
     {
-        private readonly ITaskManagerService service;
         private readonly IToDoList list = Substitute.For<IToDoList>();
+        private readonly ITaskManagerService service;
 
         public TaskManagerServiceTests()
         {
@@ -62,8 +72,9 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_create_task_and_return_taskid()
         {
-            list.AddTask("some task").Returns(1);
-            var res = service.AddTask("some task");
+            var addTaskArgs = new AddTaskArgs {Name = "some task"};
+            list.AddTask(addTaskArgs).Returns(1);
+            int res = service.AddTask(addTaskArgs);
             res.Should().Be(1);
         }
 
@@ -72,7 +83,7 @@ namespace TaskManagerServiceLibrary
         {
             var task = new ContractTask {Id = 1};
             list.GetTaskById(1).Returns(task);
-            var res = service.GetTaskById(1);
+            ContractTask res = service.GetTaskById(1);
             res.Should().Be(task);
         }
 
@@ -81,21 +92,22 @@ namespace TaskManagerServiceLibrary
         {
             var listTasks = new List<ContractTask> {new ContractTask {Id = 1, Name = "some", IsCompleted = false}};
             list.GetAllTasks().Returns(listTasks);
-            var res = service.GetAllTasks();
+            List<ContractTask> res = service.GetAllTasks();
             res.Should().BeEquivalentTo(listTasks);
         }
 
         [Fact]
         public void should_send_id_receive_completed_value()
         {
-            service.Complete(1);
-            list.Received().Complete(1);
+            var completeTaskArgs = new CompleteTaskArgs {Id = 1};
+            service.MarkTaskAsCompleted(completeTaskArgs);
+            list.Received().MarkTaskAsCompleted(completeTaskArgs);
         }
 
         [Fact]
         public void should_send_rename_task()
         {
-            var args = new RenameTaskArgs() {Id = 1, Name = "task name"};
+            var args = new RenameTaskArgs {Id = 1, Name = "task name"};
             service.RenameTask(args);
             list.Received().RenameTask(args);
         }
@@ -103,8 +115,17 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void test_connection_should_return_always_true()
         {
-            var result = service.TestConnection();
+            bool result = service.TestConnection();
             result.Should().Be(true);
+        }
+
+        [Fact]
+        public void should_send_set_date_for_task()
+        {
+            var dateTime = DateTime.Now;
+            var args = new SetDateArgs { Id = 1, DueDate = dateTime};
+            service.SetTaskDueDate(args);
+            list.Received().SetTaskDueDate(args);
         }
     }
 }

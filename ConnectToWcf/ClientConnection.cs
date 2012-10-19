@@ -22,7 +22,7 @@ namespace ConnectToWcf
             UpdateDataOnServer(t => t.RenameTask(args));
         }
 
-        public int AddTask(string task)
+        public int AddTask(AddTaskArgs task)
         {
             return GetDataFromServer(t => t.AddTask(task));
         }
@@ -37,9 +37,14 @@ namespace ConnectToWcf
             return GetDataFromServer(s => s.GetAllTasks());
         }
 
-        public void Complete(int id)
+        public void MarkTaskAsCompleted(CompleteTaskArgs id)
         {
-            UpdateDataOnServer(s => s.Complete(id));
+            UpdateDataOnServer(s => s.MarkTaskAsCompleted(id));
+        }
+
+        public void SetTaskDueDate(SetDateArgs args)
+        {
+            UpdateDataOnServer(s => s.SetTaskDueDate(args));
         }
 
         private void UpdateDataOnServer(Action<ITaskManagerService> action)

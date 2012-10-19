@@ -1,4 +1,4 @@
-using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using FluentAssertions;
@@ -8,18 +8,12 @@ namespace EntitiesLibrary
 {
     public class RenameTaskArgsConverter : TypeConverter
     {
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-        {
-            return sourceType == typeof (string) || base.CanConvertFrom(context, sourceType);
-        }
-
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            var s = value as string;
+            var s = value as List<string>;
             if (s != null)
             {
-                var argStrings = s.Split(new[] {',', ' '}, 2, StringSplitOptions.RemoveEmptyEntries);
-                return new RenameTaskArgs {Id = int.Parse(argStrings[0]), Name = argStrings[1].Trim(new[]{ ' ', '\'', '\"'})};
+                return new RenameTaskArgs {Id = int.Parse(s[0]), Name = s[1].Trim(new[] {' ', '\'', '\"'})};
             }
             return base.ConvertFrom(context, culture, value);
         }
@@ -37,17 +31,9 @@ namespace EntitiesLibrary
         [Fact]
         public void test_convert()
         {
-            TypeConverter tc = TypeDescriptor.GetConverter(typeof (RenameTaskArgs));
-            var result = (RenameTaskArgs) tc.ConvertFrom("1 fgfjh ss");
+            var tc = TypeDescriptor.GetConverter(typeof (RenameTaskArgs));
+            var result = (RenameTaskArgs) tc.ConvertFrom(new List<string> {"1", "fgfjh ss"});
             result.ShouldBeEquivalentTo(new RenameTaskArgs {Id = 1, Name = "fgfjh ss"});
-        }
-
-        [Fact]
-        public void test_can_convert()
-        {
-            TypeConverter tc = TypeDescriptor.GetConverter(typeof (RenameTaskArgs));
-            bool result = tc.CanConvertFrom(typeof (string));
-            result.Should().Be(true);
         }
     }
 }

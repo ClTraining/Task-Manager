@@ -5,10 +5,11 @@ namespace ConnectToWcf
 {
     public interface IClientConnection
     {
-        int AddTask(string task);
+        int AddTask(AddTaskArgs task);
         List<ContractTask> GetTaskById(int id);
         List<ContractTask> GetAllTasks();
-        void Complete(int id);
+        void MarkTaskAsCompleted(CompleteTaskArgs id);
         void RenameTask(RenameTaskArgs args);
+        void SetTaskDueDate(SetDateArgs args);
     }
 }

@@ -1,33 +1,36 @@
+using System.Collections.Generic;
 using System.IO;
 using ConnectToWcf;
-using FluentAssertions;
+using EntitiesLibrary;
 using NSubstitute;
-using TaskManagerServiceLibrary;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
-    public class Complete : Command<int>
+    public class Complete : Command<CompleteTaskArgs>
     {
-        public Complete(IClientConnection client, ArgumentConverter<int> converter, TextWriter textWriter)
+        public Complete(IClientConnection client, ArgumentConverter<CompleteTaskArgs> converter, TextWriter textWriter)
             : base(client, converter, textWriter)
         {
-            Description = "Mark task by ID as completed";
+            Description = "Mark task by ID as completed.";
         }
 
-        protected override void ExecuteWithGenericInput(int input)
+        protected override void ExecuteWithGenericInput(CompleteTaskArgs input)
         {
-            client.Complete(input);
-            OutText(string.Format("Task ID: {0} completed.", input));
+            client.MarkTaskAsCompleted(input);
+            OutText(string.Format("Task ID: {0} completed.", input.Id));
         }
     }
 
     public class CompleteTests
     {
-        private readonly ArgumentConverter<int> converter = Substitute.For<ArgumentConverter<int>>();
+        private const string taskName = "sometask1";
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
+
+        private readonly ArgumentConverter<CompleteTaskArgs> converter =
+            Substitute.For<ArgumentConverter<CompleteTaskArgs>>();
+
         private readonly Complete handler;
-        const string taskName = "sometask1";
 
         public CompleteTests()
         {
@@ -37,9 +40,11 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void should_send_string_return_id()
         {
-            converter.Convert("5").Returns(5);
-            handler.Execute("5");
-            client.Received().Complete(5);
+            var completeTaskArgs = new CompleteTaskArgs {Id = 5};
+            var arguments = new List<string> {"5"};
+            converter.Convert(arguments).Returns(completeTaskArgs);
+            handler.Execute(arguments);
+            client.Received().MarkTaskAsCompleted(completeTaskArgs);
         }
     }
 }

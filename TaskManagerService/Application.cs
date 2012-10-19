@@ -8,15 +8,15 @@ using TaskManagerServiceLibrary.TaskManager;
 
 namespace TaskManagerService
 {
-    static class TaskManagerApplication
+    internal static class TaskManagerApplication
     {
-        static readonly Uri baseAddresses = new Uri("net.tcp://localhost:44444");
+        private static readonly Uri baseAddresses = new Uri("net.tcp://localhost:44444");
 
         private static void Main()
         {
             Console.Title = "Task Manager Service";
             var kernel = new StandardKernel(new TaskManagerModule());
-            
+
             using (var serviceHost = new ServiceHost(kernel.Get<ITaskManagerService>(), baseAddresses))
             {
                 serviceHost.Open();
@@ -38,5 +38,4 @@ namespace TaskManagerService
             Bind<ITaskMapper>().To<TaskMapper>();
         }
     }
-
 }

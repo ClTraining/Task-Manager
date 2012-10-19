@@ -8,7 +8,7 @@ namespace TaskManagerServiceLibrary
     public interface ITaskManagerService
     {
         [OperationContract]
-        int AddTask(string task);
+        int AddTask(AddTaskArgs task);
 
         [OperationContract]
         ContractTask GetTaskById(int id);
@@ -17,12 +17,15 @@ namespace TaskManagerServiceLibrary
         List<ContractTask> GetAllTasks();
 
         [OperationContract]
-        void Complete(int id);
+        void MarkTaskAsCompleted(CompleteTaskArgs id);
 
         [OperationContract]
         bool TestConnection();
 
         [OperationContract]
         void RenameTask(RenameTaskArgs args);
+
+        [OperationContract]
+        void SetTaskDueDate(SetDateArgs args);
     }
 }

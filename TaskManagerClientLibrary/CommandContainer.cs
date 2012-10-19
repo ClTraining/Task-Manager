@@ -15,10 +15,14 @@ namespace TaskManagerClientLibrary
             this.commands = commands;
         }
 
+        #region ICommandContainer Members
+
         public IEnumerable<ICommand> GetCommands()
         {
             return commands;
         }
+
+        #endregion
     }
 
     public class CommandContainerTests
@@ -27,7 +31,7 @@ namespace TaskManagerClientLibrary
         public void should_return_collection_of_commands()
         {
             var command = Substitute.For<ICommand>();
-            IEnumerable<ICommand> commands = new List<ICommand> {command};
+            var commands = new List<ICommand> {command};
             var container = new CommandContainer(commands);
 
             var res = container.GetCommands();

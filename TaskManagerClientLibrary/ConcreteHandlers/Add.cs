@@ -1,23 +1,23 @@
+using System.Collections.Generic;
 using System.IO;
 using ConnectToWcf;
-using FluentAssertions;
+using EntitiesLibrary;
 using NSubstitute;
-using TaskManagerServiceLibrary;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
-    public class Add : Command<string>
+    public class Add : Command<AddTaskArgs>
     {
-        public Add(IClientConnection client, ArgumentConverter<string> converter, TextWriter textWriter)
+        public Add(IClientConnection client, ArgumentConverter<AddTaskArgs> converter, TextWriter textWriter)
             : base(client, converter, textWriter)
         {
-            Description = "add task to server";
+            Description = "Adds new task to server.";
         }
 
-        protected override void ExecuteWithGenericInput(string input)
+        protected override void ExecuteWithGenericInput(AddTaskArgs input)
         {
-            var result = client.AddTask(input);
+            int result = client.AddTask(input);
             OutText("Task added. Task ID: " + result);
         }
     }
@@ -26,7 +26,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     {
         private const string taskName = "sometask1";
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
-        private readonly ArgumentConverter<string> converter = Substitute.For<ArgumentConverter<string>>();
+        private readonly ArgumentConverter<AddTaskArgs> converter = Substitute.For<ArgumentConverter<AddTaskArgs>>();
         private readonly Add handler;
 
         public AddTests()
@@ -37,9 +37,11 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void should_execute_on_client_add_task()
         {
-            converter.Convert("sometask1").Returns("sometask1");
-            handler.Execute(taskName);
-            client.Received().AddTask("sometask1");
+            var addTaskArgs = new AddTaskArgs {Name = taskName};
+            var argument = new List<string> {taskName};
+            converter.Convert(argument).Returns(addTaskArgs);
+            handler.Execute(argument);
+            client.Received().AddTask(addTaskArgs);
         }
     }
 }

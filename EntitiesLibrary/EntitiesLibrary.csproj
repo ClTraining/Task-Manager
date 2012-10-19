@@ -57,11 +57,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddTaskArgs.cs" />
+    <Compile Include="AddTaskArgsConverter.cs" />
+    <Compile Include="CompleteTaskArgs.cs" />
+    <Compile Include="CompleteTaskArgsConverter.cs" />
     <Compile Include="ContractTask.cs" />
+    <Compile Include="ListArgs.cs" />
+    <Compile Include="ListArgsConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RenameTaskArgs.cs" />
     <Compile Include="RenameTaskArgsConverter.cs" />
     <Compile Include="ServiceTask.cs" />
+    <Compile Include="SetDateArgs.cs" />
+    <Compile Include="SetDateArgsConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
