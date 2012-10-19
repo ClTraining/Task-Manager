@@ -62,6 +62,7 @@
     <Compile Include="RenameTaskArgs.cs" />
     <Compile Include="RenameTaskArgsConverter.cs" />
     <Compile Include="ServiceTask.cs" />
+    <Compile Include="TaskNotFoundException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
