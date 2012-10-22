@@ -40,14 +40,14 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
         [Fact]
         public void should_return_list_formatter()
         {
-            ITaskFormatter result = taskFormatterFactory.GetListFormatter();
+            var result = taskFormatterFactory.GetListFormatter();
             result.Should().BeSameAs(listFormatter);
         }
 
         [Fact]
         public void should_return_single_formatter()
         {
-            ITaskFormatter result = taskFormatterFactory.GetSingleFormatter();
+            var result = taskFormatterFactory.GetSingleFormatter();
             result.Should().BeSameAs(singleFormatter);
         }
     }

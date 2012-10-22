@@ -32,14 +32,14 @@ namespace TaskManagerServiceLibrary.TaskManager
         [Fact]
         public void contract_task_should_be_equivalent_to_service_task()
         {
-            ContractTask res = taskMapper.ConvertToContract(serviceTask);
+            var res = taskMapper.ConvertToContract(serviceTask);
             res.ShouldBeEquivalentTo(contractTask);
         }
 
         [Fact]
         public void should_return_null_if_null_passed_convert_from_service()
         {
-            ContractTask result = taskMapper.ConvertToContract(null);
+            var result = taskMapper.ConvertToContract(null);
             result.Should().BeNull();
         }
     }

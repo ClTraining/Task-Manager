@@ -17,7 +17,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
         {
             var taskString = new StringBuilder();
 
-            DateTime minValue = DateTime.MinValue;
+            var minValue = DateTime.MinValue;
             tasks.ForEach(
                 x =>
                 taskString.Append(String.Format(Format, x.Id, x.Name, x.IsCompleted ? "+" : "-",

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using FluentAssertions;
 using NSubstitute;
 using TaskManagerClientLibrary.ConcreteHandlers;
@@ -14,17 +13,20 @@ namespace TaskManagerClientLibrary
     public class LineParser
     {
         private readonly List<ICommand> commands;
+        private readonly InputParser parser;
 
-        public LineParser(List<ICommand> commands)
+        public LineParser(List<ICommand> commands, InputParser parser)
         {
             this.commands = commands;
+            this.parser = parser;
         }
 
         public void ExecuteCommand(string input)
         {
-            var args = ParceInput(input);
+            var args = parser.Parse(input);
 
             var command = commands.FirstOrDefault(a => a.Name == args[0]);
+
             if (command == null)
                 Console.WriteLine("No such command");
             else
@@ -32,25 +34,6 @@ namespace TaskManagerClientLibrary
                 args.RemoveAt(0);
                 command.Execute(args);
             }
-        }
-
-        private List<string> ParceInput(string input)
-        {
-            var inputArr = input.Split(new[] {' '}, 2);
-            var arguments = new List<string> {inputArr[0]};
-
-            if (inputArr.Count() > 1)
-            {
-                var argumentsStr = inputArr[1];
-                const string pattern = "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)";
-                var exp = new Regex(pattern);
-                arguments.AddRange(exp.Split(argumentsStr));
-            }
-
-            var parceInput =
-                arguments.Where(s => !String.IsNullOrEmpty(s)).Select(s => s.Trim(new[] {'\'', '\"', ' ', '\t'})).ToList
-                    ();
-            return parceInput;
         }
     }
 
@@ -61,12 +44,13 @@ namespace TaskManagerClientLibrary
         private readonly ICommand command3 = Substitute.For<ICommand>();
         private readonly List<ICommand> commands;
         private readonly LineParser lp;
+        private readonly InputParser parser = Substitute.For<InputParser>();
 
         public LineParserTests()
         {
             commands = new List<ICommand> {command1, command2, command3};
 
-            lp = new LineParser(commands);
+            lp = new LineParser(commands, parser);
         }
 
         [Fact]
@@ -75,9 +59,12 @@ namespace TaskManagerClientLibrary
             command1.Name.Returns("add");
             command2.Name.Returns("command");
             command3.Name.Returns("hello");
-
-            lp.ExecuteCommand("add foo");
-            command1.ReceivedWithAnyArgs().Execute(new List<string> {"foo"});
+            var input = "add foo";
+            var list = new List<string> {"add", "foo"};
+            parser.Parse(input).Returns(list);
+            lp.ExecuteCommand(input);
+            list.RemoveAt(0);
+            command1.Received().Execute(list);
         }
 
         [Fact]
@@ -85,11 +72,13 @@ namespace TaskManagerClientLibrary
         {
             command1.Name.Returns("add");
             command2.Name.Returns("add");
-
-            lp.ExecuteCommand("add aaa");
-
-            command1.ReceivedWithAnyArgs().Execute(new List<string> {"aaa"});
-            command2.DidNotReceiveWithAnyArgs().Execute("aaa");
+            var input = "add aaa";
+            var list = new List<string> {"add", "aaa"};
+            parser.Parse(input).Returns(list);
+            lp.ExecuteCommand(input);
+            list.RemoveAt(0);
+            command1.Received().Execute(list);
+            command2.DidNotReceiveWithAnyArgs().Execute(list);
         }
 
         [Fact]
@@ -99,7 +88,10 @@ namespace TaskManagerClientLibrary
             command2.Name.Returns("command");
             command3.Name.Returns("hello");
 
-            lp.ExecuteCommand("ababa bababab");
+            var input = "ababa bababab";
+            var list = new List<string> {"ababa", "bababab"};
+            parser.Parse(input).Returns(list);
+            lp.ExecuteCommand(input);
 
             command1.DidNotReceiveWithAnyArgs().Execute("aaa");
             command2.DidNotReceiveWithAnyArgs().Execute("aaa");
@@ -116,7 +108,11 @@ namespace TaskManagerClientLibrary
             command2.Name.Returns("command");
             command3.Name.Returns("abrakadabra");
 
-            lp.ExecuteCommand("hello world");
+            var input = "hello world";
+            var list = new List<string> {"hello", "world"};
+            parser.Parse(input).Returns(list);
+
+            lp.ExecuteCommand(input);
 
             sb.ToString().ShouldBeEquivalentTo("No such command\r\n");
         }
@@ -125,18 +121,12 @@ namespace TaskManagerClientLibrary
         public void should_ignore_double_quotes()
         {
             command1.Name.Returns("add");
+            var input = "add \"hello world\"";
+            var list = new List<string> {"add", "hello world"};
+            parser.Parse(input).Returns(list);
             lp.ExecuteCommand("add \"hello world\"");
-            var argument = new List<string> {"hello world"};
-            command1.ReceivedWithAnyArgs().Execute(argument);
-        }
-
-        [Fact]
-        public void should_ignore_single_quotes()
-        {
-            command1.Name.Returns("add");
-            lp.ExecuteCommand("add \'hello world\'");
-            var argument = new List<string> {"hello world"};
-            command1.ReceivedWithAnyArgs().Execute(argument);
+            list.RemoveAt(0);
+            command1.ReceivedWithAnyArgs().Execute(list);
         }
     }
 }

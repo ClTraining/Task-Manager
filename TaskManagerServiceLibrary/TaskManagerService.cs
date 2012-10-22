@@ -58,7 +58,7 @@ namespace TaskManagerServiceLibrary
 
         #endregion
     }
-    
+
     public class TaskManagerServiceTests
     {
         private readonly IToDoList list = Substitute.For<IToDoList>();
@@ -74,7 +74,7 @@ namespace TaskManagerServiceLibrary
         {
             var addTaskArgs = new AddTaskArgs {Name = "some task"};
             list.AddTask(addTaskArgs).Returns(1);
-            int res = service.AddTask(addTaskArgs);
+            var res = service.AddTask(addTaskArgs);
             res.Should().Be(1);
         }
 
@@ -83,7 +83,7 @@ namespace TaskManagerServiceLibrary
         {
             var task = new ContractTask {Id = 1};
             list.GetTaskById(1).Returns(task);
-            ContractTask res = service.GetTaskById(1);
+            var res = service.GetTaskById(1);
             res.Should().Be(task);
         }
 
@@ -92,7 +92,7 @@ namespace TaskManagerServiceLibrary
         {
             var listTasks = new List<ContractTask> {new ContractTask {Id = 1, Name = "some", IsCompleted = false}};
             list.GetAllTasks().Returns(listTasks);
-            List<ContractTask> res = service.GetAllTasks();
+            var res = service.GetAllTasks();
             res.Should().BeEquivalentTo(listTasks);
         }
 
@@ -115,7 +115,7 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void test_connection_should_return_always_true()
         {
-            bool result = service.TestConnection();
+            var result = service.TestConnection();
             result.Should().Be(true);
         }
 
@@ -123,7 +123,7 @@ namespace TaskManagerServiceLibrary
         public void should_send_set_date_for_task()
         {
             var dateTime = DateTime.Now;
-            var args = new SetDateArgs { Id = 1, DueDate = dateTime};
+            var args = new SetDateArgs {Id = 1, DueDate = dateTime};
             service.SetTaskDueDate(args);
             list.Received().SetTaskDueDate(args);
         }

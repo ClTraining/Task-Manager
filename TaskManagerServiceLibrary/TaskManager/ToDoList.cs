@@ -74,7 +74,7 @@ namespace TaskManagerServiceLibrary.TaskManager
         {
             var addTaskArgs = new AddTaskArgs {Name = "new task"};
             repository.AddTask(addTaskArgs).Returns(1);
-            int newtask = todolist.AddTask(addTaskArgs);
+            var newtask = todolist.AddTask(addTaskArgs);
             newtask.Should().Be(1);
         }
 
@@ -86,7 +86,7 @@ namespace TaskManagerServiceLibrary.TaskManager
             repository.GetTaskById(1).Returns(serviceTask);
             mapper.ConvertToContract(serviceTask).Returns(contractTask);
 
-            ContractTask res = todolist.GetTaskById(1);
+            var res = todolist.GetTaskById(1);
             res.Should().Be(contractTask);
         }
 
@@ -101,7 +101,7 @@ namespace TaskManagerServiceLibrary.TaskManager
             repository.GetAllTasks().Returns(serviceTasks);
             mapper.ConvertToContract(serviceTask).Returns(contractTask);
 
-            List<ContractTask> res = todolist.GetAllTasks();
+            var res = todolist.GetAllTasks();
             res.Should().BeEquivalentTo(contractTasks);
         }
 
@@ -124,7 +124,7 @@ namespace TaskManagerServiceLibrary.TaskManager
         [Fact]
         public void should_send_set_date_for_task_to_repository()
         {
-            var args = new SetDateArgs { Id = 1, DueDate = DateTime.Now };
+            var args = new SetDateArgs {Id = 1, DueDate = DateTime.Now};
             todolist.SetTaskDueDate(args);
             repository.Received().SetTaskDueDate(args);
         }

@@ -31,7 +31,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         private void GetTasksAndPrint(Func<IClientConnection, List<ContractTask>> func, ITaskFormatter formatter)
         {
-            List<ContractTask> tasks = func(client);
+            var tasks = func(client);
             OutText(formatter.Show(tasks));
         }
     }

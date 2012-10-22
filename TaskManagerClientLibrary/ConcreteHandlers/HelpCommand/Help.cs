@@ -42,7 +42,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
             var commands = new List<ICommand> {command};
             container.GetCommands().Returns(commands);
             help.Execute(null);
-            foreach (ICommand c in commands)
+            foreach (var c in commands)
                 display.Received().Show(c);
         }
     }

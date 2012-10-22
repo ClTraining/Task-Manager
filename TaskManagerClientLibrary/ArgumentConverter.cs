@@ -30,8 +30,8 @@ namespace TaskManagerClientLibrary
         public void should_get_add_task_with_date_arguments()
         {
             var tc = new ArgumentConverter<AddTaskArgs>();
-            var args = tc.Convert(new List<string> { "task 1", "01-01-2012" });
-            args.ShouldBeEquivalentTo(new AddTaskArgs { Name = "task 1", DueDate = DateTime.Parse("01-01-2012")});
+            var args = tc.Convert(new List<string> {"task 1", "01-01-2012"});
+            args.ShouldBeEquivalentTo(new AddTaskArgs {Name = "task 1", DueDate = DateTime.Parse("01-01-2012")});
         }
 
         [Fact]
@@ -70,8 +70,8 @@ namespace TaskManagerClientLibrary
         public void should_convert_set_date_args()
         {
             var tc = new ArgumentConverter<SetDateArgs>();
-            var result = tc.Convert(new List<string> {"9","10-10-2012"});
-            result.ShouldBeEquivalentTo(new SetDateArgs { Id = 9, DueDate = DateTime.Parse("10-10-2012") });
+            var result = tc.Convert(new List<string> {"9", "10-10-2012"});
+            result.ShouldBeEquivalentTo(new SetDateArgs {Id = 9, DueDate = DateTime.Parse("10-10-2012")});
         }
     }
 }

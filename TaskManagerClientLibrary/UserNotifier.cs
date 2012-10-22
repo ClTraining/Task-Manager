@@ -31,9 +31,7 @@ namespace TaskManagerClientLibrary
         {
             const string test = "blabla";
             var notifier = new UserNotifier(string.Format("1/1/1:{0}", test));
-
             var greeting = notifier.GenerateGreeting();
-
             greeting.Should().Be("Hello " + Environment.UserName + "\nServer address is: " + test +
                                  "\nType \'?\' to see available commands");
         }

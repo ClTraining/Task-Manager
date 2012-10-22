@@ -8,14 +8,16 @@ namespace ConnectToWcf
 {
     public class ClientConnection : IClientConnection
     {
-        private readonly string serviceAddress;
         private readonly NetTcpBinding binding;
+        private readonly string serviceAddress;
 
         public ClientConnection(string address)
         {
             serviceAddress = address;
             binding = new NetTcpBinding();
         }
+
+        #region IClientConnection Members
 
         public void RenameTask(RenameTaskArgs args)
         {
@@ -29,7 +31,7 @@ namespace ConnectToWcf
 
         public List<ContractTask> GetTaskById(int id)
         {
-            return GetDataFromServer(s => new List<ContractTask> { s.GetTaskById(id) });
+            return GetDataFromServer(s => new List<ContractTask> {s.GetTaskById(id)});
         }
 
         public List<ContractTask> GetAllTasks()
@@ -46,6 +48,8 @@ namespace ConnectToWcf
         {
             UpdateDataOnServer(s => s.SetTaskDueDate(args));
         }
+
+        #endregion
 
         private void UpdateDataOnServer(Action<ITaskManagerService> action)
         {

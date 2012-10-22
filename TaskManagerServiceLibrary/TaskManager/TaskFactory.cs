@@ -22,7 +22,7 @@ namespace TaskManagerServiceLibrary.TaskManager
         public void should_create_new_task()
         {
             ITaskFactory taskFactory = new TaskFactory();
-            ServiceTask result = taskFactory.Create();
+            var result = taskFactory.Create();
             result.Should().BeOfType<ServiceTask>();
         }
     }
