@@ -46,13 +46,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         private readonly ArgumentConverter<ListArgs> converter = Substitute.For<ArgumentConverter<ListArgs>>();
         private readonly SingleTaskFormatter formatter1 = Substitute.For<SingleTaskFormatter>();
         private readonly ListTaskFormatter formatter2 = Substitute.For<ListTaskFormatter>();
-        private readonly List list;
         private readonly TaskFormatterFactory taskFormatterFactory;
 
         public ListTests()
         {
             taskFormatterFactory = Substitute.For<TaskFormatterFactory>(formatter1, formatter2);
-            list = new List(client, converter, new StringWriter(), taskFormatterFactory);
+            new List(client, converter, new StringWriter(), taskFormatterFactory);
             taskFormatterFactory.GetSingleFormatter().Returns(formatter1);
             taskFormatterFactory.GetListFormatter().Returns(formatter2);
         }

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using EntitiesLibrary;
 
 namespace TaskManagerServiceLibrary.TaskManager
@@ -6,7 +5,7 @@ namespace TaskManagerServiceLibrary.TaskManager
     public interface IToDoList
     {
         int AddTask(AddTaskArgs name);
-        void MarkTaskAsCompleted(CompleteTaskArgs id);
+        void Complete(CompleteTaskArgs args);
         void RenameTask(RenameTaskArgs args);
         void SetTaskDueDate(SetDateArgs args);
     }

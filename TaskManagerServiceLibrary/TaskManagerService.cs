@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
-using NSubstitute;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
@@ -37,12 +36,22 @@ namespace TaskManagerServiceLibrary
         public List<ContractTask> GetTasks(IClientSpecification specification)
         {
             var res = list.First(x => x.GetType().Name.Contains(specification.GetType().Name));
-            res.Data = specification.Data;
+
+            res.Data = ((ListSingle) specification).Id;
+
+            Console.WriteLine(res.Data);
+
             return repository.GetTasks(res);
         }
 
-        public void MarkTaskAsCompleted(CompleteTaskArgs id)
+        public void Complete(CompleteTaskArgs args)
         {
+            taskList.Complete(args);
+        }
+
+        public void RenameTask(RenameTaskArgs args)
+        {
+            taskList.RenameTask(args);
         }
 
         public void SetTaskDueDate(SetDateArgs args)
@@ -78,7 +87,7 @@ namespace TaskManagerServiceLibrary
 
             var addTaskArgs = new AddTaskArgs {Name = "some task"};
 
-            var res = service.AddTask(addTaskArgs);
+            service.AddTask(addTaskArgs);
 
             tasks.ToList().ForEach(a => service.AddTask(new AddTaskArgs{Name = a}));
 
@@ -87,15 +96,6 @@ namespace TaskManagerServiceLibrary
             foreach (var task in result)
             {
             }
-        }
-
-        [Fact]
-        public void should_send_set_date_for_task()
-        {
-            var dateTime = DateTime.Now;
-            var args = new SetDateArgs {Id = 1, DueDate = dateTime};
-            service.SetTaskDueDate(args);
-            todolist.Received().SetTaskDueDate(args);
         }
     }
 

@@ -20,9 +20,7 @@ namespace EntitiesLibrary
             var s = value as List<string>;
 
             if (s != null)
-            {
                 return s.Count > 0 ? ConvertStringToArgs(s[0]) : new ListArgs { Id = null };
-            }
 
             return base.ConvertFrom(context, culture, value);
         }
@@ -44,8 +42,7 @@ namespace EntitiesLibrary
         [Fact]
         public void should_extract_id_argument()
         {
-            var convertFrom = converter.ConvertFrom("1233334");
-            var result = convertFrom as ListArgs;
+            var result = converter.ConvertFrom("1233334") as ListArgs;
 
             result.Id.Should().Be(1233334);
             result.Date.Should().Be(default(DateTime));

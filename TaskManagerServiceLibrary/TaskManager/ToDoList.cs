@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
@@ -17,17 +15,14 @@ namespace TaskManagerServiceLibrary.TaskManager
         {
             this.repository = repository;
         }
-
-        #region IToDoList Members
-
         public int AddTask(AddTaskArgs name)
         {
             return repository.AddTask(name);
         }
 
-        public void MarkTaskAsCompleted(CompleteTaskArgs id)
+        public void Complete(CompleteTaskArgs args)
         {
-            repository.MarkTaskAsCompleted(id);
+            repository.Complete(args);
         }
 
         public void RenameTask(RenameTaskArgs args)
@@ -39,8 +34,6 @@ namespace TaskManagerServiceLibrary.TaskManager
         {
             repository.SetTaskDueDate(args);
         }
-
-        #endregion
     }
 
 
@@ -67,8 +60,8 @@ namespace TaskManagerServiceLibrary.TaskManager
         public void should_mark_task_as_completed_by_id()
         {
             var completeTaskArgs = new CompleteTaskArgs {Id = 1};
-            todolist.MarkTaskAsCompleted(completeTaskArgs);
-            repository.Received().MarkTaskAsCompleted(completeTaskArgs);
+            todolist.Complete(completeTaskArgs);
+            repository.Received().Complete(completeTaskArgs);
         }
 
         [Fact]

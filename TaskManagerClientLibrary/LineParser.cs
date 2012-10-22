@@ -24,7 +24,7 @@ namespace TaskManagerClientLibrary
         {
             var args = ParceInput(input);
 
-            var command = commands.FirstOrDefault(a => a.Name == args[0]);
+            var command = commands.First(a => a.Name == args[0]);
             if (command == null)
                 Console.WriteLine("No such command");
             else

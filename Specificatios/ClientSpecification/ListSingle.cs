@@ -1,12 +1,15 @@
-﻿namespace Specifications.ClientSpecification
+﻿using System.Collections;
+using System.Runtime.Serialization;
+
+namespace Specifications.ClientSpecification
 {
     public class ListSingle : IClientSpecification
     {
         public ListSingle(int id)
         {
-            Data = id;
+            Id = id;
         }
-
-        public object Data { get; set; }
+        
+        public int Id { get; set; }
     }
 }

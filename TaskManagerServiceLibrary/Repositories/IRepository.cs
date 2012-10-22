@@ -8,7 +8,7 @@ namespace TaskManagerServiceLibrary.Repositories
     {
         int AddTask(AddTaskArgs name);
         List<ContractTask> GetTasks(IServiceSpecification spec);
-        void MarkTaskAsCompleted(CompleteTaskArgs id);
+        void Complete(CompleteTaskArgs id);
         void RenameTask(RenameTaskArgs args);
         void SetTaskDueDate(SetDateArgs args);
     }

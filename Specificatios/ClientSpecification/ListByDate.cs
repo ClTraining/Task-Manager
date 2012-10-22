@@ -9,6 +9,6 @@ namespace Specifications.ClientSpecification
             Data = date;
         }
 
-        public object Data { get; set; }
+        public DateTime Data { get; set; }
     }
 }

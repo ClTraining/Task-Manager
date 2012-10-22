@@ -40,7 +40,7 @@ namespace ConnectToWcf
 
 //        public void Complete(int input)
 //        {
-//            UpdateDataOnServer(s => s.MarkTaskAsCompleted(input));
+//            UpdateDataOnServer(s => s.Complete(input));
 //        }
 
         public void SetTaskDueDate(SetDateArgs args)

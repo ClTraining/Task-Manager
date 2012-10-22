@@ -14,7 +14,12 @@ namespace TaskManagerServiceLibrary
 
         [OperationContract]
         List<ContractTask> GetTasks(IClientSpecification specification);
-        void MarkTaskAsCompleted(CompleteTaskArgs id);
+
+        [OperationContract]
+        void Complete(CompleteTaskArgs args);
+
+        [OperationContract]
+        void RenameTask(RenameTaskArgs args);
 
         [OperationContract]
         void SetTaskDueDate(SetDateArgs args);
