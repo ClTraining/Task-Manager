@@ -4,37 +4,32 @@ using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
 {
-    public class Help : Command<string>
+    public class Help : Command<List<string>>
     {
-        private readonly IHelpDisplayer display;
         private readonly ICommandContainer commands;
+        private readonly IHelpDisplayer display;
 
         public Help(IHelpDisplayer display, ICommandContainer commands)
         {
             Name = "?";
             this.commands = commands;
             this.display = display;
-            Description = "Causes help";
+            Description = "Causes help.";
         }
 
-        public override void Execute(object argument)
-        {
-            ExecuteWithGenericInput((string)argument);
-        }
-
-        protected override void ExecuteWithGenericInput(string input)
+        protected override void ExecuteWithGenericInput(List<string> input)
         {
             foreach (var command in commands.GetCommands())
-                display.Show(command);    
+                display.Show(command);
         }
     }
 
     public class HelpTests
     {
+        private readonly ICommand command = Substitute.For<ICommand>();
         private readonly ICommandContainer container = Substitute.For<ICommandContainer>();
         private readonly IHelpDisplayer display = Substitute.For<IHelpDisplayer>();
-        private readonly ICommand command = Substitute.For<ICommand>();
-        readonly Help help;
+        private readonly Help help;
 
         public HelpTests()
         {
@@ -44,10 +39,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
         [Fact]
         public void execute_method_test()
         {
-            List<ICommand> commands = new List<ICommand> {command};
+            var commands = new List<ICommand> {command};
             container.GetCommands().Returns(commands);
             help.Execute(null);
-            foreach (var c in commands)
+            foreach (ICommand c in commands)
                 display.Received().Show(c);
         }
     }

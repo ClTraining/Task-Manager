@@ -11,9 +11,9 @@ using TaskManagerServiceLibrary.TaskManager;
 
 namespace TaskManagerService
 {
-    static class TaskManagerApplication
+    internal static class TaskManagerApplication
     {
-        static readonly Uri baseAddresses = new Uri("net.tcp://localhost:44444");
+        private static readonly Uri baseAddresses = new Uri("net.tcp://localhost:44444");
 
         private static void Main()
         {
@@ -47,5 +47,4 @@ namespace TaskManagerService
                 );
         }
     }
-
 }

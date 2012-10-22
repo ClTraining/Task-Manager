@@ -28,7 +28,9 @@ namespace TaskManagerServiceLibrary
             this.taskList = taskList;
         }
 
-        public int AddTask(string task)
+        #region ITaskManagerService Members
+
+        public int AddTask(AddTaskArgs task)
         {
             return taskList.AddTask(task);
         }
@@ -41,9 +43,9 @@ namespace TaskManagerServiceLibrary
         }
     }
 
-    public class TaskManagerServiceTests
+        public void MarkTaskAsCompleted(CompleteTaskArgs args)
     {
-        [Fact]
+            taskList.MarkTaskAsCompleted(args);
         public void should_get_tasks_from_repository()
         {
             List<IServiceSpecification> specs = new StandardKernel(new MyModule()).GetAll<IServiceSpecification>().ToList();
@@ -51,33 +53,52 @@ namespace TaskManagerServiceLibrary
             object id = 3;
             var cSpec = new ListSingle(4);
 
+        public void SetTaskDueDate(SetDateArgs args)
+        {
+            taskList.SetTaskDueDate(args);
+        }
+
+        #endregion
+    
             var repo = new MemoRepository();
             var todolist = new ToDoList(repo);
+        private readonly ITaskManagerService service;
 
             var service = new TaskManagerService(repo, specs, todolist);
 
             var tasks = new[] { "task1", "task2", "task3", "task4", "task5", "task6", "task7", "task8", "task9" };
+            var addTaskArgs = new AddTaskArgs {Name = "some task"};
+            list.AddTask(addTaskArgs).Returns(1);
+            int res = service.AddTask(addTaskArgs);
 
             tasks.ToList().ForEach(x => service.AddTask(x));
+            ContractTask res = service.GetTaskById(1);
 
             var result = service.GetTasks(cSpec);
+            List<ContractTask> res = service.GetAllTasks();
 
             foreach (var task in result)
             {
-                Console.Out.WriteLine(task.Id + " " + task.Name);
+            var completeTaskArgs = new CompleteTaskArgs {Id = 1};
+            service.MarkTaskAsCompleted(completeTaskArgs);
+            list.Received().MarkTaskAsCompleted(completeTaskArgs);
             }
+            var args = new RenameTaskArgs {Id = 1, Name = "task name"};
         }
 
         public class MyModule : NinjectModule
         {
-            public override void Load()
+            bool result = service.TestConnection();
             {
-                this.Bind(a => a.FromAssemblyContaining<IServiceSpecification>()
-                                   .SelectAllClasses()
-                                   .InNamespaceOf<IServiceSpecification>()
-                                   .BindAllInterfaces()
-                    );
-            }
+        }
+
+        [Fact]
+        public void should_send_set_date_for_task()
+        {
+            var dateTime = DateTime.Now;
+             var args = new SetDateArgs { Id = 1, DueDate = dateTime};
+            service.SetTaskDueDate(args);
+            list.Received().SetTaskDueDate(args);
         }
     }
 }

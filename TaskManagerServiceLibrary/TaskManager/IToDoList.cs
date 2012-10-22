@@ -5,8 +5,9 @@ namespace TaskManagerServiceLibrary.TaskManager
 {
     public interface IToDoList
     {
-        int AddTask(string name);
-        void Complete(int id);
+        int AddTask(AddTaskArgs name);
+        void MarkTaskAsCompleted(CompleteTaskArgs id);
         void RenameTask(RenameTaskArgs args);
+        void SetTaskDueDate(SetDateArgs args);
     }
 }

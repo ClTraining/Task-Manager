@@ -8,7 +8,7 @@ namespace TaskManagerClientLibrary
         {
             var config =
                 System.Configuration.ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
-            string address = config.AppSettings.Settings["connectionAddress"].Value;
+            var address = config.AppSettings.Settings["connectionAddress"].Value;
             return address;
         }
     }

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using ConnectToWcf;
 using EntitiesLibrary;
 using NSubstitute;
@@ -11,7 +12,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         public Rename(IClientConnection client, ArgumentConverter<RenameTaskArgs> converter, TextWriter textWriter)
             : base(client, converter, textWriter)
         {
-            Description = "Renames task";
+            Description = "Renames task, specified by ID.";
         }
 
         protected override void ExecuteWithGenericInput(RenameTaskArgs input)
@@ -23,10 +24,14 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
     public class RenameTests
     {
-        private readonly ArgumentConverter<RenameTaskArgs> converter = Substitute.For<ArgumentConverter<RenameTaskArgs>>();
-        private readonly TextWriter textWriter = Substitute.For<TextWriter>();
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
+
+        private readonly ArgumentConverter<RenameTaskArgs> converter =
+            Substitute.For<ArgumentConverter<RenameTaskArgs>>();
+
         private readonly Rename renameCommand;
+        private readonly TextWriter textWriter = Substitute.For<TextWriter>();
+
         public RenameTests()
         {
             renameCommand = new Rename(client, converter, textWriter);
@@ -35,9 +40,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void should_send_to_client_rename_task()
         {
-            var renameTaskArgs = new RenameTaskArgs { Id = 1, Name = "taskName" };
-            converter.Convert("1 taskName").Returns(renameTaskArgs);
-            renameCommand.Execute("1 taskName");
+            var renameTaskArgs = new RenameTaskArgs {Id = 1, Name = "taskName"};
+            var argument = new List<string> {"1", "taskName"};
+            converter.Convert(argument).Returns(renameTaskArgs);
+            renameCommand.Execute(argument);
             client.Received().RenameTask(renameTaskArgs);
         }
     }

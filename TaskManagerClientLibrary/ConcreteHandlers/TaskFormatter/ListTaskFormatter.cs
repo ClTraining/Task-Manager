@@ -12,11 +12,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
         private const int PosId = 5;
         private const int PosName = 15;
         private const int PosCompleted = 13;
+        private const int PosDueDate = 20;
         private readonly string format;
 
         public ListTaskFormatter()
         {
-            format = "{0,-" + PosId + "} | {1," + PosName + "} | {2," + PosCompleted + "}";
+            format = "{0,-" + PosId + "} | {1," + PosName + "} | {2," + PosCompleted + "} | {3," + PosDueDate + "}";
         }
 
         #region ITaskFormatter Members
@@ -30,7 +31,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
                 x =>
                 taskString.AppendLine(String.Format(format, x.Id,
                                                     (x.Name.Length > PosName) ? x.Name.Remove(PosName) : x.Name,
-                                                    x.IsCompleted ? "+" : "-")));
+                                                    x.IsCompleted ? "+" : "-", x.DueDate)));
 
             return taskString.ToString();
         }
@@ -39,7 +40,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
 
         private string PrintHeader()
         {
-            return string.Format(format, "Id", "Name", "Completed");
+            return string.Format(format, "Id", "Name", "Completed", "Due date");
         }
     }
 
@@ -51,7 +52,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
             var formatter = new ListTaskFormatter();
             var sb = new StringBuilder();
             sb.Append(formatter.Show(new List<ContractTask>()));
-            sb.ToString().Should().Be("Id    |            Name |     Completed\r\n");
+            sb.ToString().Should().Be("Id    |            Name |     Completed |             Due date\r\n");
         }
 
         [Fact]
@@ -62,7 +63,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
             sb.Append(
                 formatter.Show(new List<ContractTask> {new ContractTask {Id = 1, Name = "abcd123456789000000000000"}}));
             sb.ToString().Should().Be(
-                "Id    |            Name |     Completed\r\n1     | abcd12345678900 |             -\r\n");
+                "Id    |            Name |     Completed |             Due date\r\n1     | abcd12345678900 |             - | 1/1/0001 12:00:00 AM\r\n");
         }
     }
 }

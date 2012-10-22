@@ -18,7 +18,7 @@ namespace TaskManagerClientLibrary
             var kernel = new StandardKernel(module);
             var notifier = kernel.Get<UserNotifier>();
 
-            string greeting = notifier.GenerateGreeting();
+            var greeting = notifier.GenerateGreeting();
             Console.WriteLine(greeting);
 
             for (string s; ((s = Console.ReadLine()) != null);)
@@ -46,7 +46,7 @@ namespace TaskManagerClientLibrary
             Bind<ArgumentConverter<object>>().ToSelf();
 
             var configManager = new ConfigurationManager();
-            string address = configManager.GetAddress();
+            var address = configManager.GetAddress();
 
             Bind<UserNotifier>()
                 .ToSelf()

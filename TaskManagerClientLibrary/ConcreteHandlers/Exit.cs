@@ -10,12 +10,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         public Exit(EnvironmentWrapper manager)
         {
             this.manager = manager;
-            Description = "Exit from client";
+            Description = "Exits from client.";
         }
 
         public override void Execute(object argument)
         {
-            ExecuteWithGenericInput((string)argument);
+            ExecuteWithGenericInput((string) argument);
         }
 
         protected override void ExecuteWithGenericInput(string input)
@@ -26,12 +26,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
     public class ExitTests
     {
-        private readonly EnvironmentWrapper wrapper = Substitute.For<EnvironmentWrapper>();
         private readonly Exit handler;
+        private readonly EnvironmentWrapper wrapper = Substitute.For<EnvironmentWrapper>();
 
         public ExitTests()
         {
-            handler = new Exit (wrapper);
+            handler = new Exit(wrapper);
         }
 
         [Fact]

@@ -1,4 +1,5 @@
 ﻿using Ninject;
+using TaskManagerClientLibrary;
 
 namespace TaskManagerConsole
 {
@@ -8,7 +9,7 @@ namespace TaskManagerConsole
         {
             var kernel = new StandardKernel();
 
-            kernel.Get<TaskManagerClientLibrary.Application>().Run();
+            kernel.Get<Application>().Run();
         }
     }
 }

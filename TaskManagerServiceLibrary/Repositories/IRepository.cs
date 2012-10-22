@@ -6,9 +6,10 @@ namespace TaskManagerServiceLibrary.Repositories
 {
     public interface IRepository
     {
-        int AddTask(string name);
+        int AddTask(AddTaskArgs name);
         List<ContractTask> GetTasks(IServiceSpecification spec);
-        void Complete(int id);
+        void MarkTaskAsCompleted(CompleteTaskArgs id);
         void RenameTask(RenameTaskArgs args);
+        void SetTaskDueDate(SetDateArgs args);
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using FluentAssertions;
 using NSubstitute;
 using TaskManagerClientLibrary.ConcreteHandlers;
@@ -21,14 +22,35 @@ namespace TaskManagerClientLibrary
 
         public void ExecuteCommand(string input)
         {
-            var args = input.Split(new[] {' '}, 2, StringSplitOptions.RemoveEmptyEntries).ToList();
+            var args = ParceInput(input);
 
             var command = commands.FirstOrDefault(a => a.Name == args[0]);
             if (command == null)
                 Console.WriteLine("No such command");
-
             else
-                command.Execute(args.Count > 1 ? args[1].Trim(new[] {' ', '\"', '\''}) : null);
+            {
+                args.RemoveAt(0);
+                command.Execute(args);
+            }
+        }
+
+        private List<string> ParceInput(string input)
+        {
+            var inputArr = input.Split(new[] {' '}, 2);
+            var arguments = new List<string> {inputArr[0]};
+
+            if (inputArr.Count() > 1)
+            {
+                var argumentsStr = inputArr[1];
+                const string pattern = "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)";
+                var exp = new Regex(pattern);
+                arguments.AddRange(exp.Split(argumentsStr));
+            }
+
+            var parceInput =
+                arguments.Where(s => !String.IsNullOrEmpty(s)).Select(s => s.Trim(new[] {'\'', '\"', ' ', '\t'})).ToList
+                    ();
+            return parceInput;
         }
     }
 
@@ -55,7 +77,7 @@ namespace TaskManagerClientLibrary
             command3.Name.Returns("hello");
 
             lp.ExecuteCommand("add foo");
-            command1.Received().Execute("foo");
+            command1.ReceivedWithAnyArgs().Execute(new List<string> {"foo"});
         }
 
         [Fact]
@@ -66,7 +88,7 @@ namespace TaskManagerClientLibrary
 
             lp.ExecuteCommand("add aaa");
 
-            command1.Received().Execute("aaa");
+            command1.ReceivedWithAnyArgs().Execute(new List<string> {"aaa"});
             command2.DidNotReceiveWithAnyArgs().Execute("aaa");
         }
 
@@ -104,7 +126,8 @@ namespace TaskManagerClientLibrary
         {
             command1.Name.Returns("add");
             lp.ExecuteCommand("add \"hello world\"");
-            command1.Received().Execute("hello world");
+            var argument = new List<string> {"hello world"};
+            command1.ReceivedWithAnyArgs().Execute(argument);
         }
 
         [Fact]
@@ -112,7 +135,8 @@ namespace TaskManagerClientLibrary
         {
             command1.Name.Returns("add");
             lp.ExecuteCommand("add \'hello world\'");
-            command1.Received().Execute("hello world");
+            var argument = new List<string> {"hello world"};
+            command1.ReceivedWithAnyArgs().Execute(argument);
         }
     }
 }

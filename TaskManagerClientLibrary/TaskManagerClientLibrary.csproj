@@ -69,7 +69,7 @@
     <Compile Include="ConcreteHandlers\HelpCommand\HelpDisplayer.cs" />
     <Compile Include="ConcreteHandlers\HelpCommand\IHelpDisplayer.cs" />
     <Compile Include="ConcreteHandlers\ICommand.cs" />
-    <Compile Include="ComandContainer\ICommandContainer.cs" />
+    <Compile Include="ConcreteHandlers\SetDate.cs" />
     <Compile Include="ConcreteHandlers\List.cs" />
     <Compile Include="ConcreteHandlers\Rename.cs" />
     <Compile Include="ConcreteHandlers\TaskFormatter\SingleTaskFormatter.cs" />
