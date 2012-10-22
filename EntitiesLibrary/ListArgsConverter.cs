@@ -17,9 +17,12 @@ namespace EntitiesLibrary
 
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            var s = value as string;
+            var s = value as List<string>;
+
             if (s != null)
-                return ConvertStringToArgs(s.Trim(new[] { ' ', '\'', '\"' }));
+            {
+                return s.Count > 0 ? ConvertStringToArgs(s[0]) : new ListArgs { Id = null };
+            }
 
             return base.ConvertFrom(context, culture, value);
         }
