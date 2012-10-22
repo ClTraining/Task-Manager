@@ -1,24 +1,23 @@
 using System.Collections.Generic;
 using FluentAssertions;
 using NSubstitute;
-using TaskManagerClientLibrary.ComandContainer;
 using TaskManagerClientLibrary.ConcreteHandlers;
 using Xunit;
 
-namespace TaskManagerClientLibrary
+namespace TaskManagerClientLibrary.ComandContainer
 {
     public class CommandContainer : ICommandContainer
     {
-        private readonly List<ICommand> commands;
+        private readonly IEnumerable<ICommand> commands;
 
-        public CommandContainer(List<ICommand> commands)
+        public CommandContainer(IEnumerable<ICommand> commands)
         {
             this.commands = commands;
         }
 
         #region ICommandContainer Members
 
-        public List<ICommand> GetCommands()
+        public IEnumerable<ICommand> GetCommands()
         {
             return commands;
         }
