@@ -1,4 +1,7 @@
 ﻿namespace Specifications.ClientSpecification
 {
-    public interface IClientSpecification { }
+    public interface IClientSpecification
+    {
+        object Data { get; set; }
+    }
 }

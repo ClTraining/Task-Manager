@@ -4,18 +4,11 @@ namespace Specifications.ServiceSpecifications
 {
     public class ListSingleServiceSpecification : IServiceSpecification
     {
-        private readonly int id;
-
-        public ListSingleServiceSpecification() {}
-
-        public ListSingleServiceSpecification(int id)
-        {
-            this.id = id;
-        }
+        public object Data { get; set; }
 
         public bool IsSatisfied(ServiceTask task)
         {
-            return id == task.Id;
+            return (int)Data == task.Id;
         }
     }
 }

@@ -1,12 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
-using AutoMapper;
 using EntitiesLibrary;
-using FluentAssertions;
-using NSubstitute;
+using Ninject;
+using Ninject.Extensions.Conventions;
+using Ninject.Modules;
 using Specifications.ClientSpecification;
-using Specifications.Mappers;
 using Specifications.ServiceSpecifications;
 using TaskManagerServiceLibrary.Repositories;
 using TaskManagerServiceLibrary.TaskManager;
@@ -37,41 +36,48 @@ namespace TaskManagerServiceLibrary
         public List<ContractTask> GetTasks(IClientSpecification specification)
         {
             var res = list.First(x => x.GetType().Name.Contains(specification.GetType().Name));
-
+            res.Data = specification.Data;
             return repository.GetTasks(res);
         }
     }
 
     public class TaskManagerServiceTests
     {
-        private readonly List<IServiceSpecification> specs;
-
-        public TaskManagerServiceTests(List<IServiceSpecification> specs)
-        {
-            this.specs = specs;
-        }
-
         [Fact]
         public void should_get_tasks_from_repository()
         {
-//            const int id = 3;
-//            var cSpec = new ListSingle(id);
-//
-//            var repo = new MemoRepository();
-//            var todolist = new ToDoList(repo);
-//
-//            var service = new TaskManagerService(repo, specs, todolist);
-//
-//            var tasks = new[] { "task1", "task2", "task3", "task4", "task5", "task6", "task7", "task8", "task9" };
-//
-//            tasks.ToList().ForEach(x => service.AddTask(x));
-//
-//            var result = service.GetTasks(cSpec);
-//
-//            foreach (var task in result)
-//            {
-//                Console.Out.WriteLine(task.Id + " " + task.Name);
-//            }
+            List<IServiceSpecification> specs = new StandardKernel(new MyModule()).GetAll<IServiceSpecification>().ToList();
+
+            object id = 3;
+            var cSpec = new ListSingle(4);
+
+            var repo = new MemoRepository();
+            var todolist = new ToDoList(repo);
+
+            var service = new TaskManagerService(repo, specs, todolist);
+
+            var tasks = new[] { "task1", "task2", "task3", "task4", "task5", "task6", "task7", "task8", "task9" };
+
+            tasks.ToList().ForEach(x => service.AddTask(x));
+
+            var result = service.GetTasks(cSpec);
+
+            foreach (var task in result)
+            {
+                Console.Out.WriteLine(task.Id + " " + task.Name);
+            }
+        }
+
+        public class MyModule : NinjectModule
+        {
+            public override void Load()
+            {
+                this.Bind(a => a.FromAssemblyContaining<IServiceSpecification>()
+                                   .SelectAllClasses()
+                                   .InNamespaceOf<IServiceSpecification>()
+                                   .BindAllInterfaces()
+                    );
+            }
         }
     }
 }

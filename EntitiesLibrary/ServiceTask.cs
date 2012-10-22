@@ -1,4 +1,6 @@
-﻿namespace EntitiesLibrary
+﻿using System;
+
+namespace EntitiesLibrary
 {
     public class ServiceTask
     {
@@ -7,5 +9,7 @@
         public string Name { get; set; }
 
         public bool IsCompleted { get; set; }
+
+        public DateTime DueDate { get; set; }
     }
 }

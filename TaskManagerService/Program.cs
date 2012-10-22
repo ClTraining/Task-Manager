@@ -3,6 +3,7 @@ using System.ServiceModel;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
+using Specifications.ClientSpecification;
 using Specifications.ServiceSpecifications;
 using TaskManagerServiceLibrary;
 using TaskManagerServiceLibrary.Repositories;
@@ -39,11 +40,11 @@ namespace TaskManagerService
             Bind<IToDoList>().To<ToDoList>();
             Bind<ITaskMapper>().To<TaskMapper>();
 
-//            this.Bind(a => a.FromAssemblyContaining<IServiceSpecification>()
-//                .SelectAllClasses()
-//                .InheritedFrom<IServiceSpecification>()
-//                .BindAllInterfaces()
-//                );
+            this.Bind(a => a.FromAssemblyContaining<IServiceSpecification>()
+                               .SelectAllClasses()
+                               .InNamespaceOf<IServiceSpecification>()
+                               .BindAllInterfaces()
+                );
         }
     }
 

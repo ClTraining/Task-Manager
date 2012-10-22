@@ -47,11 +47,11 @@
     <Compile Include="ClientSpecification\ListByDate.cs" />
     <Compile Include="ClientSpecification\ListSingle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Mappers\ServiceMapper.cs" />
     <Compile Include="ServiceSpecifications\IServiceSpecification.cs" />
     <Compile Include="ServiceSpecifications\ListAllServiceSpecification.cs" />
     <Compile Include="ServiceSpecifications\ListByDateSpecification.cs" />
     <Compile Include="ServiceSpecifications\ListSingleServiceSpecification.cs" />
-    <Compile Include="Mappers\ServiceMapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">

@@ -5,6 +5,6 @@ namespace TaskManagerClientLibrary
 {
     public interface ICommandContainer
     {
-        IEnumerable<ICommand> GetCommands();
+        List<ICommand> GetCommands();
     }
 }

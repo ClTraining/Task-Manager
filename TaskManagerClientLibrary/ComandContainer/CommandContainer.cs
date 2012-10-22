@@ -8,14 +8,14 @@ namespace TaskManagerClientLibrary
 {
     public class CommandContainer : ICommandContainer
     {
-        private readonly IEnumerable<ICommand> commands;
+        private readonly List<ICommand> commands;
 
-        public CommandContainer(IEnumerable<ICommand> commands)
+        public CommandContainer(List<ICommand> commands)
         {
             this.commands = commands;
         }
 
-        public IEnumerable<ICommand> GetCommands()
+        public List<ICommand> GetCommands()
         {
             return commands;
         }
@@ -27,7 +27,7 @@ namespace TaskManagerClientLibrary
         public void should_return_collection_of_commands()
         {
             var command = Substitute.For<ICommand>();
-            IEnumerable<ICommand> commands = new List<ICommand> {command};
+            List<ICommand> commands = new List<ICommand> {command};
             var container = new CommandContainer(commands);
 
             var res = container.GetCommands();

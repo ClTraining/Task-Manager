@@ -44,7 +44,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
         [Fact]
         public void execute_method_test()
         {
-            IEnumerable<ICommand> commands = new List<ICommand> {command};
+            List<ICommand> commands = new List<ICommand> {command};
             container.GetCommands().Returns(commands);
             help.Execute(null);
             foreach (var c in commands)

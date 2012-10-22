@@ -1,17 +1,24 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
+using Specifications.ClientSpecification;
+using Specifications.ServiceSpecifications;
 
 namespace Specifications.Mappers
 {
-    public class ServiceMapper<T1, T2>
+    public class ServiceMapper
     {
-        public ServiceMapper()
+        readonly IClientSpecification sourceType;
+        readonly IServiceSpecification destinationType;
+        public ServiceMapper(IClientSpecification spec1, IServiceSpecification spec2)
         {
-            Mapper.CreateMap<T1, T2>();
+            sourceType = spec1;
+            destinationType = spec2;
+            Mapper.CreateMap(sourceType.GetType(), destinationType.GetType());
         }
 
-        public T2 ConvertToServiceSpec(T1 spec)
+        public IServiceSpecification ConvertToServiceSpec(IClientSpecification spec)
         {
-            return Mapper.Map<T1, T2>(spec);
+            return null;
         }
     }
 }
