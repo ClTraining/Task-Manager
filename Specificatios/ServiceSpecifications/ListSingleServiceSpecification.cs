@@ -1,11 +1,12 @@
 using EntitiesLibrary;
-using Specifications.ClientSpecification;
 
 namespace Specifications.ServiceSpecifications
 {
     public class ListSingleServiceSpecification : IServiceSpecification
     {
-        private int id;
+        private readonly int id;
+
+        public ListSingleServiceSpecification() {}
 
         public ListSingleServiceSpecification(int id)
         {

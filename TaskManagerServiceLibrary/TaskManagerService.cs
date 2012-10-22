@@ -54,24 +54,24 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_get_tasks_from_repository()
         {
-            const int id = 3;
-            var cSpec = new ListSingle(id);
-
-            var repo = new MemoRepository();
-            var todolist = new ToDoList(repo);
-
-            var service = new TaskManagerService(repo, specs, todolist);
-
-            var tasks = new[] { "task1", "task2", "task3", "task4", "task5", "task6", "task7", "task8", "task9" };
-
-            tasks.ToList().ForEach(x => service.AddTask(x));
-
-            var result = service.GetTasks(cSpec);
-
-            foreach (var task in result)
-            {
-                Console.Out.WriteLine(task.Id + " " + task.Name);
-            }
+//            const int id = 3;
+//            var cSpec = new ListSingle(id);
+//
+//            var repo = new MemoRepository();
+//            var todolist = new ToDoList(repo);
+//
+//            var service = new TaskManagerService(repo, specs, todolist);
+//
+//            var tasks = new[] { "task1", "task2", "task3", "task4", "task5", "task6", "task7", "task8", "task9" };
+//
+//            tasks.ToList().ForEach(x => service.AddTask(x));
+//
+//            var result = service.GetTasks(cSpec);
+//
+//            foreach (var task in result)
+//            {
+//                Console.Out.WriteLine(task.Id + " " + task.Name);
+//            }
         }
     }
 }
