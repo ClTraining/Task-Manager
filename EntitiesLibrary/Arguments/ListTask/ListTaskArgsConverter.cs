@@ -49,6 +49,7 @@ namespace EntitiesLibrary.Arguments.ListTask
             var result = convertFrom as ListTaskArgs;
 
             result.Id.Should().Be(1233334);
+            result.Date.Should().Be(default(DateTime));
         }
         [Fact]
         public void should_extract_date_argument()
@@ -57,6 +58,7 @@ namespace EntitiesLibrary.Arguments.ListTask
             var result = convertFrom as ListTaskArgs;
 
             result.Date.Should().Be(15.March(1988));
+            result.Id.Should().Be(0);
         }
     }
 }

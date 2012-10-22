@@ -1,13 +1,17 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.ServiceModel;
+using AutoMapper;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
+using Specifications.ClientSpecification;
+using Specifications.Mappers;
+using Specifications.ServiceSpecifications;
 using TaskManagerServiceLibrary.Repositories;
-using TaskManagerServiceLibrary.Specifications;
 using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
+using System.Linq;
 
 namespace TaskManagerServiceLibrary
 {
@@ -16,11 +20,12 @@ namespace TaskManagerServiceLibrary
     {
         private readonly IRepository repository;
         private readonly IToDoList taskList;
+        private readonly List<IServiceSpecification> list;
 
-        public TaskManagerService(IRepository repository, IToDoList list)
+        public TaskManagerService(IRepository repository, IToDoList taskList, List<IServiceSpecification> list)
         {
             this.repository = repository;
-            taskList = list;
+            this.list = list;
         }
 
         public int AddTask(string task)
@@ -28,14 +33,10 @@ namespace TaskManagerServiceLibrary
             return taskList.AddTask(task);
         }
 
-        public List<ContractTask> GetTasks(int? id)
+        public List<ContractTask> GetTasks(IClientSpecification specification)
         {
-            return null;
-        }
-
-        public List<ContractTask> GetTasks(ISpecification specification)
-        {
-            return repository.GetTasks(specification);
+            var spec = list.First(x => x.GetType().Name.StartsWith(specification.GetType().Name));
+            return repository.GetTasks();
         }
     }
 
@@ -44,7 +45,6 @@ namespace TaskManagerServiceLibrary
         private readonly ITaskManagerService service;
         private readonly IToDoList list = Substitute.For<IToDoList>();
         private readonly IRepository repo = Substitute.For<IRepository>();
-        private readonly ISpecification spec = Substitute.For<ISpecification>();
 
         public TaskManagerServiceTests()
         {
@@ -62,16 +62,17 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_get_task_by_id_and_return_task()
         {
-            var task = new ContractTask {Id = 1};
+            IClientSpecification spec = new ListSingle(1);
+            var task = new ContractTask { Id = 1 };
             list.GetTaskById(1).Returns(task);
-            var res = service.GetTaskById(1);
+            var res = service.GetTasks();
             res.Should().Be(task);
         }
 
         [Fact]
         public void should_get_all_taasks()
         {
-            var listTasks = new List<ContractTask> {new ContractTask {Id = 1, Name = "some", IsCompleted = false}};
+            var listTasks = new List<ContractTask> { new ContractTask { Id = 1, Name = "some", IsCompleted = false } };
             list.GetAllTasks().Returns(listTasks);
             var res = service.GetAllTasks();
             res.Should().BeEquivalentTo(listTasks);
@@ -87,7 +88,7 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_send_rename_task()
         {
-            var args = new RenameTaskArgs() {Id = 1, Name = "task name"};
+            var args = new RenameTaskArgs() { Id = 1, Name = "task name" };
             service.RenameTask(args);
             list.Received().RenameTask(args);
         }

@@ -60,14 +60,10 @@
     <Compile Include="Arguments\ListTask\ListTaskArgsConverter.cs" />
     <Compile Include="ContractTask.cs" />
     <Compile Include="Arguments\ListTask\ListTaskArgs.cs" />
-    <Compile Include="SpecificationContract\ISpecificationContract.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Arguments\RenameTask\RenameTaskArgs.cs" />
     <Compile Include="Arguments\RenameTask\RenameTaskArgsConverter.cs" />
     <Compile Include="ServiceTask.cs" />
-    <Compile Include="SpecificationContract\ListAll.cs" />
-    <Compile Include="SpecificationContract\ListByDate.cs" />
-    <Compile Include="SpecificationContract\ListSingle.cs" />
     <Compile Include="TaskNotFoundException.cs" />
   </ItemGroup>
   <ItemGroup>
