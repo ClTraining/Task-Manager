@@ -9,8 +9,8 @@ namespace ConnectToWcf
         int AddTask(AddTaskArgs task);
         List<ContractTask> GetTasks(IClientSpecification id);
         
-        void MarkTaskAsCompleted(CompleteTaskArgs id);
-        void RenameTask(RenameTaskArgs args);
+        //void MarkTaskAsCompleted(CompleteTaskArgs id);
+        //void RenameTask(RenameTaskArgs args);
         void SetTaskDueDate(SetDateArgs args);
     }
 }

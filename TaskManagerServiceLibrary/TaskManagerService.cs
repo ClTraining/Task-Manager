@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
+using NSubstitute;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
@@ -28,8 +29,6 @@ namespace TaskManagerServiceLibrary
             this.taskList = taskList;
         }
 
-        #region ITaskManagerService Members
-
         public int AddTask(AddTaskArgs task)
         {
             return taskList.AddTask(task);
@@ -41,64 +40,74 @@ namespace TaskManagerServiceLibrary
             res.Data = specification.Data;
             return repository.GetTasks(res);
         }
-    }
 
-        public void MarkTaskAsCompleted(CompleteTaskArgs args)
-    {
-            taskList.MarkTaskAsCompleted(args);
-        public void should_get_tasks_from_repository()
+        public void MarkTaskAsCompleted(CompleteTaskArgs id)
         {
-            List<IServiceSpecification> specs = new StandardKernel(new MyModule()).GetAll<IServiceSpecification>().ToList();
-
-            object id = 3;
-            var cSpec = new ListSingle(4);
+        }
 
         public void SetTaskDueDate(SetDateArgs args)
         {
             taskList.SetTaskDueDate(args);
         }
+    }
 
-        #endregion
-    
-            var repo = new MemoRepository();
-            var todolist = new ToDoList(repo);
-        private readonly ITaskManagerService service;
+    public class TaskManagerTests
+    {
+        private readonly List<IServiceSpecification> specs = new StandardKernel(new MyModule()).GetAll<IServiceSpecification>().ToList();
+        readonly IRepository repo = new MemoRepository(new TaskMapper());
+        readonly IToDoList todolist;
 
-            var service = new TaskManagerService(repo, specs, todolist);
+        readonly ITaskManagerService service;
 
-            var tasks = new[] { "task1", "task2", "task3", "task4", "task5", "task6", "task7", "task8", "task9" };
+        public TaskManagerTests()
+        {
+            todolist = new ToDoList(repo);
+            service = new TaskManagerService(repo, specs, todolist);
+        }
+
+        [Fact]
+        public void should_get_tasks()
+        {
+
+            object id = 3;
+            var cSpec = new ListSingle(4);
+
+
+
+            var tasks = new[] {"task1", "task2", "task3", "task4", "task5", "task6", "task7", "task8", "task9"};
+
             var addTaskArgs = new AddTaskArgs {Name = "some task"};
-            list.AddTask(addTaskArgs).Returns(1);
-            int res = service.AddTask(addTaskArgs);
 
-            tasks.ToList().ForEach(x => service.AddTask(x));
-            ContractTask res = service.GetTaskById(1);
+            var res = service.AddTask(addTaskArgs);
+
+            tasks.ToList().ForEach(a => service.AddTask(new AddTaskArgs{Name = a}));
 
             var result = service.GetTasks(cSpec);
-            List<ContractTask> res = service.GetAllTasks();
 
             foreach (var task in result)
             {
-            var completeTaskArgs = new CompleteTaskArgs {Id = 1};
-            service.MarkTaskAsCompleted(completeTaskArgs);
-            list.Received().MarkTaskAsCompleted(completeTaskArgs);
             }
-            var args = new RenameTaskArgs {Id = 1, Name = "task name"};
-        }
-
-        public class MyModule : NinjectModule
-        {
-            bool result = service.TestConnection();
-            {
         }
 
         [Fact]
         public void should_send_set_date_for_task()
         {
             var dateTime = DateTime.Now;
-             var args = new SetDateArgs { Id = 1, DueDate = dateTime};
+            var args = new SetDateArgs {Id = 1, DueDate = dateTime};
             service.SetTaskDueDate(args);
-            list.Received().SetTaskDueDate(args);
+            todolist.Received().SetTaskDueDate(args);
+        }
+    }
+
+    public class MyModule : NinjectModule
+    {
+        public override void Load()
+        {
+            this.Bind(x => x.FromAssemblyContaining<IServiceSpecification>()
+                               .SelectAllClasses()
+                               .InNamespaceOf<IServiceSpecification>()
+                               .BindAllInterfaces()
+                );
         }
     }
 }

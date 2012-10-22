@@ -61,6 +61,7 @@
     <Compile Include="Application.cs" />
     <Compile Include="ArgumentConverter.cs" />
     <Compile Include="ComandContainer\CommandContainer.cs" />
+    <Compile Include="ComandContainer\ICommandContainer.cs" />
     <Compile Include="ConcreteHandlers\Add.cs" />
     <Compile Include="ConcreteHandlers\Command.cs" />
     <Compile Include="ConcreteHandlers\Complete.cs" />

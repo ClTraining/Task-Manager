@@ -18,10 +18,10 @@ namespace ConnectToWcf
             binding = new NetTcpBinding();
         }
 
-        public void RenameTask(RenameTaskArgs args)
-        {
-            UpdateDataOnServer(t => t.RenameTask(args));
-        }
+//        public void RenameTask(RenameTaskArgs args)
+//        {
+//            UpdateDataOnServer(t => t.RenameTask(args));
+//        }
 
         public int AddTask(AddTaskArgs task)
         {
@@ -33,15 +33,15 @@ namespace ConnectToWcf
             return GetDataFromServer(s => s.GetTasks(specification));
         }
 
-        public void RenameTask(RenameTaskArgs args)
-        {
-            return GetDataFromServer(s => s.GetAllTasks());
-        }
+//        public void RenameTask(RenameTaskArgs args)
+//        {
+//            return GetDataFromServer(s => s.GetAllTasks());
+//        }
 
-        public void Complete(int input)
-        {
-            UpdateDataOnServer(s => s.MarkTaskAsCompleted(id));
-        }
+//        public void Complete(int input)
+//        {
+//            UpdateDataOnServer(s => s.MarkTaskAsCompleted(input));
+//        }
 
         public void SetTaskDueDate(SetDateArgs args)
         {

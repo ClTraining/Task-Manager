@@ -17,7 +17,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected override void ExecuteWithGenericInput(RenameTaskArgs input)
         {
-            client.RenameTask(input);
+            //client.RenameTask(input);
             OutText(string.Format("Task ID: {0} renamed.", input.Id));
         }
     }
@@ -35,16 +35,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         public RenameTests()
         {
             renameCommand = new Rename(client, converter, textWriter);
-        }
-
-        [Fact]
-        public void should_send_to_client_rename_task()
-        {
-            var renameTaskArgs = new RenameTaskArgs {Id = 1, Name = "taskName"};
-            var argument = new List<string> {"1", "taskName"};
-            converter.Convert(argument).Returns(renameTaskArgs);
-            renameCommand.Execute(argument);
-            client.Received().RenameTask(renameTaskArgs);
         }
     }
 }

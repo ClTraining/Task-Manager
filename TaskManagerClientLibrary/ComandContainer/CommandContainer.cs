@@ -17,7 +17,7 @@ namespace TaskManagerClientLibrary
 
         #region ICommandContainer Members
 
-        public IEnumerable<ICommand> GetCommands()
+        public List<ICommand> GetCommands()
         {
             return commands;
         }

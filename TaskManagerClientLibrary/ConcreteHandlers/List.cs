@@ -22,13 +22,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             this.taskFormatterFactory = taskFormatterFactory;
         }
 
-        protected override void ExecuteWithGenericInput(ListArgs input)
-        {
-            if (input.Id == null)
-                GetTasksAndPrint(s => s.GetAllTasks(), taskFormatterFactory.GetListFormatter());
-            else
-                GetTasksAndPrint(s => s.GetTaskById(input.Id.Value), taskFormatterFactory.GetSingleFormatter());
-        }
 
         private void GetTasksAndPrint(Func<IClientConnection, List<ContractTask>> func, ITaskFormatter formatter)
         {
@@ -36,7 +29,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             OutText(formatter.Show(tasks));
         }
 
-        protected override void ExecuteWithGenericInput(ListTaskArgs input)
+        protected override void ExecuteWithGenericInput(ListArgs input)
         {
             if (input.Date == default(DateTime) && input.Id == 0)
                 GetTasksAndPrint(s => s.GetTasks(new ListAll()), taskFormatterFactory.GetListFormatter());
@@ -63,35 +56,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             taskFormatterFactory.GetSingleFormatter().Returns(formatter1);
             taskFormatterFactory.GetListFormatter().Returns(formatter2);
         }
-
-        [Fact]
-        public void should_check_receiving_one_task()
-        {
-            var argument = new List<string> {"1"};
-            converter.Convert(argument).Returns(new ListArgs {Id = 1});
-            var taskList = new List<ContractTask> {new ContractTask {Id = 1, Name = "some", IsCompleted = false}};
-            client.GetTaskById(1).Returns(taskList);
-            list.Execute(argument);
-            formatter1.Received().Show(taskList);
-        }
-
-        [Fact]
-        public void should_execute_in_client_receiving_show_all_tasks()
-        {
-            var argument = new List<string> {""};
-            converter.Convert(argument).Returns(new ListArgs {Id = null});
-            list.Execute(argument);
-            var argument = new List<string> {""};
-            converter.Convert(argument).Returns(new ListArgs {Id = null});
-            var taskList = new List<ContractTask>
-                               {
-                                   new ContractTask {Id = 1, Name = "task1", IsCompleted = false},
-                                   new ContractTask {Id = 2, Name = "task2", IsCompleted = true}
-                               };
-            client.GetAllTasks().Returns(taskList);
-            list.Execute(argument);
-            var arguments = new List<string> {"1"};
-            converter.Convert(arguments).Returns(new ListArgs {Id = 1});
-            list.Execute(arguments);
     }
+
 }

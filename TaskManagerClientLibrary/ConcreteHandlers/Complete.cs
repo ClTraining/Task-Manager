@@ -17,7 +17,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected override void ExecuteWithGenericInput(CompleteTaskArgs input)
         {
-            client.MarkTaskAsCompleted(input);
+            //client.MarkTaskAsCompleted(input);
             OutText(string.Format("Task ID: {0} completed.", input.Id));
         }
     }
@@ -35,16 +35,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         public CompleteTests()
         {
             handler = new Complete(client, converter, new StringWriter());
-        }
-
-        [Fact]
-        public void should_send_string_return_id()
-        {
-            var completeTaskArgs = new CompleteTaskArgs {Id = 5};
-            var arguments = new List<string> {"5"};
-            converter.Convert(arguments).Returns(completeTaskArgs);
-            handler.Execute(arguments);
-            client.Received().MarkTaskAsCompleted(completeTaskArgs);
         }
     }
 }

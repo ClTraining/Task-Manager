@@ -59,14 +59,6 @@ namespace TaskManagerClientLibrary
         }
 
         [Fact]
-        public void should_get_list_all_task_args()
-        {
-            var tc = new ArgumentConverter<ListArgs>();
-            var result = tc.Convert(new List<string>());
-            result.ShouldBeEquivalentTo(new ListArgs {Id = null});
-        }
-
-        [Fact]
         public void should_convert_set_date_args()
         {
             var tc = new ArgumentConverter<SetDateArgs>();
