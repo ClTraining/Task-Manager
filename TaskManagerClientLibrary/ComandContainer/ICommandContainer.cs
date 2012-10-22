@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using TaskManagerClientLibrary.ConcreteHandlers;
 
-namespace TaskManagerClientLibrary
+namespace TaskManagerClientLibrary.ComandContainer
 {
     public interface ICommandContainer
     {

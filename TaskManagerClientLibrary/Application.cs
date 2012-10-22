@@ -3,6 +3,7 @@ using ConnectToWcf;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
+using TaskManagerClientLibrary.ComandContainer;
 using TaskManagerClientLibrary.ConcreteHandlers;
 
 namespace TaskManagerClientLibrary
