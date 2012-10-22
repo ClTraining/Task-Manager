@@ -1,5 +1,4 @@
 ﻿using EntitiesLibrary;
-using Specifications.ClientSpecification;
 
 namespace Specifications.ServiceSpecifications
 {

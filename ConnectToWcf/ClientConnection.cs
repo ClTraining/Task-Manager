@@ -28,6 +28,14 @@ namespace ConnectToWcf
             return GetDataFromServer(s => s.GetTasks(specification));
         }
 
+        public void RenameTask(RenameTaskArgs args)
+        {
+        }
+
+        public void Complete(int input)
+        {
+        }
+
         private void UpdateDataOnServer(Action<ITaskManagerService> action)
         {
             GetDataFromServer<object>(s =>

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using EntitiesLibrary;
 using FluentAssertions;
+using Specifications.ServiceSpecifications;
 using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
 
@@ -23,23 +24,15 @@ namespace TaskManagerServiceLibrary.Repositories
             return serviceTask.Id;
         }
 
-        public List<ContractTask> GetTasks()
+        public List<ContractTask> GetTasks(IServiceSpecification spec)
         {
             var taskMapper = new TaskMapper();
 
             return taskList
+                .Where(spec.IsSatisfied)
                 .Select(taskMapper.ConvertToContract)
                 .ToList();
         }
-
-//        public ServiceTask GetTaskById(int id)
-//        {
-//            var index = id - 1;
-//            if (index < 0 || index >= taskList.Count)
-//                throw new TaskNotFoundException(id.ToString());
-//
-//            return taskList[index];
-//        }
 
         public void Complete(int id)
         {

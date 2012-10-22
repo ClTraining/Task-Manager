@@ -2,11 +2,11 @@
 {
     public class ListSingle : IClientSpecification
     {
-        public int ID { get; private set; }
+        private int id;
 
         public ListSingle(int id)
         {
-            ID = id;
+            this.id = id;
         }
     }
 }

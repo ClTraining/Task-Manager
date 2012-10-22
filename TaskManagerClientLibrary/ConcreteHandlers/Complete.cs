@@ -27,7 +27,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         private readonly ArgumentConverter<int> converter = Substitute.For<ArgumentConverter<int>>();
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
         private readonly Complete handler;
-        const string taskName = "sometask1";
 
         public CompleteTests()
         {

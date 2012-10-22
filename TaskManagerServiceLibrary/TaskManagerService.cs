@@ -22,10 +22,11 @@ namespace TaskManagerServiceLibrary
         private readonly IToDoList taskList;
         private readonly List<IServiceSpecification> list;
 
-        public TaskManagerService(IRepository repository, IToDoList taskList, List<IServiceSpecification> list)
+        public TaskManagerService(IRepository repository, List<IServiceSpecification> list, IToDoList taskList)
         {
             this.repository = repository;
             this.list = list;
+            this.taskList = taskList;
         }
 
         public int AddTask(string task)
@@ -35,69 +36,42 @@ namespace TaskManagerServiceLibrary
 
         public List<ContractTask> GetTasks(IClientSpecification specification)
         {
-            var spec = list.First(x => x.GetType().Name.StartsWith(specification.GetType().Name));
-            return repository.GetTasks();
+            var res = list.First(x => x.GetType().Name.Contains(specification.GetType().Name));
+
+            return repository.GetTasks(res);
         }
     }
 
     public class TaskManagerServiceTests
     {
-        private readonly ITaskManagerService service;
-        private readonly IToDoList list = Substitute.For<IToDoList>();
-        private readonly IRepository repo = Substitute.For<IRepository>();
+        private readonly List<IServiceSpecification> specs;
 
-        public TaskManagerServiceTests()
+        public TaskManagerServiceTests(List<IServiceSpecification> specs)
         {
-            service = new TaskManagerService(repo, list);
+            this.specs = specs;
         }
 
         [Fact]
-        public void should_create_task_and_return_taskid()
+        public void should_get_tasks_from_repository()
         {
-            list.AddTask("some task").Returns(1);
-            var res = service.AddTask("some task");
-            res.Should().Be(1);
-        }
+            const int id = 3;
+            var cSpec = new ListSingle(id);
 
-        [Fact]
-        public void should_get_task_by_id_and_return_task()
-        {
-            IClientSpecification spec = new ListSingle(1);
-            var task = new ContractTask { Id = 1 };
-            list.GetTaskById(1).Returns(task);
-            var res = service.GetTasks();
-            res.Should().Be(task);
-        }
+            var repo = new MemoRepository();
+            var todolist = new ToDoList(repo);
 
-        [Fact]
-        public void should_get_all_taasks()
-        {
-            var listTasks = new List<ContractTask> { new ContractTask { Id = 1, Name = "some", IsCompleted = false } };
-            list.GetAllTasks().Returns(listTasks);
-            var res = service.GetAllTasks();
-            res.Should().BeEquivalentTo(listTasks);
-        }
+            var service = new TaskManagerService(repo, specs, todolist);
 
-        [Fact]
-        public void should_send_id_receive_completed_value()
-        {
-            service.Complete(1);
-            list.Received().Complete(1);
-        }
+            var tasks = new[] { "task1", "task2", "task3", "task4", "task5", "task6", "task7", "task8", "task9" };
 
-        [Fact]
-        public void should_send_rename_task()
-        {
-            var args = new RenameTaskArgs() { Id = 1, Name = "task name" };
-            service.RenameTask(args);
-            list.Received().RenameTask(args);
-        }
+            tasks.ToList().ForEach(x => service.AddTask(x));
 
-        [Fact]
-        public void test_connection_should_return_always_true()
-        {
-            var result = service.TestConnection();
-            result.Should().Be(true);
+            var result = service.GetTasks(cSpec);
+
+            foreach (var task in result)
+            {
+                Console.Out.WriteLine(task.Id + " " + task.Name);
+            }
         }
     }
 }
