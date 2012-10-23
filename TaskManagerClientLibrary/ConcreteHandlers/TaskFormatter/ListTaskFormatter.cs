@@ -60,10 +60,11 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
         {
             var formatter = new ListTaskFormatter();
             var sb = new StringBuilder();
-            sb.Append(
-                formatter.Show(new List<ContractTask> {new ContractTask {Id = 1, Name = "abcd123456789000000000000"}}));
-            sb.ToString().Should().Be(
-                "Id    |            Name |     Completed |             Due date\r\n1     | abcd12345678900 |             - | 1/1/0001 12:00:00 AM\r\n");
+            sb.Append(formatter.Show(new List<ContractTask> { new ContractTask { Id = 1, Name = "abcd123456789000000000000" } }));
+
+            var expected = string.Format("Id    |            Name |     Completed |             Due date\r\n1     | abcd12345678900 |             - |   {0}\r\n", default(DateTime));
+
+            sb.ToString().Should().Be(expected);
         }
     }
 }
