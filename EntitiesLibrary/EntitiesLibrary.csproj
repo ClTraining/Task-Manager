@@ -58,12 +58,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandArguments\AddTaskArgs.cs" />
+    <Compile Include="CommandArguments\ClearDateArgs.cs" />
     <Compile Include="CommandArguments\CompleteTaskArgs.cs" />
     <Compile Include="CommandArguments\ListArgs.cs" />
     <Compile Include="CommandArguments\RenameTaskArgs.cs" />
     <Compile Include="CommandArguments\SetDateArgs.cs" />
     <Compile Include="ContractTask.cs" />
     <Compile Include="Converter\AddTaskArgsConverter.cs" />
+    <Compile Include="Converter\ClearDateArgsConverter.cs" />
     <Compile Include="Converter\CompleteTaskArgsConverter.cs" />
     <Compile Include="Converter\ListArgsConverter.cs" />
     <Compile Include="Converter\RenameTaskArgsConverter.cs" />

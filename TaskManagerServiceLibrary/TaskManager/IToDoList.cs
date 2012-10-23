@@ -12,5 +12,6 @@ namespace TaskManagerServiceLibrary.TaskManager
         void MarkTaskAsCompleted(CompleteTaskArgs id);
         void RenameTask(RenameTaskArgs args);
         void SetTaskDueDate(SetDateArgs args);
+        void ClearTaskDueDate(ClearDateArgs args);
     }
 }

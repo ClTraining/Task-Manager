@@ -55,6 +55,11 @@ namespace TaskManagerServiceLibrary.TaskManager
             repository.SetTaskDueDate(args);
         }
 
+        public void ClearTaskDueDate(ClearDateArgs args)
+        {
+            repository.ClearTaskDueDate(args);
+        }
+
         #endregion
     }
 
@@ -128,6 +133,14 @@ namespace TaskManagerServiceLibrary.TaskManager
             var args = new SetDateArgs {Id = 1, DueDate = DateTime.Now};
             todolist.SetTaskDueDate(args);
             repository.Received().SetTaskDueDate(args);
+        }
+
+        [Fact]
+        public void should_send_clear_task_due_date_to_repository()
+        {
+            var args = new ClearDateArgs { Id = 2 };
+            todolist.ClearTaskDueDate(args);
+            repository.Received().ClearTaskDueDate(args);
         }
     }
 }

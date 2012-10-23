@@ -28,5 +28,8 @@ namespace TaskManagerServiceLibrary
 
         [OperationContract]
         void SetTaskDueDate(SetDateArgs args);
+
+        [OperationContract]
+        void ClearTaskDueDate(ClearDateArgs args);
     }
 }

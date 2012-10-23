@@ -57,6 +57,11 @@ namespace TaskManagerServiceLibrary
             taskList.SetTaskDueDate(args);
         }
 
+        public void ClearTaskDueDate(ClearDateArgs args)
+        {
+            taskList.ClearTaskDueDate(args);
+        }
+
         #endregion
     }
 
@@ -127,6 +132,15 @@ namespace TaskManagerServiceLibrary
             var args = new SetDateArgs {Id = 1, DueDate = dateTime};
             service.SetTaskDueDate(args);
             list.Received().SetTaskDueDate(args);
+        }
+
+        [Fact]
+        public void should_send_clear_date_for_task()
+        {
+            var dateTime = DateTime.Now;
+            var args = new ClearDateArgs { Id = 1};
+            service.ClearTaskDueDate(args);
+            list.Received().ClearTaskDueDate(args);
         }
     }
 }

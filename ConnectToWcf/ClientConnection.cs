@@ -50,6 +50,11 @@ namespace ConnectToWcf
             UpdateDataOnServer(s => s.SetTaskDueDate(args));
         }
 
+        public void ClearTaskDueDate(ClearDateArgs args)
+        {
+            UpdateDataOnServer(s => s.ClearTaskDueDate(args));
+        }
+
         #endregion
 
         private void UpdateDataOnServer(Action<ITaskManagerService> action)

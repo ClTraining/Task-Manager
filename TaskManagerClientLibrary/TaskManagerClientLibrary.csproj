@@ -62,6 +62,7 @@
     <Compile Include="ArgumentConverter.cs" />
     <Compile Include="CommandContainer.cs" />
     <Compile Include="ConcreteHandlers\Add.cs" />
+    <Compile Include="ConcreteHandlers\ClearDate.cs" />
     <Compile Include="ConcreteHandlers\Command.cs" />
     <Compile Include="ConcreteHandlers\Complete.cs" />
     <Compile Include="ConcreteHandlers\Exit.cs" />

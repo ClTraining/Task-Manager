@@ -54,6 +54,11 @@ namespace TaskManagerServiceLibrary.Repositories
             GetTaskById(args.Id).DueDate = args.DueDate;
         }
 
+        public void ClearTaskDueDate(ClearDateArgs args)
+        {
+            GetTaskById(args.Id).DueDate = default(DateTime);
+        }
+
         #endregion
 
         private int GetNewId()
@@ -132,6 +137,15 @@ namespace TaskManagerServiceLibrary.Repositories
             var dateTime = DateTime.Now;
             repository.SetTaskDueDate(new SetDateArgs {Id = taskId, DueDate = dateTime});
             repository.GetTaskById(taskId).DueDate.Should().Be(dateTime);
+        }
+
+        [Fact]
+        public void shoud_clear_task_due_date()
+        {
+            var dateTime = DateTime.Now;
+            var taskId = repository.AddTask(new AddTaskArgs { Name = "tt" ,DueDate = dateTime});
+            repository.ClearTaskDueDate(new ClearDateArgs {Id = taskId});
+            repository.GetTaskById(taskId).DueDate.Should().Be(default(DateTime));
         }
     }
 }
