@@ -1,12 +1,9 @@
-﻿using System.Collections;
-using System.Runtime.Serialization;
+﻿using System.Runtime.Serialization;
 
 namespace Specifications.ClientSpecification
 {
-    [DataContract]
     public class ListSingle : IClientSpecification
     {
-        [DataMember]
-        public int Id { get; set; }
+        public object Data { get; set; }
     }
 }

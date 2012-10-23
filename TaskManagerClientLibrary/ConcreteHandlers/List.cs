@@ -32,14 +32,20 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected override void ExecuteWithGenericInput(ListArgs input)
         {
-//            if (input.Date == default(DateTime) && input.Id == null)
-//                pack.Spec = new ListAll();
-//            if (input.Date != default(DateTime) && input.Id == 0)
-//                pack.Spec = new ListByDate(input.Date);
-//            if (input.Date == default(DateTime) && input.Id != null)
-              object data = new ListSingle { Id = input.Id.Value };
+            object data;
 
-            GetTasksAndPrint(s => s.GetTasks(data), taskFormatterFactory.GetListFormatter());
+            if (input.Date != default(DateTime) && input.Id == 0)
+                data = new ListByDate{Data = input.Date};
+
+            else if (input.Date == default(DateTime) && input.Id != null)
+                data = new ListSingle { Data = input.Id.Value };
+
+            else data = new ListAll { Data = null };
+
+            GetTasksAndPrint(s => s.GetTasks(data), input.Id == null
+                                                        ? taskFormatterFactory.GetListFormatter()
+                                                        : taskFormatterFactory.GetSingleFormatter()
+                );
         }
     }
 
