@@ -18,7 +18,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
             tasks.ForEach(
                 x =>
                 taskString.Append(String.Format(Format, x.Id, x.Name, x.IsCompleted ? "+" : "-",
-                                                x.DueDate == default(DateTime) ? " not set" : x.DueDate.ToString())));
+                                                x.DueDate == default(DateTime) ? "not set" : x.DueDate.ToString())));
 
             return taskString.ToString();
         }
@@ -33,7 +33,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
             var tasks = new List<ContractTask> {new ContractTask {Id = 1, Name = "task1", IsCompleted = false}};
             var formatter = new SingleTaskFormatter();
             sb.Append(formatter.Show(tasks));
-            sb.ToString().Should().Be("\nID:		1\nName:		task1\nCompleted:	-\nDue date:	 not set\n\n");
+            sb.ToString().Should().Be("\nID:		1\nName:		task1\nCompleted:	-\nDue date:	not set\n\n");
         }
     }
 }
