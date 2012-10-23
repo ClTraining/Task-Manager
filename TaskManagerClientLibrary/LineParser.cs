@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -24,7 +25,7 @@ namespace TaskManagerClientLibrary
         {
             var args = ParceInput(input);
 
-            var command = commands.First(a => a.Name == args[0]);
+            var command = commands.FirstOrDefault(a => a.Name == args[0]);
             if (command == null)
                 Console.WriteLine("No such command");
             else
@@ -34,10 +35,10 @@ namespace TaskManagerClientLibrary
             }
         }
 
-        private List<string> ParceInput(string input)
+        public List<string> ParceInput(string input)
         {
-            var inputArr = input.Split(new[] {' '}, 2);
-            var arguments = new List<string> {inputArr[0]};
+            var inputArr = input.Split(new[] { ' ' }, 2);
+            var arguments = new List<string> { inputArr[0] };
 
             if (inputArr.Count() > 1)
             {
@@ -45,10 +46,10 @@ namespace TaskManagerClientLibrary
                 const string pattern = "(?:^|,)(\"(?:[^\"]+|\"\")*\"|[^,]*)";
                 var exp = new Regex(pattern);
                 arguments.AddRange(exp.Split(argumentsStr));
-            }
+                }
 
             var parceInput =
-                arguments.Where(s => !String.IsNullOrEmpty(s)).Select(s => s.Trim(new[] {'\'', '\"', ' ', '\t'})).ToList
+                arguments.Where(s => !String.IsNullOrEmpty(s)).Select(s => s.Trim(new[] { '\'', '\"', ' ', '\t' })).ToList
                     ();
             return parceInput;
         }
@@ -64,9 +65,16 @@ namespace TaskManagerClientLibrary
 
         public LineParserTests()
         {
-            commands = new List<ICommand> {command1, command2, command3};
+            commands = new List<ICommand> { command1, command2, command3 };
 
             lp = new LineParser(commands);
+        }
+
+        [Fact]
+        public void should_recognize_question_mark()
+        {
+            var parceInput = lp.ParceInput("?");
+            parceInput.Should().BeEquivalentTo(new List<string> { "?" });
         }
 
         [Fact]
@@ -77,7 +85,7 @@ namespace TaskManagerClientLibrary
             command3.Name.Returns("hello");
 
             lp.ExecuteCommand("add foo");
-            command1.ReceivedWithAnyArgs().Execute(new List<string> {"foo"});
+            command1.ReceivedWithAnyArgs().Execute(new List<string> { "foo" });
         }
 
         [Fact]
@@ -88,7 +96,7 @@ namespace TaskManagerClientLibrary
 
             lp.ExecuteCommand("add aaa");
 
-            command1.ReceivedWithAnyArgs().Execute(new List<string> {"aaa"});
+            command1.ReceivedWithAnyArgs().Execute(new List<string> { "aaa" });
             command2.DidNotReceiveWithAnyArgs().Execute("aaa");
         }
 
@@ -126,7 +134,7 @@ namespace TaskManagerClientLibrary
         {
             command1.Name.Returns("add");
             lp.ExecuteCommand("add \"hello world\"");
-            var argument = new List<string> {"hello world"};
+            var argument = new List<string> { "hello world" };
             command1.ReceivedWithAnyArgs().Execute(argument);
         }
 
@@ -135,7 +143,7 @@ namespace TaskManagerClientLibrary
         {
             command1.Name.Returns("add");
             lp.ExecuteCommand("add \'hello world\'");
-            var argument = new List<string> {"hello world"};
+            var argument = new List<string> { "hello world" };
             command1.ReceivedWithAnyArgs().Execute(argument);
         }
     }
