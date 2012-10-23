@@ -4,12 +4,11 @@ using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
 {
-    public class TaskFormatterFactory
+    public class TaskFormatterFactory : ITaskFormatterFactory
     {
         private readonly ListTaskFormatter listTaskFormatter;
         private readonly SingleTaskFormatter singleTaskFormatter;
 
-        public TaskFormatterFactory(){ }
         public TaskFormatterFactory(SingleTaskFormatter singleTaskFormatter, ListTaskFormatter listTaskFormatter)
         {
             this.listTaskFormatter = listTaskFormatter;

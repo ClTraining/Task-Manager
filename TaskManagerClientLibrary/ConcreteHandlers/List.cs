@@ -14,10 +14,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class List : Command<ListArgs>
     {
-        private readonly TaskFormatterFactory taskFormatterFactory;
+        private readonly ITaskFormatterFactory taskFormatterFactory;
 
         public List(IClientConnection client, ArgumentConverter<ListArgs> converter, TextWriter textWriter,
-                    TaskFormatterFactory taskFormatterFactory)
+                    ITaskFormatterFactory taskFormatterFactory)
             : base(client, converter, textWriter)
         {
             Description = "Displays list of all tasks or single task, specified by ID.";
@@ -33,10 +33,9 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         protected override void ExecuteWithGenericInput(ListArgs input)
         {
             object data;
-                data = new ListSingle { Id = input.Id.Value };
 
             if (input.Date != default(DateTime) && input.Id == 0)
-                data = new ListByDate{Data = input.Date};
+                data = new ListByDate { Data = input.Date };
 
             else if (input.Date == default(DateTime) && input.Id != null)
                 data = new ListSingle { Data = input.Id.Value };
@@ -44,12 +43,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             else data = new ListAll { Data = null };
 
             var tasks = client.GetTasks(data);
-            tasks.ForEach(x=>Console.WriteLine(x.Id + " " + x.Name));
+            tasks.ForEach(x => Console.WriteLine(x.Id + " " + x.Name));
 
-//            GetTasksAndPrint(s => s.GetTasks(data), input.Id == null
-//                                                        ? taskFormatterFactory.GetListFormatter()
-//                                                        : taskFormatterFactory.GetSingleFormatter()
-//                );
+            GetTasksAndPrint(s => s.GetTasks(data), input.Id == null
+                                                        ? taskFormatterFactory.GetListFormatter()
+                                                        : taskFormatterFactory.GetSingleFormatter()
+                );
         }
     }
 
@@ -58,7 +57,9 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         private readonly IClientConnection connection = Substitute.For<IClientConnection>();
         private readonly ArgumentConverter<ListArgs> converter = Substitute.For<ArgumentConverter<ListArgs>>();
         private readonly IClientSpecification specification = Substitute.For<IClientSpecification>();
-        private readonly TaskFormatterFactory formatter = Substitute.For<TaskFormatterFactory>();
+        private readonly SingleTaskFormatter singleTF = Substitute.For<SingleTaskFormatter>();
+        private readonly ListTaskFormatter listTF = Substitute.For<ListTaskFormatter>();
+        private readonly ITaskFormatterFactory formatter = Substitute.For<ITaskFormatterFactory>();
         private object data;
         private readonly List list;
 
