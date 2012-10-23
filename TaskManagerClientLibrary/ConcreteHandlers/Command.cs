@@ -41,7 +41,9 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             }
         }
 
-        protected abstract void ExecuteWithGenericInput(T input);
+        protected virtual void ExecuteWithGenericInput(T input)
+        {
+        }
 
         protected void OutText(string text)
         {
