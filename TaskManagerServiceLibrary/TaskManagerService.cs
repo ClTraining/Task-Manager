@@ -37,11 +37,11 @@ namespace TaskManagerServiceLibrary
             return taskList.AddTask(task);
         }
 
-        public List<ContractTask> GetTasks(object data)
+        public List<ContractTask> GetTasks(object input)
         {
-            var res = list.First(x => x.GetType().Name.Contains(data.GetType().Name));
+            var res = list.First(x => x.GetType().Name.Contains(input.GetType().Name));
 
-            res.Data = ((IClientSpecification) data).Data;
+            res.Data = (input as IClientSpecification).Data;
 
             var result = repository.GetTasks(res);
             return result;
