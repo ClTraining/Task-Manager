@@ -19,13 +19,12 @@ namespace TaskManagerServiceLibrary.Repositories
     public class MemoRepository : IRepository
     {
         private readonly ITaskMapper mapper;
-        private List<ServiceTask> taskList;
+        private static readonly List<ServiceTask> taskList = new List<ServiceTask>();
         private int currentId;
 
         public MemoRepository(ITaskMapper mapper)
         {
             this.mapper = mapper;
-            taskList = new List<ServiceTask>();
         }
 
         public int AddTask(AddTaskArgs args)

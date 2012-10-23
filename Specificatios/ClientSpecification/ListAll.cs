@@ -2,5 +2,6 @@
 {
     public class ListAll : IClientSpecification 
     {
+        public object Data { get; set; }
     }
 }

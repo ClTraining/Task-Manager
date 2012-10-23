@@ -2,5 +2,6 @@
 {
     public interface IClientSpecification
     {
+        object Data { get; set; }
     }
 }

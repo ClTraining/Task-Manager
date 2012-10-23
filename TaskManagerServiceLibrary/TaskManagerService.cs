@@ -41,11 +41,9 @@ namespace TaskManagerServiceLibrary
         {
             var res = list.First(x => x.GetType().Name.Contains(data.GetType().Name));
 
-            res.Data = ((ListSingle)data).Id;
+            res.Data = ((IClientSpecification) data).Data;
 
-            Console.WriteLine(res.Data);
             var result = repository.GetTasks(res);
-
             return result;
         }
 
@@ -82,7 +80,7 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_get_tasks()
         {
-            var spec = new ListSingle {Id = 3};
+            var spec = new ListSingle {Data = 3};
             var tasks = new[] {"task1", "task2", "task3", "task4", "task5", "task6", "task7", "task8", "task9"};
 
             var addTaskArgs = new AddTaskArgs {Name = "some task"};
