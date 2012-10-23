@@ -37,14 +37,13 @@ namespace TaskManagerServiceLibrary
             return taskList.AddTask(task);
         }
 
-        public List<ContractTask> GetTasks(object input)
+        public List<ContractTask> GetTasks(IClientSpecification input)
         {
             var res = list.First(x => x.GetType().Name.Contains(input.GetType().Name));
 
-            res.Data = (input as IClientSpecification).Data;
+            res.Data = input.Data;
 
-            var result = repository.GetTasks(res);
-            return result;
+            return repository.GetTasks(res);
         }
 
         public void Complete(CompleteTaskArgs args)
@@ -90,10 +89,6 @@ namespace TaskManagerServiceLibrary
             tasks.ToList().ForEach(a => service.AddTask(new AddTaskArgs{Name = a}));
 
             var result = service.GetTasks(spec);
-
-            foreach (var task in result)
-            {
-            }
         }
     }
 

@@ -20,7 +20,7 @@ namespace TaskManagerServiceLibrary
         [ServiceKnownType(typeof(ListAll))]
         [ServiceKnownType(typeof(ListByDate))]
         [ServiceKnownType(typeof(ListSingle))]
-        List<ContractTask> GetTasks(object data);
+        List<ContractTask> GetTasks(IClientSpecification data);
 
         [OperationContract]
         void Complete(CompleteTaskArgs args);

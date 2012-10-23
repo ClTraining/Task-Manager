@@ -6,6 +6,7 @@ using EntitiesLibrary.Arguments.AddTask;
 using EntitiesLibrary.Arguments.CompleteTask;
 using EntitiesLibrary.Arguments.RenameTask;
 using EntitiesLibrary.Arguments.SetDate;
+using Specifications.ClientSpecification;
 using TaskManagerServiceLibrary;
 
 namespace ConnectToWcf
@@ -36,7 +37,7 @@ namespace ConnectToWcf
             return GetDataFromServer(t => t.AddTask(task));
         }
 
-        public List<ContractTask> GetTasks(object data)
+        public List<ContractTask> GetTasks(IClientSpecification data)
         {
             return GetDataFromServer(s => s.GetTasks(data));
         }

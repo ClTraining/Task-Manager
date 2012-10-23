@@ -7,7 +7,6 @@ using EntitiesLibrary.Arguments.ListTask;
 using NSubstitute;
 using Specifications.ClientSpecification;
 using TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter;
-using TaskManagerServiceLibrary;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
@@ -31,7 +30,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected override void ExecuteWithGenericInput(ListArgs input)
         {
-            object data;
+            IClientSpecification data;
 
             if (input.Date != default(DateTime) && input.Id == 0)
                 data = new ListByDate { Data = input.Date };
@@ -52,11 +51,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     {
         private readonly IClientConnection connection = Substitute.For<IClientConnection>();
         private readonly ArgumentConverter<ListArgs> converter = Substitute.For<ArgumentConverter<ListArgs>>();
-        private readonly IClientSpecification specification = Substitute.For<IClientSpecification>();
-        private readonly SingleTaskFormatter singleTF = Substitute.For<SingleTaskFormatter>();
-        private readonly ListTaskFormatter listTF = Substitute.For<ListTaskFormatter>();
         private readonly ITaskFormatterFactory formatter = Substitute.For<ITaskFormatterFactory>();
-        private object data;
+        private IClientSpecification data;
         private readonly List list;
 
         public ListTests()
