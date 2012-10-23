@@ -37,15 +37,31 @@ namespace TaskManagerClientLibrary
         [Fact]
         public void should_split_one_argumet_with_double_quotes()
         {
-            var input = "add \"some task\"";
+            const string input = "add \"some task\"";
             var result = parser.Parse(input);
             result.ShouldBeEquivalentTo(new List<string> {"add", "some task"});
         }
 
         [Fact]
+        public void should_split_help_command_()
+        {
+            const string input = "? \"some task\"";
+            var result = parser.Parse(input);
+            result.ShouldBeEquivalentTo(new List<string> { "?", "some task" });
+        }
+
+        [Fact]
+        public void should_split_help_command_without_arguments()
+        {
+            const string input = "?";
+            var result = parser.Parse(input);
+            result.ShouldBeEquivalentTo(new List<string> { "?" });
+        }
+
+        [Fact]
         public void should_split_two_argumet_with_double_quotes()
         {
-            var input = "add \"some task\" 10-10-2012";
+            const string input = "add \"some task\" 10-10-2012";
             var result = parser.Parse(input);
             result.ShouldBeEquivalentTo(new List<string> {"add", "some task", "10-10-2012"});
         }
@@ -53,7 +69,7 @@ namespace TaskManagerClientLibrary
         [Fact]
         public void should_split_two_argumet_with_single_quotes()
         {
-            var input = "add \'some task\' 10-10-2012";
+            const string input = "add \'some task\' 10-10-2012";
             var result = parser.Parse(input);
             result.ShouldBeEquivalentTo(new List<string> {"add", "some task", "10-10-2012"});
         }
@@ -61,7 +77,7 @@ namespace TaskManagerClientLibrary
         [Fact]
         public void should_split_two_argumet_without_quotes()
         {
-            var input = "add some task, 10-10-2012";
+            const string input = "add some task, 10-10-2012";
             var result = parser.Parse(input);
             result.ShouldBeEquivalentTo(new List<string> {"add", "some task", "10-10-2012"});
         }
@@ -69,7 +85,7 @@ namespace TaskManagerClientLibrary
         [Fact]
         public void should_split_two_argumet_without_quotes_and_trim_extra_spaces()
         {
-            var input = "add some task   ,\t 10-10-2012\t\n";
+            const string input = "add some task   ,\t 10-10-2012\t\n";
             var result = parser.Parse(input);
             result.ShouldBeEquivalentTo(new List<string> {"add", "some task", "10-10-2012"});
         }

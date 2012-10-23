@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using EntitiesLibrary.Converter;
 
-namespace EntitiesLibrary
+namespace EntitiesLibrary.CommandArguments
 {
     [TypeConverter(typeof (RenameTaskArgsConverter))]
     public class RenameTaskArgs

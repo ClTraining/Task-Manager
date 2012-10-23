@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using EntitiesLibrary;
+using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using Xunit;
 

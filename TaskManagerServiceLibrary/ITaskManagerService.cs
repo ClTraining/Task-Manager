@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
+using EntitiesLibrary.CommandArguments;
 
 namespace TaskManagerServiceLibrary
 {

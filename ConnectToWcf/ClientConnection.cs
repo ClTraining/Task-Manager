@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
+using EntitiesLibrary.CommandArguments;
 using TaskManagerServiceLibrary;
 
 namespace ConnectToWcf

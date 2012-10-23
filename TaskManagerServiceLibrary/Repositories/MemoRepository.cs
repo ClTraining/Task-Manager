@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using EntitiesLibrary;
+using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using Xunit;
 
