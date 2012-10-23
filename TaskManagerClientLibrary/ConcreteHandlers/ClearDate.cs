@@ -11,7 +11,7 @@ using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
-    public class ClearDate: Command<ClearDateArgs>
+    public class ClearDate : Command<ClearDateArgs>
     {
         public ClearDate(IClientConnection client, ArgumentConverter<ClearDateArgs> converter, TextWriter textWriter)
             : base(client, converter, textWriter)
@@ -40,8 +40,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         [Fact]
         public void should_send_string_return_id()
         {
-            var arguments = new List<string> { "12" };
-            var clearDateArgs = new ClearDateArgs { Id = 12 };
+            var arguments = new List<string> {"12"};
+            var clearDateArgs = new ClearDateArgs {Id = 12};
             converter.Convert(arguments).Returns(clearDateArgs);
             handler.Execute(arguments);
             client.Received().ClearTaskDueDate(clearDateArgs);

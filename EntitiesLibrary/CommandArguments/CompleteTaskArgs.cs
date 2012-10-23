@@ -17,7 +17,7 @@ namespace EntitiesLibrary.CommandArguments
         [Fact]
         public void should_get_completetaskargsconverter_attribute()
         {
-            var attribute = Attribute.GetCustomAttribute(typeof(CompleteTaskArgs), typeof(TypeConverterAttribute));
+            var attribute = Attribute.GetCustomAttribute(typeof (CompleteTaskArgs), typeof (TypeConverterAttribute));
             attribute.Should().NotBeNull();
         }
     }

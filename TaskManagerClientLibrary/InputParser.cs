@@ -10,8 +10,8 @@ namespace TaskManagerClientLibrary
     public class InputParser
     {
         private const string Pattern = "(?:^|,)(\"(?:[^\"]+)*\"|\'(?:[^\']+)*\'|[^,]*)";
-        private readonly char[] splitCommandAndArgumentsChars = new[] { ' ', '\t' };
-        private readonly char[] trimChars = new[] { '\'', '\"', ' ', '\t', '\n' };
+        private readonly char[] splitCommandAndArgumentsChars = new[] {' ', '\t'};
+        private readonly char[] trimChars = new[] {'\'', '\"', ' ', '\t', '\n'};
 
         public virtual List<string> Parse(string input, int commandWordsCount = 1)
         {
@@ -47,7 +47,7 @@ namespace TaskManagerClientLibrary
         {
             const string input = "? \"some task\"";
             var result = parser.Parse(input);
-            result.ShouldBeEquivalentTo(new List<string> { "?", "some task" });
+            result.ShouldBeEquivalentTo(new List<string> {"?", "some task"});
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace TaskManagerClientLibrary
         {
             const string input = "?";
             var result = parser.Parse(input);
-            result.ShouldBeEquivalentTo(new List<string> { "?" });
+            result.ShouldBeEquivalentTo(new List<string> {"?"});
         }
 
         [Fact]

@@ -13,14 +13,10 @@ namespace TaskManagerServiceLibrary.TaskManager
             Mapper.CreateMap<ContractTask, ServiceTask>();
         }
 
-        #region ITaskMapper Members
-
         public ContractTask ConvertToContract(ServiceTask task)
         {
             return Mapper.Map<ServiceTask, ContractTask>(task);
         }
-
-        #endregion
     }
 
     public class TaskMapperTests

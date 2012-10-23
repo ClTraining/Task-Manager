@@ -19,7 +19,7 @@ namespace EntitiesLibrary.CommandArguments
         [Fact]
         public void should_get_renametaskargsconverter_attribute()
         {
-            var attribute = Attribute.GetCustomAttribute(typeof(RenameTaskArgs), typeof(TypeConverterAttribute));
+            var attribute = Attribute.GetCustomAttribute(typeof (RenameTaskArgs), typeof (TypeConverterAttribute));
             attribute.Should().NotBeNull();
         }
     }

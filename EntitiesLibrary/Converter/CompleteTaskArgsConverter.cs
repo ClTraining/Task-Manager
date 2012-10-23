@@ -22,7 +22,7 @@ namespace EntitiesLibrary.Converter
 
     public class CompleteTaskArgsConverterTests
     {
-        private CompleteTaskArgsConverter converter;
+        private readonly CompleteTaskArgsConverter converter;
 
         public CompleteTaskArgsConverterTests()
         {
@@ -34,7 +34,7 @@ namespace EntitiesLibrary.Converter
         {
             var arguments = new List<string> {"25"};
             var result = converter.ConvertFrom(arguments) as CompleteTaskArgs;
-            var completeArgs = new CompleteTaskArgs() {Id =25};
+            var completeArgs = new CompleteTaskArgs {Id = 25};
             result.ShouldBeEquivalentTo(completeArgs);
         }
     }

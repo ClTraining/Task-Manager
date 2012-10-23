@@ -34,7 +34,7 @@ namespace EntitiesLibrary.Converter
         {
             var arguments = new List<string> {"4", "new task name"};
             var result = converter.ConvertFrom(arguments) as RenameTaskArgs;
-            var renameTaskArgs = new RenameTaskArgs() {Id = 4, Name = "new task name"};
+            var renameTaskArgs = new RenameTaskArgs {Id = 4, Name = "new task name"};
             result.ShouldBeEquivalentTo(renameTaskArgs);
         }
     }

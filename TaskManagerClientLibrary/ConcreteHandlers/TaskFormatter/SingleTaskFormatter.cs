@@ -11,22 +11,17 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
     {
         private const string Format = "\nID:\t\t{0}\n" + "Name:\t\t{1}\n" + "Completed:\t{2}\n" + "Due date:\t{3}\n\n";
 
-        #region ITaskFormatter Members
-
         public virtual string Show(List<ContractTask> tasks)
         {
             var taskString = new StringBuilder();
 
-            var minValue = DateTime.MinValue;
             tasks.ForEach(
                 x =>
                 taskString.Append(String.Format(Format, x.Id, x.Name, x.IsCompleted ? "+" : "-",
-                                                x.DueDate == minValue ? " not set" : x.DueDate.ToString())));
+                                                x.DueDate == default(DateTime) ? " not set" : x.DueDate.ToString())));
 
             return taskString.ToString();
         }
-
-        #endregion
     }
 
     public class SingleTaskFormatterTests

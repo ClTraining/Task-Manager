@@ -19,7 +19,7 @@ namespace EntitiesLibrary.CommandArguments
         [Fact]
         public void should_get_setdateargsconverter_attribute()
         {
-            var attribute = Attribute.GetCustomAttribute(typeof(SetDateArgs), typeof(TypeConverterAttribute));
+            var attribute = Attribute.GetCustomAttribute(typeof (SetDateArgs), typeof (TypeConverterAttribute));
             attribute.Should().NotBeNull();
         }
     }

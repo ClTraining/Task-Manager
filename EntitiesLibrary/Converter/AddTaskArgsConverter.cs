@@ -30,7 +30,8 @@ namespace EntitiesLibrary.Converter
 
     public class AddTaskArgsConverterTests
     {
-        private readonly AddTaskArgsConverter converter ;
+        private readonly AddTaskArgsConverter converter;
+
         public AddTaskArgsConverterTests()
         {
             converter = new AddTaskArgsConverter();
@@ -39,7 +40,7 @@ namespace EntitiesLibrary.Converter
         [Fact]
         public void should_convert_add_task_args()
         {
-            var arguments = new List<string>{"task 1"};
+            var arguments = new List<string> {"task 1"};
             var result = converter.ConvertFrom(arguments) as AddTaskArgs;
             var taskArgs = new AddTaskArgs {Name = "task 1", DueDate = default(DateTime)};
             result.ShouldBeEquivalentTo(taskArgs);
@@ -48,9 +49,9 @@ namespace EntitiesLibrary.Converter
         [Fact]
         public void should_convert_add_task_args_with_date()
         {
-            var arguments = new List<string> { "task 1", "10-10-2012" };
+            var arguments = new List<string> {"task 1", "10-10-2012"};
             var result = converter.ConvertFrom(arguments) as AddTaskArgs;
-            result.ShouldBeEquivalentTo(new AddTaskArgs { Name = "task 1", DueDate = DateTime.Parse("10-10-2012") });
+            result.ShouldBeEquivalentTo(new AddTaskArgs {Name = "task 1", DueDate = DateTime.Parse("10-10-2012")});
         }
     }
 }

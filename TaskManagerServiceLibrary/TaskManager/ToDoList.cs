@@ -21,8 +21,6 @@ namespace TaskManagerServiceLibrary.TaskManager
             this.mapper = mapper;
         }
 
-        #region IToDoList Members
-
         public int AddTask(AddTaskArgs name)
         {
             return repository.AddTask(name);
@@ -59,8 +57,6 @@ namespace TaskManagerServiceLibrary.TaskManager
         {
             repository.ClearTaskDueDate(args);
         }
-
-        #endregion
     }
 
 
@@ -138,7 +134,7 @@ namespace TaskManagerServiceLibrary.TaskManager
         [Fact]
         public void should_send_clear_task_due_date_to_repository()
         {
-            var args = new ClearDateArgs { Id = 2 };
+            var args = new ClearDateArgs {Id = 2};
             todolist.ClearTaskDueDate(args);
             repository.Received().ClearTaskDueDate(args);
         }

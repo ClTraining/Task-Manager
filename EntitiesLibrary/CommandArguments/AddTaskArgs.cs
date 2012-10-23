@@ -20,7 +20,7 @@ namespace EntitiesLibrary.CommandArguments
         [Fact]
         public void should_get_addtaskargsconverter_attribute()
         {
-            var attribute = Attribute.GetCustomAttribute(typeof(AddTaskArgs), typeof(TypeConverterAttribute));
+            var attribute = Attribute.GetCustomAttribute(typeof (AddTaskArgs), typeof (TypeConverterAttribute));
             attribute.Should().NotBeNull();
         }
     }

@@ -20,8 +20,6 @@ namespace TaskManagerServiceLibrary
             taskList = list;
         }
 
-        #region ITaskManagerService Members
-
         public int AddTask(AddTaskArgs task)
         {
             return taskList.AddTask(task);
@@ -61,8 +59,6 @@ namespace TaskManagerServiceLibrary
         {
             taskList.ClearTaskDueDate(args);
         }
-
-        #endregion
     }
 
     public class TaskManagerServiceTests
@@ -138,7 +134,7 @@ namespace TaskManagerServiceLibrary
         public void should_send_clear_date_for_task()
         {
             var dateTime = DateTime.Now;
-            var args = new ClearDateArgs { Id = 1};
+            var args = new ClearDateArgs {Id = 1};
             service.ClearTaskDueDate(args);
             list.Received().ClearTaskDueDate(args);
         }

@@ -17,7 +17,7 @@ namespace EntitiesLibrary.CommandArguments
         [Fact]
         public void should_get_listargsconverter_attribute()
         {
-            var attribute = Attribute.GetCustomAttribute(typeof(ListArgs), typeof(TypeConverterAttribute));
+            var attribute = Attribute.GetCustomAttribute(typeof (ListArgs), typeof (TypeConverterAttribute));
             attribute.Should().NotBeNull();
         }
     }

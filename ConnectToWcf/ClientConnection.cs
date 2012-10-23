@@ -18,8 +18,6 @@ namespace ConnectToWcf
             binding = new NetTcpBinding();
         }
 
-        #region IClientConnection Members
-
         public void RenameTask(RenameTaskArgs args)
         {
             UpdateDataOnServer(t => t.RenameTask(args));
@@ -54,8 +52,6 @@ namespace ConnectToWcf
         {
             UpdateDataOnServer(s => s.ClearTaskDueDate(args));
         }
-
-        #endregion
 
         private void UpdateDataOnServer(Action<ITaskManagerService> action)
         {

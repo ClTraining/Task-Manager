@@ -6,7 +6,7 @@ using Xunit;
 
 namespace EntitiesLibrary.CommandArguments
 {
-    [TypeConverter(typeof(ClearDateArgsConverter))]
+    [TypeConverter(typeof (ClearDateArgsConverter))]
     public class ClearDateArgs
     {
         public int Id { get; set; }
@@ -18,7 +18,7 @@ namespace EntitiesLibrary.CommandArguments
         [Fact]
         public void should_get_cleardateargsconverter_attribute()
         {
-            var attribute = Attribute.GetCustomAttribute(typeof(ClearDateArgs), typeof(TypeConverterAttribute));
+            var attribute = Attribute.GetCustomAttribute(typeof (ClearDateArgs), typeof (TypeConverterAttribute));
             attribute.Should().NotBeNull();
         }
     }

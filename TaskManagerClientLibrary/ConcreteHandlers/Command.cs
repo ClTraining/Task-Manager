@@ -21,8 +21,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             this.textWriter = textWriter;
         }
 
-        #region ICommand Members
-
         public string Name { get; set; }
         public string Description { get; set; }
 
@@ -42,8 +40,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
                 OutText("Wrong arguments.");
             }
         }
-
-        #endregion
 
         protected abstract void ExecuteWithGenericInput(T input);
 

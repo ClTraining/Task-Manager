@@ -6,14 +6,10 @@ namespace TaskManagerServiceLibrary.TaskManager
 {
     public class TaskFactory : ITaskFactory
     {
-        #region ITaskFactory Members
-
         public ServiceTask Create()
         {
             return new ServiceTask();
         }
-
-        #endregion
     }
 
     public class TaskFactoryTests
