@@ -2,14 +2,14 @@
 using EntitiesLibrary;
 using EntitiesLibrary.Arguments.AddTask;
 using EntitiesLibrary.Arguments.SetDate;
-using Specifications.ClientSpecification;
+using TaskManagerServiceLibrary;
 
 namespace ConnectToWcf
 {
     public interface IClientConnection
     {
         int AddTask(AddTaskArgs task);
-        List<ContractTask> GetTasks(IClientSpecification id);
+        List<ContractTask> GetTasks(DataPackage pack);
         
         //void Complete(CompleteTaskArgs id);
         //void RenameTask(RenameTaskArgs args);
