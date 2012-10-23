@@ -17,7 +17,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
             Description = "Causes help.";
         }
 
-        protected override void ExecuteWithGenericInput(List<string> input)
+        public override void Execute(object input)
         {
             foreach (var command in commands.GetCommands())
                 display.Show(command);
