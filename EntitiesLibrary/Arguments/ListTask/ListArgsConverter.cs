@@ -27,7 +27,10 @@ namespace EntitiesLibrary.Arguments.ListTask
             if (!int.TryParse(argument, out id))
                 DateTime.TryParse(argument, out date);
 
-            return new ListArgs { Id = id, Date = date, };
+            var result = new ListArgs { Id = id, Date = date, };
+            if (argument == "today")
+                result.Date = DateTime.Today;
+            return result;
         }
     }
     public class ListTaskArgsConverterTester

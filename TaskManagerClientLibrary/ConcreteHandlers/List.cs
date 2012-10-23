@@ -24,10 +24,9 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             this.taskFormatterFactory = taskFormatterFactory;
         }
 
-        private void GetTasksAndPrint(Func<IClientConnection, List<ContractTask>> func, ITaskFormatter formatter)
+        private void PrintWithFormatter(List<ContractTask> list, ITaskFormatter formatter)
         {
-            List<ContractTask> tasks = func(client);
-            OutText(formatter.Show(tasks));
+            OutText(formatter.Show(list));
         }
 
         protected override void ExecuteWithGenericInput(ListArgs input)
@@ -43,12 +42,9 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             else data = new ListAll { Data = null };
 
             var tasks = client.GetTasks(data);
-            tasks.ForEach(x => Console.WriteLine(x.Id + " " + x.Name));
+            var formatter = tasks.Count > 1 ? taskFormatterFactory.GetListFormatter() : taskFormatterFactory.GetSingleFormatter();
 
-            GetTasksAndPrint(s => s.GetTasks(data), input.Id == null
-                                                        ? taskFormatterFactory.GetListFormatter()
-                                                        : taskFormatterFactory.GetSingleFormatter()
-                );
+            PrintWithFormatter(tasks, formatter);
         }
     }
 
