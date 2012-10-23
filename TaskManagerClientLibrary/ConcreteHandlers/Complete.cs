@@ -18,7 +18,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected override void ExecuteWithGenericInput(CompleteTaskArgs input)
         {
-            //client.Complete(input);
+            client.Complete(input);
             OutText(string.Format("Task ID: {0} completed.", input.Id));
         }
     }

@@ -18,7 +18,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected override void ExecuteWithGenericInput(RenameTaskArgs input)
         {
-            //client.RenameTask(input);
+            client.RenameTask(input);
             OutText(string.Format("Task ID: {0} renamed.", input.Id));
         }
     }
