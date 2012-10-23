@@ -93,7 +93,7 @@ namespace TaskManagerServiceLibrary.Repositories
             var addedTasks =
                 taskNames.Select(taskName => repository.AddTask(new AddTaskArgs {Name = taskName})).ToList();
             var receivedTasks = addedTasks.Select(repository.GetTaskById).ToList();
-            receivedTasks.Select(x => x.Name.Should().Be(taskNames.ToArray()[receivedTasks.ToList().IndexOf(x)]));
+            receivedTasks.Select(x => x.Name.Should().Be(taskNames.ToArray()[receivedTasks.ToList().IndexOf(x)])).ToList();
         }
 
         [Fact]
