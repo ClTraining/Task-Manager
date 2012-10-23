@@ -37,12 +37,11 @@ namespace TaskManagerServiceLibrary
             return taskList.AddTask(task);
         }
 
-        public List<ContractTask> GetTasks(DataPackage pack)
+        public List<ContractTask> GetTasks(object data)
         {
-            Console.WriteLine(pack.Spec.GetType().Name);
-            var res = list.First(x => x.GetType().Name.Contains(pack.Spec.GetType().Name));
+            var res = list.First(x => x.GetType().Name.Contains(data.GetType().Name));
 
-            res.Data = pack.Spec.Id;
+            res.Data = ((ListSingle)data).Id;
 
             Console.WriteLine(res.Data);
             var result = repository.GetTasks(res);
@@ -83,8 +82,7 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_get_tasks()
         {
-            var pack = new DataPackage {Spec = new ListSingle {Id = 4}};
-
+            var spec = new ListSingle {Id = 3};
             var tasks = new[] {"task1", "task2", "task3", "task4", "task5", "task6", "task7", "task8", "task9"};
 
             var addTaskArgs = new AddTaskArgs {Name = "some task"};
@@ -93,7 +91,7 @@ namespace TaskManagerServiceLibrary
 
             tasks.ToList().ForEach(a => service.AddTask(new AddTaskArgs{Name = a}));
 
-            var result = service.GetTasks(pack);
+            var result = service.GetTasks(spec);
 
             foreach (var task in result)
             {

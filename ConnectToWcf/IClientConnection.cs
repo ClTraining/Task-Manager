@@ -9,7 +9,7 @@ namespace ConnectToWcf
     public interface IClientConnection
     {
         int AddTask(AddTaskArgs task);
-        List<ContractTask> GetTasks(DataPackage pack);
+        List<ContractTask> GetTasks(object data);
         
         //void Complete(CompleteTaskArgs id);
         //void RenameTask(RenameTaskArgs args);

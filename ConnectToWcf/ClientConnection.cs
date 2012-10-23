@@ -30,9 +30,9 @@ namespace ConnectToWcf
             return GetDataFromServer(t => t.AddTask(task));
         }
 
-        public List<ContractTask> GetTasks(DataPackage pack)
+        public List<ContractTask> GetTasks(object data)
         {
-            return GetDataFromServer(s => s.GetTasks(pack));
+            return GetDataFromServer(s => s.GetTasks(data));
         }
 
 //        public void RenameTask(RenameTaskArgs args)

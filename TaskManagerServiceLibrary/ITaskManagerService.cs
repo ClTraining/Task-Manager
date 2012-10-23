@@ -5,6 +5,7 @@ using EntitiesLibrary.Arguments.AddTask;
 using EntitiesLibrary.Arguments.CompleteTask;
 using EntitiesLibrary.Arguments.RenameTask;
 using EntitiesLibrary.Arguments.SetDate;
+using Specifications.ClientSpecification;
 
 
 namespace TaskManagerServiceLibrary
@@ -16,7 +17,10 @@ namespace TaskManagerServiceLibrary
         int AddTask(AddTaskArgs task);
 
         [OperationContract]
-        List<ContractTask> GetTasks(DataPackage pack);
+        [ServiceKnownType(typeof(ListAll))]
+        [ServiceKnownType(typeof(ListByDate))]
+        [ServiceKnownType(typeof(ListSingle))]
+        List<ContractTask> GetTasks(object data);
 
         [OperationContract]
         void Complete(CompleteTaskArgs args);
