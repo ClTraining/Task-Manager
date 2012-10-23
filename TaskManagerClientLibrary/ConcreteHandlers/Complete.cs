@@ -1,10 +1,7 @@
-using System.Collections.Generic;
 using System.IO;
 using ConnectToWcf;
-using EntitiesLibrary;
 using EntitiesLibrary.Arguments.CompleteTask;
 using NSubstitute;
-using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {

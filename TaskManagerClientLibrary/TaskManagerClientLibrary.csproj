@@ -73,6 +73,7 @@
     <Compile Include="ConcreteHandlers\SetDate.cs" />
     <Compile Include="ConcreteHandlers\List.cs" />
     <Compile Include="ConcreteHandlers\Rename.cs" />
+    <Compile Include="ConcreteHandlers\TaskFormatter\ITaskFormatterFactory.cs" />
     <Compile Include="ConcreteHandlers\TaskFormatter\SingleTaskFormatter.cs" />
     <Compile Include="ConcreteHandlers\TaskFormatter\ListTaskFormatter.cs" />
     <Compile Include="ConcreteHandlers\TaskFormatter\TaskFormatterFactory.cs" />
