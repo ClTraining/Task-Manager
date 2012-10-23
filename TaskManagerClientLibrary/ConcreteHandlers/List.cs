@@ -42,10 +42,13 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
             else data = new ListAll { Data = null };
 
-            GetTasksAndPrint(s => s.GetTasks(data), input.Id == null
-                                                        ? taskFormatterFactory.GetListFormatter()
-                                                        : taskFormatterFactory.GetSingleFormatter()
-                );
+            var tasks = client.GetTasks(data);
+            tasks.ForEach(x=>Console.WriteLine(x.Id + " " + x.Name));
+
+//            GetTasksAndPrint(s => s.GetTasks(data), input.Id == null
+//                                                        ? taskFormatterFactory.GetListFormatter()
+//                                                        : taskFormatterFactory.GetSingleFormatter()
+//                );
         }
     }
 
