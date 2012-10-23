@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace EntitiesLibrary
+namespace EntitiesLibrary.Arguments.AddTask
 {
     [TypeConverter(typeof (AddTaskArgsConverter))]
     public class AddTaskArgs

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using ConnectToWcf;
 using EntitiesLibrary;
+using EntitiesLibrary.Arguments.SetDate;
 using NSubstitute;
 using Xunit;
 

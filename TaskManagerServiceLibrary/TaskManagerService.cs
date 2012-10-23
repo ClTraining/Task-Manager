@@ -2,6 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
+using EntitiesLibrary.Arguments.AddTask;
+using EntitiesLibrary.Arguments.CompleteTask;
+using EntitiesLibrary.Arguments.RenameTask;
+using EntitiesLibrary.Arguments.SetDate;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
@@ -77,9 +81,7 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_get_tasks()
         {
-
-            object id = 3;
-            var cSpec = new ListSingle(4);
+            var cSpec = new ListSingle{Id = 4};
 
 
 

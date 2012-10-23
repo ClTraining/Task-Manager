@@ -2,6 +2,7 @@
 using System.IO;
 using ConnectToWcf;
 using EntitiesLibrary;
+using EntitiesLibrary.Arguments.RenameTask;
 using NSubstitute;
 using Xunit;
 

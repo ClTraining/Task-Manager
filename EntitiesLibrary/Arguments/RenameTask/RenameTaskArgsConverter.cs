@@ -4,7 +4,7 @@ using System.Globalization;
 using FluentAssertions;
 using Xunit;
 
-namespace EntitiesLibrary
+namespace EntitiesLibrary.Arguments.RenameTask
 {
     public class RenameTaskArgsConverter : TypeConverter
     {

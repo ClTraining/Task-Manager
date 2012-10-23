@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using ConnectToWcf;
 using EntitiesLibrary;
+using EntitiesLibrary.Arguments.AddTask;
 using NSubstitute;
 using Xunit;
 

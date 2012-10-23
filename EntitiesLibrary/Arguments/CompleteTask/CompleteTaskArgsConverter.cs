@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 
-namespace EntitiesLibrary
+namespace EntitiesLibrary.Arguments.CompleteTask
 {
     public class CompleteTaskArgsConverter : TypeConverter
     {

@@ -9,7 +9,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
 {
     public class SingleTaskFormatter : ITaskFormatter
     {
-        private const string Format = "\nID:\t\t{0}\n" + "Name:\t\t{1}\n" + "Completed:\t{2}\n" + "Due date:\t{3}\n\n";
+        private string Format = "\nID:\t\t{0}\n" + "Name:\t\t{1}\n" + "Completed:\t{2}\n" + "Due date:\t{3}\n\n";
 
         #region ITaskFormatter Members
 

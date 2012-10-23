@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace EntitiesLibrary
+namespace EntitiesLibrary.Arguments.ListTask
 {
     [TypeConverter(typeof (ListArgsConverter))]
     public class ListArgs

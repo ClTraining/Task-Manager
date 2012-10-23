@@ -30,7 +30,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         {
             try
             {
-                object converted = converter == null ? argument : Convert(argument);
+                object converted = /*converter == null ? argument :*/ Convert(argument);
                 ExecuteWithGenericInput((T) converted);
             }
             catch (TaskNotFoundException e)

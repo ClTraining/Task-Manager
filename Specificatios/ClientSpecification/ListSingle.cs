@@ -3,13 +3,10 @@ using System.Runtime.Serialization;
 
 namespace Specifications.ClientSpecification
 {
+    [DataContract]
     public class ListSingle : IClientSpecification
     {
-        public ListSingle(int id)
-        {
-            Id = id;
-        }
-        
+        [DataMember]
         public int Id { get; set; }
     }
 }

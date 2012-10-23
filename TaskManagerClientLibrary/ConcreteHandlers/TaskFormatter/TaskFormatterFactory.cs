@@ -9,6 +9,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
         private readonly ListTaskFormatter listTaskFormatter;
         private readonly SingleTaskFormatter singleTaskFormatter;
 
+        public TaskFormatterFactory(){ }
         public TaskFormatterFactory(SingleTaskFormatter singleTaskFormatter, ListTaskFormatter listTaskFormatter)
         {
             this.listTaskFormatter = listTaskFormatter;

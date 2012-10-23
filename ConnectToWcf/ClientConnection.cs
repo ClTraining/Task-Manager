@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
+using EntitiesLibrary.Arguments.AddTask;
+using EntitiesLibrary.Arguments.SetDate;
 using Specifications.ClientSpecification;
 using TaskManagerServiceLibrary;
 

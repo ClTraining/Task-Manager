@@ -5,16 +5,11 @@ using System.Globalization;
 using FluentAssertions;
 using Xunit;
 
-namespace EntitiesLibrary
+namespace EntitiesLibrary.Arguments.ListTask
 {
-    [TypeConverter(typeof (ListArgsConverter))]
+    [TypeConverter(typeof(ListArgsConverter))]
     internal class ListArgsConverter : TypeConverter
     {
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-        {
-            return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
-        }
-
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             var s = value as List<string>;
@@ -42,7 +37,7 @@ namespace EntitiesLibrary
         [Fact]
         public void should_extract_id_argument()
         {
-            var result = converter.ConvertFrom("1233334") as ListArgs;
+            var result = converter.ConvertFrom(new List<string> { "1233334" }) as ListArgs;
 
             result.Id.Should().Be(1233334);
             result.Date.Should().Be(default(DateTime));
@@ -50,11 +45,21 @@ namespace EntitiesLibrary
         [Fact]
         public void should_extract_date_argument()
         {
-            var convertFrom = converter.ConvertFrom("1988,03,15");
+            var convertFrom = converter.ConvertFrom(new List<string> { "1988,03,15" });
             var result = convertFrom as ListArgs;
 
             result.Date.Should().Be(15.March(1988));
             result.Id.Should().Be(0);
+        }
+
+        [Fact]
+        public void should_return_list_with_default_values_for_wrong_args()
+        {
+            var convertFrom = converter.ConvertFrom(new List<string> { "adddbb554" });
+            var result = convertFrom as ListArgs;
+
+            result.Date.Should().Be(default(DateTime));
+            result.Id.Should().Be(default(int));
         }
     }
 }

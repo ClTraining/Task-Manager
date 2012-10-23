@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using ConnectToWcf;
 using EntitiesLibrary;
+using EntitiesLibrary.Arguments.ListTask;
 using NSubstitute;
 using Specifications.ClientSpecification;
 using TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter;
@@ -22,7 +23,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             this.taskFormatterFactory = taskFormatterFactory;
         }
 
-
         private void GetTasksAndPrint(Func<IClientConnection, List<ContractTask>> func, ITaskFormatter formatter)
         {
             List<ContractTask> tasks = func(client);
@@ -33,28 +33,52 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         {
             if (input.Date == default(DateTime) && input.Id == null)
                 GetTasksAndPrint(s => s.GetTasks(new ListAll()), taskFormatterFactory.GetListFormatter());
-            if (input.Date != default(DateTime) && input.Id == null)
+            if (input.Date != default(DateTime) && input.Id == 0)
                 GetTasksAndPrint(s => s.GetTasks(new ListByDate(input.Date)), taskFormatterFactory.GetListFormatter());
             if (input.Date == default(DateTime) && input.Id != null)
-                GetTasksAndPrint(s => s.GetTasks(new ListSingle(input.Id.Value)), taskFormatterFactory.GetListFormatter());
+                GetTasksAndPrint(s => s.GetTasks(new ListSingle { Id = input.Id.Value }), taskFormatterFactory.GetListFormatter());
         }
     }
 
     public class ListTests
     {
-        private readonly IClientConnection client = Substitute.For<IClientConnection>();
+        private readonly IClientConnection connection = Substitute.For<IClientConnection>();
         private readonly ArgumentConverter<ListArgs> converter = Substitute.For<ArgumentConverter<ListArgs>>();
-        private readonly SingleTaskFormatter formatter1 = Substitute.For<SingleTaskFormatter>();
-        private readonly ListTaskFormatter formatter2 = Substitute.For<ListTaskFormatter>();
-        private readonly TaskFormatterFactory taskFormatterFactory;
+        private readonly IClientSpecification specification = Substitute.For<IClientSpecification>();
+        private readonly TaskFormatterFactory formatter = Substitute.For<TaskFormatterFactory>();
+        private readonly List list;
 
         public ListTests()
         {
-            taskFormatterFactory = Substitute.For<TaskFormatterFactory>(formatter1, formatter2);
-            new List(client, converter, new StringWriter(), taskFormatterFactory);
-            taskFormatterFactory.GetSingleFormatter().Returns(formatter1);
-            taskFormatterFactory.GetListFormatter().Returns(formatter2);
+            list = new List(connection, converter, new StringWriter(), formatter);
+        }
+
+        [Fact]
+        public void should_get_all_commnads()
+        {
+            var input = new List<string> { "153" };
+            converter.Convert(input).Returns((object)new ListArgs { Id = 153 });
+
+            list.Execute(input);
+            connection.ReceivedWithAnyArgs().GetTasks(specification);
+        }
+        [Fact]
+        public void should_get_one_command_by_id()
+        {
+            var input = new List<string>();
+            converter.Convert(input).Returns(new ListArgs { Id = null });
+
+            list.Execute(input);
+            connection.ReceivedWithAnyArgs().GetTasks(specification);
+        }
+        [Fact]
+        public void should_get_one_command_by_date()
+        {
+            var input = new List<string>();
+            converter.Convert(input).Returns(new ListArgs { Id = 0, Date = DateTime.Now });
+
+            list.Execute(input);
+            connection.ReceivedWithAnyArgs().GetTasks(specification);
         }
     }
-
 }

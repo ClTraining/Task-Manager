@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace EntitiesLibrary
+namespace EntitiesLibrary.Arguments.CompleteTask
 {
     [TypeConverter(typeof (CompleteTaskArgsConverter))]
     public class CompleteTaskArgs

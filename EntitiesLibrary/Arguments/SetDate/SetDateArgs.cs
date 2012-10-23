@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 
-namespace EntitiesLibrary
+namespace EntitiesLibrary.Arguments.SetDate
 {
     [TypeConverter(typeof (SetDateArgsConverter))]
     public class SetDateArgs
