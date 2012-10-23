@@ -7,6 +7,7 @@ using EntitiesLibrary.Arguments.ListTask;
 using NSubstitute;
 using Specifications.ClientSpecification;
 using TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter;
+using TaskManagerServiceLibrary;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
@@ -31,12 +32,16 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected override void ExecuteWithGenericInput(ListArgs input)
         {
-            if (input.Date == default(DateTime) && input.Id == null)
-                GetTasksAndPrint(s => s.GetTasks(new ListAll()), taskFormatterFactory.GetListFormatter());
-            if (input.Date != default(DateTime) && input.Id == 0)
-                GetTasksAndPrint(s => s.GetTasks(new ListByDate(input.Date)), taskFormatterFactory.GetListFormatter());
-            if (input.Date == default(DateTime) && input.Id != null)
-                GetTasksAndPrint(s => s.GetTasks(new ListSingle { Id = input.Id.Value }), taskFormatterFactory.GetListFormatter());
+            var pack = new DataPackage();
+
+//            if (input.Date == default(DateTime) && input.Id == null)
+//                pack.Spec = new ListAll();
+//            if (input.Date != default(DateTime) && input.Id == 0)
+//                pack.Spec = new ListByDate(input.Date);
+//            if (input.Date == default(DateTime) && input.Id != null)
+                pack.Spec = new ListSingle { Id = input.Id.Value };
+
+            GetTasksAndPrint(s => s.GetTasks(pack), taskFormatterFactory.GetListFormatter());
         }
     }
 
@@ -46,10 +51,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         private readonly ArgumentConverter<ListArgs> converter = Substitute.For<ArgumentConverter<ListArgs>>();
         private readonly IClientSpecification specification = Substitute.For<IClientSpecification>();
         private readonly TaskFormatterFactory formatter = Substitute.For<TaskFormatterFactory>();
+        readonly DataPackage pack;
         private readonly List list;
 
         public ListTests()
         {
+            pack = new DataPackage{Spec = new ListSingle()};
             list = new List(connection, converter, new StringWriter(), formatter);
         }
 
@@ -60,7 +67,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             converter.Convert(input).Returns((object)new ListArgs { Id = 153 });
 
             list.Execute(input);
-            connection.ReceivedWithAnyArgs().GetTasks(specification);
+            connection.ReceivedWithAnyArgs().GetTasks(pack);
         }
         [Fact]
         public void should_get_one_command_by_id()
@@ -69,7 +76,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             converter.Convert(input).Returns(new ListArgs { Id = null });
 
             list.Execute(input);
-            connection.ReceivedWithAnyArgs().GetTasks(specification);
+            connection.ReceivedWithAnyArgs().GetTasks(pack);
         }
         [Fact]
         public void should_get_one_command_by_date()
@@ -78,7 +85,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             converter.Convert(input).Returns(new ListArgs { Id = 0, Date = DateTime.Now });
 
             list.Execute(input);
-            connection.ReceivedWithAnyArgs().GetTasks(specification);
+            connection.ReceivedWithAnyArgs().GetTasks(pack);
         }
     }
 }
