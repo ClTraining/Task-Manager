@@ -35,7 +35,7 @@ namespace TaskManagerService
         public override void Load()
         {
             Bind<ITaskManagerService>().To<TaskManagerServiceLibrary.TaskManagerService>();
-            Bind<IRepository>().To<MemoRepository>();
+            Bind<IRepository>().To<MemoRepository>().InSingletonScope();
             Bind<ITaskFactory>().To<TaskFactory>();
             Bind<IToDoList>().To<ToDoList>();
             Bind<ITaskMapper>().To<TaskMapper>();

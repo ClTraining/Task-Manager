@@ -19,7 +19,7 @@ namespace TaskManagerServiceLibrary.Repositories
     public class MemoRepository : IRepository
     {
         private readonly ITaskMapper mapper;
-        private static readonly List<ServiceTask> taskList = new List<ServiceTask>();
+        private readonly List<ServiceTask> taskList = new List<ServiceTask>();
         private int currentId;
 
         public MemoRepository(ITaskMapper mapper)
@@ -29,7 +29,7 @@ namespace TaskManagerServiceLibrary.Repositories
 
         public int AddTask(AddTaskArgs args)
         {
-            var serviceTask = new ServiceTask {Name = args.Name, DueDate = args.DueDate, Id = GetNewId()};
+            var serviceTask = new ServiceTask { Name = args.Name, DueDate = args.DueDate, Id = GetNewId() };
 
             taskList.Add(serviceTask);
 
@@ -81,7 +81,7 @@ namespace TaskManagerServiceLibrary.Repositories
         [Fact]
         public void should_add_task_to_repo()
         {
-            var task = new AddTaskArgs {DueDate = DateTime.Now, Name = "task1"};
+            var task = new AddTaskArgs { DueDate = DateTime.Now, Name = "task1" };
 
             var result = repo.AddTask(task);
 
