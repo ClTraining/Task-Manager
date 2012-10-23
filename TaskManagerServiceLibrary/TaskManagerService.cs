@@ -39,13 +39,15 @@ namespace TaskManagerServiceLibrary
 
         public List<ContractTask> GetTasks(DataPackage pack)
         {
+            Console.WriteLine(pack.Spec.GetType().Name);
             var res = list.First(x => x.GetType().Name.Contains(pack.Spec.GetType().Name));
 
             res.Data = pack.Spec.Id;
 
             Console.WriteLine(res.Data);
+            var result = repository.GetTasks(res);
 
-            return repository.GetTasks(res);
+            return result;
         }
 
         public void Complete(CompleteTaskArgs args)

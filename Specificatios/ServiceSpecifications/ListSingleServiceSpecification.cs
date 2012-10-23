@@ -8,7 +8,7 @@ namespace Specifications.ServiceSpecifications
 
         public bool IsSatisfied(ServiceTask task)
         {
-            return (int)Data == task.Id;
+            return (int)Data - 1 == task.Id;
         }
     }
 }
