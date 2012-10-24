@@ -1,7 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using ConnectToWcf;
 using EntitiesLibrary.CommandArguments;
 using NSubstitute;
+using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
@@ -27,12 +30,22 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         private readonly ArgumentConverter<RenameTaskArgs> converter =
             Substitute.For<ArgumentConverter<RenameTaskArgs>>();
 
-        private readonly Rename renameCommand;
+        private readonly Rename command;
         private readonly TextWriter textWriter = Substitute.For<TextWriter>();
 
         public RenameTests()
         {
-            renameCommand = new Rename(client, converter, textWriter);
+            command = new Rename(client, converter, textWriter);
+        }
+
+        [Fact]
+        public void should_send_rename_to_client()
+        {
+            var renameTaskArgs = new RenameTaskArgs{ Id = 5, Name = "newTask"};
+            var argument = new List<string> { "1", "10-10-2012" };
+            converter.Convert(argument).Returns(renameTaskArgs);
+            command.Execute(argument);
+            client.Received().RenameTask(renameTaskArgs);
         }
     }
 }

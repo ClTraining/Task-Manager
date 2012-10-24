@@ -61,7 +61,6 @@
     <Compile Include="ClientSpecification\ListAll.cs" />
     <Compile Include="ClientSpecification\ListByDate.cs" />
     <Compile Include="ClientSpecification\ListSingle.cs" />
-    <Compile Include="CommandSpecifications\ICommandSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mappers\ServiceMapper.cs" />
     <Compile Include="QuerySpecifications\ISpecification.cs" />

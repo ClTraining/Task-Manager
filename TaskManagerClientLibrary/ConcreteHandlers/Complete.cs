@@ -1,7 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using ConnectToWcf;
 using EntitiesLibrary.CommandArguments;
 using NSubstitute;
+using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
@@ -28,11 +31,21 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         private readonly ArgumentConverter<CompleteTaskArgs> converter =
             Substitute.For<ArgumentConverter<CompleteTaskArgs>>();
 
-        private readonly Complete handler;
+        private readonly Complete command;
 
         public CompleteTests()
         {
-            handler = new Complete(client, converter, new StringWriter());
+            command = new Complete(client, converter, new StringWriter());
+        }
+
+        [Fact]
+        public void should_send_set_date_to_client()
+        {
+            var completeTaskArgs = new CompleteTaskArgs {Id = 1};
+            var argument = new List<string> { "1", "10-10-2012" };
+            converter.Convert(argument).Returns(completeTaskArgs);
+            command.Execute(argument);
+            client.Received().Complete(completeTaskArgs);
         }
     }
 }
