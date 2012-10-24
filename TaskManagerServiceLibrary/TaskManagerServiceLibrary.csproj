@@ -62,10 +62,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ISpecificationsConverter.cs" />
     <Compile Include="ITaskManagerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\MemoRepository.cs" />
+    <Compile Include="SpecificationsConverter.cs" />
     <Compile Include="TaskManagerService.cs" />
     <Compile Include="TaskManager\ITaskMapper.cs" />
     <Compile Include="TaskManager\TaskMapper.cs" />
@@ -75,8 +77,8 @@
       <Project>{20ae42ef-7dc6-478b-b1a3-825fbf16e6c7}</Project>
       <Name>EntitiesLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Specificatios\Specifications.csproj">
-      <Project>{14B45886-80D8-4295-AD6C-6AAC3C221B5B}</Project>
+    <ProjectReference Include="..\Specifications\Specifications.csproj">
+      <Project>{14b45886-80d8-4295-ad6c-6aac3c221b5b}</Project>
       <Name>Specifications</Name>
     </ProjectReference>
   </ItemGroup>

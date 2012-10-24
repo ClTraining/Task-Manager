@@ -71,8 +71,6 @@ namespace TaskManagerServiceLibrary
 
         public TaskManagerTests()
         {
-            specs.Add(spec);
-            service = new TaskManagerService(repo, specs);
         }
 
         [Fact]
