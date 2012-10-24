@@ -23,7 +23,7 @@ namespace TaskManagerServiceLibrary
         private readonly IRepository repository;
         private readonly ISpecificationsConverter converter;
 
-        public TaskManagerService(IRepository repository, List<IQuerySpecification> list, ISpecificationsConverter converter)
+        public TaskManagerService(IRepository repository, ISpecificationsConverter converter)
         {
             this.repository = repository;
             this.converter = converter;
@@ -64,38 +64,34 @@ namespace TaskManagerServiceLibrary
 
     public class TaskManagerTests
     {
-        private readonly IQuerySpecification spec = Substitute.For<IQuerySpecification>();
+        private readonly IQuerySpecification qSpec = Substitute.For<IQuerySpecification>();
+        private readonly IClientSpecification cSpec = Substitute.For<IClientSpecification>();
+        private readonly ISpecificationsConverter converter = Substitute.For<ISpecificationsConverter>();
         private readonly IRepository repo = Substitute.For<IRepository>();
 
-        readonly ITaskManagerService service;
+        private readonly TaskManagerService service;
 
         public TaskManagerTests()
         {
-            specs.Add(spec);
-            service = new TaskManagerService(repo, specs);
+            service = new TaskManagerService(repo, converter);
         }
 
         [Fact]
         public void should_get_all_tasks()
         {
-            var clientSpec = Substitute.For<IClientSpecification>();
-            clientSpec.GetType().Name.ReturnsForAnyArgs("aa");
+            var outList = new List<ContractTask>();
+            converter.GetQuerySpecification(cSpec).Returns(qSpec);
+            repo.GetTasks(qSpec).Returns(outList);
 
-            //var cSpec = Substitute.For<IClientSpecification>();
-            //var serviceTask = new ServiceTask();
-            //var contractTasks = new List<ContractTask> { new ContractTask() };
-            //spec.IsSatisfied(serviceTask).Returns(true);
-            //repo.GetTasks(spec).Returns(contractTasks);
-            //spec.Initialise();
-            //var result = service.GetTasks(cSpec);
+            var contractTasks = service.GetTasks(cSpec);
 
-            //result.Should().BeEquivalentTo(contractTasks);
+            contractTasks.Should().BeEquivalentTo(outList);
         }
 
         [Fact]
         public void should_send_clear_date_for_task()
         {
-            var args = new ClearDateArgs {Id = 1};
+            var args = new ClearDateArgs { Id = 1 };
             service.ClearTaskDueDate(args);
             repo.Received().ClearTaskDueDate(args);
         }
