@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using EntitiesLibrary;
 using FluentAssertions;
@@ -14,6 +15,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
         private const int PosCompleted = 13;
         private const int PosDueDate = 20;
         private readonly string format;
+        private readonly string datePattern = CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern;
 
         public ListTaskFormatter()
         {
@@ -30,7 +32,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
                 x =>
                 taskString.AppendLine(String.Format(format, x.Id,
                                                     (x.Name.Length > PosName) ? x.Name.Remove(PosName) : x.Name,
-                                                    x.IsCompleted ? "+" : "-", x.DueDate == default(DateTime) ? "not set" : x.DueDate.ToString())));
+                                                    x.IsCompleted ? "+" : "-", x.DueDate == default(DateTime) ? "not set" : x.DueDate.ToString(datePattern))));
 
             return taskString.ToString();
         }
