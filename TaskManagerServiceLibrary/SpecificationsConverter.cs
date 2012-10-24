@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using NSubstitute;
 using Specifications.ClientSpecification;
 using Specifications.QuerySpecifications;
+using Xunit;
+using FluentAssertions;
 
 namespace TaskManagerServiceLibrary
 {
@@ -17,6 +20,19 @@ namespace TaskManagerServiceLibrary
         public IQuerySpecification GetQuerySpecification(IClientSpecification specification)
         {
             return serviceSpecifications.First(x => x.GetType().Name.Contains(specification.GetType().Name));
+        }
+    }
+
+    public class SpecConvTests
+    {
+        [Fact]
+        public void should_return_listsinglespecification()
+        {
+            var cSpec = new ListSingle();
+            var qSpec = new ListSingleSpecification();
+            var converter = new SpecificationsConverter(new List<IQuerySpecification> {qSpec});
+            var result = converter.GetQuerySpecification(cSpec);
+            result.Should().BeOfType<ListSingleSpecification>();
         }
     }
 }
