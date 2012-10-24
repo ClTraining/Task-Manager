@@ -9,16 +9,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public Exit(EnvironmentWrapper manager)
         {
+            Name = GetType().Name.ToLower();
             this.manager = manager;
             Description = "Exits from client.";
         }
 
         public override void Execute(object argument)
-        {
-            ExecuteWithGenericInput((string)argument);
-        }
-
-        protected override void ExecuteWithGenericInput(string input)
         {
             manager.Exit();
         }
