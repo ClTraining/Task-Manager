@@ -1,5 +1,4 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using Specifications.ClientSpecification;
 using Specifications.ServiceSpecifications;
 
