@@ -19,7 +19,9 @@ namespace TaskManagerServiceLibrary
 
         public IQuerySpecification GetQuerySpecification(IClientSpecification specification)
         {
-            return serviceSpecifications.First(x => x.GetType().Name.Contains(specification.GetType().Name));
+            var querySpecification = serviceSpecifications.First(x => x.GetType().Name.Contains(specification.GetType().Name));
+            querySpecification.Initialise(specification.Data);
+            return querySpecification;
         }
     }
 
@@ -28,7 +30,7 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_return_listsinglespecification()
         {
-            var cSpec = new ListSingle();
+            var cSpec = new ListSingle{Data = 1};
             var qSpec = new ListSingleSpecification();
             var converter = new SpecificationsConverter(new List<IQuerySpecification> {qSpec});
             var result = converter.GetQuerySpecification(cSpec);
