@@ -83,12 +83,12 @@ namespace TaskManagerServiceLibrary
             contractTasks.Should().BeEquivalentTo(outList);
         }
 
-        //[Fact]
-        //public void should_send_clear_date_for_task()
-        //{
-        //    var args = new ClearDateArgs { Id = 1 };
-        //    service.ClearTaskDueDate(args);
-        //    repo.Received().ClearTaskDueDate(args);
-        //}
+        [Fact]
+        public void should_send_clear_date_for_task()
+        {
+            var args = new ClearDateArgs { Id = 1 };
+            service.ClearTaskDueDate(args);
+            repo.Received().ClearTaskDueDate(args);
+        }
     }
 }

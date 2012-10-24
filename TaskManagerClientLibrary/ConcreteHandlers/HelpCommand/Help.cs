@@ -5,8 +5,10 @@ using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
 {
-    public class Help : Command<List<string>>
+    public class Help : ICommand
     {
+        public string Name { get; set; }
+        public string Description { get; set; }
         private readonly ICommandContainer commands;
         private readonly IHelpDisplayer display;
 
@@ -18,7 +20,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
             Description = "Causes help.";
         }
 
-        public override void Execute(object input)
+        public void Execute(object input)
         {
             foreach (var command in commands.GetCommands())
                 display.Show(command);
@@ -27,7 +29,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
 
     public class HelpTests
     {
-        
+
         private readonly ICommand command = Substitute.For<ICommand>();
         private readonly ICommandContainer container = Substitute.For<ICommandContainer>();
         private readonly IHelpDisplayer display = Substitute.For<IHelpDisplayer>();
@@ -41,7 +43,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
         [Fact]
         public void execute_method_test()
         {
-            var commands = new List<ICommand> {command};
+            var commands = new List<ICommand> { command };
             container.GetCommands().Returns(commands);
             help.Execute(null);
             foreach (var c in commands)

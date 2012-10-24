@@ -3,8 +3,10 @@ using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
-    public class Exit : Command<string>
+    public class Exit : ICommand
     {
+        public string Name { get; set; }
+        public string Description { get; set; }
         private readonly EnvironmentWrapper manager;
 
         public Exit(EnvironmentWrapper manager)
@@ -14,7 +16,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             Description = "Exits from client.";
         }
 
-        public override void Execute(object argument)
+        public void Execute(object argument)
         {
             manager.Exit();
         }

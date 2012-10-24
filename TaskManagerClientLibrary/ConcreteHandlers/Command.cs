@@ -12,7 +12,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         private readonly ArgumentConverter<T> converter;
         private readonly TextWriter textWriter;
 
-        protected Command() {}
         protected Command(IClientConnection client, ArgumentConverter<T> converter,
                           TextWriter textWriter)
         {
@@ -30,7 +29,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             try
             {
                 var converted = converter == null ? argument : Convert(argument);
-                ExecuteWithGenericInput((T) converted);
+                ExecuteWithGenericInput((T)converted);
             }
             catch (TaskNotFoundException e)
             {
