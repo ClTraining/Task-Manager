@@ -14,9 +14,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerClientLibrary", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerServiceLibrary", "TaskManagerServiceLibrary\TaskManagerServiceLibrary.csproj", "{E82CCFA8-614B-4C74-AA99-344C00AFC325}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Specifications", "Specificatios\Specifications.csproj", "{14B45886-80D8-4295-AD6C-6AAC3C221B5B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TaskManagerService", "TaskManagerService\TaskManagerService.csproj", "{F3A90486-C083-46EC-A393-9ED92957C96A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Specifications", "Specifications\Specifications.csproj", "{14B45886-80D8-4295-AD6C-6AAC3C221B5B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
