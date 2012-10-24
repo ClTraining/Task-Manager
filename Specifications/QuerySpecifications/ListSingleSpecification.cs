@@ -31,5 +31,14 @@ namespace Specifications.QuerySpecifications
             
             result.Should().BeTrue();
         }
+
+        [Fact]
+        public void should_initialise_specification()
+        {
+            var spec = new ListSingleSpecification();
+            const int expected = 1;
+            spec.Initialise(expected);
+            spec.Id.Should().Be(expected);
+        }
     }
 }

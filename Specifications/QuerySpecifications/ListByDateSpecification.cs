@@ -32,5 +32,14 @@ namespace Specifications.QuerySpecifications
 
             result.Should().BeTrue();
         }
+
+        [Fact]
+        public void should_initialise_specification()
+        {
+            var spec = new ListByDateSpecification();
+            var dateTime = DateTime.Today;
+            spec.Initialise(dateTime);
+            spec.Date.Should().Be(dateTime);
+        }
     }
 }
