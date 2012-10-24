@@ -26,7 +26,6 @@ namespace TaskManagerServiceLibrary
         public List<ContractTask> GetTasks(IClientSpecification input)
         {
             var res = converter.GetQuerySpecification(input);
-            res.Initialise(input.Data);
             return repository.GetTasks(res);
         }
 
@@ -72,7 +71,7 @@ namespace TaskManagerServiceLibrary
 
 
         [Fact]
-        public void should_get_all_tasks()
+        public void should_get_tasks()
         {
             var outList = new List<ContractTask>();
             converter.GetQuerySpecification(cSpec).Returns(qSpec);
