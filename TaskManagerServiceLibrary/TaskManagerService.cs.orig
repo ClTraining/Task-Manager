@@ -1,13 +1,19 @@
+using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
+using Ninject;
+using Ninject.Extensions.Conventions;
+using Ninject.Modules;
 using Specifications.ClientSpecification;
 using Specifications.QuerySpecifications;
 using TaskManagerServiceLibrary.Repositories;
+using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
+using System.Linq;
 
 namespace TaskManagerServiceLibrary
 {
@@ -67,28 +73,30 @@ namespace TaskManagerServiceLibrary
 
         public TaskManagerTests()
         {
-            service = new TaskManagerService(repo,converter);
+<<<<<<< HEAD
+            service = new TaskManagerService(repo, converter);
+=======
+>>>>>>> a83f085961ea015d617930764d16b22a18c98c8d
         }
-
 
         [Fact]
         public void should_get_all_tasks()
         {
             var outList = new List<ContractTask>();
             converter.GetQuerySpecification(cSpec).Returns(qSpec);
-            repo.GetTasks(qSpec).Returns(outList);            
+            repo.GetTasks(qSpec).Returns(outList);
 
             var contractTasks = service.GetTasks(cSpec);
 
             contractTasks.Should().BeEquivalentTo(outList);
         }
 
-        //[Fact]
-        //public void should_send_clear_date_for_task()
-        //{
-        //    var args = new ClearDateArgs { Id = 1 };
-        //    service.ClearTaskDueDate(args);
-        //    repo.Received().ClearTaskDueDate(args);
-        //}
+        [Fact]
+        public void should_send_clear_date_for_task()
+        {
+            var args = new ClearDateArgs { Id = 1 };
+            service.ClearTaskDueDate(args);
+            repo.Received().ClearTaskDueDate(args);
+        }
     }
 }

@@ -98,7 +98,7 @@
       <Project>{20ae42ef-7dc6-478b-b1a3-825fbf16e6c7}</Project>
       <Name>EntitiesLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Specificatios\Specifications.csproj">
+    <ProjectReference Include="..\Specifications\Specifications.csproj">
       <Project>{14B45886-80D8-4295-AD6C-6AAC3C221B5B}</Project>
       <Name>Specifications</Name>
     </ProjectReference>
