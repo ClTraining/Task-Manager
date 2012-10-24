@@ -71,10 +71,12 @@ namespace TaskManagerServiceLibrary.Repositories
         private readonly ITaskMapper mapper = Substitute.For<ITaskMapper>();
         private readonly IQuerySpecification spec = Substitute.For<IQuerySpecification>();
         readonly MemoRepository repo;
+        readonly ServiceTask sTask = new ServiceTask{Id = 1};
 
         public MemoRepositoryTests()
         {
             repo = new MemoRepository(mapper);
+            repo.taskList.Add(sTask);
         }
 
         [Fact]
@@ -90,13 +92,39 @@ namespace TaskManagerServiceLibrary.Repositories
         [Fact]
         public void should_get_all_tasks_from_repo()
         {
-            var task = new ServiceTask();
-            repo.taskList.Add(task);
-            spec.IsSatisfied(task).Returns(true);
+            spec.IsSatisfied(sTask).Returns(true);
             
             var res = repo.GetTasks(spec);
             
             res.Count.Should().Be(1);
+        }
+
+        [Fact]
+        public void should_mark_task_as_completed()
+        {
+            repo.Complete(new CompleteTaskArgs{Id = 1});
+            repo.taskList[0].IsCompleted.Should().BeTrue();
+        }
+
+        [Fact]
+        public void should_rename_task_by_id()
+        {
+            repo.RenameTask(new RenameTaskArgs{Id = 1, Name = "task1"});
+            repo.taskList[0].Name.Should().Be("task1");
+        }
+
+        [Fact]
+        public void should_set_date_to_task_by_id()
+        {
+            repo.SetTaskDueDate(new SetDateArgs{Id = 1, DueDate = DateTime.Today});
+            repo.taskList[0].DueDate.Should().Be(DateTime.Today);
+        }
+
+        [Fact]
+        public void should_clear_date_by_id()
+        {
+            repo.ClearTaskDueDate(new ClearDateArgs{Id = 1});
+            repo.taskList[0].DueDate.Should().Be(default(DateTime));
         }
     }
 }
