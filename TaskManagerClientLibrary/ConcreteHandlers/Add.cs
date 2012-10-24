@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using ConnectToWcf;
 using EntitiesLibrary;
+using EntitiesLibrary.CommandArguments;
 using NSubstitute;
 using Xunit;
 
@@ -17,7 +18,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         protected override void ExecuteWithGenericInput(AddTaskArgs input)
         {
-            int result = client.AddTask(input);
+            var result = client.AddTask(input);
             OutText("Task added. Task ID: " + result);
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using EntitiesLibrary;
+using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using Xunit;
 
@@ -12,8 +13,6 @@ namespace TaskManagerServiceLibrary.Repositories
     {
         private readonly List<ServiceTask> taskList = new List<ServiceTask>();
         private int currentId;
-
-        #region IRepository Members
 
         public int AddTask(AddTaskArgs args)
         {
@@ -26,7 +25,7 @@ namespace TaskManagerServiceLibrary.Repositories
 
         public ServiceTask GetTaskById(int id)
         {
-            int index = id - 1;
+            var index = id - 1;
             if (index < 0 || index >= taskList.Count)
                 throw new TaskNotFoundException(id.ToString());
 
@@ -53,7 +52,10 @@ namespace TaskManagerServiceLibrary.Repositories
             GetTaskById(args.Id).DueDate = args.DueDate;
         }
 
-        #endregion
+        public void ClearTaskDueDate(ClearDateArgs args)
+        {
+            GetTaskById(args.Id).DueDate = default(DateTime);
+        }
 
         private int GetNewId()
         {
@@ -65,7 +67,7 @@ namespace TaskManagerServiceLibrary.Repositories
     public class MemoRepositoryTests
     {
         private readonly MemoRepository repository = new MemoRepository();
-        private readonly List<string> taskNames = new List<string> {"test task", "another task", "my task"};
+        private readonly List<string> taskNames = new List<string> { "test task", "another task", "my task" };
 
         [Fact]
         public void should_throw_exception_if_index_not_found()
@@ -77,23 +79,24 @@ namespace TaskManagerServiceLibrary.Repositories
         [Fact]
         public void should_save_task_and_generate_new_id()
         {
-            int tTask = repository.AddTask(new AddTaskArgs {Name = taskNames[0]});
+            var tTask = repository.AddTask(new AddTaskArgs {Name = taskNames[0]});
             tTask.Should().Be(1);
         }
 
         [Fact]
         public void should_get_task_by_id()
         {
-            List<int> addedTasks =
-                taskNames.Select(taskName => repository.AddTask(new AddTaskArgs {Name = taskName})).ToList();
-            List<ServiceTask> receivedTasks = addedTasks.Select(repository.GetTaskById).ToList();
-            receivedTasks.Select(x => x.Name.Should().Be(taskNames.ToArray()[receivedTasks.ToList().IndexOf(x)]));
+            var date = DateTime.Now;
+            var taskArgs = new AddTaskArgs {Name = "task name" , DueDate = date};
+            var taskId = repository.AddTask(taskArgs);
+            var result = repository.GetTaskById(taskId);
+            result.ShouldBeEquivalentTo(new ServiceTask{Id = taskId, Name = taskArgs.Name, DueDate = taskArgs.DueDate});
         }
 
         [Fact]
-        public void should_mark_task_by_id()
+        public void should_mark_as_completed_task_by_id()
         {
-            int taskId = repository.AddTask(new AddTaskArgs {Name = "tt"});
+            var taskId = repository.AddTask(new AddTaskArgs {Name = "tt"});
             repository.MarkTaskAsCompleted(new CompleteTaskArgs {Id = taskId});
             repository.GetTaskById(taskId).IsCompleted.Should().BeTrue();
         }
@@ -101,7 +104,7 @@ namespace TaskManagerServiceLibrary.Repositories
         [Fact]
         public void should_return_empty_list()
         {
-            List<ServiceTask> result = repository.GetAllTasks();
+            var result = repository.GetAllTasks();
             result.ShouldBeEquivalentTo(new List<ServiceTask>());
         }
 
@@ -109,8 +112,8 @@ namespace TaskManagerServiceLibrary.Repositories
         public void should_get_all_tasks()
         {
             taskNames.Select(taskName => repository.AddTask(new AddTaskArgs {Name = taskName})).ToList();
-            List<ServiceTask> taskList = repository.GetAllTasks().ToList();
-            foreach (ServiceTask task in taskList)
+            var taskList = repository.GetAllTasks().ToList();
+            foreach (var task in taskList)
             {
                 task.Name.Should().Be(taskNames.ToArray()[taskList.IndexOf(task)]);
             }
@@ -119,7 +122,7 @@ namespace TaskManagerServiceLibrary.Repositories
         [Fact]
         public void should_rename_task()
         {
-            int taskId = repository.AddTask(new AddTaskArgs {Name = "tt"});
+            var taskId = repository.AddTask(new AddTaskArgs {Name = "task"});
             repository.RenameTask(new RenameTaskArgs {Id = taskId, Name = "New name"});
             repository.GetTaskById(taskId).Name.Should().Be("New name");
         }
@@ -127,10 +130,19 @@ namespace TaskManagerServiceLibrary.Repositories
         [Fact]
         public void shoud_set_date_for_task()
         {
-            int taskId = repository.AddTask(new AddTaskArgs { Name = "tt" });
+            var taskId = repository.AddTask(new AddTaskArgs {Name = "task 1"});
             var dateTime = DateTime.Now;
-            repository.SetTaskDueDate(new SetDateArgs { Id = taskId, DueDate = dateTime });
+            repository.SetTaskDueDate(new SetDateArgs {Id = taskId, DueDate = dateTime});
             repository.GetTaskById(taskId).DueDate.Should().Be(dateTime);
+        }
+
+        [Fact]
+        public void shoud_clear_task_due_date()
+        {
+            var dateTime = DateTime.Now;
+            var taskId = repository.AddTask(new AddTaskArgs {Name = "task 2", DueDate = dateTime});
+            repository.ClearTaskDueDate(new ClearDateArgs {Id = taskId});
+            repository.GetTaskById(taskId).DueDate.Should().Be(default(DateTime));
         }
     }
 }

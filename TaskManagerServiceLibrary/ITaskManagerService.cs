@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
+using EntitiesLibrary.CommandArguments;
 
 namespace TaskManagerServiceLibrary
 {
@@ -27,5 +28,8 @@ namespace TaskManagerServiceLibrary
 
         [OperationContract]
         void SetTaskDueDate(SetDateArgs args);
+
+        [OperationContract]
+        void ClearTaskDueDate(ClearDateArgs args);
     }
 }

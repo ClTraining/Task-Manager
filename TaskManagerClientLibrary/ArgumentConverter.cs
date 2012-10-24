@@ -1,7 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using EntitiesLibrary;
+using System.Globalization;
 using FluentAssertions;
 using Xunit;
 
@@ -16,62 +15,53 @@ namespace TaskManagerClientLibrary
         }
     }
 
+
     public class ArgumentConverterTests
     {
+        private readonly ArgumentConverter<TestArgs> argumentConverter = new ArgumentConverter<TestArgs>();
+
         [Fact]
         public void should_get_add_task_arguments()
         {
-            var tc = new ArgumentConverter<AddTaskArgs>();
+            var tc = argumentConverter;
             var args = tc.Convert(new List<string> {"123"});
-            args.ShouldBeEquivalentTo(new AddTaskArgs {Name = "123"});
+            args.ShouldBeEquivalentTo(new TestArgs {TestString = "123"});
         }
 
         [Fact]
         public void should_get_add_task_with_date_arguments()
         {
-            var tc = new ArgumentConverter<AddTaskArgs>();
-            var args = tc.Convert(new List<string> { "task 1", "01-01-2012" });
-            args.ShouldBeEquivalentTo(new AddTaskArgs { Name = "task 1", DueDate = DateTime.Parse("01-01-2012")});
+            var tc = argumentConverter;
+            var args = tc.Convert(new List<string> {"test test", "4003"});
+            args.ShouldBeEquivalentTo(new TestArgs {TestString = "test test", TestInt = 4003});
         }
+    }
 
-        [Fact]
-        public void should_get_rename_task_arguments()
-        {
-            var tc = new ArgumentConverter<RenameTaskArgs>();
-            var result = tc.Convert(new List<string> {"11", "13dsd"});
-            result.ShouldBeEquivalentTo(new RenameTaskArgs {Id = 11, Name = "13dsd"});
-        }
+    [TypeConverter(typeof (TestArgsConverter))]
+    internal class TestArgs
+    {
+        public string TestString { get; set; }
 
-        [Fact]
-        public void should_get_complete_command_arguments()
-        {
-            var tc = new ArgumentConverter<CompleteTaskArgs>();
-            var result = tc.Convert(new List<string> {"14"});
-            result.ShouldBeEquivalentTo(new CompleteTaskArgs {Id = 14});
-        }
+        public int TestInt { get; set; }
+    }
 
-        [Fact]
-        public void should_get_list_single_task_args()
+    internal class TestArgsConverter : TypeConverter
+    {
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            var tc = new ArgumentConverter<ListArgs>();
-            var result = tc.Convert(new List<string> {"3"});
-            result.ShouldBeEquivalentTo(new ListArgs {Id = 3});
-        }
+            var s = value as List<string>;
+            if (s != null)
+            {
+                var addTaskArgs = new TestArgs {TestString = s[0]};
 
-        [Fact]
-        public void should_get_list_all_task_args()
-        {
-            var tc = new ArgumentConverter<ListArgs>();
-            var result = tc.Convert(new List<string>());
-            result.ShouldBeEquivalentTo(new ListArgs {Id = null});
-        }
+                if (s.Count > 1)
+                {
+                    addTaskArgs.TestInt = int.Parse(s[1]);
+                }
 
-        [Fact]
-        public void should_convert_set_date_args()
-        {
-            var tc = new ArgumentConverter<SetDateArgs>();
-            var result = tc.Convert(new List<string> {"9","10-10-2012"});
-            result.ShouldBeEquivalentTo(new SetDateArgs { Id = 9, DueDate = DateTime.Parse("10-10-2012") });
+                return addTaskArgs;
+            }
+            return base.ConvertFrom(context, culture, value);
         }
     }
 }

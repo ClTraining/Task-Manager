@@ -9,14 +9,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
 {
     public class HelpDisplayer : IHelpDisplayer
     {
-        #region IHelpDisplayer Members
-
         public void Show(ICommand command)
         {
             Console.WriteLine("  " + command.Name + "\n\t" + command.Description + "\n");
         }
-
-        #endregion
     }
 
     public class DisplayHelpTests

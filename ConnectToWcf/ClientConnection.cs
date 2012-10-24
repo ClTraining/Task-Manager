@@ -2,14 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
+using EntitiesLibrary.CommandArguments;
 using TaskManagerServiceLibrary;
 
 namespace ConnectToWcf
 {
     public class ClientConnection : IClientConnection
     {
-        private readonly string serviceAddress;
         private readonly NetTcpBinding binding;
+        private readonly string serviceAddress;
 
         public ClientConnection(string address)
         {
@@ -29,7 +30,7 @@ namespace ConnectToWcf
 
         public List<ContractTask> GetTaskById(int id)
         {
-            return GetDataFromServer(s => new List<ContractTask> { s.GetTaskById(id) });
+            return GetDataFromServer(s => new List<ContractTask> {s.GetTaskById(id)});
         }
 
         public List<ContractTask> GetAllTasks()
@@ -45,6 +46,11 @@ namespace ConnectToWcf
         public void SetTaskDueDate(SetDateArgs args)
         {
             UpdateDataOnServer(s => s.SetTaskDueDate(args));
+        }
+
+        public void ClearTaskDueDate(ClearDateArgs args)
+        {
+            UpdateDataOnServer(s => s.ClearTaskDueDate(args));
         }
 
         private void UpdateDataOnServer(Action<ITaskManagerService> action)

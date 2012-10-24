@@ -21,8 +21,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             this.textWriter = textWriter;
         }
 
-        #region ICommand Members
-
         public string Name { get; set; }
         public string Description { get; set; }
 
@@ -30,7 +28,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         {
             try
             {
-                object converted = converter == null ? argument : Convert(argument);
+                var converted = converter == null ? argument : Convert(argument);
                 ExecuteWithGenericInput((T) converted);
             }
             catch (TaskNotFoundException e)
@@ -43,9 +41,9 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             }
         }
 
-        #endregion
-
-        protected abstract void ExecuteWithGenericInput(T input);
+        protected virtual void ExecuteWithGenericInput(T input)
+        {
+        }
 
         protected void OutText(string text)
         {

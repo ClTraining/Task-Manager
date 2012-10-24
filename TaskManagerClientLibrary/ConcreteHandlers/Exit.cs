@@ -15,11 +15,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public override void Execute(object argument)
         {
-            ExecuteWithGenericInput((string) argument);
-        }
-
-        protected override void ExecuteWithGenericInput(string input)
-        {
             manager.Exit();
         }
     }

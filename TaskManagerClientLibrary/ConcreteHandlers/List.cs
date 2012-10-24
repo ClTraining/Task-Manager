@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using ConnectToWcf;
 using EntitiesLibrary;
+using EntitiesLibrary.CommandArguments;
 using NSubstitute;
 using TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter;
 using Xunit;
@@ -31,7 +32,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         private void GetTasksAndPrint(Func<IClientConnection, List<ContractTask>> func, ITaskFormatter formatter)
         {
-            List<ContractTask> tasks = func(client);
+            var tasks = func(client);
             OutText(formatter.Show(tasks));
         }
     }

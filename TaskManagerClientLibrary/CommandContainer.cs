@@ -15,14 +15,11 @@ namespace TaskManagerClientLibrary
             this.commands = commands;
         }
 
-        #region ICommandContainer Members
-
         public IEnumerable<ICommand> GetCommands()
         {
             return commands;
         }
 
-        #endregion
     }
 
     public class CommandContainerTests

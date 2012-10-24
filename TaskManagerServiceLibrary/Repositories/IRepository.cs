@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using EntitiesLibrary;
+using EntitiesLibrary.CommandArguments;
 
 namespace TaskManagerServiceLibrary.Repositories
 {
@@ -11,5 +12,6 @@ namespace TaskManagerServiceLibrary.Repositories
         void MarkTaskAsCompleted(CompleteTaskArgs id);
         void RenameTask(RenameTaskArgs args);
         void SetTaskDueDate(SetDateArgs args);
+        void ClearTaskDueDate(ClearDateArgs args);
     }
 }
