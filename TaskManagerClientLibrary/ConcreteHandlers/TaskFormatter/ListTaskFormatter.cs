@@ -20,8 +20,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
             format = "{0,-" + PosId + "} | {1," + PosName + "} | {2," + PosCompleted + "} | {3," + PosDueDate + "}";
         }
 
-        #region ITaskFormatter Members
-
         public virtual string Show(List<ContractTask> tasks)
         {
             var taskString = new StringBuilder();
@@ -31,12 +29,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
                 x =>
                 taskString.AppendLine(String.Format(format, x.Id,
                                                     (x.Name.Length > PosName) ? x.Name.Remove(PosName) : x.Name,
-                                                    x.IsCompleted ? "+" : "-", x.DueDate)));
+                                                    x.IsCompleted ? "+" : "-", x.DueDate == default(DateTime) ? "not set" : x.DueDate.ToString())));
 
             return taskString.ToString();
         }
-
-        #endregion
 
         private string PrintHeader()
         {
@@ -60,11 +56,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
         {
             var formatter = new ListTaskFormatter();
             var sb = new StringBuilder();
-            sb.Append(formatter.Show(new List<ContractTask> { new ContractTask { Id = 1, Name = "abcd123456789000000000000" } }));
-
-            var expected = string.Format("Id    |            Name |     Completed |             Due date\r\n1     | abcd12345678900 |             - |   {0}\r\n", default(DateTime));
-
-            sb.ToString().Should().Be(expected);
+            sb.Append(
+                formatter.Show(new List<ContractTask> { new ContractTask { Id = 1, Name = "abcd123456789000000000000" } }));
+            sb.ToString().Should().Be(
+                "Id    |            Name |     Completed |             Due date\r\n1     | abcd12345678900 |             - |              not set\r\n");
         }
     }
 }
