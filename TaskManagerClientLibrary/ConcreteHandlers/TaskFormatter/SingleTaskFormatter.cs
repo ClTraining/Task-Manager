@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using EntitiesLibrary;
 using FluentAssertions;
@@ -10,6 +11,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
     public class SingleTaskFormatter : ITaskFormatter
     {
         private const string Format = "\nID:\t\t{0}\n" + "Name:\t\t{1}\n" + "Completed:\t{2}\n" + "Due date:\t{3}\n\n";
+        private readonly string datePattern = CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern;
 
         public virtual string Show(List<ContractTask> tasks)
         {
@@ -18,7 +20,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
             tasks.ForEach(
                 x =>
                 taskString.Append(String.Format(Format, x.Id, x.Name, x.IsCompleted ? "+" : "-",
-                                                x.DueDate == default(DateTime) ? "not set" : x.DueDate.ToString())));
+                                                x.DueDate == default(DateTime) ? "not set" : x.DueDate.ToString(datePattern))));
 
             return taskString.ToString();
         }
