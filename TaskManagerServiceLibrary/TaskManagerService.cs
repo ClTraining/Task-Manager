@@ -23,16 +23,16 @@ namespace TaskManagerServiceLibrary
             this.converter = converter;
         }
 
-        public int AddTask(AddTaskArgs task)
-        {
-            return repository.AddTask(task);
-        }
-
         public List<ContractTask> GetTasks(IClientSpecification input)
         {
             var res = converter.GetQuerySpecification(input);
             res.Initialise(input.Data);
             return repository.GetTasks(res);
+        }
+
+        public int AddTask(AddTaskArgs task)
+        {
+            return repository.AddTask(task);
         }
 
         public void Complete(CompleteTaskArgs args)
@@ -67,7 +67,7 @@ namespace TaskManagerServiceLibrary
 
         public TaskManagerTests()
         {
-            service = new TaskManagerService(repo,converter);
+            service = new TaskManagerService(repo, converter);
         }
 
 
@@ -76,11 +76,20 @@ namespace TaskManagerServiceLibrary
         {
             var outList = new List<ContractTask>();
             converter.GetQuerySpecification(cSpec).Returns(qSpec);
-            repo.GetTasks(qSpec).Returns(outList);            
+            repo.GetTasks(qSpec).Returns(outList);
 
             var contractTasks = service.GetTasks(cSpec);
 
             contractTasks.Should().BeEquivalentTo(outList);
+        }
+
+        [Fact]
+        public void should_add_task_and_return_id()
+        {
+            var args = new AddTaskArgs();
+            service.AddTask(args);
+            repo.Received().AddTask(args);
+
         }
 
         [Fact]
@@ -89,6 +98,29 @@ namespace TaskManagerServiceLibrary
             var args = new ClearDateArgs { Id = 1 };
             service.ClearTaskDueDate(args);
             repo.Received().ClearTaskDueDate(args);
+        }
+
+        [Fact]
+        public void should_mard_task_as_completed()
+        {
+            var args = new CompleteTaskArgs { Id = 1 };
+            service.Complete(args);
+            repo.Received().Complete(args);
+        }
+        [Fact]
+        public void should_rename_task()
+        {
+            var args = new RenameTaskArgs { Id = 1 };
+            service.RenameTask(args);
+            repo.Received().RenameTask(args);
+        }
+
+        [Fact]
+        public void should_set_task_due_date()
+        {
+            var args = new SetDateArgs { Id = 1 };
+            service.SetTaskDueDate(args);
+            repo.Received().SetTaskDueDate(args);
         }
     }
 }
