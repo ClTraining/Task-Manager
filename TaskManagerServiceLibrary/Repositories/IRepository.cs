@@ -4,14 +4,15 @@ using EntitiesLibrary.Arguments.AddTask;
 using EntitiesLibrary.Arguments.CompleteTask;
 using EntitiesLibrary.Arguments.RenameTask;
 using EntitiesLibrary.Arguments.SetDate;
-using Specifications.ServiceSpecifications;
+using Specifications;
+using Specifications.QuerySpecifications;
 
 namespace TaskManagerServiceLibrary.Repositories
 {
     public interface IRepository
     {
         int AddTask(AddTaskArgs name);
-        List<ContractTask> GetTasks(IServiceSpecification spec);
+        List<ContractTask> GetTasks(IQuerySpecification spec);
         void Complete(CompleteTaskArgs id);
         void RenameTask(RenameTaskArgs args);
         void SetTaskDueDate(SetDateArgs args);

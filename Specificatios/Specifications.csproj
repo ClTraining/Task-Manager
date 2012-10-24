@@ -35,6 +35,13 @@
     <Reference Include="AutoMapper">
       <HintPath>..\packages\AutoMapper.2.2.0\lib\net40\AutoMapper.dll</HintPath>
     </Reference>
+    <Reference Include="FluentAssertions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Users\pavelz\Documents\FluentAssertions\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.4.3.0\lib\NET40\NSubstitute.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -43,18 +50,23 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="xunit, Version=1.9.1.1600, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\TaskConsoleClient\bin\Debug\xunit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientSpecification\IClientSpecification.cs" />
     <Compile Include="ClientSpecification\ListAll.cs" />
     <Compile Include="ClientSpecification\ListByDate.cs" />
     <Compile Include="ClientSpecification\ListSingle.cs" />
+    <Compile Include="CommandSpecifications\ICommandSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Mappers\ServiceMapper.cs" />
-    <Compile Include="ServiceSpecifications\IServiceSpecification.cs" />
-    <Compile Include="ServiceSpecifications\ListAllServiceSpecification.cs" />
-    <Compile Include="ServiceSpecifications\ListByDateSpecification.cs" />
-    <Compile Include="ServiceSpecifications\ListSingleServiceSpecification.cs" />
+    <Compile Include="QuerySpecifications\ISpecification.cs" />
+    <Compile Include="QuerySpecifications\ListAllSpecification.cs" />
+    <Compile Include="QuerySpecifications\ListByDateSpecification.cs" />
+    <Compile Include="QuerySpecifications\ListSingleSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">
@@ -65,6 +77,7 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

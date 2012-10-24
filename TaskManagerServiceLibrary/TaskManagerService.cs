@@ -9,8 +9,9 @@ using EntitiesLibrary.Arguments.SetDate;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
+using Specifications;
 using Specifications.ClientSpecification;
-using Specifications.ServiceSpecifications;
+using Specifications.QuerySpecifications;
 using TaskManagerServiceLibrary.Repositories;
 using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
@@ -23,9 +24,9 @@ namespace TaskManagerServiceLibrary
     {
         private readonly IRepository repository;
         private readonly IToDoList taskList;
-        private readonly List<IServiceSpecification> list;
+        private readonly List<IQuerySpecification> list;
 
-        public TaskManagerService(IRepository repository, List<IServiceSpecification> list, IToDoList taskList)
+        public TaskManagerService(IRepository repository, List<IQuerySpecification> list, IToDoList taskList)
         {
             this.repository = repository;
             this.list = list;
@@ -40,9 +41,7 @@ namespace TaskManagerServiceLibrary
         public List<ContractTask> GetTasks(IClientSpecification input)
         {
             var res = list.First(x => x.GetType().Name.Contains(input.GetType().Name));
-
-            res.Data = input.Data;
-
+            res.Initialise(input.Data);
             return repository.GetTasks(res);
         }
 
@@ -64,14 +63,16 @@ namespace TaskManagerServiceLibrary
 
     public class TaskManagerTests
     {
-        private readonly List<IServiceSpecification> specs = new StandardKernel(new MyModule()).GetAll<IServiceSpecification>().ToList();
-        readonly IRepository repo = new MemoRepository(new TaskMapper());
+        private readonly List<IQuerySpecification> specs = new StandardKernel(new MyModule()).GetAll<IQuerySpecification>().ToList();
+        readonly ITaskMapper mapper = new TaskMapper();
+        private readonly IRepository repo;
         readonly IToDoList todolist;
 
         readonly ITaskManagerService service;
 
         public TaskManagerTests()
         {
+            repo = new MemoRepository(mapper);
             todolist = new ToDoList(repo);
             service = new TaskManagerService(repo, specs, todolist);
         }
@@ -79,14 +80,14 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_get_tasks()
         {
-            var spec = new ListSingle {Data = 3};
-            var tasks = new[] {"task1", "task2", "task3", "task4", "task5", "task6", "task7", "task8", "task9"};
+            var spec = new ListSingle { Data = 3 };
+            var tasks = new[] { "task1", "task2", "task3", "task4", "task5", "task6", "task7", "task8", "task9" };
 
-            var addTaskArgs = new AddTaskArgs {Name = "some task"};
+            var addTaskArgs = new AddTaskArgs { Name = "some task" };
 
             service.AddTask(addTaskArgs);
 
-            tasks.ToList().ForEach(a => service.AddTask(new AddTaskArgs{Name = a}));
+            tasks.ToList().ForEach(a => service.AddTask(new AddTaskArgs { Name = a }));
 
             var result = service.GetTasks(spec);
         }
@@ -96,9 +97,9 @@ namespace TaskManagerServiceLibrary
     {
         public override void Load()
         {
-            this.Bind(x => x.FromAssemblyContaining<IServiceSpecification>()
+            this.Bind(x => x.FromAssemblyContaining<IQuerySpecification>()
                                .SelectAllClasses()
-                               .InNamespaceOf<IServiceSpecification>()
+                               .InNamespaceOf<IQuerySpecification>()
                                .BindAllInterfaces()
                 );
         }

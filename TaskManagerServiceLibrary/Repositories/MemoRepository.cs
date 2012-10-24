@@ -10,7 +10,8 @@ using EntitiesLibrary.Arguments.RenameTask;
 using EntitiesLibrary.Arguments.SetDate;
 using FluentAssertions;
 using NSubstitute;
-using Specifications.ServiceSpecifications;
+using Specifications;
+using Specifications.QuerySpecifications;
 using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
 
@@ -19,7 +20,7 @@ namespace TaskManagerServiceLibrary.Repositories
     public class MemoRepository : IRepository
     {
         private readonly ITaskMapper mapper;
-        private readonly List<ServiceTask> taskList = new List<ServiceTask>();
+        public readonly List<ServiceTask> taskList = new List<ServiceTask>();
         private int currentId;
 
         public MemoRepository(ITaskMapper mapper)
@@ -36,7 +37,7 @@ namespace TaskManagerServiceLibrary.Repositories
             return serviceTask.Id;
         }
 
-        public List<ContractTask> GetTasks(IServiceSpecification spec)
+        public List<ContractTask> GetTasks(IQuerySpecification spec)
         {
             return taskList
                 .Where(spec.IsSatisfied)
@@ -69,9 +70,8 @@ namespace TaskManagerServiceLibrary.Repositories
     public class MemoRepositoryTests
     {
         private readonly ITaskMapper mapper = Substitute.For<ITaskMapper>();
+        private readonly IQuerySpecification spec = Substitute.For<IQuerySpecification>();
         readonly MemoRepository repo;
-
-        private readonly List<string> taskNames = new List<string> { "test task", "another task", "my task" };
 
         public MemoRepositoryTests()
         {
@@ -82,10 +82,22 @@ namespace TaskManagerServiceLibrary.Repositories
         public void should_add_task_to_repo()
         {
             var task = new AddTaskArgs { DueDate = DateTime.Now, Name = "task1" };
-
+            
             var result = repo.AddTask(task);
-
+            
             result.Should().Be(1);
+        }
+
+        [Fact]
+        public void should_get_all_tasks_from_repo()
+        {
+            var task = new ServiceTask();
+            repo.taskList.Add(task);
+            spec.IsSatisfied(task).Returns(true);
+            
+            var res = repo.GetTasks(spec);
+            
+            res.Count.Should().Be(1);
         }
     }
 }

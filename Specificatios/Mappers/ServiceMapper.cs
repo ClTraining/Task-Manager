@@ -1,21 +1,21 @@
 ﻿using AutoMapper;
 using Specifications.ClientSpecification;
-using Specifications.ServiceSpecifications;
+using Specifications.QuerySpecifications;
 
 namespace Specifications.Mappers
 {
     public class ServiceMapper
     {
         readonly IClientSpecification sourceType;
-        readonly IServiceSpecification destinationType;
-        public ServiceMapper(IClientSpecification spec1, IServiceSpecification spec2)
+        readonly IQuerySpecification destinationType;
+        public ServiceMapper(IClientSpecification spec1, IQuerySpecification spec2)
         {
             sourceType = spec1;
             destinationType = spec2;
             Mapper.CreateMap(sourceType.GetType(), destinationType.GetType());
         }
 
-        public IServiceSpecification ConvertToServiceSpec(IClientSpecification spec)
+        public IQuerySpecification ConvertToServiceSpec(IClientSpecification spec)
         {
             return null;
         }
