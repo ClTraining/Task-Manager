@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
+using FluentAssertions;
 using NSubstitute;
 using Ninject;
 using Ninject.Extensions.Conventions;
@@ -20,12 +21,12 @@ namespace TaskManagerServiceLibrary
     public class TaskManagerService : ITaskManagerService
     {
         private readonly IRepository repository;
-        private readonly List<IQuerySpecification> list;
+        private readonly ISpecificationsConverter converter;
 
-        public TaskManagerService(IRepository repository, List<IQuerySpecification> list)
+        public TaskManagerService(IRepository repository, List<IQuerySpecification> list, ISpecificationsConverter converter)
         {
             this.repository = repository;
-            this.list = list;
+            this.converter = converter;
         }
 
         public int AddTask(AddTaskArgs task)
@@ -35,7 +36,7 @@ namespace TaskManagerServiceLibrary
 
         public List<ContractTask> GetTasks(IClientSpecification input)
         {
-            var res = list.First(x => x.GetType().Name.Contains(input.GetType().Name));
+            var res = converter.GetQuerySpecification(input);
             res.Initialise(input.Data);
             return repository.GetTasks(res);
         }
@@ -63,52 +64,40 @@ namespace TaskManagerServiceLibrary
 
     public class TaskManagerTests
     {
-        private readonly List<IQuerySpecification> specs = new StandardKernel(new MyModule()).GetAll<IQuerySpecification>().ToList();
-        readonly ITaskMapper mapper = new TaskMapper();
-        private readonly IRepository repo;
+        private readonly IQuerySpecification spec = Substitute.For<IQuerySpecification>();
+        private readonly IRepository repo = Substitute.For<IRepository>();
 
         readonly ITaskManagerService service;
 
         public TaskManagerTests()
         {
-            repo = new MemoRepository(mapper);
+            specs.Add(spec);
             service = new TaskManagerService(repo, specs);
         }
 
         [Fact]
-        public void should_get_tasks()
+        public void should_get_all_tasks()
         {
-            var spec = new ListSingle { Data = 3 };
-            var tasks = new[] { "task1", "task2", "task3", "task4", "task5", "task6", "task7", "task8", "task9" };
+            var clientSpec = Substitute.For<IClientSpecification>();
+            clientSpec.GetType().Name.ReturnsForAnyArgs("aa");
 
-            var addTaskArgs = new AddTaskArgs { Name = "some task" };
+            //var cSpec = Substitute.For<IClientSpecification>();
+            //var serviceTask = new ServiceTask();
+            //var contractTasks = new List<ContractTask> { new ContractTask() };
+            //spec.IsSatisfied(serviceTask).Returns(true);
+            //repo.GetTasks(spec).Returns(contractTasks);
+            //spec.Initialise();
+            //var result = service.GetTasks(cSpec);
 
-            service.AddTask(addTaskArgs);
-
-            tasks.ToList().ForEach(a => service.AddTask(new AddTaskArgs { Name = a }));
-
-            var result = service.GetTasks(spec);
+            //result.Should().BeEquivalentTo(contractTasks);
         }
-        
+
         [Fact]
         public void should_send_clear_date_for_task()
         {
-            var dateTime = DateTime.Now;
             var args = new ClearDateArgs {Id = 1};
             service.ClearTaskDueDate(args);
             repo.Received().ClearTaskDueDate(args);
-        }
-    }
-
-    public class MyModule : NinjectModule
-    {
-        public override void Load()
-        {
-            this.Bind(x => x.FromAssemblyContaining<IQuerySpecification>()
-                               .SelectAllClasses()
-                               .InNamespaceOf<IQuerySpecification>()
-                               .BindAllInterfaces()
-                );
         }
     }
 }

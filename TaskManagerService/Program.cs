@@ -36,6 +36,7 @@ namespace TaskManagerService
             Bind<ITaskManagerService>().To<TaskManagerServiceLibrary.TaskManagerService>();
             Bind<IRepository>().To<MemoRepository>().InSingletonScope();
             Bind<ITaskMapper>().To<TaskMapper>();
+            Bind<ISpecificationsConverter>().To<SpecificationsConverter>();
 
             this.Bind(a => a.FromAssemblyContaining<IQuerySpecification>()
                                .SelectAllClasses()
