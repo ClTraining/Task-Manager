@@ -22,6 +22,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
 
         public virtual string Show(List<ContractTask> tasks)
         {
+            var defaultDate = default(DateTime);
             var taskString = new StringBuilder();
             taskString.AppendLine(PrintHeader());
 
@@ -57,7 +58,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
             var formatter = new ListTaskFormatter();
             var sb = new StringBuilder();
             sb.Append(
-                formatter.Show(new List<ContractTask> {new ContractTask {Id = 1, Name = "abcd123456789000000000000"}}));
+                formatter.Show(new List<ContractTask> { new ContractTask { Id = 1, Name = "abcd123456789000000000000" } }));
             sb.ToString().Should().Be(
                 "Id    |            Name |     Completed |             Due date\r\n1     | abcd12345678900 |             - |              not set\r\n");
         }

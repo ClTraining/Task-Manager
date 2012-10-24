@@ -4,7 +4,7 @@ using NSubstitute;
 using TaskManagerClientLibrary.ConcreteHandlers;
 using Xunit;
 
-namespace TaskManagerClientLibrary
+namespace TaskManagerClientLibrary.ComandContainer
 {
     public class CommandContainer : ICommandContainer
     {

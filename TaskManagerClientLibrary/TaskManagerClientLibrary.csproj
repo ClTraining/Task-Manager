@@ -60,7 +60,8 @@
   <ItemGroup>
     <Compile Include="Application.cs" />
     <Compile Include="ArgumentConverter.cs" />
-    <Compile Include="CommandContainer.cs" />
+    <Compile Include="ComandContainer\CommandContainer.cs" />
+    <Compile Include="ComandContainer\ICommandContainer.cs" />
     <Compile Include="ConcreteHandlers\Add.cs" />
     <Compile Include="ConcreteHandlers\ClearDate.cs" />
     <Compile Include="ConcreteHandlers\Command.cs" />
@@ -71,9 +72,9 @@
     <Compile Include="ConcreteHandlers\HelpCommand\IHelpDisplayer.cs" />
     <Compile Include="ConcreteHandlers\ICommand.cs" />
     <Compile Include="ConcreteHandlers\SetDate.cs" />
-    <Compile Include="ICommandContainer.cs" />
     <Compile Include="ConcreteHandlers\List.cs" />
     <Compile Include="ConcreteHandlers\Rename.cs" />
+    <Compile Include="ConcreteHandlers\TaskFormatter\ITaskFormatterFactory.cs" />
     <Compile Include="ConcreteHandlers\TaskFormatter\SingleTaskFormatter.cs" />
     <Compile Include="ConcreteHandlers\TaskFormatter\ListTaskFormatter.cs" />
     <Compile Include="ConcreteHandlers\TaskFormatter\TaskFormatterFactory.cs" />
@@ -97,13 +98,13 @@
       <Project>{20ae42ef-7dc6-478b-b1a3-825fbf16e6c7}</Project>
       <Name>EntitiesLibrary</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Specificatios\Specifications.csproj">
+      <Project>{14B45886-80D8-4295-AD6C-6AAC3C221B5B}</Project>
+      <Name>Specifications</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TaskManagerServiceLibrary\TaskManagerServiceLibrary.csproj">
       <Project>{E82CCFA8-614B-4C74-AA99-344C00AFC325}</Project>
       <Name>TaskManagerServiceLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TaskManagerService\TaskManagerService.csproj">
-      <Project>{f3a90486-c083-46ec-a393-9ed92957c96a}</Project>
-      <Name>TaskManagerService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

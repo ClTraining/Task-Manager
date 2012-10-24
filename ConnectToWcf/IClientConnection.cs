@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
+using Specifications.ClientSpecification;
 
 namespace ConnectToWcf
 {
     public interface IClientConnection
     {
         int AddTask(AddTaskArgs task);
-        List<ContractTask> GetTaskById(int id);
-        List<ContractTask> GetAllTasks();
-        void MarkTaskAsCompleted(CompleteTaskArgs id);
+        List<ContractTask> GetTasks(IClientSpecification data);
+        void Complete(CompleteTaskArgs args);
         void RenameTask(RenameTaskArgs args);
         void SetTaskDueDate(SetDateArgs args);
         void ClearTaskDueDate(ClearDateArgs args);

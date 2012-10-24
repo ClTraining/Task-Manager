@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
+using Specifications.ClientSpecification;
 using TaskManagerServiceLibrary;
 
 namespace ConnectToWcf
@@ -18,6 +19,11 @@ namespace ConnectToWcf
             binding = new NetTcpBinding();
         }
 
+        public void Complete(CompleteTaskArgs args)
+        {
+            UpdateDataOnServer(s => s.Complete(args));
+        }
+
         public void RenameTask(RenameTaskArgs args)
         {
             UpdateDataOnServer(t => t.RenameTask(args));
@@ -28,19 +34,9 @@ namespace ConnectToWcf
             return GetDataFromServer(t => t.AddTask(task));
         }
 
-        public List<ContractTask> GetTaskById(int id)
+        public List<ContractTask> GetTasks(IClientSpecification data)
         {
-            return GetDataFromServer(s => new List<ContractTask> {s.GetTaskById(id)});
-        }
-
-        public List<ContractTask> GetAllTasks()
-        {
-            return GetDataFromServer(s => s.GetAllTasks());
-        }
-
-        public void MarkTaskAsCompleted(CompleteTaskArgs id)
-        {
-            UpdateDataOnServer(s => s.MarkTaskAsCompleted(id));
+            return GetDataFromServer(s => s.GetTasks(data));
         }
 
         public void SetTaskDueDate(SetDateArgs args)

@@ -48,7 +48,7 @@ namespace TaskManagerClientLibrary
 
         public LineParserTests()
         {
-            commands = new List<ICommand> {command1, command2, command3};
+            commands = new List<ICommand> { command1, command2, command3 };
 
             lp = new LineParser(commands, parser);
         }
@@ -60,7 +60,7 @@ namespace TaskManagerClientLibrary
             command2.Name.Returns("command");
             command3.Name.Returns("hello");
             var input = "add foo";
-            var list = new List<string> {"add", "foo"};
+            var list = new List<string> { "add", "foo" };
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
             list.RemoveAt(0);
@@ -73,7 +73,7 @@ namespace TaskManagerClientLibrary
             command1.Name.Returns("add");
             command2.Name.Returns("add");
             var input = "add aaa";
-            var list = new List<string> {"add", "aaa"};
+            var list = new List<string> { "add", "aaa" };
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
             list.RemoveAt(0);
@@ -89,7 +89,7 @@ namespace TaskManagerClientLibrary
             command3.Name.Returns("hello");
 
             var input = "ababa bababab";
-            var list = new List<string> {"ababa", "bababab"};
+            var list = new List<string> { "ababa", "bababab" };
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
 
@@ -109,7 +109,7 @@ namespace TaskManagerClientLibrary
             command3.Name.Returns("abrakadabra");
 
             var input = "hello world";
-            var list = new List<string> {"hello", "world"};
+            var list = new List<string> { "hello", "world" };
             parser.Parse(input).Returns(list);
 
             lp.ExecuteCommand(input);
@@ -122,7 +122,7 @@ namespace TaskManagerClientLibrary
         {
             command1.Name.Returns("add");
             var input = "add \"hello world\"";
-            var list = new List<string> {"add", "hello world"};
+            var list = new List<string> { "add", "hello world" };
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand("add \"hello world\"");
             list.RemoveAt(0);

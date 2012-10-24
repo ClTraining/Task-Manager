@@ -5,6 +5,7 @@ using ConnectToWcf;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using NSubstitute;
+using Specifications.ClientSpecification;
 using TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter;
 using Xunit;
 
@@ -12,90 +13,82 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class List : Command<ListArgs>
     {
-        private readonly TaskFormatterFactory taskFormatterFactory;
+        private readonly ITaskFormatterFactory taskFormatterFactory;
 
         public List(IClientConnection client, ArgumentConverter<ListArgs> converter, TextWriter textWriter,
-                    TaskFormatterFactory taskFormatterFactory)
+                    ITaskFormatterFactory taskFormatterFactory)
             : base(client, converter, textWriter)
         {
             Description = "Displays list of all tasks or single task, specified by ID.";
             this.taskFormatterFactory = taskFormatterFactory;
         }
 
-        protected override void ExecuteWithGenericInput(ListArgs input)
+        private void PrintWithFormatter(List<ContractTask> list, ITaskFormatter formatter)
         {
-            if (input.Id == null)
-                GetTasksAndPrint(s => s.GetAllTasks(), taskFormatterFactory.GetListFormatter());
-            else
-                GetTasksAndPrint(s => s.GetTaskById(input.Id.Value), taskFormatterFactory.GetSingleFormatter());
+            OutText(formatter.Show(list));
         }
 
-        private void GetTasksAndPrint(Func<IClientConnection, List<ContractTask>> func, ITaskFormatter formatter)
+        protected override void ExecuteWithGenericInput(ListArgs input)
         {
-            var tasks = func(client);
-            OutText(formatter.Show(tasks));
+            IClientSpecification data;
+
+            if (input.Date != default(DateTime) && input.Id == 0)
+                data = new ListByDate { Data = input.Date };
+
+            else if (input.Date == default(DateTime) && input.Id != null)
+                data = new ListSingle { Data = input.Id.Value };
+
+            else data = new ListAll { Data = null };
+
+            var tasks = client.GetTasks(data);
+            var formatter = tasks.Count > 1 ? taskFormatterFactory.GetListFormatter() : taskFormatterFactory.GetSingleFormatter();
+
+            PrintWithFormatter(tasks, formatter);
         }
     }
 
     public class ListTests
     {
-        private readonly IClientConnection client = Substitute.For<IClientConnection>();
+        private readonly IClientConnection connection = Substitute.For<IClientConnection>();
         private readonly ArgumentConverter<ListArgs> converter = Substitute.For<ArgumentConverter<ListArgs>>();
-        private readonly SingleTaskFormatter formatter1 = Substitute.For<SingleTaskFormatter>();
-        private readonly ListTaskFormatter formatter2 = Substitute.For<ListTaskFormatter>();
+        private readonly ITaskFormatterFactory formatter = Substitute.For<ITaskFormatterFactory>();
+        private IClientSpecification data;
         private readonly List list;
-        private readonly TaskFormatterFactory taskFormatterFactory;
 
         public ListTests()
         {
-            taskFormatterFactory = Substitute.For<TaskFormatterFactory>(formatter1, formatter2);
-            list = new List(client, converter, new StringWriter(), taskFormatterFactory);
-            taskFormatterFactory.GetSingleFormatter().Returns(formatter1);
-            taskFormatterFactory.GetListFormatter().Returns(formatter2);
+            list = new List(connection, converter, new StringWriter(), formatter);
         }
 
         [Fact]
-        public void should_check_receiving_one_task()
+        public void should_get_all_commnads()
         {
-            var argument = new List<string> {"1"};
-            converter.Convert(argument).Returns(new ListArgs {Id = 1});
-            var taskList = new List<ContractTask> {new ContractTask {Id = 1, Name = "some", IsCompleted = false}};
-            client.GetTaskById(1).Returns(taskList);
-            list.Execute(argument);
-            formatter1.Received().Show(taskList);
-        }
+            data = new ListAll();
+            var input = new List<string> { "153" };
+            converter.Convert(input).Returns((object)new ListArgs { Id = 153 });
 
-        [Fact]
-        public void should_execute_in_client_receiving_show_all_tasks()
-        {
-            var argument = new List<string> {""};
-            converter.Convert(argument).Returns(new ListArgs {Id = null});
-            list.Execute(argument);
-            client.Received().GetAllTasks();
+            list.Execute(input);
+            connection.ReceivedWithAnyArgs().GetTasks(data);
         }
-
         [Fact]
-        public void should_check_receiving_all_task()
+        public void should_get_one_command_by_id()
         {
-            var argument = new List<string> {""};
-            converter.Convert(argument).Returns(new ListArgs {Id = null});
-            var taskList = new List<ContractTask>
-                               {
-                                   new ContractTask {Id = 1, Name = "task1", IsCompleted = false},
-                                   new ContractTask {Id = 2, Name = "task2", IsCompleted = true}
-                               };
-            client.GetAllTasks().Returns(taskList);
-            list.Execute(argument);
-            formatter2.Received().Show(taskList);
+            data = new ListSingle();
+            var input = new List<string>();
+            converter.Convert(input).Returns(new ListArgs { Id = null });
+
+            list.Execute(input);
+            connection.ReceivedWithAnyArgs().GetTasks(data);
         }
-
         [Fact]
-        public void should_execute_in_client_receiving_show_one_tasks()
+        public void should_get_one_command_by_date()
         {
-            var arguments = new List<string> {"1"};
-            converter.Convert(arguments).Returns(new ListArgs {Id = 1});
-            list.Execute(arguments);
-            client.Received().GetTaskById(1);
+            data = new ListByDate();
+            var input = new List<string>();
+            converter.Convert(input).Returns(new ListArgs { Id = 0, Date = DateTime.Now });
+
+            list.Execute(input);
+            connection.ReceivedWithAnyArgs().GetTasks(data);
         }
     }
 }

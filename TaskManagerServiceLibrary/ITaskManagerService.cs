@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
+using Specifications.ClientSpecification;
+
 
 namespace TaskManagerServiceLibrary
 {
@@ -12,16 +14,13 @@ namespace TaskManagerServiceLibrary
         int AddTask(AddTaskArgs task);
 
         [OperationContract]
-        ContractTask GetTaskById(int id);
+        [ServiceKnownType(typeof(ListAll))]
+        [ServiceKnownType(typeof(ListByDate))]
+        [ServiceKnownType(typeof(ListSingle))]
+        List<ContractTask> GetTasks(IClientSpecification data);
 
         [OperationContract]
-        List<ContractTask> GetAllTasks();
-
-        [OperationContract]
-        void MarkTaskAsCompleted(CompleteTaskArgs id);
-
-        [OperationContract]
-        bool TestConnection();
+        void Complete(CompleteTaskArgs args);
 
         [OperationContract]
         void RenameTask(RenameTaskArgs args);

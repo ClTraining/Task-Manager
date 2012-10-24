@@ -3,140 +3,112 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
-using FluentAssertions;
 using NSubstitute;
+using Ninject;
+using Ninject.Extensions.Conventions;
+using Ninject.Modules;
+using Specifications.ClientSpecification;
+using Specifications.QuerySpecifications;
+using TaskManagerServiceLibrary.Repositories;
 using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
+using System.Linq;
 
 namespace TaskManagerServiceLibrary
 {
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, IncludeExceptionDetailInFaults = true)]
     public class TaskManagerService : ITaskManagerService
     {
-        private readonly IToDoList taskList;
+        private readonly IRepository repository;
+        private readonly List<IQuerySpecification> list;
 
-        public TaskManagerService(IToDoList list)
+        public TaskManagerService(IRepository repository, List<IQuerySpecification> list)
         {
-            taskList = list;
+            this.repository = repository;
+            this.list = list;
         }
 
         public int AddTask(AddTaskArgs task)
         {
-            return taskList.AddTask(task);
+            return repository.AddTask(task);
         }
 
-        public ContractTask GetTaskById(int id)
+        public List<ContractTask> GetTasks(IClientSpecification input)
         {
-            return taskList.GetTaskById(id);
+            var res = list.First(x => x.GetType().Name.Contains(input.GetType().Name));
+            res.Initialise(input.Data);
+            return repository.GetTasks(res);
         }
 
-        public List<ContractTask> GetAllTasks()
+        public void Complete(CompleteTaskArgs args)
         {
-            return taskList.GetAllTasks();
-        }
-
-        public void MarkTaskAsCompleted(CompleteTaskArgs args)
-        {
-            taskList.MarkTaskAsCompleted(args);
-        }
-
-        public bool TestConnection()
-        {
-            return true;
+            repository.Complete(args);
         }
 
         public void RenameTask(RenameTaskArgs args)
         {
-            taskList.RenameTask(args);
+            repository.RenameTask(args);
         }
 
         public void SetTaskDueDate(SetDateArgs args)
         {
-            taskList.SetTaskDueDate(args);
+            repository.SetTaskDueDate(args);
         }
 
         public void ClearTaskDueDate(ClearDateArgs args)
         {
-            taskList.ClearTaskDueDate(args);
+            repository.ClearTaskDueDate(args);
         }
     }
 
-    public class TaskManagerServiceTests
+    public class TaskManagerTests
     {
-        private readonly IToDoList list = Substitute.For<IToDoList>();
-        private readonly ITaskManagerService service;
+        private readonly List<IQuerySpecification> specs = new StandardKernel(new MyModule()).GetAll<IQuerySpecification>().ToList();
+        readonly ITaskMapper mapper = new TaskMapper();
+        private readonly IRepository repo;
 
-        public TaskManagerServiceTests()
+        readonly ITaskManagerService service;
+
+        public TaskManagerTests()
         {
-            service = new TaskManagerService(list);
+            repo = new MemoRepository(mapper);
+            service = new TaskManagerService(repo, specs);
         }
 
         [Fact]
-        public void should_create_task_and_return_taskid()
+        public void should_get_tasks()
         {
-            var addTaskArgs = new AddTaskArgs {Name = "some task"};
-            list.AddTask(addTaskArgs).Returns(1);
-            var res = service.AddTask(addTaskArgs);
-            res.Should().Be(1);
-        }
+            var spec = new ListSingle { Data = 3 };
+            var tasks = new[] { "task1", "task2", "task3", "task4", "task5", "task6", "task7", "task8", "task9" };
 
-        [Fact]
-        public void should_get_task_by_id_and_return_task()
-        {
-            var task = new ContractTask {Id = 1};
-            list.GetTaskById(1).Returns(task);
-            var res = service.GetTaskById(1);
-            res.Should().Be(task);
-        }
+            var addTaskArgs = new AddTaskArgs { Name = "some task" };
 
-        [Fact]
-        public void should_get_all_taasks()
-        {
-            var listTasks = new List<ContractTask> {new ContractTask {Id = 1, Name = "some", IsCompleted = false}};
-            list.GetAllTasks().Returns(listTasks);
-            var res = service.GetAllTasks();
-            res.Should().BeEquivalentTo(listTasks);
-        }
+            service.AddTask(addTaskArgs);
 
-        [Fact]
-        public void should_send_id_receive_completed_value()
-        {
-            var completeTaskArgs = new CompleteTaskArgs {Id = 1};
-            service.MarkTaskAsCompleted(completeTaskArgs);
-            list.Received().MarkTaskAsCompleted(completeTaskArgs);
-        }
+            tasks.ToList().ForEach(a => service.AddTask(new AddTaskArgs { Name = a }));
 
-        [Fact]
-        public void should_send_rename_task()
-        {
-            var args = new RenameTaskArgs {Id = 1, Name = "task name"};
-            service.RenameTask(args);
-            list.Received().RenameTask(args);
+            var result = service.GetTasks(spec);
         }
-
-        [Fact]
-        public void test_connection_should_return_always_true()
-        {
-            var result = service.TestConnection();
-            result.Should().Be(true);
-        }
-
-        [Fact]
-        public void should_send_set_date_for_task()
-        {
-            var dateTime = DateTime.Now;
-            var args = new SetDateArgs {Id = 1, DueDate = dateTime};
-            service.SetTaskDueDate(args);
-            list.Received().SetTaskDueDate(args);
-        }
-
+        
         [Fact]
         public void should_send_clear_date_for_task()
         {
             var dateTime = DateTime.Now;
             var args = new ClearDateArgs {Id = 1};
             service.ClearTaskDueDate(args);
-            list.Received().ClearTaskDueDate(args);
+            repo.Received().ClearTaskDueDate(args);
+        }
+    }
+
+    public class MyModule : NinjectModule
+    {
+        public override void Load()
+        {
+            this.Bind(x => x.FromAssemblyContaining<IQuerySpecification>()
+                               .SelectAllClasses()
+                               .InNamespaceOf<IQuerySpecification>()
+                               .BindAllInterfaces()
+                );
         }
     }
 }

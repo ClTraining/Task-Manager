@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using NSubstitute;
+using TaskManagerClientLibrary.ComandContainer;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
@@ -26,6 +27,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
 
     public class HelpTests
     {
+        
         private readonly ICommand command = Substitute.For<ICommand>();
         private readonly ICommandContainer container = Substitute.For<ICommandContainer>();
         private readonly IHelpDisplayer display = Substitute.For<IHelpDisplayer>();

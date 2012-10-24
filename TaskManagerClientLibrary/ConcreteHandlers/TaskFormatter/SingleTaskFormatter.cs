@@ -30,7 +30,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
         public void should_correctly_out_one_task()
         {
             var sb = new StringBuilder();
-            var tasks = new List<ContractTask> {new ContractTask {Id = 1, Name = "task1", IsCompleted = false}};
+            var tasks = new List<ContractTask> { new ContractTask { Id = 1, Name = "task1", IsCompleted = false } };
             var formatter = new SingleTaskFormatter();
             sb.Append(formatter.Show(tasks));
             sb.ToString().Should().Be("\nID:		1\nName:		task1\nCompleted:	-\nDue date:	not set\n\n");

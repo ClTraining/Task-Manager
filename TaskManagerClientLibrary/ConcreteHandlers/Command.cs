@@ -12,8 +12,9 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         private readonly ArgumentConverter<T> converter;
         private readonly TextWriter textWriter;
 
-        protected Command(IClientConnection client = null, ArgumentConverter<T> converter = null,
-                          TextWriter textWriter = null)
+        protected Command() {}
+        protected Command(IClientConnection client, ArgumentConverter<T> converter,
+                          TextWriter textWriter)
         {
             Name = GetType().Name.ToLower();
             this.client = client;
@@ -35,9 +36,10 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             {
                 OutText("Task not found. Id = " + e.Message);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                OutText("Wrong arguments.");
+                Console.WriteLine(e.Message);
+                //OutText("Wrong arguments.");
             }
         }
 

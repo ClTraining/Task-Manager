@@ -10,8 +10,8 @@ namespace TaskManagerClientLibrary
     {
         public virtual T Convert(List<string> input)
         {
-            var tc = TypeDescriptor.GetConverter(typeof (T));
-            return (T) tc.ConvertFrom(input);
+            var tc = TypeDescriptor.GetConverter(typeof(T));
+            return (T)tc.ConvertFrom(input);
         }
     }
 
@@ -24,20 +24,20 @@ namespace TaskManagerClientLibrary
         public void should_get_add_task_arguments()
         {
             var tc = argumentConverter;
-            var args = tc.Convert(new List<string> {"123"});
-            args.ShouldBeEquivalentTo(new TestArgs {TestString = "123"});
+            var args = tc.Convert(new List<string> { "123" });
+            args.ShouldBeEquivalentTo(new TestArgs { TestString = "123" });
         }
 
         [Fact]
         public void should_get_add_task_with_date_arguments()
         {
             var tc = argumentConverter;
-            var args = tc.Convert(new List<string> {"test test", "4003"});
-            args.ShouldBeEquivalentTo(new TestArgs {TestString = "test test", TestInt = 4003});
+            var args = tc.Convert(new List<string> { "test test", "4003" });
+            args.ShouldBeEquivalentTo(new TestArgs { TestString = "test test", TestInt = 4003 });
         }
     }
 
-    [TypeConverter(typeof (TestArgsConverter))]
+    [TypeConverter(typeof(TestArgsConverter))]
     internal class TestArgs
     {
         public string TestString { get; set; }
@@ -52,7 +52,7 @@ namespace TaskManagerClientLibrary
             var s = value as List<string>;
             if (s != null)
             {
-                var addTaskArgs = new TestArgs {TestString = s[0]};
+                var addTaskArgs = new TestArgs { TestString = s[0] };
 
                 if (s.Count > 1)
                 {

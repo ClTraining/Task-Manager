@@ -4,7 +4,7 @@ using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers.TaskFormatter
 {
-    public class TaskFormatterFactory
+    public class TaskFormatterFactory : ITaskFormatterFactory
     {
         private readonly ListTaskFormatter listTaskFormatter;
         private readonly SingleTaskFormatter singleTaskFormatter;
