@@ -5,8 +5,8 @@ using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
-using Specifications.ClientSpecification;
-using Specifications.QuerySpecifications;
+using Specifications.ClientSpecifications;
+using Specifications.ServiceSpecifications;
 using TaskManagerServiceLibrary.Repositories;
 using Xunit;
 
@@ -16,28 +16,16 @@ namespace TaskManagerServiceLibrary
     public class TaskManagerService : ITaskManagerService
     {
         private readonly IRepository repository;
-        private readonly ISpecificationsConverter converter;
-
-        public TaskManagerService(IRepository repository, ISpecificationsConverter converter)
-        {
-            this.repository = repository;
-            this.converter = converter;
-        }
 
         public TaskManagerService(IRepository repo)
         {
             repository = repo;
         }
 
-        public List<ContractTask> GetTasks(IClientSpecification input)
+        public List<ClientPackage> GetTasks(IClientSpecification input)
         {
-            var specification = converter.GetQuerySpecification(input);
-            var result = repository.GetTasks(specification);
-            
-            if (result.Count == 0)
-                throw new TaskNotFoundException();
-
-            return result;
+            var specification = new SpecificationsConverter().GetQuerySpecification(input);
+            return repository.GetTasks(specification);
         }
 
         public int AddTask(AddTaskArgs task)
@@ -57,12 +45,12 @@ namespace TaskManagerServiceLibrary
             repository.RenameTask(args);
         }
 
-        public void SetTaskDueDate(SetDateArgs args)
+        public void SetTaskDueDate(SetDateTaskArgs args)
         {
             repository.SetTaskDueDate(args);
         }
 
-        public void ClearTaskDueDate(ClearDateArgs args)
+        public void ClearTaskDueDate(ClearDateTaskArgs args)
         {
             repository.ClearTaskDueDate(args);
         }
@@ -70,7 +58,7 @@ namespace TaskManagerServiceLibrary
 
     public class TaskManagerTests
     {
-        private readonly IQuerySpecification qSpec = Substitute.For<IQuerySpecification>();
+        private readonly IServiceSpecification qSpec = Substitute.For<IServiceSpecification>();
         private readonly IClientSpecification cSpec = Substitute.For<IClientSpecification>();
         private readonly ISpecificationsConverter converter = Substitute.For<ISpecificationsConverter>();
         private readonly IRepository repo = Substitute.For<IRepository>();
@@ -79,14 +67,14 @@ namespace TaskManagerServiceLibrary
 
         public TaskManagerTests()
         {
-            service = new TaskManagerService(repo, converter);
+            service = new TaskManagerService(repo);
         }
 
 
         [Fact]
         public void should_get_tasks()
         {
-            var outList = new List<ContractTask>{new ContractTask{Id = 1}};
+            var outList = new List<ClientPackage>{new ClientPackage{Id = 1}};
             converter.GetQuerySpecification(cSpec).Returns(qSpec);
             repo.GetTasks(qSpec).Returns(outList);
 
@@ -98,7 +86,7 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_throw_exception_if_no_task()
         {
-            var outList = new List<ContractTask>();
+            var outList = new List<ClientPackage>();
             converter.GetQuerySpecification(cSpec).Returns(qSpec);
             repo.GetTasks(qSpec).Returns(outList);
 
@@ -118,7 +106,7 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_send_clear_date_for_task()
         {
-            var args = new ClearDateArgs { Id = 1 };
+            var args = new ClearDateTaskArgs { Id = 1 };
             service.ClearTaskDueDate(args);
             repo.Received().ClearTaskDueDate(args);
         }
@@ -141,7 +129,7 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_set_task_due_date()
         {
-            var args = new SetDateArgs { Id = 1 };
+            var args = new SetDateTaskArgs { Id = 1 };
             service.SetTaskDueDate(args);
             repo.Received().SetTaskDueDate(args);
         }

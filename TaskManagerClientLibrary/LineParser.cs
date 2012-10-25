@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using FluentAssertions;
 using NSubstitute;
-using TaskManagerClientLibrary.ConcreteHandlers;
+using TaskManagerClientLibrary.ConcreteCommands;
 using Xunit;
 
 namespace TaskManagerClientLibrary

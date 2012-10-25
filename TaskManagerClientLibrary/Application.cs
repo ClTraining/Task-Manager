@@ -3,8 +3,8 @@ using ConnectToWcf;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
-using TaskManagerClientLibrary.ComandContainer;
-using TaskManagerClientLibrary.ConcreteHandlers;
+using TaskManagerClientLibrary.CommandContainer;
+using TaskManagerClientLibrary.ConcreteCommands;
 
 namespace TaskManagerClientLibrary
 {
@@ -40,7 +40,7 @@ namespace TaskManagerClientLibrary
                 );
 
             Bind<ICommandContainer>()
-                .To<CommandContainer>()
+                .To<CommandContainer.CommandContainer>()
                 .InSingletonScope()
                 .WithConstructorArgument("commands", Kernel.GetAll<ICommand>());
 
@@ -53,8 +53,8 @@ namespace TaskManagerClientLibrary
                 .ToSelf()
                 .WithConstructorArgument("address", address);
 
-            Bind<IClientConnection>()
-                .To<ClientConnection>()
+            Bind<IClient>()
+                .To<ExchangeClient>()
                 .WithConstructorArgument("address", address);
         }
     }
