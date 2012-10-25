@@ -14,7 +14,7 @@ namespace Specifications.QuerySpecifications
         public void Initialise(object data) { }
     }
 
-    public class ListAllSpecTests
+    public class ListAllSpecificationTests
     {
         [Fact]
         public void should_always_return_true_if_task_exists()

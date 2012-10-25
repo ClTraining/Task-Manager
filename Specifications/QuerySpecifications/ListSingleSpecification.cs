@@ -19,7 +19,7 @@ namespace Specifications.QuerySpecifications
         }
     }
 
-    public class ListSingleSpecTests
+    public class ListSingleSpecificationTests
     {
         [Fact]
         public void should_return_true_if_equal_tasks()

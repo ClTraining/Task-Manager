@@ -20,8 +20,10 @@ namespace Specifications.QuerySpecifications
         }
     }
 
-    public class ListByDateSpecTests
+    public class ListByDateSpecificationTests
     {
+        ListByDateSpecification spec = new ListByDateSpecification();
+
         [Fact]
         public void should_return_task_if_task_exists()
         {
@@ -34,9 +36,13 @@ namespace Specifications.QuerySpecifications
         }
 
         [Fact]
+        public void test1()
+        {
+        }
+
+        [Fact]
         public void should_initialise_specification()
         {
-            var spec = new ListByDateSpecification();
             var dateTime = DateTime.Today;
             spec.Initialise(dateTime);
             spec.Date.Should().Be(dateTime);
