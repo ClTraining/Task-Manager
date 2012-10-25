@@ -21,8 +21,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
         public void should_test_show_task_name_and_description()
         {
             var command = Substitute.For<ICommand>();
-            command.Name = "help";
-            command.Description = "task help";
+            command.Name.Returns("help");
+            command.Description.Returns("task help");
 
             var displayHelp = new HelpDisplayer();
             var sb = new StringBuilder();

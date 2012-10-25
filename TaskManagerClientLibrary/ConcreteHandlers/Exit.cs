@@ -6,8 +6,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Exit : ICommand
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
+        public string Name { get { return GetType().Name; } }
+        public string Description { get; private set; }
         private readonly EnvironmentWrapper manager;
 
         public void Execute(List<string> argument)
@@ -17,7 +17,6 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public Exit(EnvironmentWrapper manager)
         {
-            Name = GetType().Name.ToLower();
             this.manager = manager;
             Description = "Exits from client.";
         }

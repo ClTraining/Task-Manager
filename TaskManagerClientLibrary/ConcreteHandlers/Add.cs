@@ -7,22 +7,38 @@ using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
-    public class Add : Command<AddTaskArgs>
+    public class Add : ICommand
     {
-        private IClientConnection Client { get; set; }
+        private readonly ArgumentConverter<AddTaskArgs> converter;
+        private readonly TextWriter textWriter;
+        private readonly IClientConnection client;
+        public string Name { get { return GetType().Name.ToLower(); } }
+        public string Description { get; private set; }
 
         public Add(ArgumentConverter<AddTaskArgs> converter, TextWriter textWriter, IClientConnection client)
-            : base(converter, textWriter)
         {
-            Client = client;
+            this.converter = converter;
+            this.textWriter = textWriter;
+            this.client = client;
             Description = "Adds new task to server.";
         }
 
-        public override void Execute(List<string> argument)
+        public void Execute(List<string> argument)
+        {
+            var addTaskArgs = ConvertToArgs(argument);
+            var result = client.AddTask(addTaskArgs);
+            Printinfo(result);
+        }
+
+        private void Printinfo(int result)
+        {
+            textWriter.WriteLine("Task added. Task ID: " + result);
+        }
+
+        private AddTaskArgs ConvertToArgs(List<string> argument)
         {
             var addTaskArgs = converter.Convert(argument);
-            var result = Client.AddTask(addTaskArgs);
-            OutText("Task added. Task ID: " + result);
+            return addTaskArgs;
         }
     }
 

@@ -8,22 +8,38 @@ using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
-    public class SetDate : Command<SetDateArgs>
+    public class SetDate : ICommand
     {
-        private IClientConnection Client { get; set; }
+        private readonly ArgumentConverter<SetDateArgs> converter;
+        private readonly TextWriter textWriter;
+        private readonly IClientConnection client;
+        public string Name { get { return GetType().Name.ToLower(); } }
+        public string Description { get; private set; }
 
         public SetDate(ArgumentConverter<SetDateArgs> converter, TextWriter textWriter, IClientConnection client)
-            : base(converter, textWriter)
         {
-            Client = client;
+            this.converter = converter;
+            this.textWriter = textWriter;
+            this.client = client;
             Description = "Sets due date for task, specified by ID.";
         }
 
-        public override void Execute(List<string> argument)
+        public void Execute(List<string> argument)
+        {
+            var setDateArgs = ConvertToArgs(argument);
+            client.SetTaskDueDate(setDateArgs);
+            PrintInfo(setDateArgs);
+        }
+
+        private void PrintInfo(SetDateArgs setDateArgs)
+        {
+            textWriter.WriteLine("Due date to task assigned. Task Id:" + setDateArgs.Id);
+        }
+
+        private SetDateArgs ConvertToArgs(List<string> argument)
         {
             var setDateArgs = converter.Convert(argument);
-            Client.SetTaskDueDate(setDateArgs);
-            OutText(string.Format("Due date to task assigned. Task Id:{0}", setDateArgs.Id));
+            return setDateArgs;
         }
     }
 

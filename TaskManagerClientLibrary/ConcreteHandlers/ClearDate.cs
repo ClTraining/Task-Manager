@@ -7,22 +7,27 @@ using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
-    public class ClearDate : Command<ClearDateArgs>
+    public class ClearDate : ICommand
     {
-        private IClientConnection Client { get; set; }
+        private readonly IClientConnection client;
+        public string Name { get { return GetType().Name.ToLower(); } }
+        public string Description { get; private set; }
+        private readonly ArgumentConverter<ClearDateArgs> converter;
+        private readonly TextWriter textWriter;
 
         public ClearDate(ArgumentConverter<ClearDateArgs> converter, TextWriter textWriter, IClientConnection client)
-            : base(converter, textWriter)
         {
-            Client = client;
+            this.converter = converter;
+            this.textWriter = textWriter;
+            this.client = client;
             Description = "Clears due date for specified task by ID.";
         }
 
-        public override void Execute(List<string> argument)
+        public void Execute(List<string> argument)
         {
             var clearDateArgs = converter.Convert(argument);
-            Client.ClearTaskDueDate(clearDateArgs);
-            OutText(string.Format("Due date cleared for task ID: {0} .", clearDateArgs.Id));
+            client.ClearTaskDueDate(clearDateArgs);
+            textWriter.WriteLine(string.Format("Due date cleared for task ID: {0} .", clearDateArgs.Id));
         }
     }
 
