@@ -33,8 +33,21 @@ namespace TaskManagerServiceLibrary
             var cSpec = new ListSingle{Data = 1};
             var qSpec = new ListSingleSpecification();
             var converter = new SpecificationsConverter(new List<IQuerySpecification> {qSpec});
+            
             var result = converter.GetQuerySpecification(cSpec);
+            
             result.Should().BeOfType<ListSingleSpecification>();
+        }
+
+        [Fact]
+        public void should_return_listallspecification()
+        {
+            var cSpec = new ListAll();
+            var qSpec = new ListAllSpecification();
+            var converter = new SpecificationsConverter(new List<IQuerySpecification> {qSpec});
+
+            var result = converter.GetQuerySpecification(cSpec);
+            result.Should().BeOfType<ListAllSpecification>();
         }
     }
 }

@@ -93,9 +93,9 @@ namespace TaskManagerClientLibrary
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
 
-            command1.DidNotReceiveWithAnyArgs().Execute("aaa");
-            command2.DidNotReceiveWithAnyArgs().Execute("aaa");
-            command3.DidNotReceiveWithAnyArgs().Execute("aaa");
+            command1.DidNotReceiveWithAnyArgs().Execute(new List<string> { "aaa" });
+            command2.DidNotReceiveWithAnyArgs().Execute(new List<string> { "aaa" });
+            command3.DidNotReceiveWithAnyArgs().Execute(new List<string> { "aaa" });
         }
 
         [Fact]

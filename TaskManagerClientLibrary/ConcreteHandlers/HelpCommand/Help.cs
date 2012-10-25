@@ -12,18 +12,18 @@ namespace TaskManagerClientLibrary.ConcreteHandlers.HelpCommand
         private readonly ICommandContainer commands;
         private readonly IHelpDisplayer display;
 
+        public void Execute(List<string> argument)
+        {
+            foreach (var command in commands.GetCommands())
+                display.Show(command);
+        }
+
         public Help(IHelpDisplayer display, ICommandContainer commands)
         {
             Name = "?";
             this.commands = commands;
             this.display = display;
             Description = "Causes help.";
-        }
-
-        public void Execute(object input)
-        {
-            foreach (var command in commands.GetCommands())
-                display.Show(command);
         }
     }
 

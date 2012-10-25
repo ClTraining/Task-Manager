@@ -10,16 +10,20 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class SetDate : Command<SetDateArgs>
     {
-        public SetDate(IClientConnection client, ArgumentConverter<SetDateArgs> converter, TextWriter textWriter)
-            : base(client, converter, textWriter)
+        private IClientConnection Client { get; set; }
+
+        public SetDate(ArgumentConverter<SetDateArgs> converter, TextWriter textWriter, IClientConnection client)
+            : base(converter, textWriter)
         {
+            Client = client;
             Description = "Sets due date for task, specified by ID.";
         }
 
-        protected override void ExecuteWithGenericInput(SetDateArgs input)
+        public override void Execute(List<string> argument)
         {
-            client.SetTaskDueDate(input);
-            OutText(string.Format("Due date to task assigned. Task Id:{0}", input.Id));
+            var setDateArgs = converter.Convert(argument);
+            Client.SetTaskDueDate(setDateArgs);
+            OutText(string.Format("Due date to task assigned. Task Id:{0}", setDateArgs.Id));
         }
     }
 
@@ -33,14 +37,14 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public SetDateTests()
         {
-            command = new SetDate(client, converter, writer);
+            command = new SetDate(converter, writer, client);
         }
 
         [Fact]
         public void should_send_set_date_to_client()
         {
-            var setDateArgs = new SetDateArgs {Id = 5, DueDate = DateTime.Parse("10-10-2012")};
-            var argument = new List<string> {"1", "10-10-2012"};
+            var setDateArgs = new SetDateArgs { Id = 5, DueDate = DateTime.Parse("10-10-2012") };
+            var argument = new List<string> { "1", "10-10-2012" };
             converter.Convert(argument).Returns(setDateArgs);
             command.Execute(argument);
             client.Received().SetTaskDueDate(setDateArgs);

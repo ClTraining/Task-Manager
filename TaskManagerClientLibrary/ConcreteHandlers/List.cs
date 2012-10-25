@@ -14,13 +14,15 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     public class List : Command<ListArgs>
     {
         private readonly ITaskFormatterFactory taskFormatterFactory;
+        private IClientConnection Client { get; set; }
 
-        public List(IClientConnection client, ArgumentConverter<ListArgs> converter, TextWriter textWriter,
-                    ITaskFormatterFactory taskFormatterFactory)
-            : base(client, converter, textWriter)
+        public List(ArgumentConverter<ListArgs> converter, TextWriter textWriter,
+                    ITaskFormatterFactory taskFormatterFactory, IClientConnection client)
+            : base(converter, textWriter)
         {
             Description = "Displays list of all tasks or single task, specified by ID.";
             this.taskFormatterFactory = taskFormatterFactory;
+            Client = client;
         }
 
         private void PrintWithFormatter(List<ContractTask> list, ITaskFormatter formatter)
@@ -28,19 +30,20 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             OutText(formatter.Show(list));
         }
 
-        protected override void ExecuteWithGenericInput(ListArgs input)
+        public override void Execute(List<string> argument)
         {
+            var listArgs = converter.Convert(argument);
             IClientSpecification data;
 
-            if (input.Date != default(DateTime) && input.Id == 0)
-                data = new ListByDate { Data = input.Date };
+            if (listArgs.Date != default(DateTime) && listArgs.Id == 0)
+                data = new ListByDate { Data = listArgs.Date };
 
-            else if (input.Date == default(DateTime) && input.Id != null)
-                data = new ListSingle { Data = input.Id.Value };
+            else if (listArgs.Date == default(DateTime) && listArgs.Id != null)
+                data = new ListSingle { Data = listArgs.Id.Value };
 
             else data = new ListAll { Data = null };
 
-            var tasks = client.GetTasks(data);
+            var tasks = Client.GetTasks(data);
             var formatter = tasks.Count > 1 ? taskFormatterFactory.GetListFormatter() : taskFormatterFactory.GetSingleFormatter();
 
             PrintWithFormatter(tasks, formatter);
@@ -57,15 +60,16 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public ListTests()
         {
-            list = new List(connection, converter, new StringWriter(), formatter);
+            list = new List(converter, new StringWriter(), formatter, connection);
         }
 
         [Fact]
-        public void should_get_all_commnads()
+        public void should_get_all_commands()
         {
             data = new ListAll();
             var input = new List<string> { "153" };
-            converter.Convert(input).Returns((object)new ListArgs { Id = 153 });
+            converter.Convert(input).Returns(new ListArgs { Id = 153 });
+            connection.GetTasks(data).ReturnsForAnyArgs(new List<ContractTask>());
 
             list.Execute(input);
             connection.ReceivedWithAnyArgs().GetTasks(data);
@@ -75,6 +79,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         {
             data = new ListSingle();
             var input = new List<string>();
+            connection.GetTasks(data).ReturnsForAnyArgs(new List<ContractTask>());
             converter.Convert(input).Returns(new ListArgs { Id = null });
 
             list.Execute(input);
@@ -85,6 +90,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         {
             data = new ListByDate();
             var input = new List<string>();
+            connection.GetTasks(data).ReturnsForAnyArgs(new List<ContractTask>());
             converter.Convert(input).Returns(new ListArgs { Id = 0, Date = DateTime.Now });
 
             list.Execute(input);
