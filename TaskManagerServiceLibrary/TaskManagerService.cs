@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
@@ -25,8 +26,13 @@ namespace TaskManagerServiceLibrary
 
         public List<ContractTask> GetTasks(IClientSpecification input)
         {
-            var res = converter.GetQuerySpecification(input);
-            return repository.GetTasks(res);
+            var specification = converter.GetQuerySpecification(input);
+            var result = repository.GetTasks(specification);
+            
+            if (result.Count == 0)
+                throw new TaskNotFoundException();
+
+            return result;
         }
 
         public int AddTask(AddTaskArgs task)
@@ -73,13 +79,25 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_get_tasks()
         {
-            var outList = new List<ContractTask>();
+            var outList = new List<ContractTask>{new ContractTask{Id = 1}};
             converter.GetQuerySpecification(cSpec).Returns(qSpec);
             repo.GetTasks(qSpec).Returns(outList);
 
             var contractTasks = service.GetTasks(cSpec);
 
             contractTasks.Should().BeEquivalentTo(outList);
+        }
+
+        [Fact]
+        public void should_throw_exception_if_no_task()
+        {
+            var outList = new List<ContractTask>();
+            converter.GetQuerySpecification(cSpec).Returns(qSpec);
+            repo.GetTasks(qSpec).Returns(outList);
+
+            Action action = () => service.GetTasks(cSpec);
+
+            action.ShouldThrow<TaskNotFoundException>();
         }
 
         [Fact]

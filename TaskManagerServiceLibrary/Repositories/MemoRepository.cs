@@ -33,10 +33,12 @@ namespace TaskManagerServiceLibrary.Repositories
 
         public List<ContractTask> GetTasks(IQuerySpecification spec)
         {
-            return taskList
+            var resList = taskList
                 .Where(spec.IsSatisfied)
                 .Select(mapper.ConvertToContract)
                 .ToList();
+
+            return resList;
         }
 
         public void Complete(CompleteTaskArgs args)

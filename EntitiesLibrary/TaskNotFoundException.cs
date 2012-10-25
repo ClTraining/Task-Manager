@@ -1,14 +1,8 @@
 using System;
 
-namespace TaskManagerServiceLibrary
+namespace EntitiesLibrary
 {
     public class TaskNotFoundException : Exception
     {
-        public TaskNotFoundException(string taskId)
-            : base(taskId)
-        {
-        }
-
-        public string TaskId { get; set; }
     }
 }

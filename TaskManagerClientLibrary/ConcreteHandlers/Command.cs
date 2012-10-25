@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using ConnectToWcf;
+using EntitiesLibrary;
 using TaskManagerServiceLibrary;
+using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
@@ -33,12 +35,11 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             }
             catch (TaskNotFoundException e)
             {
-                OutText("Task not found. Id = " + e.Message);
+                OutText("Task not found.");
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
-                //OutText("Wrong arguments.");
             }
         }
 
@@ -55,5 +56,9 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         {
             return converter.Convert(input as List<string>);
         }
+    }
+
+    public class CommandTests
+    {
     }
 }
