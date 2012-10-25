@@ -24,6 +24,11 @@ namespace TaskManagerServiceLibrary
             this.converter = converter;
         }
 
+        public TaskManagerService(IRepository repo)
+        {
+            repository = repo;
+        }
+
         public List<ContractTask> GetTasks(IClientSpecification input)
         {
             var specification = converter.GetQuerySpecification(input);
@@ -37,7 +42,8 @@ namespace TaskManagerServiceLibrary
 
         public int AddTask(AddTaskArgs task)
         {
-            return repository.AddTask(task);
+            var addTask = repository.AddTask(task);
+            return addTask;
         }
 
         public void Complete(CompleteTaskArgs args)
