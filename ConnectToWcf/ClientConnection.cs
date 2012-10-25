@@ -97,4 +97,12 @@ namespace ConnectToWcf
             }
         }
     }
+
+    public class ClientConnectionTests
+    {
+        public void should_add_task_to_srvice()
+        {
+            
+        }
+    }
 }
