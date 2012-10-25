@@ -9,17 +9,21 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Add : Command<AddTaskArgs>
     {
-        public Add(IClientConnection client, ArgumentConverter<AddTaskArgs> converter, TextWriter textWriter)
-            : base(client, converter, textWriter)
+        private IClientConnection Client { get; set; }
+
+        public Add(ArgumentConverter<AddTaskArgs> converter, TextWriter textWriter, IClientConnection client)
+            : base(converter, textWriter)
         {
+            Client = client;
             Description = "Adds new task to server.";
         }
 
         protected override void ExecuteWithGenericInput(AddTaskArgs input)
         {
-            var result = client.AddTask(input);
+            var result = Client.AddTask(input);
             OutText("Task added. Task ID: " + result);
         }
+
     }
 
     public class AddTests
@@ -31,14 +35,14 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public AddTests()
         {
-            handler = new Add(client, converter, new StringWriter());
+            handler = new Add(converter, new StringWriter(), client);
         }
 
         [Fact]
         public void should_execute_on_client_add_task()
         {
-            var addTaskArgs = new AddTaskArgs {Name = taskName};
-            var argument = new List<string> {taskName};
+            var addTaskArgs = new AddTaskArgs { Name = taskName };
+            var argument = new List<string> { taskName };
             converter.Convert(argument).Returns(addTaskArgs);
             handler.Execute(argument);
             client.Received().AddTask(addTaskArgs);

@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ConnectToWcf;
 using EntitiesLibrary.CommandArguments;
 using NSubstitute;
@@ -13,17 +9,22 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class ClearDate : Command<ClearDateArgs>
     {
-        public ClearDate(IClientConnection client, ArgumentConverter<ClearDateArgs> converter, TextWriter textWriter)
-            : base(client, converter, textWriter)
+        private IClientConnection Client { get; set; }
+
+        public ClearDate(ArgumentConverter<ClearDateArgs> converter, TextWriter textWriter, IClientConnection client)
+            : base(converter, textWriter)
         {
+            Client = client;
             Description = "Clears due date for specified task by ID.";
         }
 
         protected override void ExecuteWithGenericInput(ClearDateArgs input)
         {
-            client.ClearTaskDueDate(input);
+            Client.ClearTaskDueDate(input);
             OutText(string.Format("Due date cleared for task ID: {0} .", input.Id));
         }
+
+
     }
 
     public class ClearDateTests
@@ -34,14 +35,14 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public ClearDateTests()
         {
-            handler = new ClearDate(client, converter, new StringWriter());
+            handler = new ClearDate(converter, new StringWriter(), client);
         }
 
         [Fact]
         public void should_send_string_return_id()
         {
-            var arguments = new List<string> {"12"};
-            var clearDateArgs = new ClearDateArgs {Id = 12};
+            var arguments = new List<string> { "12" };
+            var clearDateArgs = new ClearDateArgs { Id = 12 };
             converter.Convert(arguments).Returns(clearDateArgs);
             handler.Execute(arguments);
             client.Received().ClearTaskDueDate(clearDateArgs);

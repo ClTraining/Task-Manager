@@ -1,30 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using ConnectToWcf;
 using EntitiesLibrary;
-using TaskManagerServiceLibrary;
-using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public abstract class Command<T> : ICommand
     {
-        protected readonly IClientConnection client;
+        public string Name { get; set; }
+        public string Description { get; set; }
         private readonly ArgumentConverter<T> converter;
         private readonly TextWriter textWriter;
 
-        protected Command(IClientConnection client, ArgumentConverter<T> converter,
-                          TextWriter textWriter)
+        protected Command(ArgumentConverter<T> converter, TextWriter textWriter)
         {
             Name = GetType().Name.ToLower();
-            this.client = client;
             this.converter = converter;
             this.textWriter = textWriter;
         }
-
-        public string Name { get; set; }
-        public string Description { get; set; }
 
         public virtual void Execute(object argument)
         {
@@ -43,9 +36,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             }
         }
 
-        protected virtual void ExecuteWithGenericInput(T input)
-        {
-        }
+        protected virtual void ExecuteWithGenericInput(T input) { }
 
         protected void OutText(string text)
         {
@@ -56,9 +47,5 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         {
             return converter.Convert(input as List<string>);
         }
-    }
-
-    public class CommandTests
-    {
     }
 }

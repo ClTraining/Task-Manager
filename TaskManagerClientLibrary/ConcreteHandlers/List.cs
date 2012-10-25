@@ -14,13 +14,15 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     public class List : Command<ListArgs>
     {
         private readonly ITaskFormatterFactory taskFormatterFactory;
+        private IClientConnection Client { get; set; }
 
-        public List(IClientConnection client, ArgumentConverter<ListArgs> converter, TextWriter textWriter,
-                    ITaskFormatterFactory taskFormatterFactory)
-            : base(client, converter, textWriter)
+        public List(ArgumentConverter<ListArgs> converter, TextWriter textWriter,
+                    ITaskFormatterFactory taskFormatterFactory, IClientConnection client)
+            : base(converter, textWriter)
         {
             Description = "Displays list of all tasks or single task, specified by ID.";
             this.taskFormatterFactory = taskFormatterFactory;
+            Client = client;
         }
 
         private void PrintWithFormatter(List<ContractTask> list, ITaskFormatter formatter)
@@ -40,7 +42,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
             else data = new ListAll { Data = null };
 
-            var tasks = client.GetTasks(data);
+            var tasks = Client.GetTasks(data);
             var formatter = tasks.Count > 1 ? taskFormatterFactory.GetListFormatter() : taskFormatterFactory.GetSingleFormatter();
 
             PrintWithFormatter(tasks, formatter);
@@ -57,7 +59,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public ListTests()
         {
-            list = new List(connection, converter, new StringWriter(), formatter);
+            list = new List(converter, new StringWriter(), formatter, connection);
         }
 
         [Fact]

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using ConnectToWcf;
 using EntitiesLibrary.CommandArguments;
@@ -10,22 +9,24 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Complete : Command<CompleteTaskArgs>
     {
-        public Complete(IClientConnection client, ArgumentConverter<CompleteTaskArgs> converter, TextWriter textWriter)
-            : base(client, converter, textWriter)
+        public Complete(ArgumentConverter<CompleteTaskArgs> converter, TextWriter textWriter, IClientConnection client)
+            : base(converter, textWriter)
         {
+            Client = client;
             Description = "Mark task by ID as completed.";
         }
 
         protected override void ExecuteWithGenericInput(CompleteTaskArgs input)
         {
-            client.Complete(input);
+            Client.Complete(input);
             OutText(string.Format("Task ID: {0} completed.", input.Id));
         }
+
+        protected IClientConnection Client { get; set; }
     }
 
     public class CompleteTests
     {
-        private const string taskName = "sometask1";
         private readonly IClientConnection client = Substitute.For<IClientConnection>();
 
         private readonly ArgumentConverter<CompleteTaskArgs> converter =
@@ -35,13 +36,13 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 
         public CompleteTests()
         {
-            command = new Complete(client, converter, new StringWriter());
+            command = new Complete(converter, new StringWriter(), client);
         }
 
         [Fact]
         public void should_send_set_date_to_client()
         {
-            var completeTaskArgs = new CompleteTaskArgs {Id = 1};
+            var completeTaskArgs = new CompleteTaskArgs { Id = 1 };
             var argument = new List<string> { "1", "10-10-2012" };
             converter.Convert(argument).Returns(completeTaskArgs);
             command.Execute(argument);
