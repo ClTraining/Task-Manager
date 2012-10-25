@@ -7,22 +7,38 @@ using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
-    public class Rename : Command<RenameTaskArgs>
+    public class Rename : ICommand
     {
-        private IClientConnection Client { get; set; }
+        private readonly IClientConnection client;
+        public string Name { get { return GetType().Name.ToLower(); } }
+        public string Description { get; private set; }
+        private readonly ArgumentConverter<RenameTaskArgs> converter;
+        private readonly TextWriter textWriter;
 
         public Rename(ArgumentConverter<RenameTaskArgs> converter, TextWriter textWriter, IClientConnection client)
-            : base(converter, textWriter)
         {
-            Client = client;
+            this.converter = converter;
+            this.textWriter = textWriter;
+            this.client = client;
             Description = "Renames task, specified by ID.";
         }
 
-        public override void Execute(List<string> argument)
+        public void Execute(List<string> argument)
+        {
+            var renameTaskArgs = ConvertToArgs(argument);
+            client.RenameTask(renameTaskArgs);
+            PrintInfo(renameTaskArgs);
+        }
+
+        private void PrintInfo(RenameTaskArgs renameTaskArgs)
+        {
+            textWriter.WriteLine(string.Format("Task ID: {0} renamed.", renameTaskArgs.Id));
+        }
+
+        private RenameTaskArgs ConvertToArgs(List<string> argument)
         {
             var renameTaskArgs = converter.Convert(argument);
-            Client.RenameTask(renameTaskArgs);
-            OutText(string.Format("Task ID: {0} renamed.", renameTaskArgs.Id));
+            return renameTaskArgs;
         }
     }
 

@@ -11,28 +11,43 @@ using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
-    public class List : Command<ListArgs>
+    public class List : ICommand
     {
+        public string Name { get { return GetType().Name.ToLower(); } }
+        public string Description { get; private set; }
+        private readonly IClientConnection client;
+        private readonly ArgumentConverter<ListArgs> converter;
+        private readonly TextWriter textWriter;
         private readonly ITaskFormatterFactory taskFormatterFactory;
-        private IClientConnection Client { get; set; }
 
         public List(ArgumentConverter<ListArgs> converter, TextWriter textWriter,
                     ITaskFormatterFactory taskFormatterFactory, IClientConnection client)
-            : base(converter, textWriter)
         {
             Description = "Displays list of all tasks or single task, specified by ID.";
+            this.converter = converter;
+            this.textWriter = textWriter;
             this.taskFormatterFactory = taskFormatterFactory;
-            Client = client;
+            this.client = client;
         }
 
         private void PrintWithFormatter(List<ContractTask> list, ITaskFormatter formatter)
         {
-            OutText(formatter.Show(list));
+            textWriter.WriteLine(formatter.Show(list));
         }
 
-        public override void Execute(List<string> argument)
+        public void Execute(List<string> argument)
         {
             var listArgs = converter.Convert(argument);
+            var data = GetClientSpecification(listArgs);
+
+            var tasks = client.GetTasks(data);
+            var formatter = tasks.Count > 1 ? taskFormatterFactory.GetListFormatter() : taskFormatterFactory.GetSingleFormatter();
+
+            PrintWithFormatter(tasks, formatter);
+        }
+
+        private IClientSpecification GetClientSpecification(ListArgs listArgs)
+        {
             IClientSpecification data;
 
             if (listArgs.Date != default(DateTime) && listArgs.Id == 0)
@@ -42,11 +57,7 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
                 data = new ListSingle { Id = listArgs.Id.Value };
 
             else data = new ListAll ();
-
-            var tasks = Client.GetTasks(data);
-            var formatter = tasks.Count > 1 ? taskFormatterFactory.GetListFormatter() : taskFormatterFactory.GetSingleFormatter();
-
-            PrintWithFormatter(tasks, formatter);
+            return data;
         }
     }
 
