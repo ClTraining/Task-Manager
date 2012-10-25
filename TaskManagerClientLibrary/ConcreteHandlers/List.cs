@@ -33,12 +33,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             IClientSpecification data;
 
             if (input.Date != default(DateTime) && input.Id == 0)
-                data = new ListByDate { Data = input.Date };
+                data = new ListByDate { Date = input.Date };
 
             else if (input.Date == default(DateTime) && input.Id != null)
-                data = new ListSingle { Data = input.Id.Value };
+                data = new ListSingle { Id = input.Id.Value };
 
-            else data = new ListAll { Data = null };
+            else data = new ListAll() ;
 
             var tasks = client.GetTasks(data);
             var formatter = tasks.Count > 1 ? taskFormatterFactory.GetListFormatter() : taskFormatterFactory.GetSingleFormatter();

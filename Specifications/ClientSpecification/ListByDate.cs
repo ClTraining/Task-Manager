@@ -1,7 +1,9 @@
-﻿namespace Specifications.ClientSpecification
+﻿using System;
+
+namespace Specifications.ClientSpecification
 {
     public class ListByDate : IClientSpecification
     {
-        public object Data { get; set; }
+        public DateTime Date { get; set; }
     }
 }
