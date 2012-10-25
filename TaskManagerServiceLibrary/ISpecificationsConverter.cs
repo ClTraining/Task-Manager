@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Specifications.ClientSpecification;
+﻿using Specifications.ClientSpecification;
 using Specifications.QuerySpecifications;
 
 namespace TaskManagerServiceLibrary

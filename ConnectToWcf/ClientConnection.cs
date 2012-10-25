@@ -9,7 +9,6 @@ using Specifications.ClientSpecification;
 using Specifications.QuerySpecifications;
 using TaskManagerServiceLibrary;
 using TaskManagerServiceLibrary.Repositories;
-using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
 
 namespace ConnectToWcf

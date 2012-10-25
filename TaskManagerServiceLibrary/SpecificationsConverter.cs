@@ -13,7 +13,7 @@ namespace TaskManagerServiceLibrary
             Mapper.CreateMap<ListAll, ListAllSpecification>();
             Mapper.CreateMap<ListByDate, ListByDateSpecification>();
             Mapper.CreateMap<ListSingle, ListSingleSpecification>();
-            Mapper.CreateMap<IClientSpecification, IQuerySpecification>().ConvertUsing(new SpecificationMapConverter<IClientSpecification, IQuerySpecification>());
+            Mapper.CreateMap<IClientSpecification, IQuerySpecification>().ConvertUsing<SpecificationMapConverter<IClientSpecification, IQuerySpecification>>();
         }
 
         public IQuerySpecification GetQuerySpecification(IClientSpecification specification)
