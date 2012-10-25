@@ -43,6 +43,7 @@ namespace TaskManagerServiceLibrary
         public int AddTask(AddTaskArgs task)
         {
             var addTask = repository.AddTask(task);
+
             return addTask;
         }
 
@@ -112,7 +113,6 @@ namespace TaskManagerServiceLibrary
             var args = new AddTaskArgs();
             service.AddTask(args);
             repo.Received().AddTask(args);
-
         }
 
         [Fact]

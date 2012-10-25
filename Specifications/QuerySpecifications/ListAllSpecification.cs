@@ -10,8 +10,6 @@ namespace Specifications.QuerySpecifications
         {
             return true;
         }
-
-        //public void Initialise(object data) { }
     }
 
     public class ListAllSpecificationTests

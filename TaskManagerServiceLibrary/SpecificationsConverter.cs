@@ -29,7 +29,6 @@ namespace TaskManagerServiceLibrary
         public void should_return_listsinglespecification()
         {
             var cSpec = new ListSingle();
-            new ListSingleSpecification();
             var converter = new SpecificationsConverter();
             
             var result = converter.GetQuerySpecification(cSpec);
@@ -41,10 +40,10 @@ namespace TaskManagerServiceLibrary
         public void should_return_listallspecification()
         {
             var cSpec = new ListAll();
-            var qSpec = new ListAllSpecification();
-            var converter = new SpecificationsConverter(new List<IQuerySpecification> {qSpec});
+            var converter = new SpecificationsConverter();
 
             var result = converter.GetQuerySpecification(cSpec);
+
             result.Should().BeOfType<ListAllSpecification>();
         }
     }

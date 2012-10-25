@@ -160,7 +160,7 @@ namespace ConnectToWcf
         {
             var expected = new List<ContractTask> {new ContractTask {Id = 1}};
             var cSpec = Substitute.For<IClientSpecification>();
-            cSpec.Data.Returns(1);
+            //cSpec.Data.Returns(1);
             var qSpec = Substitute.For<IQuerySpecification>();
 
             repo.GetTasks(Arg.Is<IQuerySpecification>(s => s.IsSatisfied(new ServiceTask{Id = 1}))).Returns(expected);

@@ -1,6 +1,5 @@
 using EntitiesLibrary;
 using FluentAssertions;
-using Specifications.ClientSpecification;
 using Xunit;
 
 namespace Specifications.QuerySpecifications
@@ -13,11 +12,6 @@ namespace Specifications.QuerySpecifications
         {
             return Id == task.Id;
         }
-
-        //public void Initialise(object data)
-        //{
-        //    Id = ((ListSingle) data).Id;
-        //}
     }
 
     public class ListSingleSpecificationTests
@@ -31,15 +25,6 @@ namespace Specifications.QuerySpecifications
             var result = spec.IsSatisfied(task);
 
             result.Should().BeTrue();
-        }
-
-        [Fact]
-        public void should_initialise_specification()
-        {
-            //var spec = new ListSingleSpecification();
-            //const int expected = 1;
-            //spec.Initialise(expected);
-            //spec.Id.Should().Be(expected);
         }
     }
 }
