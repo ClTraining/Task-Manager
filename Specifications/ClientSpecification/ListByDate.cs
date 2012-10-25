@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Specifications.ClientSpecification
+﻿namespace Specifications.ClientSpecification
 {
     public class ListByDate : IClientSpecification
     {

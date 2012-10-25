@@ -1,6 +1,4 @@
-﻿using System.Runtime.Serialization;
-
-namespace Specifications.ClientSpecification
+﻿namespace Specifications.ClientSpecification
 {
     public class ListSingle : IClientSpecification
     {
