@@ -1,4 +1,5 @@
-﻿using NSubstitute;
+﻿using System.Collections.Generic;
+using NSubstitute;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
@@ -9,16 +10,16 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
         public string Description { get; set; }
         private readonly EnvironmentWrapper manager;
 
+        public void Execute(List<string> argument)
+        {
+            manager.Exit();
+        }
+
         public Exit(EnvironmentWrapper manager)
         {
             Name = GetType().Name.ToLower();
             this.manager = manager;
             Description = "Exits from client.";
-        }
-
-        public void Execute(object argument)
-        {
-            manager.Exit();
         }
     }
 

@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
-using EntitiesLibrary;
 
 namespace TaskManagerClientLibrary.ConcreteHandlers
 {
@@ -9,8 +7,11 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
     {
         public string Name { get; set; }
         public string Description { get; set; }
-        private readonly ArgumentConverter<T> converter;
+        protected readonly ArgumentConverter<T> converter;
         private readonly TextWriter textWriter;
+        //protected void ExecuteWithGenericInput(T input) { }
+
+        public abstract void Execute(List<string> argument);
 
         protected Command(ArgumentConverter<T> converter, TextWriter textWriter)
         {
@@ -18,34 +19,24 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             this.converter = converter;
             this.textWriter = textWriter;
         }
+        //try
+        //{
+        //    var converted = converter == null ? argument : Convert(argument);
+        //    ExecuteWithGenericInput((T)converted);
+        //}
+        //catch (TaskNotFoundException e)
+        //{
+        //    OutText("Task not found.");
+        //}
+        //catch (Exception e)
+        //{
+        //    Console.WriteLine(e.Message);
+        //}
 
-        public virtual void Execute(object argument)
-        {
-            try
-            {
-                var converted = converter == null ? argument : Convert(argument);
-                ExecuteWithGenericInput((T)converted);
-            }
-            catch (TaskNotFoundException e)
-            {
-                OutText("Task not found.");
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-        }
-
-        protected virtual void ExecuteWithGenericInput(T input) { }
 
         protected void OutText(string text)
         {
             textWriter.WriteLine(text);
-        }
-
-        private object Convert(object input)
-        {
-            return converter.Convert(input as List<string>);
         }
     }
 }

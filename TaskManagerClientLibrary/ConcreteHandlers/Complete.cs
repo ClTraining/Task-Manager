@@ -9,6 +9,8 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
 {
     public class Complete : Command<CompleteTaskArgs>
     {
+        private IClientConnection Client { get; set; }
+
         public Complete(ArgumentConverter<CompleteTaskArgs> converter, TextWriter textWriter, IClientConnection client)
             : base(converter, textWriter)
         {
@@ -16,13 +18,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             Description = "Mark task by ID as completed.";
         }
 
-        protected override void ExecuteWithGenericInput(CompleteTaskArgs input)
+        public override void Execute(List<string> argument)
         {
-            Client.Complete(input);
-            OutText(string.Format("Task ID: {0} completed.", input.Id));
+            var completeTaskArgs = converter.Convert(argument);
+            Client.Complete(completeTaskArgs);
+            OutText(string.Format("Task ID: {0} completed.", completeTaskArgs.Id));
         }
-
-        protected IClientConnection Client { get; set; }
     }
 
     public class CompleteTests

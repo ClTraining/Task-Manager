@@ -19,10 +19,11 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             Description = "Sets due date for task, specified by ID.";
         }
 
-        protected override void ExecuteWithGenericInput(SetDateArgs input)
+        public override void Execute(List<string> argument)
         {
-            Client.SetTaskDueDate(input);
-            OutText(string.Format("Due date to task assigned. Task Id:{0}", input.Id));
+            var setDateArgs = converter.Convert(argument);
+            Client.SetTaskDueDate(setDateArgs);
+            OutText(string.Format("Due date to task assigned. Task Id:{0}", setDateArgs.Id));
         }
     }
 

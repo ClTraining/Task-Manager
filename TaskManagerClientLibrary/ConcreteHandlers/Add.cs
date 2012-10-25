@@ -18,12 +18,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             Description = "Adds new task to server.";
         }
 
-        protected override void ExecuteWithGenericInput(AddTaskArgs input)
+        public override void Execute(List<string> argument)
         {
-            var result = Client.AddTask(input);
+            var addTaskArgs = converter.Convert(argument);
+            var result = Client.AddTask(addTaskArgs);
             OutText("Task added. Task ID: " + result);
         }
-
     }
 
     public class AddTests

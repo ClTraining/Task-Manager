@@ -18,13 +18,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             Description = "Renames task, specified by ID.";
         }
 
-        protected override void ExecuteWithGenericInput(RenameTaskArgs input)
+        public override void Execute(List<string> argument)
         {
-            Client.RenameTask(input);
-            OutText(string.Format("Task ID: {0} renamed.", input.Id));
+            var renameTaskArgs = converter.Convert(argument);
+            Client.RenameTask(renameTaskArgs);
+            OutText(string.Format("Task ID: {0} renamed.", renameTaskArgs.Id));
         }
-
-
     }
 
     public class RenameTests

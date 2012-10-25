@@ -18,13 +18,12 @@ namespace TaskManagerClientLibrary.ConcreteHandlers
             Description = "Clears due date for specified task by ID.";
         }
 
-        protected override void ExecuteWithGenericInput(ClearDateArgs input)
+        public override void Execute(List<string> argument)
         {
-            Client.ClearTaskDueDate(input);
-            OutText(string.Format("Due date cleared for task ID: {0} .", input.Id));
+            var clearDateArgs = converter.Convert(argument);
+            Client.ClearTaskDueDate(clearDateArgs);
+            OutText(string.Format("Due date cleared for task ID: {0} .", clearDateArgs.Id));
         }
-
-
     }
 
     public class ClearDateTests
