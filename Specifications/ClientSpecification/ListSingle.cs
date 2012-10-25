@@ -2,6 +2,6 @@
 {
     public class ListSingle : IClientSpecification
     {
-        public object Data { get; set; }
+        public int Id { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
-using NSubstitute;
+using AutoMapper;
 using Specifications.ClientSpecification;
 using Specifications.QuerySpecifications;
 using Xunit;
@@ -10,17 +8,17 @@ namespace TaskManagerServiceLibrary
 {
     public class SpecificationsConverter : ISpecificationsConverter
     {
-        private readonly IEnumerable<IQuerySpecification> serviceSpecifications;
-
-        public SpecificationsConverter(IEnumerable<IQuerySpecification> serviceSpecifications)
+        public SpecificationsConverter()
         {
-            this.serviceSpecifications = serviceSpecifications;
+            Mapper.CreateMap<ListAll, ListAllSpecification>();
+            Mapper.CreateMap<ListByDate, ListByDateSpecification>();
+            Mapper.CreateMap<ListSingle, ListSingleSpecification>();
+            Mapper.CreateMap<IClientSpecification, IQuerySpecification>().ConvertUsing(new SpecificationMapConverter<IClientSpecification, IQuerySpecification>());
         }
 
         public IQuerySpecification GetQuerySpecification(IClientSpecification specification)
         {
-            var querySpecification = serviceSpecifications.First(x => x.GetType().Name.Contains(specification.GetType().Name));
-            querySpecification.Initialise(specification.Data);
+            var querySpecification = Mapper.DynamicMap<IClientSpecification, IQuerySpecification>(specification);
             return querySpecification;
         }
     }
@@ -30,9 +28,9 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_return_listsinglespecification()
         {
-            var cSpec = new ListSingle{Data = 1};
-            var qSpec = new ListSingleSpecification();
-            var converter = new SpecificationsConverter(new List<IQuerySpecification> {qSpec});
+            var cSpec = new ListSingle();
+            new ListSingleSpecification();
+            var converter = new SpecificationsConverter();
             
             var result = converter.GetQuerySpecification(cSpec);
             
