@@ -6,7 +6,7 @@ using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
-using Specifications.QuerySpecifications;
+using Specifications.ServiceSpecifications;
 using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
 
@@ -31,7 +31,7 @@ namespace TaskManagerServiceLibrary.Repositories
             return serviceTask.Id;
         }
 
-        public List<ContractTask> GetTasks(IQuerySpecification spec)
+        public List<ClientPackage> GetTasks(IServiceSpecification spec)
         {
             var resList = taskList
                 .Where(spec.IsSatisfied)
@@ -51,12 +51,12 @@ namespace TaskManagerServiceLibrary.Repositories
             taskList.First(x => x.Id == args.Id).Name = args.Name;
         }
 
-        public void SetTaskDueDate(SetDateArgs args)
+        public void SetTaskDueDate(SetDateTaskArgs args)
         {
             taskList.First(x => x.Id == args.Id).DueDate = args.DueDate;
         }
 
-        public void ClearTaskDueDate(ClearDateArgs args)
+        public void ClearTaskDueDate(ClearDateTaskArgs args)
         {
             taskList.First(x => x.Id == args.Id).DueDate = default(DateTime);
         }
@@ -71,7 +71,7 @@ namespace TaskManagerServiceLibrary.Repositories
     public class MemoRepositoryTests
     {
         private readonly ITaskMapper mapper = Substitute.For<ITaskMapper>();
-        private readonly IQuerySpecification spec = Substitute.For<IQuerySpecification>();
+        private readonly IServiceSpecification spec = Substitute.For<IServiceSpecification>();
         readonly MemoRepository repo;
         readonly ServiceTask sTask = new ServiceTask{Id = 1};
 
@@ -118,14 +118,14 @@ namespace TaskManagerServiceLibrary.Repositories
         [Fact]
         public void should_set_date_to_task_by_id()
         {
-            repo.SetTaskDueDate(new SetDateArgs{Id = 1, DueDate = DateTime.Today});
+            repo.SetTaskDueDate(new SetDateTaskArgs{Id = 1, DueDate = DateTime.Today});
             repo.taskList[0].DueDate.Should().Be(DateTime.Today);
         }
 
         [Fact]
         public void should_clear_date_by_id()
         {
-            repo.ClearTaskDueDate(new ClearDateArgs{Id = 1});
+            repo.ClearTaskDueDate(new ClearDateTaskArgs{Id = 1});
             repo.taskList[0].DueDate.Should().Be(default(DateTime));
         }
     }

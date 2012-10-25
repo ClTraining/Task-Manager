@@ -9,19 +9,19 @@ namespace TaskManagerServiceLibrary.TaskManager
     {
         public TaskMapper()
         {
-            Mapper.CreateMap<ServiceTask, ContractTask>();
-            Mapper.CreateMap<ContractTask, ServiceTask>();
+            Mapper.CreateMap<ServiceTask, ClientPackage>();
+            Mapper.CreateMap<ClientPackage, ServiceTask>();
         }
 
-        public ContractTask ConvertToContract(ServiceTask task)
+        public ClientPackage ConvertToContract(ServiceTask task)
         {
-            return Mapper.Map<ServiceTask, ContractTask>(task);
+            return Mapper.Map<ServiceTask, ClientPackage>(task);
         }
     }
 
     public class TaskMapperTests
     {
-        private readonly ContractTask contractTask = new ContractTask {Id = 10, Name = "service", IsCompleted = true};
+        private readonly ClientPackage contractTask = new ClientPackage {Id = 10, Name = "service", IsCompleted = true};
         private readonly ServiceTask serviceTask = new ServiceTask {Id = 10, Name = "service", IsCompleted = true};
         private readonly TaskMapper taskMapper = new TaskMapper();
 

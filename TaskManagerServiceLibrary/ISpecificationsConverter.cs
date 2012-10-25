@@ -1,10 +1,10 @@
-﻿using Specifications.ClientSpecification;
-using Specifications.QuerySpecifications;
+﻿using Specifications.ClientSpecifications;
+using Specifications.ServiceSpecifications;
 
 namespace TaskManagerServiceLibrary
 {
     public interface ISpecificationsConverter
     {
-        IQuerySpecification GetQuerySpecification(IClientSpecification specification);
+        IServiceSpecification GetQuerySpecification(IClientSpecification specification);
     }
 }

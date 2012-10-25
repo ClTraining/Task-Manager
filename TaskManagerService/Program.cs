@@ -3,7 +3,7 @@ using System.ServiceModel;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
-using Specifications.QuerySpecifications;
+using Specifications.ServiceSpecifications;
 using TaskManagerServiceLibrary;
 using TaskManagerServiceLibrary.Repositories;
 using TaskManagerServiceLibrary.TaskManager;
@@ -38,9 +38,9 @@ namespace TaskManagerService
             Bind<ITaskMapper>().To<TaskMapper>();
             Bind<ISpecificationsConverter>().To<SpecificationsConverter>();
 
-            this.Bind(a => a.FromAssemblyContaining<IQuerySpecification>()
+            this.Bind(a => a.FromAssemblyContaining<IServiceSpecification>()
                                .SelectAllClasses()
-                               .InNamespaceOf<IQuerySpecification>()
+                               .InNamespaceOf<IServiceSpecification>()
                                .BindAllInterfaces()
                 );
         }

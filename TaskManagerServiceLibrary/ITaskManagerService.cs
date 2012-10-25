@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
-using Specifications.ClientSpecification;
+using Specifications.ClientSpecifications;
 
 
 namespace TaskManagerServiceLibrary
@@ -14,10 +14,10 @@ namespace TaskManagerServiceLibrary
         int AddTask(AddTaskArgs task);
 
         [OperationContract]
-        [ServiceKnownType(typeof(ListAll))]
-        [ServiceKnownType(typeof(ListByDate))]
-        [ServiceKnownType(typeof(ListSingle))]
-        List<ContractTask> GetTasks(IClientSpecification data);
+        [ServiceKnownType(typeof(ListAllClientSpecification))]
+        [ServiceKnownType(typeof(ListByDateClientSpecification))]
+        [ServiceKnownType(typeof(ListSingleClientSpecification))]
+        List<ClientPackage> GetTasks(IClientSpecification data);
 
         [OperationContract]
         void Complete(CompleteTaskArgs args);
@@ -26,9 +26,9 @@ namespace TaskManagerServiceLibrary
         void RenameTask(RenameTaskArgs args);
 
         [OperationContract]
-        void SetTaskDueDate(SetDateArgs args);
+        void SetTaskDueDate(SetDateTaskArgs args);
 
         [OperationContract]
-        void ClearTaskDueDate(ClearDateArgs args);
+        void ClearTaskDueDate(ClearDateTaskArgs args);
     }
 }

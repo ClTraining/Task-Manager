@@ -61,29 +61,29 @@
   <ItemGroup>
     <Compile Include="Application.cs" />
     <Compile Include="ArgumentConverter.cs" />
-    <Compile Include="ComandContainer\CommandContainer.cs" />
-    <Compile Include="ComandContainer\ICommandContainer.cs" />
-    <Compile Include="ConcreteHandlers\Add.cs" />
-    <Compile Include="ConcreteHandlers\ClearDate.cs" />
-    <Compile Include="ConcreteHandlers\Complete.cs" />
-    <Compile Include="ConcreteHandlers\Exit.cs" />
-    <Compile Include="ConcreteHandlers\HelpCommand\Help.cs" />
-    <Compile Include="ConcreteHandlers\HelpCommand\HelpDisplayer.cs" />
-    <Compile Include="ConcreteHandlers\HelpCommand\IHelpDisplayer.cs" />
-    <Compile Include="ConcreteHandlers\ICommand.cs" />
-    <Compile Include="ConcreteHandlers\SetDate.cs" />
-    <Compile Include="ConcreteHandlers\List.cs" />
-    <Compile Include="ConcreteHandlers\Rename.cs" />
-    <Compile Include="ConcreteHandlers\TaskFormatter\ITaskFormatterFactory.cs" />
-    <Compile Include="ConcreteHandlers\TaskFormatter\SingleTaskFormatter.cs" />
-    <Compile Include="ConcreteHandlers\TaskFormatter\ListTaskFormatter.cs" />
-    <Compile Include="ConcreteHandlers\TaskFormatter\TaskFormatterFactory.cs" />
+    <Compile Include="CommandContainer\CommandContainer.cs" />
+    <Compile Include="CommandContainer\ICommandContainer.cs" />
+    <Compile Include="ConcreteCommands\AddCommand.cs" />
+    <Compile Include="ConcreteCommands\ClearDateCommand.cs" />
+    <Compile Include="ConcreteCommands\CompleteCommand.cs" />
+    <Compile Include="ConcreteCommands\ExitCommand.cs" />
+    <Compile Include="ConcreteCommands\HelpCommand\HelpCommand.cs" />
+    <Compile Include="ConcreteCommands\HelpCommand\HelpCommandDisplayer.cs" />
+    <Compile Include="ConcreteCommands\HelpCommand\IHelpCommandDisplayer.cs" />
+    <Compile Include="ConcreteCommands\ICommand.cs" />
+    <Compile Include="ConcreteCommands\ListCommand.cs" />
+    <Compile Include="ConcreteCommands\RenameCommand.cs" />
+    <Compile Include="ConcreteCommands\SetDateCommand.cs" />
+    <Compile Include="ConcreteCommands\TaskFormatter\ITaskFormatter.cs" />
+    <Compile Include="ConcreteCommands\TaskFormatter\ITaskFormatterFactory.cs" />
+    <Compile Include="ConcreteCommands\TaskFormatter\ListTaskFormatter.cs" />
+    <Compile Include="ConcreteCommands\TaskFormatter\SingleTaskFormatter.cs" />
+    <Compile Include="ConcreteCommands\TaskFormatter\TaskFormatterFactory.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="EnvironmentWrapper.cs" />
     <Compile Include="InputParser.cs" />
     <Compile Include="LineParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ConcreteHandlers\TaskFormatter\ITaskFormatter.cs" />
     <Compile Include="UserNotifier.cs" />
   </ItemGroup>
   <ItemGroup>

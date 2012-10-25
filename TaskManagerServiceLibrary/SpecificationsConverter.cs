@@ -1,6 +1,6 @@
 using AutoMapper;
-using Specifications.ClientSpecification;
-using Specifications.QuerySpecifications;
+using Specifications.ClientSpecifications;
+using Specifications.ServiceSpecifications;
 using Xunit;
 using FluentAssertions;
 
@@ -10,15 +10,15 @@ namespace TaskManagerServiceLibrary
     {
         public SpecificationsConverter()
         {
-            Mapper.CreateMap<ListAll, ListAllSpecification>();
-            Mapper.CreateMap<ListByDate, ListByDateSpecification>();
-            Mapper.CreateMap<ListSingle, ListSingleSpecification>();
-            Mapper.CreateMap<IClientSpecification, IQuerySpecification>().ConvertUsing<SpecificationMapConverter<IClientSpecification, IQuerySpecification>>();
+            Mapper.CreateMap<ListAllClientSpecification, ListAllServiceSpecification>();
+            Mapper.CreateMap<ListByDateClientSpecification, ListByDateServiceSpecification>();
+            Mapper.CreateMap<ListSingleClientSpecification, ListSingleServiceSpecification>();
+            Mapper.CreateMap<IClientSpecification, IServiceSpecification>().ConvertUsing<SpecificationMapConverter<IClientSpecification, IServiceSpecification>>();
         }
 
-        public IQuerySpecification GetQuerySpecification(IClientSpecification specification)
+        public IServiceSpecification GetQuerySpecification(IClientSpecification specification)
         {
-            var querySpecification = Mapper.DynamicMap<IClientSpecification, IQuerySpecification>(specification);
+            var querySpecification = Mapper.DynamicMap<IClientSpecification, IServiceSpecification>(specification);
             return querySpecification;
         }
     }
@@ -28,23 +28,23 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_return_listsinglespecification()
         {
-            var cSpec = new ListSingle();
+            var cSpec = new ListSingleClientSpecification();
             var converter = new SpecificationsConverter();
             
             var result = converter.GetQuerySpecification(cSpec);
             
-            result.Should().BeOfType<ListSingleSpecification>();
+            result.Should().BeOfType<ListSingleServiceSpecification>();
         }
 
         [Fact]
         public void should_return_listallspecification()
         {
-            var cSpec = new ListAll();
+            var cSpec = new ListAllClientSpecification();
             var converter = new SpecificationsConverter();
 
             var result = converter.GetQuerySpecification(cSpec);
 
-            result.Should().BeOfType<ListAllSpecification>();
+            result.Should().BeOfType<ListAllServiceSpecification>();
         }
     }
 }

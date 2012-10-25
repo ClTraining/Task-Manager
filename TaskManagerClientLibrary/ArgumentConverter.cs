@@ -38,14 +38,14 @@ namespace TaskManagerClientLibrary
     }
 
     [TypeConverter(typeof(TestArgsConverter))]
-    internal class TestArgs
+    public class TestArgs
     {
         public string TestString { get; set; }
 
         public int TestInt { get; set; }
     }
 
-    internal class TestArgsConverter : TypeConverter
+    public class TestArgsConverter : TypeConverter
     {
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
