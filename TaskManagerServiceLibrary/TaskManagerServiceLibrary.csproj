@@ -65,7 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SpecificationMapComverter.cs" />
+    <Compile Include="SpecificationMapConverter.cs" />
     <Compile Include="ISpecificationsConverter.cs" />
     <Compile Include="ITaskManagerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
