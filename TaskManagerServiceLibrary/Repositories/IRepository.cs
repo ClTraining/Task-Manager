@@ -9,9 +9,6 @@ namespace TaskManagerServiceLibrary.Repositories
     {
         int AddTask(AddTaskArgs args);
         List<ClientPackage> GetTasks(IServiceSpecification spec);
-        void Complete(CompleteTaskArgs args);
-        void RenameTask(RenameTaskArgs args);
-        void SetTaskDueDate(SetDateTaskArgs args);
-        void ClearTaskDueDate(ClearDateTaskArgs args);
+        void UpdateChanges(ICommandArguments task);
     }
 }

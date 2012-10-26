@@ -28,7 +28,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         public void Execute(List<string> argument)
         {
             var setDateArgs = ConvertToArgs(argument);
-            client.SetTaskDueDate(setDateArgs);
+            client.UpdateChanges(setDateArgs);
             PrintInfo(setDateArgs);
         }
 
@@ -70,7 +70,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             var argument = new List<string> { "1", "10-10-2012" };
             converter.Convert(argument).Returns(setDateArgs);
             command.Execute(argument);
-            client.Received().SetTaskDueDate(setDateArgs);
+            client.Received().UpdateChanges(setDateArgs);
         }
     }
 }

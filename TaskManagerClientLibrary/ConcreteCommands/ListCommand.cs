@@ -51,10 +51,10 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             IClientSpecification data;
 
-            if (listArgs.Date != default(DateTime) && listArgs.Id == 0)
-                data = new ListByDateClientSpecification { Date = listArgs.Date };
+            if (listArgs.DueDate != default(DateTime) && listArgs.Id == 0)
+                data = new ListByDateClientSpecification { Date = listArgs.DueDate };
 
-            else if (listArgs.Date == default(DateTime) && listArgs.Id != null)
+            else if (listArgs.DueDate == default(DateTime) && listArgs.Id != null)
                 data = new ListSingleClientSpecification { Id = listArgs.Id.Value };
 
             else data = new ListAllClientSpecification ();
@@ -109,7 +109,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             data = new ListByDateClientSpecification();
             var input = new List<string>();
             connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientPackage>());
-            converter.Convert(input).Returns(new ListTaskArgs { Id = 0, Date = DateTime.Now });
+            converter.Convert(input).Returns(new ListTaskArgs { Id = 0, DueDate = DateTime.Now });
 
             list.Execute(input);
             connection.ReceivedWithAnyArgs().GetTasks(data);

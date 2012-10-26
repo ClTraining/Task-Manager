@@ -28,7 +28,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         public void Execute(List<string> argument)
         {
             var completeTaskArgs = ConvertToArgs(argument);
-            client.Complete(completeTaskArgs);
+            client.UpdateChanges(completeTaskArgs);
             PrintInfo(completeTaskArgs);
         }
 
@@ -71,7 +71,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             var argument = new List<string> { "1", "10-10-2012" };
             converter.Convert(argument).Returns(completeTaskArgs);
             command.Execute(argument);
-            client.Received().Complete(completeTaskArgs);
+            client.Received().UpdateChanges(completeTaskArgs);
         }
     }
 }

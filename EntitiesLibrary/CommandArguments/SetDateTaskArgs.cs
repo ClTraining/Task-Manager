@@ -6,8 +6,13 @@ using Xunit;
 
 namespace EntitiesLibrary.CommandArguments
 {
+    public interface ISetDateTaskArgs : ICommandArguments
+    {
+        DateTime DueDate { get; set; }
+    }
+
     [TypeConverter(typeof (SetDateTaskArgsConverter))]
-    public class SetDateTaskArgs
+    public class SetDateTaskArgs : ISetDateTaskArgs
     {
         public int Id { get; set; }
 

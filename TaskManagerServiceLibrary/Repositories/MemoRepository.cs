@@ -15,7 +15,7 @@ namespace TaskManagerServiceLibrary.Repositories
     public class MemoRepository : IRepository
     {
         private readonly ITaskMapper mapper;
-        public readonly List<ServiceTask> taskList = new List<ServiceTask>();
+        public List<ServiceTask> taskList = new List<ServiceTask>();
         private int currentId;
 
         public MemoRepository(ITaskMapper mapper)
@@ -41,24 +41,14 @@ namespace TaskManagerServiceLibrary.Repositories
             return resList;
         }
 
-        public void Complete(CompleteTaskArgs args)
+        public void UpdateChanges(ICommandArguments args)
         {
-            taskList.First(x => x.Id == args.Id).IsCompleted = true;
-        }
+            var index = args.Id - 1;
+            var taskToConvert = taskList[index];
+            var task = mapper.Convert(args, taskToConvert);
 
-        public void RenameTask(RenameTaskArgs args)
-        {
-            taskList.First(x => x.Id == args.Id).Name = args.Name;
-        }
-
-        public void SetTaskDueDate(SetDateTaskArgs args)
-        {
-            taskList.First(x => x.Id == args.Id).DueDate = args.DueDate;
-        }
-
-        public void ClearTaskDueDate(ClearDateTaskArgs args)
-        {
-            taskList.First(x => x.Id == args.Id).DueDate = default(DateTime);
+            taskList.RemoveAt(index);
+            taskList.Insert(index, task);
         }
 
         private int GetNewId()
@@ -99,34 +89,6 @@ namespace TaskManagerServiceLibrary.Repositories
             var res = repo.GetTasks(spec);
             
             res.Count.Should().Be(1);
-        }
-
-        [Fact]
-        public void should_mark_task_as_completed()
-        {
-            repo.Complete(new CompleteTaskArgs{Id = 1});
-            repo.taskList[0].IsCompleted.Should().BeTrue();
-        }
-
-        [Fact]
-        public void should_rename_task_by_id()
-        {
-            repo.RenameTask(new RenameTaskArgs{Id = 1, Name = "task1"});
-            repo.taskList[0].Name.Should().Be("task1");
-        }
-
-        [Fact]
-        public void should_set_date_to_task_by_id()
-        {
-            repo.SetTaskDueDate(new SetDateTaskArgs{Id = 1, DueDate = DateTime.Today});
-            repo.taskList[0].DueDate.Should().Be(DateTime.Today);
-        }
-
-        [Fact]
-        public void should_clear_date_by_id()
-        {
-            repo.ClearTaskDueDate(new ClearDateTaskArgs{Id = 1});
-            repo.taskList[0].DueDate.Should().Be(default(DateTime));
         }
     }
 }

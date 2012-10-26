@@ -29,29 +29,14 @@ namespace ConnectToWcf
             return GetDataFromServer(t => t.AddTask(task));
         }
 
-        public void Complete(CompleteTaskArgs args)
-        {
-            UpdateDataOnServer(s => s.Complete(args));
-        }
-
-        public void RenameTask(RenameTaskArgs args)
-        {
-            UpdateDataOnServer(t => t.RenameTask(args));
-        }
-
         public List<ClientPackage> GetTasks(IClientSpecification data)
         {
             return GetDataFromServer(s => s.GetTasks(data));
         }
 
-        public void SetTaskDueDate(SetDateTaskArgs args)
+        public void UpdateChanges(ICommandArguments args)
         {
-            UpdateDataOnServer(s => s.SetTaskDueDate(args));
-        }
-
-        public void ClearTaskDueDate(ClearDateTaskArgs args)
-        {
-            UpdateDataOnServer(s => s.ClearTaskDueDate(args));
+            UpdateDataOnServer(s=>s.UpdateChanges(args));
         }
 
         private void UpdateDataOnServer(Action<ITaskManagerService> action)
@@ -71,9 +56,9 @@ namespace ConnectToWcf
             {
                 return func(client.CreateChannel());
             }
-            catch (FaultException<ExceptionDetail>)
+            catch (FaultException<ExceptionDetail> e)
             {
-                throw new TaskNotFoundException();
+                throw new TaskNotFoundException(e.Detail.Message);
             }
             finally
             {
@@ -132,28 +117,6 @@ namespace ConnectToWcf
             result.Should().Be(1);
         }
 
-        [Fact]
-        public void should_mark_task_as_complited()
-        {
-            var args = new CompleteTaskArgs { Id = 1 };
-            
-            client.Complete(args);
-
-            repo.Received().Complete(Arg.Is<CompleteTaskArgs>(a => a.Id == 1));
-            host.Close();
-        }
-
-        [Fact]
-        public void should_rename_task_by_id()
-        {
-            var args = new RenameTaskArgs { Id = 1 };
-
-            client.RenameTask(args);
-
-            repo.Received().RenameTask(Arg.Is<RenameTaskArgs>(a => a.Id == 1));
-            host.Close();
-        }
-
         [Fact(Skip = "")]
         public void should_get_tasks_from_server()
         {
@@ -171,28 +134,6 @@ namespace ConnectToWcf
                 Console.WriteLine(task);
             }
 
-            host.Close();
-        }
-
-        [Fact]
-        public void should_set_date_to_task()
-        {
-            var args = new SetDateTaskArgs{Id = 1, DueDate = DateTime.Today};
-
-            client.SetTaskDueDate(args);
-
-            repo.Received().SetTaskDueDate(Arg.Is<SetDateTaskArgs>(a => a.Id == 1));
-            host.Close();
-        }
-
-        [Fact]
-        public void should_clear_task_by_date()
-        {
-            var args = new ClearDateTaskArgs{Id = 1};
-
-            client.ClearTaskDueDate(args);
-
-            repo.Received().ClearTaskDueDate(Arg.Is<ClearDateTaskArgs>(a => a.Id == 1));
             host.Close();
         }
     }
