@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.ServiceModel;
+using AutoMapper;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using NSubstitute;
@@ -45,6 +46,9 @@ namespace TaskManagerServiceLibrary
         private readonly IClientSpecification cSpec = Substitute.For<IClientSpecification>();
         private readonly ISpecificationsConverter converter = Substitute.For<ISpecificationsConverter>();
         private readonly IRepository repo = Substitute.For<IRepository>();
+
+        private readonly ITypeConverter<IClientSpecification, IServiceSpecification> typeConverter =
+            Substitute.For<ITypeConverter<IClientSpecification, IServiceSpecification>>();
 
         private readonly TaskManagerService service;
 

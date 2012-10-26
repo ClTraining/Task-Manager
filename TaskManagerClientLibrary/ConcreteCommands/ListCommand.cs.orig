@@ -50,9 +50,16 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             IClientSpecification data;
 
+<<<<<<< HEAD
             if (listArgs.DueDate != default(DateTime) && listArgs.Id == 0)
                 data = new ListByDateClientSpecification { Date = listArgs.DueDate };
+
             else if (listArgs.DueDate == default(DateTime) && listArgs.Id != null)
+=======
+            if (listArgs.Date != default(DateTime) && listArgs.Id == 0)
+                data = new ListByDateClientSpecification { Date = listArgs.Date };
+            else if (listArgs.Date == default(DateTime) && listArgs.Id != null)
+>>>>>>> 907bed11240132517b7f7c3a01f9986cb61c369b
                 data = new ListSingleClientSpecification { Id = listArgs.Id.Value };
             else
                 data = new ListAllClientSpecification();

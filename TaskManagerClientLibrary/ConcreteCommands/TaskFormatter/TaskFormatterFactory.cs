@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NSubstitute;
+using Specifications.ClientSpecifications;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
@@ -15,14 +16,11 @@ namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
             this.singleTaskFormatter = singleTaskFormatter;
         }
 
-        public virtual ITaskFormatter GetListFormatter()
+        public ITaskFormatter GetFormatter(IClientSpecification specification)
         {
+            if (specification is ListSingleClientSpecification)
+                return singleTaskFormatter;
             return listTaskFormatter;
-        }
-
-        public virtual ITaskFormatter GetSingleFormatter()
-        {
-            return singleTaskFormatter;
         }
     }
 
@@ -40,14 +38,14 @@ namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
         [Fact]
         public void should_return_list_formatter()
         {
-            var result = taskFormatterFactory.GetListFormatter();
+            var result = taskFormatterFactory.GetFormatter(new ListAllClientSpecification());
             result.Should().BeSameAs(listFormatter);
         }
 
         [Fact]
         public void should_return_single_formatter()
         {
-            var result = taskFormatterFactory.GetSingleFormatter();
+            var result = taskFormatterFactory.GetFormatter(new ListSingleClientSpecification());
             result.Should().BeSameAs(singleFormatter);
         }
     }

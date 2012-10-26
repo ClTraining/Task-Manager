@@ -1,19 +1,13 @@
-using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using AutoMapper;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
-using FluentAssertions;
 using NSubstitute;
-using Ninject;
-using Ninject.Extensions.Conventions;
-using Ninject.Modules;
-using Specifications.ClientSpecification;
-using Specifications.QuerySpecifications;
+using Specifications.ClientSpecifications;
+using Specifications.ServiceSpecifications;
 using TaskManagerServiceLibrary.Repositories;
-using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
-using System.Linq;
 
 namespace TaskManagerServiceLibrary
 {
@@ -21,82 +15,82 @@ namespace TaskManagerServiceLibrary
     public class TaskManagerService : ITaskManagerService
     {
         private readonly IRepository repository;
-        private readonly ISpecificationsConverter converter;
 
-        public TaskManagerService(IRepository repository, ISpecificationsConverter converter)
+        public TaskManagerService(IRepository repo)
         {
-            this.repository = repository;
-            this.converter = converter;
+            repository = repo;
+        }
+
+        public List<ClientPackage> GetTasks(IClientSpecification input)
+        {
+            var specification = new SpecificationsConverter().GetQuerySpecification(input);
+            return repository.GetTasks(specification);
+        }
+
+        public void UpdateChanges(ICommandArguments args)
+        {
+            repository.UpdateChanges(args);
         }
 
         public int AddTask(AddTaskArgs task)
         {
-            return repository.AddTask(task);
-        }
+            var addTask = repository.AddTask(task);
 
-        public List<ContractTask> GetTasks(IClientSpecification input)
-        {
-            var res = converter.GetQuerySpecification(input);
-            res.Initialise(input.Data);
-            return repository.GetTasks(res);
-        }
-
-        public void Complete(CompleteTaskArgs args)
-        {
-            repository.Complete(args);
-        }
-
-        public void RenameTask(RenameTaskArgs args)
-        {
-            repository.RenameTask(args);
-        }
-
-        public void SetTaskDueDate(SetDateArgs args)
-        {
-            repository.SetTaskDueDate(args);
-        }
-
-        public void ClearTaskDueDate(ClearDateArgs args)
-        {
-            repository.ClearTaskDueDate(args);
+            return addTask;
         }
     }
 
     public class TaskManagerTests
     {
-        private readonly IQuerySpecification qSpec = Substitute.For<IQuerySpecification>();
+        private readonly IServiceSpecification qSpec = Substitute.For<IServiceSpecification>();
         private readonly IClientSpecification cSpec = Substitute.For<IClientSpecification>();
         private readonly ISpecificationsConverter converter = Substitute.For<ISpecificationsConverter>();
         private readonly IRepository repo = Substitute.For<IRepository>();
+
+        private readonly ITypeConverter<IClientSpecification, IServiceSpecification> typeConverter =
+            Substitute.For<ITypeConverter<IClientSpecification, IServiceSpecification>>();
 
         private readonly TaskManagerService service;
 
         public TaskManagerTests()
         {
-<<<<<<< HEAD
-            service = new TaskManagerService(repo, converter);
-=======
->>>>>>> a83f085961ea015d617930764d16b22a18c98c8d
+            service = new TaskManagerService(repo);
         }
 
+<<<<<<< HEAD
+=======
+
         [Fact]
-        public void should_get_all_tasks()
+        public void should_get_tasks()
         {
-            var outList = new List<ContractTask>();
+            var outList = new List<ClientPackage> { new ClientPackage { Id = 1 } };
             converter.GetQuerySpecification(cSpec).Returns(qSpec);
             repo.GetTasks(qSpec).Returns(outList);
-
+            
             var contractTasks = service.GetTasks(cSpec);
 
             contractTasks.Should().BeEquivalentTo(outList);
         }
 
         [Fact]
-        public void should_send_clear_date_for_task()
+        public void should_throw_exception_if_no_task()
         {
-            var args = new ClearDateArgs { Id = 1 };
-            service.ClearTaskDueDate(args);
-            repo.Received().ClearTaskDueDate(args);
+            var outList = new List<ClientPackage>();
+            converter.GetQuerySpecification(cSpec).Returns(qSpec);
+            repo.GetTasks(qSpec).Returns(outList);
+
+            Action action = () => service.GetTasks(cSpec);
+
+            action.ShouldThrow<TaskNotFoundException>();
+        }
+
+>>>>>>> 907bed11240132517b7f7c3a01f9986cb61c369b
+        [Fact]
+        public void should_add_task_and_return_id()
+        {
+            var args = new AddTaskArgs();
+            service.AddTask(args);
+            repo.Received().AddTask(args);
         }
     }
 }
