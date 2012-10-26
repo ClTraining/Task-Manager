@@ -20,15 +20,12 @@ namespace TaskManagerServiceLibrary
         List<ClientPackage> GetTasks(IClientSpecification data);
 
         [OperationContract]
-        void Complete(CompleteTaskArgs args);
-
-        [OperationContract]
-        void RenameTask(RenameTaskArgs args);
-
-        [OperationContract]
-        void SetTaskDueDate(SetDateTaskArgs args);
-
-        [OperationContract]
-        void ClearTaskDueDate(ClearDateTaskArgs args);
+        [ServiceKnownType(typeof(AddTaskArgs))]
+        [ServiceKnownType(typeof(ClearDateTaskArgs))]
+        [ServiceKnownType(typeof(CompleteTaskArgs))]
+        [ServiceKnownType(typeof(ListTaskArgs))]
+        [ServiceKnownType(typeof(RenameTaskArgs))]
+        [ServiceKnownType(typeof(SetDateTaskArgs))]
+        void UpdateChanges(ICommandArguments args);
     }
 }

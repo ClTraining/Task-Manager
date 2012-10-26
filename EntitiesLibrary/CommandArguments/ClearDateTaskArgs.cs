@@ -6,10 +6,16 @@ using Xunit;
 
 namespace EntitiesLibrary.CommandArguments
 {
+    public interface IClearDateTaskArgs : ICommandArguments
+    {
+        DateTime Date { get; }
+    }
+
     [TypeConverter(typeof (ClearDateTaskArgsConverter))]
-    public class ClearDateTaskArgs
+    public class ClearDateTaskArgs : IClearDateTaskArgs
     {
         public int Id { get; set; }
+        public DateTime Date { get; set; }
     }
 
 

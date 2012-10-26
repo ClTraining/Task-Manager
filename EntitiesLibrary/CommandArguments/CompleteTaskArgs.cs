@@ -6,10 +6,18 @@ using Xunit;
 
 namespace EntitiesLibrary.CommandArguments
 {
-    [TypeConverter(typeof (CompleteTaskArgsConverter))]
-    public class CompleteTaskArgs
+    public interface ICompleteTaskArgs : ICommandArguments
     {
+        bool IsCompleted { get; }
+    }
+
+    [TypeConverter(typeof (CompleteTaskArgsConverter))]
+    public class CompleteTaskArgs : ICompleteTaskArgs
+    {
+        private bool isCompleted;
+
         public int Id { get; set; }
+        public bool IsCompleted { get{ return true; } set { isCompleted = value; } }
     }
 
     public class CompleteTaskArgsTests

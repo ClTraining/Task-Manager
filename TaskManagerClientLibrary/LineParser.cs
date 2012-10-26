@@ -59,7 +59,7 @@ namespace TaskManagerClientLibrary
             command1.Name.Returns("add");
             command2.Name.Returns("command");
             command3.Name.Returns("hello");
-            var input = "add foo";
+            const string input = "add foo";
             var list = new List<string> { "add", "foo" };
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
@@ -72,7 +72,7 @@ namespace TaskManagerClientLibrary
         {
             command1.Name.Returns("add");
             command2.Name.Returns("add");
-            var input = "add aaa";
+            const string input = "add aaa";
             var list = new List<string> { "add", "aaa" };
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
@@ -88,7 +88,7 @@ namespace TaskManagerClientLibrary
             command2.Name.Returns("command");
             command3.Name.Returns("hello");
 
-            var input = "ababa bababab";
+            const string input = "ababa bababab";
             var list = new List<string> { "ababa", "bababab" };
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
@@ -108,7 +108,7 @@ namespace TaskManagerClientLibrary
             command2.Name.Returns("command");
             command3.Name.Returns("abrakadabra");
 
-            var input = "hello world";
+            const string input = "hello world";
             var list = new List<string> { "hello", "world" };
             parser.Parse(input).Returns(list);
 
@@ -121,7 +121,7 @@ namespace TaskManagerClientLibrary
         public void should_ignore_double_quotes()
         {
             command1.Name.Returns("add");
-            var input = "add \"hello world\"";
+            const string input = "add \"hello world\"";
             var list = new List<string> { "add", "hello world" };
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand("add \"hello world\"");

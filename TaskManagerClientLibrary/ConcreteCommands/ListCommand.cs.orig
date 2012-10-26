@@ -53,7 +53,22 @@ namespace TaskManagerClientLibrary.ConcreteCommands
                 return;
             }
             textWriter.WriteLine("Tasks not found");
-            }
+
+<<<<<<< HEAD
+=======
+        private IClientSpecification GetClientSpecification(ListTaskArgs listArgs)
+        {
+            IClientSpecification data;
+
+            if (listArgs.DueDate != default(DateTime) && listArgs.Id == 0)
+                data = new ListByDateClientSpecification { Date = listArgs.DueDate };
+            else if (listArgs.DueDate == default(DateTime) && listArgs.Id != null)
+                data = new ListSingleClientSpecification { Id = listArgs.Id.Value };
+            else
+                data = new ListAllClientSpecification();
+            return data;
+>>>>>>> b2fd6099090e246a39f2ea42b81b10ea4ac16af3
+        }
     }
 
     public class ListTests

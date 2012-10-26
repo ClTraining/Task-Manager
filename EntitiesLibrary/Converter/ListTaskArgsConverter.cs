@@ -28,9 +28,9 @@ namespace EntitiesLibrary.Converter
             if (!int.TryParse(argument, out id))
                 DateTime.TryParse(argument, out date);
 
-            var result = new ListTaskArgs { Id = id, Date = date, };
+            var result = new ListTaskArgs { Id = id, DueDate = date, };
             if (argument == "today")
-                result.Date = DateTime.Today;
+                result.DueDate = DateTime.Today;
             return result;
         }
     }
@@ -44,7 +44,7 @@ namespace EntitiesLibrary.Converter
             var result = converter.ConvertFrom(new List<string> { "1233334" }) as ListTaskArgs;
 
             result.Id.Should().Be(1233334);
-            result.Date.Should().Be(default(DateTime));
+            result.DueDate.Should().Be(default(DateTime));
         }
         [Fact]
         public void should_extract_date_argument()
@@ -52,7 +52,7 @@ namespace EntitiesLibrary.Converter
             var convertFrom = converter.ConvertFrom(new List<string> { "1988,03,15" });
             var result = convertFrom as ListTaskArgs;
 
-            result.Date.Should().Be(15.March(1988));
+            result.DueDate.Should().Be(15.March(1988));
             result.Id.Should().Be(0);
         }
 
@@ -62,7 +62,7 @@ namespace EntitiesLibrary.Converter
             var convertFrom = converter.ConvertFrom(new List<string> { "adddbb554" });
             var result = convertFrom as ListTaskArgs;
 
-            result.Date.Should().Be(default(DateTime));
+            result.DueDate.Should().Be(default(DateTime));
             result.Id.Should().Be(default(int));
         }
     }

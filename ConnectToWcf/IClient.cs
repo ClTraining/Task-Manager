@@ -9,9 +9,6 @@ namespace ConnectToWcf
     {
         int AddTask(AddTaskArgs task);
         List<ClientPackage> GetTasks(IClientSpecification data);
-        void Complete(CompleteTaskArgs args);
-        void RenameTask(RenameTaskArgs args);
-        void SetTaskDueDate(SetDateTaskArgs args);
-        void ClearTaskDueDate(ClearDateTaskArgs args);
+        void UpdateChanges(ICommandArguments args);
     }
 }

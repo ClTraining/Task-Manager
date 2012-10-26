@@ -61,6 +61,7 @@
     <Compile Include="CommandArguments\AddTaskArgs.cs" />
     <Compile Include="CommandArguments\ClearDateTaskArgs.cs" />
     <Compile Include="CommandArguments\CompleteTaskArgs.cs" />
+    <Compile Include="CommandArguments\ICommandArguments.cs" />
     <Compile Include="CommandArguments\ListTaskArgs.cs" />
     <Compile Include="CommandArguments\RenameTaskArgs.cs" />
     <Compile Include="CommandArguments\SetDateTaskArgs.cs" />

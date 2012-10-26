@@ -12,9 +12,9 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             IClientSpecification data;
 
-            if (listArgs.Date != default(DateTime) && listArgs.Id == 0)
-                data = new ListByDateClientSpecification { Date = listArgs.Date };
-            else if (listArgs.Date == default(DateTime) && listArgs.Id != null)
+            if (listArgs.DueDate != default(DateTime) && listArgs.Id == 0)
+                data = new ListByDateClientSpecification { Date = listArgs.DueDate };
+            else if (listArgs.DueDate == default(DateTime) && listArgs.Id != null)
                 data = new ListSingleClientSpecification { Id = listArgs.Id.Value };
             else
                 data = new ListAllClientSpecification();
@@ -29,7 +29,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         [Fact]
         public void If_contains_dateTime_and_id_zero_returns_ListByDateClientSpecification()
         {
-            var listTaskArgs = new ListTaskArgs {Id = 0, Date = DateTime.Now};
+            var listTaskArgs = new ListTaskArgs { Id = 0, DueDate = DateTime.Now };
             var clientSpecification = factory.GetClientSpecification(listTaskArgs);
 
             clientSpecification.Should().BeOfType<ListByDateClientSpecification>();
@@ -37,7 +37,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         [Fact]
         public void If__no_dateTime_set_and_id_is_not_zero_returns_ListSingleClientSpecification()
         {
-            var listTaskArgs = new ListTaskArgs {Id = 5, Date = default(DateTime)};
+            var listTaskArgs = new ListTaskArgs { Id = 5, DueDate = default(DateTime) };
             var clientSpecification = factory.GetClientSpecification(listTaskArgs);
 
             clientSpecification.Should().BeOfType<ListSingleClientSpecification>();
@@ -45,7 +45,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         [Fact]
         public void If__no_dateTime_set_and_id_is_not_zero_returns_ListAllClientSpecification()
         {
-            var listTaskArgs = new ListTaskArgs {Id = null, Date = default(DateTime)};
+            var listTaskArgs = new ListTaskArgs { Id = null, DueDate = default(DateTime) };
             var clientSpecification = factory.GetClientSpecification(listTaskArgs);
 
             clientSpecification.Should().BeOfType<ListAllClientSpecification>();
