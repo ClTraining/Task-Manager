@@ -39,10 +39,9 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         public void Execute(List<string> argument)
         {
             var listArgs = converter.Convert(argument);
-            var data = GetClientSpecification(listArgs);
-
-            var tasks = client.GetTasks(data);
-            var formatter = tasks.Count > 1 ? taskFormatterFactory.GetListFormatter() : taskFormatterFactory.GetSingleFormatter();
+            var clientSpecification = GetClientSpecification(listArgs);
+            var formatter = taskFormatterFactory.GetFormatter(clientSpecification);
+            var tasks = client.GetTasks(clientSpecification);
 
             PrintWithFormatter(tasks, formatter);
         }
@@ -53,11 +52,10 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
             if (listArgs.Date != default(DateTime) && listArgs.Id == 0)
                 data = new ListByDateClientSpecification { Date = listArgs.Date };
-
             else if (listArgs.Date == default(DateTime) && listArgs.Id != null)
                 data = new ListSingleClientSpecification { Id = listArgs.Id.Value };
-
-            else data = new ListAllClientSpecification ();
+            else
+                data = new ListAllClientSpecification();
             return data;
         }
     }

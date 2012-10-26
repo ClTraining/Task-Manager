@@ -1,8 +1,9 @@
+using Specifications.ClientSpecifications;
+
 namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
 {
     public interface ITaskFormatterFactory
     {
-        ITaskFormatter GetListFormatter();
-        ITaskFormatter GetSingleFormatter();
+        ITaskFormatter GetFormatter(IClientSpecification specification);
     }
 }

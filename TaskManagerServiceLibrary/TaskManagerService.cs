@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using AutoMapper;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
@@ -63,6 +64,9 @@ namespace TaskManagerServiceLibrary
         private readonly ISpecificationsConverter converter = Substitute.For<ISpecificationsConverter>();
         private readonly IRepository repo = Substitute.For<IRepository>();
 
+        private readonly ITypeConverter<IClientSpecification, IServiceSpecification> typeConverter =
+            Substitute.For<ITypeConverter<IClientSpecification, IServiceSpecification>>();
+
         private readonly TaskManagerService service;
 
         public TaskManagerTests()
@@ -74,10 +78,10 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_get_tasks()
         {
-            var outList = new List<ClientPackage>{new ClientPackage{Id = 1}};
+            var outList = new List<ClientPackage> { new ClientPackage { Id = 1 } };
             converter.GetQuerySpecification(cSpec).Returns(qSpec);
             repo.GetTasks(qSpec).Returns(outList);
-
+            
             var contractTasks = service.GetTasks(cSpec);
 
             contractTasks.Should().BeEquivalentTo(outList);
