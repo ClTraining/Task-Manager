@@ -11,15 +11,14 @@ namespace TaskManagerServiceLibrary
         public SpecificationsConverter()
         {
             Mapper.CreateMap<ListAllClientSpecification, ListAllServiceSpecification>();
-            Mapper.CreateMap<ListByDateClientSpecification, ListByDateServiceSpecification>();
+            Mapper.CreateMap<ListTodayClientSpecification, ListTodayServiceSpecification>();
             Mapper.CreateMap<ListSingleClientSpecification, ListSingleServiceSpecification>();
             Mapper.CreateMap<IClientSpecification, IServiceSpecification>().ConvertUsing<SpecificationMapConverter<IClientSpecification, IServiceSpecification>>();
         }
 
         public IServiceSpecification GetQuerySpecification(IClientSpecification specification)
         {
-            var querySpecification = Mapper.DynamicMap<IClientSpecification, IServiceSpecification>(specification);
-            return querySpecification;
+            return Mapper.DynamicMap<IClientSpecification, IServiceSpecification>(specification);
         }
     }
 

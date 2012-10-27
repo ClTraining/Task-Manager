@@ -1,7 +1,6 @@
 ﻿using EntitiesLibrary.CommandArguments;
-using Specifications.ClientSpecifications;
 
-namespace TaskManagerClientLibrary.ConcreteCommands
+namespace Specifications.ClientSpecifications
 {
     public interface IClientSpecificatinsFactory
     {

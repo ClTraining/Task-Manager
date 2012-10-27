@@ -71,7 +71,6 @@
     <Compile Include="ConcreteCommands\HelpCommand\HelpCommand.cs" />
     <Compile Include="ConcreteCommands\HelpCommand\HelpCommandDisplayer.cs" />
     <Compile Include="ConcreteCommands\HelpCommand\IHelpCommandDisplayer.cs" />
-    <Compile Include="ConcreteCommands\IClientSpecificatinsFactory.cs" />
     <Compile Include="ConcreteCommands\ICommand.cs" />
     <Compile Include="ConcreteCommands\ListCommand.cs" />
     <Compile Include="ConcreteCommands\RenameCommand.cs" />

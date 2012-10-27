@@ -15,7 +15,7 @@ namespace TaskManagerServiceLibrary
 
         [OperationContract]
         [ServiceKnownType(typeof(ListAllClientSpecification))]
-        [ServiceKnownType(typeof(ListByDateClientSpecification))]
+        [ServiceKnownType(typeof(ListTodayClientSpecification))]
         [ServiceKnownType(typeof(ListSingleClientSpecification))]
         List<ClientPackage> GetTasks(IClientSpecification data);
 

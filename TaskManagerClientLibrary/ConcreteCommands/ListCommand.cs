@@ -105,7 +105,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         [Fact]
         public void should_get_one_command_by_date()
         {
-            data = new ListByDateClientSpecification();
+            data = new ListTodayClientSpecification();
             var input = new List<string>();
             connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientPackage>());
             converter.Convert(input).Returns(new ListTaskArgs { Id = 0, DueDate = DateTime.Now });

@@ -57,9 +57,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientSpecifications\ClientSpecificatinsFactory.cs" />
+    <Compile Include="ClientSpecifications\IClientSpecificatinsFactory.cs" />
     <Compile Include="ClientSpecifications\IClientSpecification.cs" />
     <Compile Include="ClientSpecifications\ListAllClientSpecification.cs" />
-    <Compile Include="ClientSpecifications\ListByDateClientSpecification.cs" />
+    <Compile Include="ClientSpecifications\ListTodayClientSpecification.cs" />
     <Compile Include="ClientSpecifications\ListSingleClientSpecification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceSpecifications\IServiceSpecification.cs" />
