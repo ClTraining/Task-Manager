@@ -3,6 +3,7 @@ using ConnectToWcf;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
+using Specifications.ClientSpecifications;
 using TaskManagerClientLibrary.CommandContainer;
 using TaskManagerClientLibrary.ConcreteCommands;
 
@@ -22,7 +23,7 @@ namespace TaskManagerClientLibrary
             var greeting = notifier.GenerateGreeting();
             Console.WriteLine(greeting);
 
-            for (string s; ((s = Console.ReadLine()) != null);)
+            for (string s; ((s = Console.ReadLine()) != null); )
             {
                 kernel.Get<LineParser>().ExecuteCommand(s);
             }
@@ -45,7 +46,7 @@ namespace TaskManagerClientLibrary
                 .WithConstructorArgument("commands", Kernel.GetAll<ICommand>());
 
             Bind<ArgumentConverter<object>>().ToSelf();
-
+            Bind<IClientSpecificationsFactory>().To<ClientSpecificationsFactory>();
             var configManager = new ConfigurationManager();
             var address = configManager.GetAddress();
 
