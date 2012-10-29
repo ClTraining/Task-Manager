@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Specifications.ClientSpecifications
+namespace CQRS.ClientSpecifications
 {
     public class ListByDateClientSpecification : IClientSpecification
     {

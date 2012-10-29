@@ -1,7 +1,7 @@
 using System.Collections.Generic;
+using CQRS.ServiceSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
-using Specifications.ServiceSpecifications;
 
 namespace TaskManagerServiceLibrary.Repositories
 {

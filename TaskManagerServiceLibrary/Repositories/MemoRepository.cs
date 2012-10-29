@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using CQRS.ServiceSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
-using Specifications.ServiceSpecifications;
 using Xunit;
 
 namespace TaskManagerServiceLibrary.Repositories

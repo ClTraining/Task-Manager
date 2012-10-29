@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.ServiceModel;
+using CQRS.ClientSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
-using Specifications.ClientSpecifications;
 
 
 namespace TaskManagerServiceLibrary

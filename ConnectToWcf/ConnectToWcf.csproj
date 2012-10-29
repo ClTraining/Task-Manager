@@ -59,13 +59,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CQRS\CQRS.csproj">
+      <Project>{14B45886-80D8-4295-AD6C-6AAC3C221B5B}</Project>
+      <Name>CQRS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">
       <Project>{20ae42ef-7dc6-478b-b1a3-825fbf16e6c7}</Project>
       <Name>EntitiesLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Specifications\Specifications.csproj">
-      <Project>{14B45886-80D8-4295-AD6C-6AAC3C221B5B}</Project>
-      <Name>Specifications</Name>
     </ProjectReference>
     <ProjectReference Include="..\TaskManagerServiceLibrary\TaskManagerServiceLibrary.csproj">
       <Project>{e82ccfa8-614b-4c74-aa99-344c00afc325}</Project>

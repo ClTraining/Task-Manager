@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CQRS.Commands;
+using CQRS.ServiceSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
-using Specifications.ServiceSpecifications;
 using TaskManagerServiceLibrary.Repositories;
 using TaskManagerServiceLibrary.TaskManager;
 
@@ -13,25 +14,21 @@ namespace TaskManagerServiceLibrary
     {
         private readonly IRepository repo;
         private readonly ITaskMapper mapper;
+        private readonly List<IServiceCommand> commands;
 
-        public TodoList(IRepository repo, ITaskMapper mapper)
+        public TodoList(IRepository repo, ITaskMapper mapper, List<IServiceCommand> commands)
         {
             this.repo = repo;
             this.mapper = mapper;
+            this.commands = commands;
         }
 
         public void UpdateChanges(ICommandArguments args)
         {
             var tasks = repo.GetTasks(new ListSingleServiceSpecification {Id = args.Id});
-
-            if (args is ClearDateTaskArgs)
-                tasks[0].DueDate = default(DateTime);
-            else if (args is CompleteTaskArgs)
-                tasks[0].IsCompleted = true;
-            else if (args is RenameTaskArgs)
-                tasks[0].Name = (args as RenameTaskArgs).Name;
-            else if (args is SetDateTaskArgs)
-                tasks[0].DueDate = (args as SetDateTaskArgs).DueDate;
+            commands.First(
+                c => c.GetType().Name.Contains(args.GetType().Name.Split(new[] {"Task"}, StringSplitOptions.None)[0])).
+                Update(args, tasks[0]);
         }
 
         public int AddTask(AddTaskArgs args)

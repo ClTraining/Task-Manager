@@ -1,6 +1,6 @@
 using AutoMapper;
-using Specifications.ClientSpecifications;
-using Specifications.ServiceSpecifications;
+using CQRS.ClientSpecifications;
+using CQRS.ServiceSpecifications;
 using Xunit;
 using FluentAssertions;
 

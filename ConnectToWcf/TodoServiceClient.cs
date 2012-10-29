@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
+using CQRS.ClientSpecifications;
+using CQRS.ServiceSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
-using Specifications.ClientSpecifications;
-using Specifications.ServiceSpecifications;
 using TaskManagerServiceLibrary;
 using TaskManagerServiceLibrary.Repositories;
 using Xunit;

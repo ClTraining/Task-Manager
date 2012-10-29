@@ -1,4 +1,4 @@
-﻿namespace Specifications.ClientSpecifications
+﻿namespace CQRS.ClientSpecifications
 {
     public class ListAllClientSpecification : IClientSpecification 
     {

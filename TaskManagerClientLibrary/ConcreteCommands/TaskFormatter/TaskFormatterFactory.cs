@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+﻿using CQRS.ClientSpecifications;
+using FluentAssertions;
 using NSubstitute;
-using Specifications.ClientSpecifications;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter

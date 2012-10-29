@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using CQRS.ClientSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
-using Specifications.ClientSpecifications;
 
 namespace ConnectToWcf
 {

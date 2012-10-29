@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using CQRS.ClientSpecifications;
 using ConnectToWcf;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
-using Specifications.ClientSpecifications;
 using TaskManagerClientLibrary.ConcreteCommands.TaskFormatter;
 using Xunit;
 

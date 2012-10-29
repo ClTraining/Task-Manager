@@ -79,13 +79,13 @@
     <Compile Include="TodoList.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CQRS\CQRS.csproj">
+      <Project>{14b45886-80d8-4295-ad6c-6aac3c221b5b}</Project>
+      <Name>CQRS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">
       <Project>{20ae42ef-7dc6-478b-b1a3-825fbf16e6c7}</Project>
       <Name>EntitiesLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Specifications\Specifications.csproj">
-      <Project>{14b45886-80d8-4295-ad6c-6aac3c221b5b}</Project>
-      <Name>Specifications</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

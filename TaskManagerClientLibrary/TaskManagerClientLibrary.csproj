@@ -94,13 +94,13 @@
       <Project>{98346f47-73d5-423c-8439-473926635211}</Project>
       <Name>ConnectToWcf</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CQRS\CQRS.csproj">
+      <Project>{14B45886-80D8-4295-AD6C-6AAC3C221B5B}</Project>
+      <Name>CQRS</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">
       <Project>{20ae42ef-7dc6-478b-b1a3-825fbf16e6c7}</Project>
       <Name>EntitiesLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Specifications\Specifications.csproj">
-      <Project>{14B45886-80D8-4295-AD6C-6AAC3C221B5B}</Project>
-      <Name>Specifications</Name>
     </ProjectReference>
     <ProjectReference Include="..\TaskManagerServiceLibrary\TaskManagerServiceLibrary.csproj">
       <Project>{E82CCFA8-614B-4C74-AA99-344C00AFC325}</Project>

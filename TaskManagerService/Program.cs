@@ -1,9 +1,10 @@
 using System;
 using System.ServiceModel;
+using CQRS.Commands;
+using CQRS.ServiceSpecifications;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
-using Specifications.ServiceSpecifications;
 using TaskManagerServiceLibrary;
 using TaskManagerServiceLibrary.Repositories;
 using TaskManagerServiceLibrary.TaskManager;
@@ -35,13 +36,20 @@ namespace TaskManagerService
         {
             Bind<ITaskManagerService>().To<TaskManagerServiceLibrary.TaskManagerService>();
             Bind<IRepository>().To<MemoRepository>().InSingletonScope();
-            Bind<ITodoList>().To<TodoList>();
             Bind<ITaskMapper>().To<TaskMapper>();
+            Bind<ITodoList>().To<TodoList>();
+
             Bind<ISpecificationsConverter>().To<SpecificationsConverter>();
 
             this.Bind(a => a.FromAssemblyContaining<IServiceSpecification>()
                                .SelectAllClasses()
                                .InNamespaceOf<IServiceSpecification>()
+                               .BindAllInterfaces()
+                );
+
+            this.Bind(a => a.FromAssemblyContaining<IServiceCommand>()
+                               .SelectAllClasses()
+                               .InNamespaceOf<IServiceCommand>()
                                .BindAllInterfaces()
                 );
         }

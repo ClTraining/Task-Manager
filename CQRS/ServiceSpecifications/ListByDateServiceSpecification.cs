@@ -3,7 +3,7 @@ using EntitiesLibrary;
 using FluentAssertions;
 using Xunit;
 
-namespace Specifications.ServiceSpecifications
+namespace CQRS.ServiceSpecifications
 {
     public class ListByDateServiceSpecification : IServiceSpecification
     {

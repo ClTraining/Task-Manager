@@ -39,19 +39,5 @@ namespace TaskManagerServiceLibrary.TaskManager
             var result = mapper.ConvertToContract(null);
             result.Should().BeNull();
         }
-
-        [Fact]
-        public void test1()
-        {
-            var sargs = new SetDateTaskArgs{Id = 1, DueDate = DateTime.Parse("10/29/2012")};
-            var rargs = new RenameTaskArgs {Id = 1, Name = "task1"};
-            var task = new ServiceTask {Id = 1, DueDate = default(DateTime), Name = "123456"};
-            Console.Out.WriteLine("task before = " + task.Id + task.Name + task.DueDate);
-            var result1 = mapper.ConvertFromArgsToService(sargs, task);
-            var result2 = mapper.ConvertFromArgsToService(rargs, task);
-            Console.Out.WriteLine("result setdate = " + result1.Id + " " + result1.DueDate);
-            Console.Out.WriteLine("result rename = " + result2.Id + " " + result2.Name);
-            Console.Out.WriteLine("task after = " + task.Id + " " + task.Name + " " + task.DueDate);
-        }
     }
 }
