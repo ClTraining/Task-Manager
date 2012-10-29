@@ -22,10 +22,10 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         private readonly ArgumentConverter<ListTaskArgs> converter;
         private readonly TextWriter textWriter;
         private readonly ITaskFormatterFactory taskFormatterFactory;
-        private readonly IClientSpecificatinsFactory specificatinsFactory;
+        private readonly IClientSpecificationsFactory specificatinsFactory;
 
         public ListCommand(ArgumentConverter<ListTaskArgs> converter, TextWriter textWriter,
-                    ITaskFormatterFactory taskFormatterFactory, IClient client, IClientSpecificatinsFactory specificatinsFactory)
+                    ITaskFormatterFactory taskFormatterFactory, IClient client, IClientSpecificationsFactory specificatinsFactory)
         {
             Description = "Displays list of all tasks or single task, specified by ID.";
             this.converter = converter;
@@ -65,8 +65,8 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         private readonly StringBuilder sb = new StringBuilder();
         readonly StringWriter writer;
         private readonly ListCommand list;
-        private readonly IClientSpecificatinsFactory specificatinsFactory =
-            Substitute.For<IClientSpecificatinsFactory>();
+        private readonly IClientSpecificationsFactory specificatinsFactory =
+            Substitute.For<IClientSpecificationsFactory>();
 
         public ListTests()
         {

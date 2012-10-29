@@ -2,7 +2,7 @@
 
 namespace Specifications.ClientSpecifications
 {
-    public interface IClientSpecificatinsFactory
+    public interface IClientSpecificationsFactory
     {
         IClientSpecification GetClientSpecification(ListTaskArgs listArgs);
     }

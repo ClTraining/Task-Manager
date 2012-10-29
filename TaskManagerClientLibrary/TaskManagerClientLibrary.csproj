@@ -65,7 +65,6 @@
     <Compile Include="CommandContainer\ICommandContainer.cs" />
     <Compile Include="ConcreteCommands\AddCommand.cs" />
     <Compile Include="ConcreteCommands\ClearDateCommand.cs" />
-    <Compile Include="ConcreteCommands\ClientSpecificatinsFactory.cs" />
     <Compile Include="ConcreteCommands\CompleteCommand.cs" />
     <Compile Include="ConcreteCommands\ExitCommand.cs" />
     <Compile Include="ConcreteCommands\HelpCommand\HelpCommand.cs" />
