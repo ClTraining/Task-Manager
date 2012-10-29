@@ -32,6 +32,7 @@ namespace TaskManagerClientLibrary
 
     public class TaskManagerModule : NinjectModule
     {
+
         public override void Load()
         {
             this.Bind(x => x.FromThisAssembly()
@@ -44,9 +45,9 @@ namespace TaskManagerClientLibrary
                 .To<CommandContainer.CommandContainer>()
                 .InSingletonScope()
                 .WithConstructorArgument("commands", Kernel.GetAll<ICommand>());
-
-            Bind<ArgumentConverter<object>>().ToSelf();
             Bind<IClientSpecificationsFactory>().To<ClientSpecificationsFactory>();
+            Bind<ArgumentConverter<object>>().ToSelf();
+
             var configManager = new ConfigurationManager();
             var address = configManager.GetAddress();
 
