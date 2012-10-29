@@ -21,18 +21,18 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         private readonly IClient client;
         private readonly ArgumentConverter<ListTaskArgs> converter;
         private readonly TextWriter textWriter;
-        private readonly ITaskFormatterFactory taskFormatterFactory;
-        private readonly IClientSpecificationsFactory specificatinsFactory;
+        private readonly IFactory factory;
+        
 
         public ListCommand(ArgumentConverter<ListTaskArgs> converter, TextWriter textWriter,
-                    ITaskFormatterFactory taskFormatterFactory, IClient client, IClientSpecificationsFactory specificatinsFactory)
+                     IClient client,IFactory factory)
         {
             Description = "Displays list of all tasks or single task, specified by ID.";
             this.converter = converter;
             this.textWriter = textWriter;
-            this.taskFormatterFactory = taskFormatterFactory;
+            this.factory = factory;
             this.client = client;
-            this.specificatinsFactory = specificatinsFactory;
+            
         }
 
         private void PrintWithFormatter(List<ClientPackage> list, ITaskFormatter formatter)
@@ -43,8 +43,8 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         public void Execute(List<string> argument)
         {
             var listArgs = converter.Convert(argument);
-            var clientSpecification = specificatinsFactory.GetClientSpecification(listArgs);
-            var formatter = taskFormatterFactory.GetFormatter(clientSpecification);
+            var clientSpecification = factory.GetClientSpecification(listArgs);
+            var formatter = factory.GetFormatter(clientSpecification);
             var tasks = client.GetTasks(clientSpecification);
 
             if (tasks.Any())
@@ -60,18 +60,16 @@ namespace TaskManagerClientLibrary.ConcreteCommands
     {
         private readonly IClient connection = Substitute.For<IClient>();
         private readonly ArgumentConverter<ListTaskArgs> converter = Substitute.For<ArgumentConverter<ListTaskArgs>>();
-        private readonly ITaskFormatterFactory formatterFactory = Substitute.For<ITaskFormatterFactory>();
         private IClientSpecification data;
         private readonly StringBuilder sb = new StringBuilder();
         readonly StringWriter writer;
         private readonly ListCommand list;
-        private readonly IClientSpecificationsFactory specificatinsFactory =
-            Substitute.For<IClientSpecificationsFactory>();
+        private readonly IFactory factory = Substitute.For<IFactory>();
 
         public ListTests()
         {
             writer = new StringWriter(sb);
-            list = new ListCommand(converter, writer, formatterFactory, connection, specificatinsFactory);
+            list = new ListCommand(converter, writer, connection, factory);
         }
 
         [Fact]
@@ -138,8 +136,8 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             data = Substitute.For<IClientSpecification>();
 
             converter.Convert(input).Returns(args);
-            specificatinsFactory.GetClientSpecification(args).Returns(data);
-            formatterFactory.GetFormatter(data).Returns(formatter);
+            factory.GetClientSpecification(args).Returns(data);
+            factory.GetFormatter(data).Returns(formatter);
             formatter.ToFormatString(listPackage).Returns("hello world");
 
             connection.GetTasks(data).Returns(listPackage);

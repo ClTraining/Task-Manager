@@ -3,7 +3,6 @@ using ConnectToWcf;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
-using Specifications.ClientSpecifications;
 using TaskManagerClientLibrary.CommandContainer;
 using TaskManagerClientLibrary.ConcreteCommands;
 
@@ -41,11 +40,12 @@ namespace TaskManagerClientLibrary
                                .BindAllInterfaces().Configure(b => b.WithConstructorArgument("textWriter", Console.Out))
                 );
 
+
             Bind<ICommandContainer>()
                 .To<CommandContainer.CommandContainer>()
                 .InSingletonScope()
                 .WithConstructorArgument("commands", Kernel.GetAll<ICommand>());
-            Bind<IClientSpecificationsFactory>().To<ClientSpecificationsFactory>();
+            Bind<IFactory>().To<Factory>();
             Bind<ArgumentConverter<object>>().ToSelf();
 
             var configManager = new ConfigurationManager();

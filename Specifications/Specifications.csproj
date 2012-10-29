@@ -57,8 +57,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientSpecifications\ClientSpecificationsFactory.cs" />
-    <Compile Include="ClientSpecifications\IClientSpecificationsFactory.cs" />
     <Compile Include="ClientSpecifications\IClientSpecification.cs" />
     <Compile Include="ClientSpecifications\ListAllClientSpecification.cs" />
     <Compile Include="ClientSpecifications\ListByDateClientSpecification.cs" />
