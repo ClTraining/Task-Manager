@@ -14,29 +14,27 @@ namespace TaskManagerServiceLibrary
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.Single, IncludeExceptionDetailInFaults = true)]
     public class TaskManagerService : ITaskManagerService
     {
-        private readonly IRepository repository;
+        private readonly ITodoList todoList;
 
-        public TaskManagerService(IRepository repo)
+        public TaskManagerService(IRepository repo, ITodoList todoList)
         {
-            repository = repo;
+            this.todoList = todoList;
         }
 
-        public List<ClientPackage> GetTasks(IClientSpecification input)
+        public List<ClientTask> GetTasks(IClientSpecification specification)
         {
-            var specification = new SpecificationsConverter().GetQuerySpecification(input);
-            return repository.GetTasks(specification);
+            var serviceSpecification = new SpecificationsConverter().GetQuerySpecification(specification);
+            return todoList.GetTasks(serviceSpecification);
         }
 
         public void UpdateChanges(ICommandArguments args)
         {
-            repository.UpdateChanges(args);
+            todoList.UpdateChanges(args);
         }
 
         public int AddTask(AddTaskArgs task)
         {
-            var addTask = repository.AddTask(task);
-
-            return addTask;
+            return todoList.AddTask(task);
         }
     }
 
@@ -46,6 +44,7 @@ namespace TaskManagerServiceLibrary
         private readonly IClientSpecification cSpec = Substitute.For<IClientSpecification>();
         private readonly ISpecificationsConverter converter = Substitute.For<ISpecificationsConverter>();
         private readonly IRepository repo = Substitute.For<IRepository>();
+        readonly ITodoList todoList = Substitute.For<ITodoList>();
 
         private readonly ITypeConverter<IClientSpecification, IServiceSpecification> typeConverter =
             Substitute.For<ITypeConverter<IClientSpecification, IServiceSpecification>>();
@@ -54,15 +53,7 @@ namespace TaskManagerServiceLibrary
 
         public TaskManagerTests()
         {
-            service = new TaskManagerService(repo);
-        }
-
-        [Fact]
-        public void should_add_task_and_return_id()
-        {
-            var args = new AddTaskArgs();
-            service.AddTask(args);
-            repo.Received().AddTask(args);
+            service = new TaskManagerService(repo, todoList);
         }
     }
 }

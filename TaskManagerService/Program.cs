@@ -35,6 +35,7 @@ namespace TaskManagerService
         {
             Bind<ITaskManagerService>().To<TaskManagerServiceLibrary.TaskManagerService>();
             Bind<IRepository>().To<MemoRepository>().InSingletonScope();
+            Bind<ITodoList>().To<TodoList>();
             Bind<ITaskMapper>().To<TaskMapper>();
             Bind<ISpecificationsConverter>().To<SpecificationsConverter>();
 

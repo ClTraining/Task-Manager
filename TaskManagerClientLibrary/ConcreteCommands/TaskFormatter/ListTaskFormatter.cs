@@ -22,7 +22,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
             format = "{0,-" + PosId + "} | {1," + PosName + "} | {2," + PosCompleted + "} | {3," + PosDueDate + "}";
         }
 
-        public virtual string ToFormatString(List<ClientPackage> tasks)
+        public virtual string ToFormatString(List<ClientTask> tasks)
         {
             var taskString = new StringBuilder();
             taskString.AppendLine(PrintHeader());
@@ -49,7 +49,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
         {
             var formatter = new ListTaskFormatter();
             var sb = new StringBuilder();
-            sb.Append(formatter.ToFormatString(new List<ClientPackage>()));
+            sb.Append(formatter.ToFormatString(new List<ClientTask>()));
             sb.ToString().Should().Be("Id    |            Name |     Completed |             Due date\r\n");
         }
 
@@ -59,7 +59,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
             var formatter = new ListTaskFormatter();
             var sb = new StringBuilder();
             sb.Append(
-                formatter.ToFormatString(new List<ClientPackage> { new ClientPackage { Id = 1, Name = "abcd123456789000000000000" } }));
+                formatter.ToFormatString(new List<ClientTask> { new ClientTask { Id = 1, Name = "abcd123456789000000000000" } }));
             sb.ToString().Should().Be(
                 "Id    |            Name |     Completed |             Due date\r\n1     | abcd12345678900 |             - |              not set\r\n");
         }

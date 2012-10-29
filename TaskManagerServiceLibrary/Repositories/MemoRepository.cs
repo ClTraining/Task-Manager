@@ -1,27 +1,20 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
 using Specifications.ServiceSpecifications;
-using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
 
 namespace TaskManagerServiceLibrary.Repositories
 {
     public class MemoRepository : IRepository
     {
-        private readonly ITaskMapper mapper;
-        public List<ServiceTask> taskList = new List<ServiceTask>();
+        public readonly List<ServiceTask> taskList = new List<ServiceTask>();
         private int currentId;
 
-        public MemoRepository(ITaskMapper mapper)
-        {
-            this.mapper = mapper;
-        }
         public int AddTask(AddTaskArgs args)
         {
             var serviceTask = new ServiceTask { Name = args.Name, DueDate = args.DueDate, Id = GetNewId() };
@@ -31,24 +24,21 @@ namespace TaskManagerServiceLibrary.Repositories
             return serviceTask.Id;
         }
 
-        public List<ClientPackage> GetTasks(IServiceSpecification spec)
+        public List<ServiceTask> GetTasks(IServiceSpecification spec)
         {
-            var resList = taskList
-                .Where(spec.IsSatisfied)
-                .Select(mapper.ConvertToContract)
-                .ToList();
-
-            return resList;
+            var list = new List<ServiceTask>();
+            foreach (var task in taskList)
+            {
+                if(spec.IsSatisfied(task))
+                    list.Add(task);
+            }
+            return list;
+            //return taskList.Where(spec.IsSatisfied).ToList();
         }
 
-        public void UpdateChanges(ICommandArguments args)
+        public void UpdateChanges(ServiceTask task)
         {
-            var index = args.Id - 1;
-            var taskToConvert = taskList[index];
-            var task = mapper.Convert(args, taskToConvert);
-
-            taskList.RemoveAt(index);
-            taskList.Insert(index, task);
+            taskList[task.Id] = task;
         }
 
         private int GetNewId()
@@ -60,14 +50,12 @@ namespace TaskManagerServiceLibrary.Repositories
 
     public class MemoRepositoryTests
     {
-        private readonly ITaskMapper mapper = Substitute.For<ITaskMapper>();
         private readonly IServiceSpecification spec = Substitute.For<IServiceSpecification>();
-        readonly MemoRepository repo;
+        private readonly MemoRepository repo = new MemoRepository();
         readonly ServiceTask sTask = new ServiceTask{Id = 1};
 
         public MemoRepositoryTests()
         {
-            repo = new MemoRepository(mapper);
             repo.taskList.Add(sTask);
         }
 

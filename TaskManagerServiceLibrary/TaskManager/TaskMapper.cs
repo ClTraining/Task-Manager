@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
 using AutoMapper;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
-using NSubstitute;
 using Xunit;
 
 namespace TaskManagerServiceLibrary.TaskManager
@@ -13,34 +11,18 @@ namespace TaskManagerServiceLibrary.TaskManager
     {
         public TaskMapper()
         {
-            Mapper.CreateMap<ServiceTask, ClientPackage>();
-            Mapper.CreateMap<ClientPackage, ServiceTask>();
-
-            Mapper.CreateMap<ICommandArguments, ServiceTask>()
-                .Include<IClearDateTaskArgs, ServiceTask>()
-                .ForMember(s => s.DueDate, o => o.MapFrom(a => (a as IClearDateTaskArgs).Date))
-                .Include<ICompleteTaskArgs, ServiceTask>()
-                .ForMember(s => s.IsCompleted, o => o.MapFrom(a => (a as ICompleteTaskArgs).IsCompleted))
-                .Include<IRenameTaskArgs, ServiceTask>()
-                .ForMember(s => s.Name, o => o.MapFrom(a => (a as IRenameTaskArgs).Name))
-                .Include<ISetDateTaskArgs, ServiceTask>()
-                .ForMember(s => s.DueDate, o => o.MapFrom(a => (a as SetDateTaskArgs).DueDate));
+            Mapper.CreateMap<ServiceTask, ClientTask>();
         }
 
-        public ClientPackage ConvertToContract(ServiceTask task)
+        public ClientTask ConvertToContract(ServiceTask task)
         {
-            return Mapper.Map<ServiceTask, ClientPackage>(task);
-        }
-
-        public ServiceTask Convert(ICommandArguments fromArgs, ServiceTask toTask)
-        {
-            return Mapper.Map(fromArgs, toTask);
+            return Mapper.Map<ServiceTask, ClientTask>(task);
         }
     }
 
     public class TaskMapperTests
     {
-        private readonly ClientPackage contractTask = new ClientPackage {Id = 10, Name = "service", IsCompleted = true};
+        private readonly ClientTask contractTask = new ClientTask {Id = 10, Name = "service", IsCompleted = true};
         private readonly ServiceTask serviceTask = new ServiceTask {Id = 10, Name = "service", IsCompleted = true};
         private readonly TaskMapper mapper = new TaskMapper();
 
@@ -59,14 +41,17 @@ namespace TaskManagerServiceLibrary.TaskManager
         }
 
         [Fact]
-        public void should_convert_to_servicetask()
+        public void test1()
         {
-            var task = new ServiceTask { Name = "task1" };
-            var renameTaskArgs = new RenameTaskArgs {Name = "12345"};
-
-            var result = mapper.Convert(renameTaskArgs, task);
-
-            result.Name.Should().Be("12345");
+            var sargs = new SetDateTaskArgs{Id = 1, DueDate = DateTime.Parse("10/29/2012")};
+            var rargs = new RenameTaskArgs {Id = 1, Name = "task1"};
+            var task = new ServiceTask {Id = 1, DueDate = default(DateTime), Name = "123456"};
+            Console.Out.WriteLine("task before = " + task.Id + task.Name + task.DueDate);
+            var result1 = mapper.ConvertFromArgsToService(sargs, task);
+            var result2 = mapper.ConvertFromArgsToService(rargs, task);
+            Console.Out.WriteLine("result setdate = " + result1.Id + " " + result1.DueDate);
+            Console.Out.WriteLine("result rename = " + result2.Id + " " + result2.Name);
+            Console.Out.WriteLine("task after = " + task.Id + " " + task.Name + " " + task.DueDate);
         }
     }
 }

@@ -65,7 +65,7 @@
     <Compile Include="CommandArguments\ListTaskArgs.cs" />
     <Compile Include="CommandArguments\RenameTaskArgs.cs" />
     <Compile Include="CommandArguments\SetDateTaskArgs.cs" />
-    <Compile Include="ClientPackage.cs" />
+    <Compile Include="ClientTask.cs" />
     <Compile Include="Converter\AddTaskArgsConverter.cs" />
     <Compile Include="Converter\ClearDateTaskArgsConverter.cs" />
     <Compile Include="Converter\CompleteTaskArgsConverter.cs" />

@@ -6,13 +6,8 @@ using Xunit;
 
 namespace EntitiesLibrary.CommandArguments
 {
-    public interface IRenameTaskArgs : ICommandArguments
-    {
-        string Name { get; set; }
-    }
-
     [TypeConverter(typeof (RenameTaskArgsConverter))]
-    public class RenameTaskArgs : IRenameTaskArgs
+    public class RenameTaskArgs : ICommandArguments
     {
         public int Id { get; set; }
 

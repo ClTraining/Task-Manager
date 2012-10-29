@@ -2,7 +2,7 @@
 
 namespace EntitiesLibrary
 {
-    public class ClientPackage
+    public class ClientTask
     {
         public int Id { get; set; }
 

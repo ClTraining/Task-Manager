@@ -3,12 +3,12 @@ using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using Specifications.ServiceSpecifications;
 
-namespace TaskManagerServiceLibrary.Repositories
+namespace TaskManagerServiceLibrary
 {
-    public interface IRepository
+    public interface ITodoList
     {
+        void UpdateChanges(ICommandArguments args);
         int AddTask(AddTaskArgs args);
-        List<ServiceTask> GetTasks(IServiceSpecification spec);
-        void UpdateChanges(ServiceTask task);
+        List<ClientTask> GetTasks(IServiceSpecification serviceSpecification);
     }
 }

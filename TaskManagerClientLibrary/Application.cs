@@ -54,7 +54,7 @@ namespace TaskManagerClientLibrary
                 .WithConstructorArgument("address", address);
 
             Bind<IClient>()
-                .To<ExchangeClient>()
+                .To<TodoServiceClient>()
                 .WithConstructorArgument("address", address);
         }
     }

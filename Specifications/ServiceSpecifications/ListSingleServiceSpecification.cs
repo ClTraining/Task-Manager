@@ -6,7 +6,7 @@ namespace Specifications.ServiceSpecifications
 {
     public class ListSingleServiceSpecification : IServiceSpecification
     {
-        public int Id { get; set; }
+        public int Id { private get; set; }
 
         public bool IsSatisfied(ServiceTask task)
         {

@@ -31,7 +31,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             this.client = client;
         }
 
-        private void PrintWithFormatter(List<ClientPackage> list, ITaskFormatter formatter)
+        private void PrintWithFormatter(List<ClientTask> list, ITaskFormatter formatter)
         {
             textWriter.WriteLine(formatter.ToFormatString(list));
         }
@@ -85,7 +85,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             data = new ListAllClientSpecification();
             var input = new List<string> { "153" };
             converter.Convert(input).Returns(new ListTaskArgs { Id = 153 });
-            connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientPackage>());
+            connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientTask>());
 
             list.Execute(input);
             connection.ReceivedWithAnyArgs().GetTasks(data);
@@ -95,7 +95,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             data = new ListSingleClientSpecification();
             var input = new List<string>();
-            connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientPackage>());
+            connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientTask>());
             converter.Convert(input).Returns(new ListTaskArgs { Id = null });
 
             list.Execute(input);
@@ -106,7 +106,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             data = new ListByDateClientSpecification();
             var input = new List<string>();
-            connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientPackage>());
+            connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientTask>());
             converter.Convert(input).Returns(new ListTaskArgs { Id = 0, DueDate = DateTime.Now });
 
             list.Execute(input);

@@ -8,7 +8,7 @@ namespace ConnectToWcf
     public interface IClient
     {
         int AddTask(AddTaskArgs task);
-        List<ClientPackage> GetTasks(IClientSpecification data);
-        void UpdateChanges(ICommandArguments args);
+        List<ClientTask> GetTasks(IClientSpecification data);
+        void ExecuteCommand(ICommandArguments args);
     }
 }

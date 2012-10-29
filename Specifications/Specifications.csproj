@@ -65,7 +65,7 @@
     <Compile Include="ServiceSpecifications\IServiceSpecification.cs" />
     <Compile Include="ServiceSpecifications\ListAllServiceSpecification.cs" />
     <Compile Include="ServiceSpecifications\ListByDateServiceSpecification.cs" />
-    <Compile Include="ServiceSpecifications\ListSingleSpecification.cs" />
+    <Compile Include="ServiceSpecifications\ListSingleServiceSpecification.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">

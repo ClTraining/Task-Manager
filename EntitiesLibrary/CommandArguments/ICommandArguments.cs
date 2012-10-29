@@ -2,6 +2,6 @@
 {
     public interface ICommandArguments
     {
-        int Id { get; set; }
+        int Id { get; }
     }
 }

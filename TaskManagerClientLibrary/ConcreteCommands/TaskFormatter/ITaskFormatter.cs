@@ -5,6 +5,6 @@ namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
 {
     public interface ITaskFormatter
     {
-        string ToFormatString(List<ClientPackage> tasks);
+        string ToFormatString(List<ClientTask> tasks);
     }
 }

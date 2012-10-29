@@ -17,13 +17,11 @@ namespace TaskManagerServiceLibrary
         [ServiceKnownType(typeof(ListAllClientSpecification))]
         [ServiceKnownType(typeof(ListByDateClientSpecification))]
         [ServiceKnownType(typeof(ListSingleClientSpecification))]
-        List<ClientPackage> GetTasks(IClientSpecification data);
+        List<ClientTask> GetTasks(IClientSpecification specification);
 
         [OperationContract]
-        [ServiceKnownType(typeof(AddTaskArgs))]
         [ServiceKnownType(typeof(ClearDateTaskArgs))]
         [ServiceKnownType(typeof(CompleteTaskArgs))]
-        [ServiceKnownType(typeof(ListTaskArgs))]
         [ServiceKnownType(typeof(RenameTaskArgs))]
         [ServiceKnownType(typeof(SetDateTaskArgs))]
         void UpdateChanges(ICommandArguments args);
