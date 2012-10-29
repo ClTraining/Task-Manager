@@ -14,10 +14,10 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         private readonly IClient client;
         public string Name { get { return GetType().Name.Split(new[] { "Command" }, StringSplitOptions.None)[0].ToLower(); } }
         public string Description { get; private set; }
-        private readonly ArgumentConverter<ClearDateTaskArgs> converter;
+        private readonly TaskArgsConverter<ClearDateTaskArgs> converter;
         private readonly TextWriter textWriter;
 
-        public ClearDateCommand(ArgumentConverter<ClearDateTaskArgs> converter, TextWriter textWriter, IClient client)
+        public ClearDateCommand(TaskArgsConverter<ClearDateTaskArgs> converter, TextWriter textWriter, IClient client)
         {
             this.converter = converter;
             this.textWriter = textWriter;
@@ -36,7 +36,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
     public class ClearDateTests
     {
         private readonly IClient client = Substitute.For<IClient>();
-        private readonly ArgumentConverter<ClearDateTaskArgs> converter = Substitute.For<ArgumentConverter<ClearDateTaskArgs>>();
+        private readonly TaskArgsConverter<ClearDateTaskArgs> converter = Substitute.For<TaskArgsConverter<ClearDateTaskArgs>>();
         private readonly ClearDateCommand handler;
 
         public ClearDateTests()

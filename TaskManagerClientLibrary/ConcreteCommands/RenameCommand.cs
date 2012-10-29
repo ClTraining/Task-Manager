@@ -14,10 +14,10 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         private readonly IClient client;
         public string Name { get { return GetType().Name.Split(new[] { "Command" }, StringSplitOptions.None)[0].ToLower(); } }
         public string Description { get; private set; }
-        private readonly ArgumentConverter<RenameTaskArgs> converter;
+        private readonly TaskArgsConverter<RenameTaskArgs> converter;
         private readonly TextWriter textWriter;
 
-        public RenameCommand(ArgumentConverter<RenameTaskArgs> converter, TextWriter textWriter, IClient client)
+        public RenameCommand(TaskArgsConverter<RenameTaskArgs> converter, TextWriter textWriter, IClient client)
         {
             this.converter = converter;
             this.textWriter = textWriter;
@@ -48,8 +48,8 @@ namespace TaskManagerClientLibrary.ConcreteCommands
     {
         private readonly IClient client = Substitute.For<IClient>();
 
-        private readonly ArgumentConverter<RenameTaskArgs> converter =
-            Substitute.For<ArgumentConverter<RenameTaskArgs>>();
+        private readonly TaskArgsConverter<RenameTaskArgs> converter =
+            Substitute.For<TaskArgsConverter<RenameTaskArgs>>();
 
         private readonly RenameCommand command;
         private readonly TextWriter textWriter = Substitute.For<TextWriter>();

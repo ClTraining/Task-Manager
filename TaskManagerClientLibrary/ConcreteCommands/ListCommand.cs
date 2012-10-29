@@ -17,11 +17,11 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         public string Name { get { return GetType().Name.Split(new[] { "Command" }, StringSplitOptions.None)[0].ToLower(); } }
         public string Description { get; private set; }
         private readonly IClient client;
-        private readonly ArgumentConverter<ListTaskArgs> converter;
+        private readonly TaskArgsConverter<ListTaskArgs> converter;
         private readonly TextWriter textWriter;
         private readonly ITaskFormatterFactory taskFormatterFactory;
 
-        public ListCommand(ArgumentConverter<ListTaskArgs> converter, TextWriter textWriter,
+        public ListCommand(TaskArgsConverter<ListTaskArgs> converter, TextWriter textWriter,
                     ITaskFormatterFactory taskFormatterFactory, IClient client)
         {
             Description = "Displays list of all tasks or single task, specified by ID.";
@@ -63,7 +63,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
     public class ListTests
     {
         private readonly IClient connection = Substitute.For<IClient>();
-        private readonly ArgumentConverter<ListTaskArgs> converter = Substitute.For<ArgumentConverter<ListTaskArgs>>();
+        private readonly TaskArgsConverter<ListTaskArgs> converter = Substitute.For<TaskArgsConverter<ListTaskArgs>>();
         private readonly ITaskFormatterFactory formatter = Substitute.For<ITaskFormatterFactory>();
         private IClientSpecification data;
         private readonly ListCommand list;

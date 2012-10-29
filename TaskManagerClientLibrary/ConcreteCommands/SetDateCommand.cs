@@ -11,13 +11,13 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 {
     public class SetDateCommand : ICommand
     {
-        private readonly ArgumentConverter<SetDateTaskArgs> converter;
+        private readonly TaskArgsConverter<SetDateTaskArgs> converter;
         private readonly TextWriter textWriter;
         private readonly IClient client;
         public string Name { get { return GetType().Name.Split(new[] { "Command" }, StringSplitOptions.None)[0].ToLower(); } }
         public string Description { get; private set; }
 
-        public SetDateCommand(ArgumentConverter<SetDateTaskArgs> converter, TextWriter textWriter, IClient client)
+        public SetDateCommand(TaskArgsConverter<SetDateTaskArgs> converter, TextWriter textWriter, IClient client)
         {
             this.converter = converter;
             this.textWriter = textWriter;
@@ -48,7 +48,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
     {
         private readonly IClient client = Substitute.For<IClient>();
         private readonly ICommand command;
-        private readonly ArgumentConverter<SetDateTaskArgs> converter = Substitute.For<ArgumentConverter<SetDateTaskArgs>>();
+        private readonly TaskArgsConverter<SetDateTaskArgs> converter = Substitute.For<TaskArgsConverter<SetDateTaskArgs>>();
         private readonly TextWriter writer = Substitute.For<TextWriter>();
 
 

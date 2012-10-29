@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using AutoMapper;
 using ConnectToWcf;
+using EntitiesLibrary.CommandArguments;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
@@ -44,8 +47,6 @@ namespace TaskManagerClientLibrary
                 .InSingletonScope()
                 .WithConstructorArgument("commands", Kernel.GetAll<ICommand>());
 
-            Bind<ArgumentConverter<object>>().ToSelf();
-
             var configManager = new ConfigurationManager();
             var address = configManager.GetAddress();
 
@@ -56,6 +57,7 @@ namespace TaskManagerClientLibrary
             Bind<IClient>()
                 .To<ExchangeClient>()
                 .WithConstructorArgument("address", address);
+
         }
     }
 }

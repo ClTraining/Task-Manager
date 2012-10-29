@@ -11,13 +11,13 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 {
     public class AddCommand : ICommand
     {
-        private readonly ArgumentConverter<AddTaskArgs> converter;
+        private readonly TaskArgsConverter<AddTaskArgs> converter;
         private readonly TextWriter textWriter;
         private readonly IClient client;
         public string Name { get { return GetType().Name.Split(new[] { "Command" }, StringSplitOptions.None)[0].ToLower(); } }
         public string Description { get; private set; }
 
-        public AddCommand(ArgumentConverter<AddTaskArgs> converter, TextWriter textWriter, IClient client)
+        public AddCommand(TaskArgsConverter<AddTaskArgs> converter, TextWriter textWriter, IClient client)
         {
             this.converter = converter;
             this.textWriter = textWriter;
@@ -48,7 +48,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
     {
         private const string taskName = "sometask1";
         private readonly IClient client = Substitute.For<IClient>();
-        private readonly ArgumentConverter<AddTaskArgs> converter = Substitute.For<ArgumentConverter<AddTaskArgs>>();
+        private readonly TaskArgsConverter<AddTaskArgs> converter = Substitute.For<TaskArgsConverter<AddTaskArgs>>();
         private readonly AddCommand handler;
 
         public AddTests()

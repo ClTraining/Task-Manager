@@ -14,10 +14,10 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         private readonly IClient client;
         public string Name { get { return GetType().Name.Split(new[] { "Command" }, StringSplitOptions.None)[0].ToLower(); } }
         public string Description { get; private set; }
-        private readonly ArgumentConverter<CompleteTaskArgs> converter;
+        private readonly TaskArgsConverter<CompleteTaskArgs> converter;
         private readonly TextWriter textWriter;
 
-        public CompleteCommand(ArgumentConverter<CompleteTaskArgs> converter, TextWriter textWriter, IClient client)
+        public CompleteCommand(TaskArgsConverter<CompleteTaskArgs> converter, TextWriter textWriter, IClient client)
         {
             this.converter = converter;
             this.textWriter = textWriter;
@@ -48,8 +48,8 @@ namespace TaskManagerClientLibrary.ConcreteCommands
     {
         private readonly IClient client = Substitute.For<IClient>();
 
-        private readonly ArgumentConverter<CompleteTaskArgs> converter =
-            Substitute.For<ArgumentConverter<CompleteTaskArgs>>();
+        private readonly TaskArgsConverter<CompleteTaskArgs> converter =
+            Substitute.For<TaskArgsConverter<CompleteTaskArgs>>();
 
         private readonly CompleteCommand command;
 
