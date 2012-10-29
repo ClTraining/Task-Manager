@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Specifications.ServiceSpecifications
 {
-    public class ListTodayServiceSpecification : IServiceSpecification
+    public class ListByDateServiceSpecification : IServiceSpecification
     {
         public DateTime Date { get; set; }
 
@@ -17,12 +17,12 @@ namespace Specifications.ServiceSpecifications
 
     public class ListTodaySpecificationTests
     {
-        ListTodayServiceSpecification spec = new ListTodayServiceSpecification();
+        ListByDateServiceSpecification spec = new ListByDateServiceSpecification();
 
         [Fact]
         public void should_return_task_if_task_exists()
         {
-            var spec = new ListTodayServiceSpecification {Date = DateTime.Today};
+            var spec = new ListByDateServiceSpecification {Date = DateTime.Today};
             var task = new ServiceTask{DueDate = DateTime.Today};
 
             var result = spec.IsSatisfied(task);

@@ -66,7 +66,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceSpecifications\IServiceSpecification.cs" />
     <Compile Include="ServiceSpecifications\ListAllServiceSpecification.cs" />
-    <Compile Include="ServiceSpecifications\ListByDateServiceSpecification.cs" />
+    <Compile Include="ServiceSpecifications\ListTodayServiceSpecification.cs" />
     <Compile Include="ServiceSpecifications\ListSingleSpecification.cs" />
   </ItemGroup>
   <ItemGroup>

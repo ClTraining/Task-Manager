@@ -11,7 +11,7 @@ namespace TaskManagerServiceLibrary
         public SpecificationsConverter()
         {
             Mapper.CreateMap<ListAllClientSpecification, ListAllServiceSpecification>();
-            Mapper.CreateMap<ListTodayClientSpecification, ListTodayServiceSpecification>();
+            Mapper.CreateMap<ListByDateClientSpecification, ListByDateServiceSpecification>();
             Mapper.CreateMap<ListSingleClientSpecification, ListSingleServiceSpecification>();
             Mapper.CreateMap<IClientSpecification, IServiceSpecification>().ConvertUsing<SpecificationMapConverter<IClientSpecification, IServiceSpecification>>();
         }

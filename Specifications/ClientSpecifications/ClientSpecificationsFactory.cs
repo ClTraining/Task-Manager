@@ -12,7 +12,7 @@ namespace Specifications.ClientSpecifications
             IClientSpecification data;
 
             if (listArgs.DueDate != default(DateTime) && listArgs.Id == 0)
-                data = new ListTodayClientSpecification { Date = listArgs.DueDate };
+                data = new ListByDateClientSpecification { Date = listArgs.DueDate };
             else if (listArgs.DueDate == default(DateTime) && listArgs.Id != null)
                 data = new ListSingleClientSpecification { Id = listArgs.Id.Value };
             else
@@ -51,7 +51,7 @@ namespace Specifications.ClientSpecifications
         {
             var args = new ListTaskArgs {DueDate = DateTime.Today};
             var clientSpecification = factory.GetClientSpecification(args);
-            clientSpecification.Should().BeOfType<ListTodayClientSpecification>();
+            clientSpecification.Should().BeOfType<ListByDateClientSpecification>();
         }
     }
 }

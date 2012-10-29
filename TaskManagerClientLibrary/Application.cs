@@ -3,6 +3,7 @@ using ConnectToWcf;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
+using Specifications.ClientSpecifications;
 using TaskManagerClientLibrary.CommandContainer;
 using TaskManagerClientLibrary.ConcreteCommands;
 
@@ -43,6 +44,8 @@ namespace TaskManagerClientLibrary
                 .To<CommandContainer.CommandContainer>()
                 .InSingletonScope()
                 .WithConstructorArgument("commands", Kernel.GetAll<ICommand>());
+
+            Bind<IClientSpecificationsFactory>().To<ClientSpecificationsFactory>();
 
             Bind<ArgumentConverter<object>>().ToSelf();
 

@@ -2,7 +2,7 @@
 
 namespace Specifications.ClientSpecifications
 {
-    public class ListTodayClientSpecification : IClientSpecification
+    public class ListByDateClientSpecification : IClientSpecification
     {
         public DateTime Date { get; set; }
     }
