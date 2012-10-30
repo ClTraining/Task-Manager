@@ -1,4 +1,4 @@
-using CQRS.ClientSpecifications;
+using CommandQueryLibrary.ClientSpecifications;
 
 namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
 {

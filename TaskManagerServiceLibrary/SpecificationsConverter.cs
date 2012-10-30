@@ -1,8 +1,8 @@
 using AutoMapper;
-using CQRS.ClientSpecifications;
-using CQRS.ServiceSpecifications;
-using Xunit;
+using CommandQueryLibrary.ClientSpecifications;
+using CommandQueryLibrary.ServiceSpecifications;
 using FluentAssertions;
+using Xunit;
 
 namespace TaskManagerServiceLibrary
 {

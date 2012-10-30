@@ -2,7 +2,7 @@ using System;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 
-namespace CQRS.Commands
+namespace CommandQueryLibrary.Commands
 {
     public class SetDateServiceCommand : IServiceCommand
     {
@@ -10,7 +10,7 @@ namespace CQRS.Commands
         {
             if(!task.IsCompleted)
                 task.DueDate = ((SetDateTaskArgs) args).DueDate;
-            else throw new Exception("Task is completed");
+            else throw new TaskNotFoundException(args.Id);
 
             return task;
         }

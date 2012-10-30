@@ -1,6 +1,6 @@
 ﻿using EntitiesLibrary;
 
-namespace CQRS.ServiceSpecifications
+namespace CommandQueryLibrary.ServiceSpecifications
 {
     public interface IServiceSpecification
     {

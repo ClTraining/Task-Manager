@@ -1,13 +1,14 @@
+using System;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 
-namespace CQRS.Commands
+namespace CommandQueryLibrary.Commands
 {
-    public class CompleteServiceCommand : IServiceCommand
+    public class ClearDateServiceCommand : IServiceCommand
     {
         public ServiceTask Update(ICommandArguments args, ServiceTask task)
         {
-            task.IsCompleted = true;
+            task.DueDate = default(DateTime);
             return task;
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using ConnectToWcf;
+using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
@@ -27,9 +28,16 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         public void Execute(List<string> argument)
         {
-            var completeTaskArgs = ConvertToArgs(argument);
-            client.ExecuteCommand(completeTaskArgs);
-            PrintInfo(completeTaskArgs);
+            try
+            {
+                var completeTaskArgs = ConvertToArgs(argument);
+                client.ExecuteCommand(completeTaskArgs);
+                PrintInfo(completeTaskArgs);
+            }
+            catch (TaskNotFoundException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         private void PrintInfo(CompleteTaskArgs completeTaskArgs)

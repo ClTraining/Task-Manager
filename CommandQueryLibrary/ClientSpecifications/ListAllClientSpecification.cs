@@ -1,4 +1,4 @@
-﻿namespace CQRS.ClientSpecifications
+﻿namespace CommandQueryLibrary.ClientSpecifications
 {
     public class ListAllClientSpecification : IClientSpecification 
     {

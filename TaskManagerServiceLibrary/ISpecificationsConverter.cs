@@ -1,5 +1,5 @@
-﻿using CQRS.ClientSpecifications;
-using CQRS.ServiceSpecifications;
+﻿using CommandQueryLibrary.ClientSpecifications;
+using CommandQueryLibrary.ServiceSpecifications;
 
 namespace TaskManagerServiceLibrary
 {

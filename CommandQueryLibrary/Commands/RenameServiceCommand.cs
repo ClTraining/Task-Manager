@@ -1,14 +1,13 @@
-using System;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 
-namespace CQRS.Commands
+namespace CommandQueryLibrary.Commands
 {
-    public class ClearDateServiceCommand : IServiceCommand
+    public class RenameServiceCommand : IServiceCommand
     {
         public ServiceTask Update(ICommandArguments args, ServiceTask task)
         {
-            task.DueDate = default(DateTime);
+            task.Name = ((RenameTaskArgs)args).Name;
             return task;
         }
     }

@@ -66,9 +66,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CQRS\CQRS.csproj">
+    <ProjectReference Include="..\CommandQueryLibrary\CommandQueryLibrary.csproj">
       <Project>{14B45886-80D8-4295-AD6C-6AAC3C221B5B}</Project>
-      <Name>CQRS</Name>
+      <Name>CommandQueryLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">
       <Project>{20ae42ef-7dc6-478b-b1a3-825fbf16e6c7}</Project>

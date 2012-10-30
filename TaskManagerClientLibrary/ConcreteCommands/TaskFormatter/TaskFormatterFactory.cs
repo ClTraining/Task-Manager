@@ -1,4 +1,4 @@
-﻿using CQRS.ClientSpecifications;
+﻿using CommandQueryLibrary.ClientSpecifications;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;

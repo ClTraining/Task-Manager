@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using CQRS.ClientSpecifications;
+using CommandQueryLibrary.ClientSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 

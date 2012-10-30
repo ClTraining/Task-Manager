@@ -1,7 +1,7 @@
 using System;
 using System.ServiceModel;
-using CQRS.Commands;
-using CQRS.ServiceSpecifications;
+using CommandQueryLibrary.Commands;
+using CommandQueryLibrary.ServiceSpecifications;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;

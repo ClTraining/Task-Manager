@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
-using CQRS.ClientSpecifications;
-using CQRS.ServiceSpecifications;
+using CommandQueryLibrary.ClientSpecifications;
+using CommandQueryLibrary.ServiceSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
@@ -58,7 +58,7 @@ namespace ConnectToWcf
             }
             catch (FaultException<ExceptionDetail> e)
             {
-                throw new TaskNotFoundException(e.Detail.Message);
+                throw new TaskNotFoundException(int.Parse(e.Detail.Message));
             }
             finally
             {

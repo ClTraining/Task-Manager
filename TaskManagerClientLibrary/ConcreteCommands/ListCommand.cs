@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using CQRS.ClientSpecifications;
+using CommandQueryLibrary.ClientSpecifications;
 using ConnectToWcf;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;

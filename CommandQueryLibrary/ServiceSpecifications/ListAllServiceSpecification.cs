@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Xunit;
 
-namespace CQRS.ServiceSpecifications
+namespace CommandQueryLibrary.ServiceSpecifications
 {
     public class ListAllServiceSpecification : IServiceSpecification
     {

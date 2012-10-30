@@ -1,7 +1,7 @@
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 
-namespace CQRS.Commands
+namespace CommandQueryLibrary.Commands
 {
     public interface IServiceCommand
     {

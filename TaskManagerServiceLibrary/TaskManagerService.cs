@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using AutoMapper;
-using CQRS.ClientSpecifications;
-using CQRS.ServiceSpecifications;
+using CommandQueryLibrary.ClientSpecifications;
+using CommandQueryLibrary.ServiceSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using NSubstitute;
