@@ -22,17 +22,17 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         private readonly ArgumentConverter<ListTaskArgs> converter;
         private readonly TextWriter textWriter;
         private readonly IFactory factory;
-        
+
 
         public ListCommand(ArgumentConverter<ListTaskArgs> converter, TextWriter textWriter,
-                     IClient client,IFactory factory)
+                     IClient client, IFactory factory)
         {
             Description = "Displays list of all tasks or single task, specified by ID.";
             this.converter = converter;
             this.textWriter = textWriter;
             this.factory = factory;
             this.client = client;
-            
+
         }
 
         private void PrintWithFormatter(List<ClientPackage> list, ITaskFormatter formatter)
@@ -53,7 +53,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
                 return;
             }
             textWriter.WriteLine("Tasks not found");
-            }
+        }
     }
 
     public class ListTests
