@@ -17,7 +17,7 @@ namespace TaskManagerServiceLibrary
         [ServiceKnownType(typeof(ListAllTaskArgs))]
         [ServiceKnownType(typeof(ListByDateTaskArgs))]
         [ServiceKnownType(typeof(ListSingleTaskArgs))]
-        List<ClientPackage> GetTasks(IListCommandArguments data);
+        List<ClientTask> GetTasks(IListCommandArguments data);
 
         [OperationContract]
         [ServiceKnownType(typeof(ClearDateTaskArgs))]

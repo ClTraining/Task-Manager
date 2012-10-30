@@ -114,24 +114,12 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         }
 
         [Fact]
-        public void should_print_info_if_no_tasks_found()
-        {
-            data = new ListAllTaskArgs();
-            var input = new List<string> { "153" };
-            converter.Convert(input, typeof(ListAllTaskArgs)).Returns(data);
-            connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientPackage>());
-
-            list.Execute(input);
-            sb.ToString().Should().BeEquivalentTo("Tasks not found\r\n");
-        }
-
-        [Fact]
         public void should_print_info_on_reauired_tasks()
         {
 
             //var args = new ListTaskArgs { Id = 153 };
             //var input = new List<string> { "153" };
-            //var listPackage = new List<ClientPackage> { new ClientPackage { DueDate = DateTime.Now, Id = 1, IsCompleted = true } };
+            //var listPackage = new List<ClientTask> { new ClientTask { DueDate = DateTime.Now, Id = 1, IsCompleted = true } };
 
             //var formatter = Substitute.For<ITaskFormatter>();
             //data = Substitute.For<IClientSpecification>();

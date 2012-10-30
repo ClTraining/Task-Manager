@@ -1,13 +1,11 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using AutoMapper;
-using CommandQueryLibrary.ClientSpecifications;
 using CommandQueryLibrary.ServiceSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using NSubstitute;
 using TaskManagerServiceLibrary.Repositories;
-using Xunit;
 
 namespace TaskManagerServiceLibrary
 {
@@ -21,9 +19,9 @@ namespace TaskManagerServiceLibrary
             this.todoList = todoList;
         }
 
-        public List<ClientPackage> GetTasks(IListCommandArguments input)
+        public List<ClientTask> GetTasks(IListCommandArguments input)
         {
-            var serviceSpecification = new SpecificationsConverter().GetQuerySpecification(specification);
+            var serviceSpecification = new SpecificationsConverter().GetQuerySpecification(null);
             return todoList.GetTasks(serviceSpecification);
         }
 

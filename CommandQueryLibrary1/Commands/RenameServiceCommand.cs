@@ -1,14 +1,14 @@
-using System;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 
 namespace CommandQueryLibrary.Commands
 {
-    public class SetDateServiceCommand : IServiceCommand
+    public class RenameServiceCommand : IServiceCommand
     {
         public ServiceTask Update(ICommandArguments args, ServiceTask task)
         {
-            return null;
+            task.Name = ((RenameTaskArgs)args).Name;
+            return task;
         }
     }
 }

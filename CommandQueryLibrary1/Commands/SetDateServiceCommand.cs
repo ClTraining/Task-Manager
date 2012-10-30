@@ -8,7 +8,11 @@ namespace CommandQueryLibrary.Commands
     {
         public ServiceTask Update(ICommandArguments args, ServiceTask task)
         {
-            return null;
+            if(!task.IsCompleted)
+                task.DueDate = ((SetDateTaskArgs) args).DueDate;
+            else throw new TaskNotFoundException(args.Id);
+
+            return task;
         }
     }
 }

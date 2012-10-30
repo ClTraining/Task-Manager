@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using CommandQueryLibrary.ClientSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 
@@ -8,7 +7,7 @@ namespace ConnectToWcf
     public interface IClient
     {
         int AddTask(AddTaskArgs task);
-        List<ClientPackage> GetTasks(IListCommandArguments data);
-        void UpdateChanges(IEditCommandArguments args);
+        List<ClientTask> GetTasks(IListCommandArguments data);
+        void ExecuteCommand(IEditCommandArguments args);
     }
 }

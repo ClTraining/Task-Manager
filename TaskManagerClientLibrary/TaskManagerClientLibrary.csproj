@@ -98,7 +98,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandQueryLibrary\CommandQueryLibrary.csproj">
-      <Project>{14B45886-80D8-4295-AD6C-6AAC3C221B5B}</Project>
+      <Project>{26e506ca-7cd6-45a2-9a33-5e6339c39f1a}</Project>
       <Name>CommandQueryLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\ConnectToWcf\ConnectToWcf.csproj">

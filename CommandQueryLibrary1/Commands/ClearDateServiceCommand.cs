@@ -4,11 +4,12 @@ using EntitiesLibrary.CommandArguments;
 
 namespace CommandQueryLibrary.Commands
 {
-    public class SetDateServiceCommand : IServiceCommand
+    public class ClearDateServiceCommand : IServiceCommand
     {
         public ServiceTask Update(ICommandArguments args, ServiceTask task)
         {
-            return null;
+            task.DueDate = default(DateTime);
+            return task;
         }
     }
 }

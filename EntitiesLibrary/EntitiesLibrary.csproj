@@ -70,13 +70,6 @@
     <Compile Include="CommandArguments\RenameTaskArgs.cs" />
     <Compile Include="CommandArguments\SetDateTaskArgs.cs" />
     <Compile Include="ClientTask.cs" />
-    <Compile Include="Converter\AddTaskArgsConverter.cs" />
-    <Compile Include="Converter\ClearDateTaskArgsConverter.cs" />
-    <Compile Include="Converter\CompleteTaskArgsConverter.cs" />
-    <Compile Include="Converter\ListTaskArgsConverter.cs" />
-    <Compile Include="Converter\RenameTaskArgsConverter.cs" />
-    <Compile Include="Converter\SetDateTaskArgsConverter.cs" />
-    <Compile Include="ClientPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceTask.cs" />
     <Compile Include="TaskNotFoundException.cs" />

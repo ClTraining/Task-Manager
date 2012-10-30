@@ -38,7 +38,6 @@ namespace TaskManagerServiceLibrary.Repositories
 
         public void UpdateChanges(IEditCommandArguments args)
         {
-            taskList[task.Id] = task;
         }
 
         private int GetNewId()

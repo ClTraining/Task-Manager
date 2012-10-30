@@ -25,13 +25,6 @@ namespace TaskManagerServiceLibrary
 
         public void UpdateChanges(ICommandArguments args)
         {
-            var tasks = repo.GetTasks(new ListSingleServiceSpecification {Id = args.Id});
-
-            if(tasks.Count == 0) throw new TaskNotFoundException(args.Id);
-
-            commands.First(
-                c => c.GetType().Name.Contains(args.GetType().Name.Split(new[] {"Task"}, StringSplitOptions.None)[0])).
-                Update(args, tasks[0]);
         }
 
         public int AddTask(AddTaskArgs args)

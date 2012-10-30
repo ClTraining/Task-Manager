@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ServiceModel;
-using CommandQueryLibrary.ClientSpecifications;
 using CommandQueryLibrary.ServiceSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
@@ -29,12 +28,12 @@ namespace ConnectToWcf
             return GetDataFromServer(t => t.AddTask(task));
         }
 
-        public List<ClientPackage> GetTasks(IListCommandArguments data)
+        public List<ClientTask> GetTasks(IListCommandArguments data)
         {
             return GetDataFromServer(s => s.GetTasks(data));
         }
 
-        public void UpdateChanges(IEditCommandArguments args)
+        public void ExecuteCommand(IEditCommandArguments args)
         {
             UpdateDataOnServer(s=>s.UpdateChanges(args));
         }
