@@ -1,8 +1,14 @@
 using AutoMapper;
-using Specifications.ClientSpecification;
-using Specifications.QuerySpecifications;
+<<<<<<< HEAD
+using CommandQueryLibrary.ClientSpecifications;
+using CommandQueryLibrary.ServiceSpecifications;
+=======
+using EntitiesLibrary.CommandArguments;
+using Specifications.ServiceSpecifications;
 using Xunit;
+>>>>>>> 799a97aee3dc15959fd4cd7a37cf028fec760d63
 using FluentAssertions;
+using Xunit;
 
 namespace TaskManagerServiceLibrary
 {
@@ -10,15 +16,15 @@ namespace TaskManagerServiceLibrary
     {
         public SpecificationsConverter()
         {
-            Mapper.CreateMap<ListAll, ListAllSpecification>();
-            Mapper.CreateMap<ListByDate, ListByDateSpecification>();
-            Mapper.CreateMap<ListSingle, ListSingleSpecification>();
-            Mapper.CreateMap<IClientSpecification, IQuerySpecification>().ConvertUsing(new SpecificationMapConverter<IClientSpecification, IQuerySpecification>());
+            Mapper.CreateMap<ListAllTaskArgs, ListAllServiceSpecification>();
+            Mapper.CreateMap<ListByDateTaskArgs, ListByDateServiceSpecification>();
+            Mapper.CreateMap<ListSingleTaskArgs, ListSingleServiceSpecification>();
+            Mapper.CreateMap<IListCommandArguments, IServiceSpecification>().ConvertUsing<SpecificationMapConverter<IListCommandArguments, IServiceSpecification>>();
         }
 
-        public IQuerySpecification GetQuerySpecification(IClientSpecification specification)
+        public IServiceSpecification GetQuerySpecification(IListCommandArguments specification)
         {
-            var querySpecification = Mapper.DynamicMap<IClientSpecification, IQuerySpecification>(specification);
+            var querySpecification = Mapper.DynamicMap<IListCommandArguments, IServiceSpecification>(specification);
             return querySpecification;
         }
     }
@@ -28,30 +34,23 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_return_listsinglespecification()
         {
-<<<<<<< HEAD
-            var cSpec = new ListSingle{Data = 1};
-            var qSpec = new ListSingleSpecification();
-            var converter = new SpecificationsConverter(new List<IQuerySpecification> {qSpec});
-            
-=======
-            var cSpec = new ListSingle();
-            new ListSingleSpecification();
+            var cSpec = new ListSingleTaskArgs();
             var converter = new SpecificationsConverter();
->>>>>>> review_fixes_specification
+            
             var result = converter.GetQuerySpecification(cSpec);
             
-            result.Should().BeOfType<ListSingleSpecification>();
+            result.Should().BeOfType<ListSingleServiceSpecification>();
         }
 
         [Fact]
         public void should_return_listallspecification()
         {
-            var cSpec = new ListAll();
-            var qSpec = new ListAllSpecification();
-            var converter = new SpecificationsConverter(new List<IQuerySpecification> {qSpec});
+            var cSpec = new ListAllTaskArgs();
+            var converter = new SpecificationsConverter();
 
             var result = converter.GetQuerySpecification(cSpec);
-            result.Should().BeOfType<ListAllSpecification>();
+
+            result.Should().BeOfType<ListAllServiceSpecification>();
         }
     }
 }

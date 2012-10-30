@@ -1,0 +1,29 @@
+<<<<<<< HEAD
+﻿using System.Collections.Generic;
+using CommandQueryLibrary.ClientSpecifications;
+using EntitiesLibrary;
+using EntitiesLibrary.CommandArguments;
+
+namespace ConnectToWcf
+{
+    public interface IClient
+    {
+        int AddTask(AddTaskArgs task);
+        List<ClientTask> GetTasks(IClientSpecification data);
+        void ExecuteCommand(ICommandArguments args);
+    }
+=======
+﻿using System.Collections.Generic;
+using EntitiesLibrary;
+using EntitiesLibrary.CommandArguments;
+
+namespace ConnectToWcf
+{
+    public interface IClient
+    {
+        int AddTask(AddTaskArgs task);
+        List<ClientPackage> GetTasks(IListCommandArguments data);
+        void UpdateChanges(IEditCommandArguments args);
+    }
+>>>>>>> 799a97aee3dc15959fd4cd7a37cf028fec760d63
+}

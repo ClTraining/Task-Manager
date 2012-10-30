@@ -1,0 +1,11 @@
+﻿namespace EntitiesLibrary.CommandArguments
+{
+    public interface ICommandArguments
+    {
+<<<<<<< HEAD
+        int Id { get; }
+=======
+       
+>>>>>>> 799a97aee3dc15959fd4cd7a37cf028fec760d63
+    }
+}

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using CommandQueryLibrary.ClientSpecifications;
+using System.Linq;
+using System.Text;
 using ConnectToWcf;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
@@ -17,18 +18,19 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         public string Name { get { return GetType().Name.Split(new[] { "Command" }, StringSplitOptions.None)[0].ToLower(); } }
         public string Description { get; private set; }
         private readonly IClient client;
-        private readonly ArgumentConverter<ListTaskArgs> converter;
+        private readonly IFactory factory;
+        private readonly TaskArgsConverter converter;
         private readonly TextWriter textWriter;
-        private readonly ITaskFormatterFactory taskFormatterFactory;
 
-        public ListCommand(ArgumentConverter<ListTaskArgs> converter, TextWriter textWriter,
-                    ITaskFormatterFactory taskFormatterFactory, IClient client)
+        public ListCommand(TaskArgsConverter converter, TextWriter textWriter,
+                    IClient client, IFactory factory )
         {
             Description = "Displays list of all tasks or single task, specified by ID.";
             this.converter = converter;
             this.textWriter = textWriter;
-            this.taskFormatterFactory = taskFormatterFactory;
+            
             this.client = client;
+            this.factory = factory;
         }
 
         private void PrintWithFormatter(List<ClientTask> list, ITaskFormatter formatter)
@@ -38,39 +40,37 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         public void Execute(List<string> argument)
         {
-            var listArgs = converter.Convert(argument);
-            var clientSpecification = GetClientSpecification(listArgs);
-            var formatter = taskFormatterFactory.GetFormatter(clientSpecification);
-            var tasks = client.GetTasks(clientSpecification);
+            var listArgs = GetClientSpecification(argument);
+            var formatter = factory.GetFormatter(listArgs);
+            var tasks = client.GetTasks(listArgs);
 
             PrintWithFormatter(tasks, formatter);
         }
 
-        private IClientSpecification GetClientSpecification(ListTaskArgs listArgs)
+        private IListCommandArguments GetClientSpecification(List<string> source)
         {
-            IClientSpecification data;
+            var types = new List<Type>
+                            {typeof (ListByDateTaskArgs), typeof (ListSingleTaskArgs), typeof (ListAllTaskArgs)};
+            var listType = (from type in types where converter.CanConvert(source, type) select type).FirstOrDefault();
+            return converter.Convert(source, listType) as IListCommandArguments;
 
-            if (listArgs.DueDate != default(DateTime) && listArgs.Id == 0)
-                data = new ListByDateClientSpecification { Date = listArgs.DueDate };
-            else if (listArgs.DueDate == default(DateTime) && listArgs.Id != null)
-                data = new ListSingleClientSpecification { Id = listArgs.Id.Value };
-            else
-                data = new ListAllClientSpecification();
-            return data;
         }
     }
 
     public class ListTests
     {
         private readonly IClient connection = Substitute.For<IClient>();
-        private readonly ArgumentConverter<ListTaskArgs> converter = Substitute.For<ArgumentConverter<ListTaskArgs>>();
-        private readonly ITaskFormatterFactory formatter = Substitute.For<ITaskFormatterFactory>();
-        private IClientSpecification data;
+        private readonly TaskArgsConverter converter = Substitute.For<TaskArgsConverter>();
+        private IListCommandArguments data;
+        private readonly StringBuilder sb = new StringBuilder();
+        readonly StringWriter writer;
         private readonly ListCommand list;
+        private readonly IFactory factory = Substitute.For<IFactory>();
 
         public ListTests()
         {
-            list = new ListCommand(converter, new StringWriter(), formatter, connection);
+            writer = new StringWriter(sb);
+            list = new ListCommand(converter, writer, connection, factory);
         }
 
         [Fact]
@@ -82,9 +82,9 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         [Fact]
         public void should_get_all_commands()
         {
-            data = new ListAllClientSpecification();
+            data = new ListAllTaskArgs();
             var input = new List<string> { "153" };
-            converter.Convert(input).Returns(new ListTaskArgs { Id = 153 });
+            converter.Convert(input, typeof(ListAllTaskArgs)).Returns(data);
             connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientTask>());
 
             list.Execute(input);
@@ -93,10 +93,10 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         [Fact]
         public void should_get_one_command_by_id()
         {
-            data = new ListSingleClientSpecification();
+            data = new ListSingleTaskArgs();
             var input = new List<string>();
             connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientTask>());
-            converter.Convert(input).Returns(new ListTaskArgs { Id = null });
+            converter.Convert(input, typeof(ListSingleTaskArgs)).Returns(new ListSingleTaskArgs());
 
             list.Execute(input);
             connection.ReceivedWithAnyArgs().GetTasks(data);
@@ -104,13 +104,47 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         [Fact]
         public void should_get_one_command_by_date()
         {
-            data = new ListByDateClientSpecification();
+            data = new ListByDateTaskArgs();
             var input = new List<string>();
             connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientTask>());
-            converter.Convert(input).Returns(new ListTaskArgs { Id = 0, DueDate = DateTime.Now });
+            converter.Convert(input, typeof(ListByDateTaskArgs)).Returns(data);
 
             list.Execute(input);
             connection.ReceivedWithAnyArgs().GetTasks(data);
+        }
+
+        [Fact]
+        public void should_print_info_if_no_tasks_found()
+        {
+            data = new ListAllTaskArgs();
+            var input = new List<string> { "153" };
+            converter.Convert(input, typeof(ListAllTaskArgs)).Returns(data);
+            connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientPackage>());
+
+            list.Execute(input);
+            sb.ToString().Should().BeEquivalentTo("Tasks not found\r\n");
+        }
+
+        [Fact]
+        public void should_print_info_on_reauired_tasks()
+        {
+
+            //var args = new ListTaskArgs { Id = 153 };
+            //var input = new List<string> { "153" };
+            //var listPackage = new List<ClientPackage> { new ClientPackage { DueDate = DateTime.Now, Id = 1, IsCompleted = true } };
+
+            //var formatter = Substitute.For<ITaskFormatter>();
+            //data = Substitute.For<IClientSpecification>();
+
+            //converter.Convert(input).Returns(args);
+            //factory.GetClientSpecification(args).Returns(data);
+            //factory.GetFormatter(data).Returns(formatter);
+            //formatter.ToFormatString(listPackage).Returns("hello world");
+
+            //connection.GetTasks(data).Returns(listPackage);
+
+            //list.Execute(input);
+            //sb.ToString().Should().BeEquivalentTo("hello world\r\n");
         }
     }
 }

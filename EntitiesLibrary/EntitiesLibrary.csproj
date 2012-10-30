@@ -62,7 +62,11 @@
     <Compile Include="CommandArguments\ClearDateTaskArgs.cs" />
     <Compile Include="CommandArguments\CompleteTaskArgs.cs" />
     <Compile Include="CommandArguments\ICommandArguments.cs" />
-    <Compile Include="CommandArguments\ListTaskArgs.cs" />
+    <Compile Include="CommandArguments\IEditCommandArguments.cs" />
+    <Compile Include="CommandArguments\IListCommandArguments.cs" />
+    <Compile Include="CommandArguments\ListAllTaskArgs.cs" />
+    <Compile Include="CommandArguments\ListByDateTaskArgs.cs" />
+    <Compile Include="CommandArguments\ListSingleTaskArgs.cs" />
     <Compile Include="CommandArguments\RenameTaskArgs.cs" />
     <Compile Include="CommandArguments\SetDateTaskArgs.cs" />
     <Compile Include="ClientTask.cs" />
@@ -72,9 +76,11 @@
     <Compile Include="Converter\ListTaskArgsConverter.cs" />
     <Compile Include="Converter\RenameTaskArgsConverter.cs" />
     <Compile Include="Converter\SetDateTaskArgsConverter.cs" />
+    <Compile Include="ClientPackage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ServiceTask.cs" />
     <Compile Include="TaskNotFoundException.cs" />
+    <Compile Include="WrongTaskArgumentsException.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">

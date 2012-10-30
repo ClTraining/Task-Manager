@@ -1,0 +1,26 @@
+namespace EntitiesLibrary.CommandArguments
+{
+<<<<<<< HEAD
+    [TypeConverter(typeof (CompleteTaskArgsConverter))]
+    public class CompleteTaskArgs : ICommandArguments
+=======
+
+    public class CompleteTaskArgs : IEditCommandArguments
+>>>>>>> 799a97aee3dc15959fd4cd7a37cf028fec760d63
+    {
+        public int Id { get; set; }
+<<<<<<< HEAD
+    }
+
+    public class CompleteTaskArgsTests
+    {
+        [Fact]
+        public void should_get_completetaskargsconverter_attribute()
+        {
+            var attribute = Attribute.GetCustomAttribute(typeof (CompleteTaskArgs), typeof (TypeConverterAttribute));
+            attribute.Should().NotBeNull();
+        }
+=======
+>>>>>>> 799a97aee3dc15959fd4cd7a37cf028fec760d63
+    }
+}

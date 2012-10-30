@@ -1,4 +1,8 @@
+<<<<<<< HEAD
+﻿using CommandQueryLibrary.ClientSpecifications;
+=======
 ﻿using EntitiesLibrary.CommandArguments;
+>>>>>>> 799a97aee3dc15959fd4cd7a37cf028fec760d63
 using FluentAssertions;
 using NSubstitute;
 using Xunit;

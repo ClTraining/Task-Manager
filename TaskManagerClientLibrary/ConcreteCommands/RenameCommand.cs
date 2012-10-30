@@ -14,10 +14,10 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         private readonly IClient client;
         public string Name { get { return GetType().Name.Split(new[] { "Command" }, StringSplitOptions.None)[0].ToLower(); } }
         public string Description { get; private set; }
-        private readonly ArgumentConverter<RenameTaskArgs> converter;
+        private readonly TaskArgsConverter converter;
         private readonly TextWriter textWriter;
 
-        public RenameCommand(ArgumentConverter<RenameTaskArgs> converter, TextWriter textWriter, IClient client)
+        public RenameCommand(TaskArgsConverter converter, TextWriter textWriter, IClient client)
         {
             this.converter = converter;
             this.textWriter = textWriter;
@@ -39,7 +39,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         private RenameTaskArgs ConvertToArgs(List<string> argument)
         {
-            var renameTaskArgs = converter.Convert(argument);
+            var renameTaskArgs = converter.Convert(argument, typeof(RenameTaskArgs)) as RenameTaskArgs;
             return renameTaskArgs;
         }
     }
@@ -48,8 +48,8 @@ namespace TaskManagerClientLibrary.ConcreteCommands
     {
         private readonly IClient client = Substitute.For<IClient>();
 
-        private readonly ArgumentConverter<RenameTaskArgs> converter =
-            Substitute.For<ArgumentConverter<RenameTaskArgs>>();
+        private readonly TaskArgsConverter converter =
+            Substitute.For<TaskArgsConverter>();
 
         private readonly RenameCommand command;
         private readonly TextWriter textWriter = Substitute.For<TextWriter>();
@@ -70,7 +70,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var renameTaskArgs = new RenameTaskArgs { Id = 5, Name = "newTask" };
             var argument = new List<string> { "1", "10-10-2012" };
-            converter.Convert(argument).Returns(renameTaskArgs);
+            converter.Convert(argument, typeof(RenameTaskArgs)).Returns(renameTaskArgs);
             command.Execute(argument);
             client.Received().ExecuteCommand(renameTaskArgs);
         }

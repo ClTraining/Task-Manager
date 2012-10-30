@@ -14,16 +14,16 @@ namespace TaskManagerServiceLibrary
         int AddTask(AddTaskArgs task);
 
         [OperationContract]
-        [ServiceKnownType(typeof(ListAllClientSpecification))]
-        [ServiceKnownType(typeof(ListByDateClientSpecification))]
-        [ServiceKnownType(typeof(ListSingleClientSpecification))]
-        List<ClientTask> GetTasks(IClientSpecification specification);
+        [ServiceKnownType(typeof(ListAllTaskArgs))]
+        [ServiceKnownType(typeof(ListByDateTaskArgs))]
+        [ServiceKnownType(typeof(ListSingleTaskArgs))]
+        List<ClientPackage> GetTasks(IListCommandArguments data);
 
         [OperationContract]
         [ServiceKnownType(typeof(ClearDateTaskArgs))]
         [ServiceKnownType(typeof(CompleteTaskArgs))]
         [ServiceKnownType(typeof(RenameTaskArgs))]
         [ServiceKnownType(typeof(SetDateTaskArgs))]
-        void UpdateChanges(ICommandArguments args);
+        void UpdateChanges(IEditCommandArguments args);
     }
 }

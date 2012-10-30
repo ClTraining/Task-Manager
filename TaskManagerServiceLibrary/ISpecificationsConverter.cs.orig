@@ -1,5 +1,10 @@
-﻿using EntitiesLibrary.CommandArguments;
+<<<<<<< HEAD
+﻿using CommandQueryLibrary.ClientSpecifications;
 using CommandQueryLibrary.ServiceSpecifications;
+=======
+﻿using EntitiesLibrary.CommandArguments;
+using Specifications.ServiceSpecifications;
+>>>>>>> 799a97aee3dc15959fd4cd7a37cf028fec760d63
 
 namespace TaskManagerServiceLibrary
 {

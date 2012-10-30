@@ -29,12 +29,12 @@ namespace ConnectToWcf
             return GetDataFromServer(t => t.AddTask(task));
         }
 
-        public List<ClientTask> GetTasks(IClientSpecification data)
+        public List<ClientPackage> GetTasks(IListCommandArguments data)
         {
             return GetDataFromServer(s => s.GetTasks(data));
         }
 
-        public void ExecuteCommand(ICommandArguments args)
+        public void UpdateChanges(IEditCommandArguments args)
         {
             UpdateDataOnServer(s=>s.UpdateChanges(args));
         }
@@ -122,8 +122,7 @@ namespace ConnectToWcf
         public void should_get_tasks_from_server()
         {
             var tasks = new List<ServiceTask> { new ServiceTask { Id = 1 } };
-            var expected = new List<ClientTask> { new ClientTask { Id = 1 } };
-            var cSpec = Substitute.For<IClientSpecification>();
+            var cSpec = Substitute.For<IListCommandArguments>();
             //cSpec.Data.Returns(1);
             var qSpec = Substitute.For<IServiceSpecification>();
 

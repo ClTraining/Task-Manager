@@ -21,13 +21,13 @@ namespace TaskManagerServiceLibrary
             this.todoList = todoList;
         }
 
-        public List<ClientTask> GetTasks(IClientSpecification specification)
+        public List<ClientPackage> GetTasks(IListCommandArguments input)
         {
             var serviceSpecification = new SpecificationsConverter().GetQuerySpecification(specification);
             return todoList.GetTasks(serviceSpecification);
         }
 
-        public void UpdateChanges(ICommandArguments args)
+        public void UpdateChanges(IEditCommandArguments args)
         {
             todoList.UpdateChanges(args);
         }
@@ -41,13 +41,13 @@ namespace TaskManagerServiceLibrary
     public class TaskManagerTests
     {
         private readonly IServiceSpecification qSpec = Substitute.For<IServiceSpecification>();
-        private readonly IClientSpecification cSpec = Substitute.For<IClientSpecification>();
+        private readonly IListCommandArguments cSpec = Substitute.For<IListCommandArguments>();
         private readonly ISpecificationsConverter converter = Substitute.For<ISpecificationsConverter>();
         private readonly IRepository repo = Substitute.For<IRepository>();
         readonly ITodoList todoList = Substitute.For<ITodoList>();
 
-        private readonly ITypeConverter<IClientSpecification, IServiceSpecification> typeConverter =
-            Substitute.For<ITypeConverter<IClientSpecification, IServiceSpecification>>();
+        private readonly ITypeConverter<IListCommandArguments, IServiceSpecification> typeConverter =
+            Substitute.For<ITypeConverter<IListCommandArguments, IServiceSpecification>>();
 
         private readonly TaskManagerService service;
 
