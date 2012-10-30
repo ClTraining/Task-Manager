@@ -11,13 +11,13 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 {
     public class AddCommand : ICommand
     {
-        private readonly TaskArgsConverter<AddTaskArgs> converter;
+        private readonly TaskArgsConverter converter;
         private readonly TextWriter textWriter;
         private readonly IClient client;
         public string Name { get { return GetType().Name.Split(new[] { "Command" }, StringSplitOptions.None)[0].ToLower(); } }
         public string Description { get; private set; }
 
-        public AddCommand(TaskArgsConverter<AddTaskArgs> converter, TextWriter textWriter, IClient client)
+        public AddCommand(TaskArgsConverter converter, TextWriter textWriter, IClient client)
         {
             this.converter = converter;
             this.textWriter = textWriter;
@@ -39,7 +39,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         private AddTaskArgs ConvertToArgs(List<string> argument)
         {
-            var addTaskArgs = converter.Convert(argument);
+            var addTaskArgs = converter.Convert(argument, typeof(AddTaskArgs)) as AddTaskArgs;
             return addTaskArgs;
         }
     }
@@ -48,7 +48,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
     {
         private const string taskName = "sometask1";
         private readonly IClient client = Substitute.For<IClient>();
-        private readonly TaskArgsConverter<AddTaskArgs> converter = Substitute.For<TaskArgsConverter<AddTaskArgs>>();
+        private readonly TaskArgsConverter converter = Substitute.For<TaskArgsConverter>();
         private readonly AddCommand handler;
 
         public AddTests()
@@ -67,7 +67,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var addTaskArgs = new AddTaskArgs { Name = taskName };
             var argument = new List<string> { taskName };
-            converter.Convert(argument).Returns(addTaskArgs);
+            converter.Convert(argument, typeof(AddTaskArgs)).Returns(addTaskArgs);
             handler.Execute(argument);
             client.Received().AddTask(addTaskArgs);
         }

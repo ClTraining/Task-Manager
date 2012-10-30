@@ -17,13 +17,13 @@ namespace TaskManagerServiceLibrary.TaskManager
             Mapper.CreateMap<ClientPackage, ServiceTask>();
 
             Mapper.CreateMap<ICommandArguments, ServiceTask>()
-                .Include<IClearDateTaskArgs, ServiceTask>()
-                .ForMember(s => s.DueDate, o => o.MapFrom(a => (a as IClearDateTaskArgs).Date))
-                .Include<ICompleteTaskArgs, ServiceTask>()
+                .Include<ClearDateTaskArgs, ServiceTask>()
+                .ForMember(s => s.DueDate, o => o.MapFrom(a => (a as ClearDateTaskArgs).Date))
+                .Include<CompleteTaskArgs, ServiceTask>()
                 .ForMember(s => s.IsCompleted, o => o.MapFrom(a => true))
-                .Include<IRenameTaskArgs, ServiceTask>()
-                .ForMember(s => s.Name, o => o.MapFrom(a => (a as IRenameTaskArgs).Name))
-                .Include<ISetDateTaskArgs, ServiceTask>()
+                .Include<RenameTaskArgs, ServiceTask>()
+                .ForMember(s => s.Name, o => o.MapFrom(a => (a as RenameTaskArgs).Name))
+                .Include<SetDateTaskArgs, ServiceTask>()
                 .ForMember(s => s.DueDate, o => o.MapFrom(a => (a as SetDateTaskArgs).DueDate));
         }
 

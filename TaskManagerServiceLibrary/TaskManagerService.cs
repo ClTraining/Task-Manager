@@ -4,7 +4,6 @@ using AutoMapper;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using NSubstitute;
-using Specifications.ClientSpecifications;
 using Specifications.ServiceSpecifications;
 using TaskManagerServiceLibrary.Repositories;
 using Xunit;
@@ -21,13 +20,13 @@ namespace TaskManagerServiceLibrary
             repository = repo;
         }
 
-        public List<ClientPackage> GetTasks(IClientSpecification input)
+        public List<ClientPackage> GetTasks(IListCommandArguments input)
         {
             var specification = new SpecificationsConverter().GetQuerySpecification(input);
             return repository.GetTasks(specification);
         }
 
-        public void UpdateChanges(ICommandArguments args)
+        public void UpdateChanges(IEditCommandArguments args)
         {
             repository.UpdateChanges(args);
         }
@@ -43,12 +42,12 @@ namespace TaskManagerServiceLibrary
     public class TaskManagerTests
     {
         private readonly IServiceSpecification qSpec = Substitute.For<IServiceSpecification>();
-        private readonly IClientSpecification cSpec = Substitute.For<IClientSpecification>();
+        private readonly IListCommandArguments cSpec = Substitute.For<IListCommandArguments>();
         private readonly ISpecificationsConverter converter = Substitute.For<ISpecificationsConverter>();
         private readonly IRepository repo = Substitute.For<IRepository>();
 
-        private readonly ITypeConverter<IClientSpecification, IServiceSpecification> typeConverter =
-            Substitute.For<ITypeConverter<IClientSpecification, IServiceSpecification>>();
+        private readonly ITypeConverter<IListCommandArguments, IServiceSpecification> typeConverter =
+            Substitute.For<ITypeConverter<IListCommandArguments, IServiceSpecification>>();
 
         private readonly TaskManagerService service;
 

@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+﻿using EntitiesLibrary.CommandArguments;
+using FluentAssertions;
 using NSubstitute;
-using Specifications.ClientSpecifications;
 using Xunit;
 
 namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
@@ -16,9 +16,9 @@ namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
             this.singleTaskFormatter = singleTaskFormatter;
         }
 
-        public ITaskFormatter GetFormatter(IClientSpecification specification)
+        public ITaskFormatter GetFormatter(IListCommandArguments specification)
         {
-            if (specification is ListSingleClientSpecification)
+            if (specification is ListSingleTaskArgs)
                 return singleTaskFormatter;
             return listTaskFormatter;
         }
@@ -38,14 +38,14 @@ namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
         [Fact]
         public void should_return_list_formatter()
         {
-            var result = taskFormatterFactory.GetFormatter(new ListAllClientSpecification());
+            var result = taskFormatterFactory.GetFormatter(new ListAllTaskArgs());
             result.Should().BeSameAs(listFormatter);
         }
 
         [Fact]
         public void should_return_single_formatter()
         {
-            var result = taskFormatterFactory.GetFormatter(new ListSingleClientSpecification());
+            var result = taskFormatterFactory.GetFormatter(new ListSingleTaskArgs());
             result.Should().BeSameAs(singleFormatter);
         }
     }

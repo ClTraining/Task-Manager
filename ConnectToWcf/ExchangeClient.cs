@@ -5,7 +5,6 @@ using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
-using Specifications.ClientSpecifications;
 using Specifications.ServiceSpecifications;
 using TaskManagerServiceLibrary;
 using TaskManagerServiceLibrary.Repositories;
@@ -29,12 +28,12 @@ namespace ConnectToWcf
             return GetDataFromServer(t => t.AddTask(task));
         }
 
-        public List<ClientPackage> GetTasks(IClientSpecification data)
+        public List<ClientPackage> GetTasks(IListCommandArguments data)
         {
             return GetDataFromServer(s => s.GetTasks(data));
         }
 
-        public void UpdateChanges(ICommandArguments args)
+        public void UpdateChanges(IEditCommandArguments args)
         {
             UpdateDataOnServer(s=>s.UpdateChanges(args));
         }
@@ -121,7 +120,7 @@ namespace ConnectToWcf
         public void should_get_tasks_from_server()
         {
             var expected = new List<ClientPackage> {new ClientPackage {Id = 1}};
-            var cSpec = Substitute.For<IClientSpecification>();
+            var cSpec = Substitute.For<IListCommandArguments>();
             //cSpec.Data.Returns(1);
             var qSpec = Substitute.For<IServiceSpecification>();
 

@@ -58,6 +58,7 @@ namespace TaskManagerClientLibrary
                 .To<ExchangeClient>()
                 .WithConstructorArgument("address", address);
 
+            Bind<IFactory>().To<Factory>();
         }
     }
 }

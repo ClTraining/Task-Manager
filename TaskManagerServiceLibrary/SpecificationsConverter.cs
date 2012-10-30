@@ -1,5 +1,5 @@
 using AutoMapper;
-using Specifications.ClientSpecifications;
+using EntitiesLibrary.CommandArguments;
 using Specifications.ServiceSpecifications;
 using Xunit;
 using FluentAssertions;
@@ -10,15 +10,15 @@ namespace TaskManagerServiceLibrary
     {
         public SpecificationsConverter()
         {
-            Mapper.CreateMap<ListAllClientSpecification, ListAllServiceSpecification>();
-            Mapper.CreateMap<ListByDateClientSpecification, ListByDateServiceSpecification>();
-            Mapper.CreateMap<ListSingleClientSpecification, ListSingleServiceSpecification>();
-            Mapper.CreateMap<IClientSpecification, IServiceSpecification>().ConvertUsing<SpecificationMapConverter<IClientSpecification, IServiceSpecification>>();
+            Mapper.CreateMap<ListAllTaskArgs, ListAllServiceSpecification>();
+            Mapper.CreateMap<ListByDateTaskArgs, ListByDateServiceSpecification>();
+            Mapper.CreateMap<ListSingleTaskArgs, ListSingleServiceSpecification>();
+            Mapper.CreateMap<IListCommandArguments, IServiceSpecification>().ConvertUsing<SpecificationMapConverter<IListCommandArguments, IServiceSpecification>>();
         }
 
-        public IServiceSpecification GetQuerySpecification(IClientSpecification specification)
+        public IServiceSpecification GetQuerySpecification(IListCommandArguments specification)
         {
-            var querySpecification = Mapper.DynamicMap<IClientSpecification, IServiceSpecification>(specification);
+            var querySpecification = Mapper.DynamicMap<IListCommandArguments, IServiceSpecification>(specification);
             return querySpecification;
         }
     }
@@ -28,7 +28,7 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_return_listsinglespecification()
         {
-            var cSpec = new ListSingleClientSpecification();
+            var cSpec = new ListSingleTaskArgs();
             var converter = new SpecificationsConverter();
             
             var result = converter.GetQuerySpecification(cSpec);
@@ -39,7 +39,7 @@ namespace TaskManagerServiceLibrary
         [Fact]
         public void should_return_listallspecification()
         {
-            var cSpec = new ListAllClientSpecification();
+            var cSpec = new ListAllTaskArgs();
             var converter = new SpecificationsConverter();
 
             var result = converter.GetQuerySpecification(cSpec);

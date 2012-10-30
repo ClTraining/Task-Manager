@@ -2,54 +2,70 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using EntitiesLibrary;
+using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using Xunit;
 
 namespace TaskManagerClientLibrary
 {
-    public class TaskArgsConverter<T> where T:new()
+    public class TaskArgsConverter
     {
-        public virtual T Convert(List<string> source)
+        public virtual bool CanConvert(List<string> source, Type type)
         {
-            var type = typeof (T);
-            var returnValue = new T();
-            var i = 0;
             var properties = type.GetProperties().ToList();
+            var i = 0;
 
-            if (properties.Count != source.Count)
+            if (properties.Count < source.Count)
+                return false;
+            foreach (var typeConverter in properties.Select(property => GetConverter(property, source[i])))
             {
-                throw new WrongTaskArgumentsException("Wrong arguments count.");
-            }
-
-            foreach (var property in properties)
-            {
-                var propertyType = property.PropertyType;
-
-                var tc = TypeDescriptor.GetConverter(propertyType);
-                
-                var isNullable = (propertyType.IsGenericType && propertyType.GetGenericTypeDefinition() == typeof(Nullable<>));
-
-                if (!tc.IsValid(source[i]))
+                if (typeConverter == null)
                 {
-                    if (isNullable)
-                    {
-                        property.SetValue(returnValue, null, null);
-                    }
-                    else
-                    {
-                        throw new WrongTaskArgumentsException("Wrong arguments types.");
-                    }
+                    return false;
                 }
-                else
-                {
-                    property.SetValue(returnValue, tc.ConvertFrom(source[i]), null);
-                }
-
                 i++;
             }
 
-            return returnValue;
+            return true;
+        }
+
+        public virtual ICommandArguments Convert(List<string> source, Type type)
+        {
+            var properties = type.GetProperties().ToList();
+            var returnValue = Activator.CreateInstance(type);
+            var i = 0;
+
+            foreach (var property in properties)
+            {
+                var value = i < source.Count ? source[i] : "";
+
+                var typeConverter = GetConverter(property, value);
+
+                if (typeConverter == null)
+                {
+                    throw new WrongTaskArgumentsException("Wrong command arguments.");
+                }
+
+                property.SetValue(returnValue, typeConverter.ConvertFrom(value), null);
+
+                i++;
+            }
+            return (ICommandArguments) returnValue;
+        }
+
+        private TypeConverter GetConverter(PropertyInfo property, string source)
+        {
+            var propertyType = property.PropertyType;
+            var typeConverter = TypeDescriptor.GetConverter(propertyType);
+            var isNullable = (propertyType.IsGenericType &&
+                              propertyType.GetGenericTypeDefinition() == typeof (Nullable<>));
+            if (typeConverter.IsValid(source) || isNullable)
+            {
+                return typeConverter;
+            }
+            return null;
         }
     }
 
@@ -66,38 +82,58 @@ namespace TaskManagerClientLibrary
 
     public class TaskArgsConvertertests
     {
-        private readonly TaskArgsConverter<TestArgs> converter = new TaskArgsConverter<TestArgs>();
-  
+        private readonly TaskArgsConverter converter = new TaskArgsConverter();
+
         [Fact]
         public void sould_get_all_arguments_without_nullable()
         {
-            var arguments = new List<string>{"11","lhkjh","10-10-2012", "11"};
-            var result = converter.Convert(arguments);
-            result.ShouldBeEquivalentTo(new TestArgs { IntValue = 11, StringValue = "lhkjh", DateTimeValue1 = DateTime.Parse("10-10-2012"), DateTimeValue2 = null});
+            var arguments = new List<string> {"11", "lhkjh", "10-10-2012", ""};
+            var result = converter.Convert(arguments, typeof (TestArgs));
+            result.ShouldBeEquivalentTo(new TestArgs
+                                            {
+                                                IntValue = 11,
+                                                StringValue = "lhkjh",
+                                                DateTimeValue1 = DateTime.Parse("10-10-2012"),
+                                                DateTimeValue2 = null
+                                            });
         }
 
         [Fact]
         public void should_get_nullable_value()
         {
-            var arguments = new List<string> {"102","some string", "07-02-2010", "10-12-2012"};
-            var result = converter.Convert(arguments);
-            result.ShouldBeEquivalentTo(new TestArgs{IntValue = 102, StringValue = "some string", DateTimeValue1 = DateTime.Parse("07-02-2010"), DateTimeValue2 = DateTime.Parse("10-12-2012")});
+            var arguments = new List<string> {"102", "some string", "07-02-2010", "10-12-2012"};
+            var result = converter.Convert(arguments, typeof (TestArgs));
+            result.ShouldBeEquivalentTo(new TestArgs
+                                            {
+                                                IntValue = 102,
+                                                StringValue = "some string",
+                                                DateTimeValue1 = DateTime.Parse("07-02-2010"),
+                                                DateTimeValue2 = DateTime.Parse("10-12-2012")
+                                            });
         }
 
         [Fact]
         public void should_throw_exception_wrong_argument_types()
         {
-            var arguments = new List<string> { "aa4", "task", "01-05-2012", "11-11-2012" };
-            Action action = () => converter.Convert(arguments);
-            action.ShouldThrow<WrongTaskArgumentsException>().WithMessage("Wrong arguments types.");
+            var arguments = new List<string> {"aa4", "task", "01-05-2012", "11-11-2012"};
+            Action action = () => converter.Convert(arguments, typeof (TestArgs));
+            action.ShouldThrow<WrongTaskArgumentsException>().WithMessage("Wrong command arguments.");
         }
 
         [Fact]
         public void should_throw_exception_wrong_argument_count()
         {
-            var arguments = new List<string> { "dd", "fff"};
-            Action action = () => converter.Convert(arguments);
-            action.ShouldThrow<WrongTaskArgumentsException>().WithMessage("Wrong arguments count.");
+            var arguments = new List<string> {"dd", "fff"};
+            Action action = () => converter.Convert(arguments, typeof (TestArgs));
+            action.ShouldThrow<WrongTaskArgumentsException>().WithMessage("Wrong command arguments.");
+        }
+
+        [Fact]
+        public void should_can_convert_return_true()
+        {
+            var arguments = new List<string> {"11","some string", "01-01-2001","12-12-2012"};
+            var result = converter.CanConvert(arguments, typeof(TestArgs));
+            result.Should().Be(true);
         }
     }
 }

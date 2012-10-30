@@ -69,6 +69,7 @@
     <Compile Include="ConcreteCommands\AddCommand.cs" />
     <Compile Include="ConcreteCommands\ClearDateCommand.cs" />
     <Compile Include="ConcreteCommands\CompleteCommand.cs" />
+    <Compile Include="ConcreteCommands\ConverterMethod.cs" />
     <Compile Include="ConcreteCommands\ExitCommand.cs" />
     <Compile Include="ConcreteCommands\HelpCommand\HelpCommand.cs" />
     <Compile Include="ConcreteCommands\HelpCommand\HelpCommandDisplayer.cs" />
@@ -84,6 +85,8 @@
     <Compile Include="ConcreteCommands\TaskFormatter\TaskFormatterFactory.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="EnvironmentWrapper.cs" />
+    <Compile Include="Factory.cs" />
+    <Compile Include="IFactory.cs" />
     <Compile Include="InputParser.cs" />
     <Compile Include="LineParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -2,12 +2,8 @@ using System;
 
 namespace EntitiesLibrary.CommandArguments
 {
-    public interface ISetDateTaskArgs : ICommandArguments
-    {
-        DateTime DueDate { get; set; }
-    }
 
-    public class SetDateTaskArgs : ISetDateTaskArgs
+    public class SetDateTaskArgs : IEditCommandArguments
     {
         public int Id { get; set; }
 

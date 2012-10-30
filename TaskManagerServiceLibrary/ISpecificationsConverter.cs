@@ -1,10 +1,10 @@
-﻿using Specifications.ClientSpecifications;
+﻿using EntitiesLibrary.CommandArguments;
 using Specifications.ServiceSpecifications;
 
 namespace TaskManagerServiceLibrary
 {
     public interface ISpecificationsConverter
     {
-        IServiceSpecification GetQuerySpecification(IClientSpecification specification);
+        IServiceSpecification GetQuerySpecification(IListCommandArguments specification);
     }
 }

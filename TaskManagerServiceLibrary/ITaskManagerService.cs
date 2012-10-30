@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
-using Specifications.ClientSpecifications;
 
 
 namespace TaskManagerServiceLibrary
@@ -14,18 +13,16 @@ namespace TaskManagerServiceLibrary
         int AddTask(AddTaskArgs task);
 
         [OperationContract]
-        [ServiceKnownType(typeof(ListAllClientSpecification))]
-        [ServiceKnownType(typeof(ListByDateClientSpecification))]
-        [ServiceKnownType(typeof(ListSingleClientSpecification))]
-        List<ClientPackage> GetTasks(IClientSpecification data);
+        [ServiceKnownType(typeof(ListAllTaskArgs))]
+        [ServiceKnownType(typeof(ListByDateTaskArgs))]
+        [ServiceKnownType(typeof(ListSingleTaskArgs))]
+        List<ClientPackage> GetTasks(IListCommandArguments data);
 
         [OperationContract]
-        [ServiceKnownType(typeof(AddTaskArgs))]
         [ServiceKnownType(typeof(ClearDateTaskArgs))]
         [ServiceKnownType(typeof(CompleteTaskArgs))]
-        [ServiceKnownType(typeof(ListTaskArgs))]
         [ServiceKnownType(typeof(RenameTaskArgs))]
         [ServiceKnownType(typeof(SetDateTaskArgs))]
-        void UpdateChanges(ICommandArguments args);
+        void UpdateChanges(IEditCommandArguments args);
     }
 }

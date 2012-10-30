@@ -14,10 +14,10 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         private readonly IClient client;
         public string Name { get { return GetType().Name.Split(new[] { "Command" }, StringSplitOptions.None)[0].ToLower(); } }
         public string Description { get; private set; }
-        private readonly TaskArgsConverter<ClearDateTaskArgs> converter;
+        private readonly TaskArgsConverter converter;
         private readonly TextWriter textWriter;
 
-        public ClearDateCommand(TaskArgsConverter<ClearDateTaskArgs> converter, TextWriter textWriter, IClient client)
+        public ClearDateCommand(TaskArgsConverter converter, TextWriter textWriter, IClient client)
         {
             this.converter = converter;
             this.textWriter = textWriter;
@@ -27,16 +27,16 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         public void Execute(List<string> argument)
         {
-            var clearDateArgs = converter.Convert(argument);
+            var clearDateArgs = converter.Convert(argument, typeof(ClearDateTaskArgs)) as ClearDateTaskArgs;
             client.UpdateChanges(clearDateArgs);
-            textWriter.WriteLine("Due date cleared for task ID: {0} .", clearDateArgs.Id);
+            if (clearDateArgs != null) textWriter.WriteLine("Due date cleared for task ID: {0} .", clearDateArgs.Id);
         }
     }
 
     public class ClearDateTests
     {
         private readonly IClient client = Substitute.For<IClient>();
-        private readonly TaskArgsConverter<ClearDateTaskArgs> converter = Substitute.For<TaskArgsConverter<ClearDateTaskArgs>>();
+        private readonly TaskArgsConverter converter = Substitute.For<TaskArgsConverter>();
         private readonly ClearDateCommand handler;
 
         public ClearDateTests()
@@ -55,7 +55,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var arguments = new List<string> { "12" };
             var clearDateArgs = new ClearDateTaskArgs { Id = 12 };
-            converter.Convert(arguments).Returns(clearDateArgs);
+            converter.Convert(arguments, typeof(ClearDateTaskArgs)).Returns(clearDateArgs);
             handler.Execute(arguments);
             client.Received().UpdateChanges(clearDateArgs);
         }

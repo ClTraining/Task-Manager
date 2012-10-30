@@ -1,10 +1,7 @@
 namespace EntitiesLibrary.CommandArguments
 {
-    public interface ICompleteTaskArgs : ICommandArguments
-    {
-    }
 
-    public class CompleteTaskArgs : ICompleteTaskArgs
+    public class CompleteTaskArgs : IEditCommandArguments
     {
         private bool isCompleted;
 

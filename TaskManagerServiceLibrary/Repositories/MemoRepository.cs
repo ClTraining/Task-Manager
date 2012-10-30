@@ -41,7 +41,7 @@ namespace TaskManagerServiceLibrary.Repositories
             return resList;
         }
 
-        public void UpdateChanges(ICommandArguments args)
+        public void UpdateChanges(IEditCommandArguments args)
         {
             var index = args.Id - 1;
             var taskToConvert = taskList[index];

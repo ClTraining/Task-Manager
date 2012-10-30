@@ -1,9 +1,9 @@
-using Specifications.ClientSpecifications;
+using EntitiesLibrary.CommandArguments;
 
 namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
 {
     public interface ITaskFormatterFactory
     {
-        ITaskFormatter GetFormatter(IClientSpecification specification);
+        ITaskFormatter GetFormatter(IListCommandArguments specification);
     }
 }

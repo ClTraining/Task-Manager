@@ -11,13 +11,13 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 {
     public class SetDateCommand : ICommand
     {
-        private readonly TaskArgsConverter<SetDateTaskArgs> converter;
+        private readonly TaskArgsConverter converter;
         private readonly TextWriter textWriter;
         private readonly IClient client;
         public string Name { get { return GetType().Name.Split(new[] { "Command" }, StringSplitOptions.None)[0].ToLower(); } }
         public string Description { get; private set; }
 
-        public SetDateCommand(TaskArgsConverter<SetDateTaskArgs> converter, TextWriter textWriter, IClient client)
+        public SetDateCommand(TaskArgsConverter converter, TextWriter textWriter, IClient client)
         {
             this.converter = converter;
             this.textWriter = textWriter;
@@ -39,7 +39,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         private SetDateTaskArgs ConvertToArgs(List<string> argument)
         {
-            var setDateArgs = converter.Convert(argument);
+            var setDateArgs = converter.Convert(argument, typeof(SetDateTaskArgs)) as SetDateTaskArgs;
             return setDateArgs;
         }
     }
@@ -48,7 +48,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
     {
         private readonly IClient client = Substitute.For<IClient>();
         private readonly ICommand command;
-        private readonly TaskArgsConverter<SetDateTaskArgs> converter = Substitute.For<TaskArgsConverter<SetDateTaskArgs>>();
+        private readonly TaskArgsConverter converter = Substitute.For<TaskArgsConverter>();
         private readonly TextWriter writer = Substitute.For<TextWriter>();
 
 
@@ -68,7 +68,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var setDateArgs = new SetDateTaskArgs { Id = 5, DueDate = DateTime.Parse("10-10-2012") };
             var argument = new List<string> { "1", "10-10-2012" };
-            converter.Convert(argument).Returns(setDateArgs);
+            converter.Convert(argument, typeof(SetDateTaskArgs)).Returns(setDateArgs);
             command.Execute(argument);
             client.Received().UpdateChanges(setDateArgs);
         }
