@@ -65,6 +65,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\ClearDateServiceCommand.cs" />
+    <Compile Include="Commands\CompleteServiceCommand.cs" />
+    <Compile Include="Commands\IServiceCommand.cs" />
+    <Compile Include="Commands\RenameServiceCommand.cs" />
+    <Compile Include="Commands\SetDateServiceCommand.cs" />
     <Compile Include="ITodoList.cs" />
     <Compile Include="SpecificationMapConverter.cs" />
     <Compile Include="ISpecificationsConverter.cs" />

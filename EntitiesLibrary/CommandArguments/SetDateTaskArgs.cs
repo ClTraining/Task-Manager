@@ -8,5 +8,4 @@ namespace EntitiesLibrary.CommandArguments
 
         public DateTime DueDate { get; set; }
     }
-
 }

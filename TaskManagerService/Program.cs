@@ -1,11 +1,12 @@
 using System;
 using System.ServiceModel;
-using CommandQueryLibrary.Commands;
 using CommandQueryLibrary.ServiceSpecifications;
+using EntitiesLibrary.CommandArguments;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using TaskManagerServiceLibrary;
+using TaskManagerServiceLibrary.Commands;
 using TaskManagerServiceLibrary.Repositories;
 using TaskManagerServiceLibrary.TaskManager;
 
@@ -47,9 +48,9 @@ namespace TaskManagerService
                                .BindAllInterfaces()
                 );
 
-            this.Bind(a => a.FromAssemblyContaining<IServiceCommand>()
+            this.Bind(a => a.FromAssemblyContaining<IServiceCommand<IEditCommandArguments>>()
                                .SelectAllClasses()
-                               .InNamespaceOf<IServiceCommand>()
+                               .InNamespaceOf<IServiceCommand<IEditCommandArguments>>()
                                .BindAllInterfaces()
                 );
         }

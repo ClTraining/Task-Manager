@@ -7,7 +7,7 @@ namespace TaskManagerServiceLibrary
 {
     public interface ITodoList
     {
-        void UpdateChanges(ICommandArguments args);
+        void UpdateChanges(IEditCommandArguments args);
         int AddTask(AddTaskArgs args);
         List<ClientTask> GetTasks(IServiceSpecification serviceSpecification);
     }

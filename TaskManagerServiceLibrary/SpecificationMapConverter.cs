@@ -12,8 +12,8 @@ namespace TaskManagerServiceLibrary
             var baseType = context.SourceValue.GetType();
 
             var map = (from maps in Mapper.GetAllTypeMaps()
-                                  where maps.SourceType == baseType
-                                  select maps).FirstOrDefault();
+                       where maps.SourceType == baseType
+                       select maps).FirstOrDefault();
 
             if (map != null)
             {
