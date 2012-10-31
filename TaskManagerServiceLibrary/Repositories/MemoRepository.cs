@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using CommandQueryLibrary.ServiceSpecifications;
 using EntitiesLibrary;
@@ -26,14 +27,7 @@ namespace TaskManagerServiceLibrary.Repositories
 
         public List<ServiceTask> GetTasks(IServiceSpecification spec)
         {
-            var list = new List<ServiceTask>();
-            foreach (var task in taskList)
-            {
-                if(spec.IsSatisfied(task))
-                    list.Add(task);
-            }
-            return list;
-            //return taskList.Where(spec.IsSatisfied).ToList();
+            return taskList.Where(spec.IsSatisfied).ToList();
         }
 
         public void UpdateChanges(IEditCommandArguments args)
