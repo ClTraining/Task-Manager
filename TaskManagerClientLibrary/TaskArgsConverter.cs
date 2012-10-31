@@ -26,6 +26,8 @@ namespace TaskManagerClientLibrary
             {
                 var properties = type.GetProperties().ToList();
                 var returnValue = Activator.CreateInstance(type);
+                if (properties.Count<source.Count)
+                    break;
                 var sourceArr = new string[properties.Count];
                 source.CopyTo(sourceArr, 0);
 
@@ -49,6 +51,7 @@ namespace TaskManagerClientLibrary
                 }
                 if (returnValue!= null) return (ICommandArguments) returnValue;
             }
+
             throw new WrongTaskArgumentsException("Wrong command arguments.");
         }
 
