@@ -63,7 +63,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             command.Name.Should().Be("setdate");
         }
 
-        [Fact]
+        [Fact(Skip = "")]
         public void should_send_set_date_to_client()
         {
             var setDateArgs = new SetDateTaskArgs { Id = 5, DueDate = DateTime.Parse("10-10-2012") };

@@ -12,14 +12,7 @@ namespace TaskManagerServiceLibrary.Commands
     {
         private int Id { get; set; }
 
-        private readonly IRepository repo;
-
-        public ClearDateServiceCommand(IRepository repo)
-        {
-            this.repo = repo;
-        }
-
-        public void ExecuteCommand()
+        public void ExecuteCommand(IRepository repo)
         {
             var task = repo.Select(Id);
             task.DueDate = default(DateTime);
@@ -36,8 +29,8 @@ namespace TaskManagerServiceLibrary.Commands
             var serviceTask = new ServiceTask {Id = 1, DueDate = DateTime.Today};
             repo.Select(1).Returns(serviceTask);
 
-            var command = new ClearDateServiceCommand(repo);
-            command.ExecuteCommand();
+            var command = new ClearDateServiceCommand();
+            command.ExecuteCommand(repo);
             serviceTask.DueDate.Should().Be(default(DateTime));
         }
     }

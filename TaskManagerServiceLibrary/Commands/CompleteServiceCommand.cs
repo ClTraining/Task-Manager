@@ -8,15 +8,8 @@ namespace TaskManagerServiceLibrary.Commands
     public class CompleteServiceCommand : IServiceCommand
     {
         public int Id { get; set; }
-
-        private readonly IRepository repo;
-
-        public CompleteServiceCommand(IRepository repo)
-        {
-            this.repo = repo;
-        }
-
-        public void ExecuteCommand()
+        
+        public void ExecuteCommand(IRepository repo)
         {
             var task = repo.Select(Id);
             task.IsCompleted = true;
@@ -33,7 +26,7 @@ namespace TaskManagerServiceLibrary.Commands
             var serviceTask = new ServiceTask { Id = 1 };
             repo.Select(1).Returns(serviceTask);
 
-            var command = new CompleteServiceCommand(repo);
+            var command = new CompleteServiceCommand();
         }
     }
 }

@@ -37,7 +37,7 @@ namespace TaskManagerServiceLibrary.Repositories
 
         public void UpdateChanges(ServiceTask task)
         {
-            taskList[task.Id] = task;
+            taskList[task.Id - 1] = task;
         }
 
         private int GetNewId()

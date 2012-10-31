@@ -12,23 +12,11 @@ namespace TaskManagerServiceLibrary.Commands
         public int Id { get; set; }
         public string Name { get; set; }
 
-        private readonly IRepository repo;
-
-        public RenameServiceCommand(IRepository repo)
+        public void ExecuteCommand(IRepository repo)
         {
-            this.repo = repo;
-        }
-
-        public void ExecuteCommand()
-        {
-            var task = GetTask(Id);
+            var task = repo.Select(Id);
             task.Name = Name;
             repo.UpdateChanges(task);
-        }
-
-        private ServiceTask GetTask(int id)
-        {
-            return repo.Select(id);
         }
     }
 
@@ -41,8 +29,8 @@ namespace TaskManagerServiceLibrary.Commands
             var serviceTask = new ServiceTask { Id = 1, Name = "1"};
             repo.Select(1).Returns(serviceTask);
 
-            var command = new RenameServiceCommand(repo);
-            command.ExecuteCommand();
+            var command = new RenameServiceCommand();
+            command.ExecuteCommand(repo);
 
             serviceTask.Name.Should().Be("task1");
         }
