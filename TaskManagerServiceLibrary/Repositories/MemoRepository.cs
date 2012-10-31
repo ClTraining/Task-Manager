@@ -35,6 +35,11 @@ namespace TaskManagerServiceLibrary.Repositories
             return taskList[id - 1];
         }
 
+        public void UpdateChanges(ServiceTask task)
+        {
+            taskList[task.Id] = task;
+        }
+
         private int GetNewId()
         {
             Interlocked.Increment(ref currentId);

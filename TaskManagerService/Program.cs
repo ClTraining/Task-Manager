@@ -39,6 +39,7 @@ namespace TaskManagerService
             Bind<IRepository>().To<MemoRepository>().InSingletonScope();
             Bind<ITaskMapper>().To<TaskMapper>();
             Bind<ITodoList>().To<TodoList>();
+            Bind<IArgToCommandConverter>().To<ArgToCommandConverter>();
 
             Bind<ISpecificationsConverter>().To<SpecificationsConverter>();
 
@@ -48,9 +49,9 @@ namespace TaskManagerService
                                .BindAllInterfaces()
                 );
 
-            this.Bind(a => a.FromAssemblyContaining<IServiceCommand<IEditCommandArguments>>()
+            this.Bind(a => a.FromAssemblyContaining<IServiceCommand>()
                                .SelectAllClasses()
-                               .InNamespaceOf<IServiceCommand<IEditCommandArguments>>()
+                               .InNamespaceOf<IServiceCommand>()
                                .BindAllInterfaces()
                 );
         }

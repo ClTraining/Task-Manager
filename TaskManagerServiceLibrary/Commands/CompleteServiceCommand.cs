@@ -1,15 +1,14 @@
-using System;
 using EntitiesLibrary;
-using EntitiesLibrary.CommandArguments;
-using FluentAssertions;
 using NSubstitute;
 using TaskManagerServiceLibrary.Repositories;
 using Xunit;
 
 namespace TaskManagerServiceLibrary.Commands
 {
-    public class CompleteServiceCommand : IServiceCommand<CompleteTaskArgs>
+    public class CompleteServiceCommand : IServiceCommand
     {
+        public int Id { get; set; }
+
         private readonly IRepository repo;
 
         public CompleteServiceCommand(IRepository repo)
@@ -17,10 +16,11 @@ namespace TaskManagerServiceLibrary.Commands
             this.repo = repo;
         }
 
-        public void ExecuteCommand(CompleteTaskArgs args)
+        public void ExecuteCommand()
         {
-            var task = repo.Select(args.Id);
+            var task = repo.Select(Id);
             task.IsCompleted = true;
+            repo.UpdateChanges(task);
         }
     }
 
@@ -34,8 +34,6 @@ namespace TaskManagerServiceLibrary.Commands
             repo.Select(1).Returns(serviceTask);
 
             var command = new CompleteServiceCommand(repo);
-            command.ExecuteCommand(new CompleteTaskArgs { Id = 1 });
-            serviceTask.IsCompleted.Should().BeTrue();
         }
     }
 }

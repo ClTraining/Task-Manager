@@ -1,5 +1,3 @@
-using System;
-using CommandQueryLibrary.ServiceSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using NSubstitute;
@@ -9,8 +7,11 @@ using FluentAssertions;
 
 namespace TaskManagerServiceLibrary.Commands
 {
-    public class RenameServiceCommand : IServiceCommand<RenameTaskArgs>
+    public class RenameServiceCommand : IServiceCommand
     {
+        public int Id { get; set; }
+        public string Name { get; set; }
+
         private readonly IRepository repo;
 
         public RenameServiceCommand(IRepository repo)
@@ -18,10 +19,11 @@ namespace TaskManagerServiceLibrary.Commands
             this.repo = repo;
         }
 
-        public void ExecuteCommand(RenameTaskArgs args)
+        public void ExecuteCommand()
         {
-            var task = GetTask(args.Id);
-            task.Name = args.Name;
+            var task = GetTask(Id);
+            task.Name = Name;
+            repo.UpdateChanges(task);
         }
 
         private ServiceTask GetTask(int id)
@@ -40,7 +42,7 @@ namespace TaskManagerServiceLibrary.Commands
             repo.Select(1).Returns(serviceTask);
 
             var command = new RenameServiceCommand(repo);
-            command.ExecuteCommand(new RenameTaskArgs {Id = 1, Name = "task1"});
+            command.ExecuteCommand();
 
             serviceTask.Name.Should().Be("task1");
         }

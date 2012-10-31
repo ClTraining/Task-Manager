@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using CommandQueryLibrary.ServiceSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
-using TaskManagerServiceLibrary.Commands;
 using TaskManagerServiceLibrary.Repositories;
 using TaskManagerServiceLibrary.TaskManager;
 
@@ -14,18 +12,18 @@ namespace TaskManagerServiceLibrary
     {
         private readonly IRepository repo;
         private readonly ITaskMapper mapper;
-        private readonly List<IServiceCommand<IEditCommandArguments>> commands;
+        private readonly IArgToCommandConverter converter;
 
-        public TodoList(IRepository repo, ITaskMapper mapper, List<IServiceCommand<IEditCommandArguments>> commands)
+        public TodoList(IRepository repo, ITaskMapper mapper, IArgToCommandConverter converter)
         {
             this.repo = repo;
             this.mapper = mapper;
-            this.commands = commands;
+            this.converter = converter;
         }
 
         public void UpdateChanges(IEditCommandArguments args)
         {
-            commands.First(x=>x.GetType().Name.Contains(args.GetType().Name.Split('T')[0])).ExecuteCommand(args);
+            converter.GetServiceCommand(args).ExecuteCommand();
         }
 
         public int AddTask(AddTaskArgs args)

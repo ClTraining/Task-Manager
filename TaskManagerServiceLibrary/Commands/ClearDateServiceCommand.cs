@@ -8,8 +8,10 @@ using FluentAssertions;
 
 namespace TaskManagerServiceLibrary.Commands
 {
-    public class ClearDateServiceCommand : IServiceCommand<ClearDateTaskArgs>
+    public class ClearDateServiceCommand : IServiceCommand
     {
+        private int Id { get; set; }
+
         private readonly IRepository repo;
 
         public ClearDateServiceCommand(IRepository repo)
@@ -17,10 +19,11 @@ namespace TaskManagerServiceLibrary.Commands
             this.repo = repo;
         }
 
-        public void ExecuteCommand(ClearDateTaskArgs args)
+        public void ExecuteCommand()
         {
-            var task = repo.Select(args.Id);
+            var task = repo.Select(Id);
             task.DueDate = default(DateTime);
+            repo.UpdateChanges(task);
         }
     }
 
@@ -34,7 +37,7 @@ namespace TaskManagerServiceLibrary.Commands
             repo.Select(1).Returns(serviceTask);
 
             var command = new ClearDateServiceCommand(repo);
-            command.ExecuteCommand(new ClearDateTaskArgs {Id = 1});
+            command.ExecuteCommand();
             serviceTask.DueDate.Should().Be(default(DateTime));
         }
     }

@@ -3,7 +3,7 @@ using AutoMapper;
 
 namespace TaskManagerServiceLibrary
 {
-    public class SpecificationMapConverter<TSource, TDestination> : ITypeConverter<TSource, TDestination>
+    public class MapConverter<TSource, TDestination> : ITypeConverter<TSource, TDestination>
         where TSource : class
         where TDestination : class
     {

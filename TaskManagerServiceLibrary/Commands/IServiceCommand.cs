@@ -1,7 +1,7 @@
 namespace TaskManagerServiceLibrary.Commands
 {
-    public interface IServiceCommand<in T>
+    public interface IServiceCommand
     {
-        void ExecuteCommand(T args);
+        void ExecuteCommand();
     }
 }

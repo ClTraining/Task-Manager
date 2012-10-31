@@ -13,7 +13,7 @@ namespace TaskManagerServiceLibrary
             Mapper.CreateMap<ListAllTaskArgs, ListAllServiceSpecification>();
             Mapper.CreateMap<ListByDateTaskArgs, ListByDateServiceSpecification>();
             Mapper.CreateMap<ListSingleTaskArgs, ListSingleServiceSpecification>();
-            Mapper.CreateMap<IListCommandArguments, IServiceSpecification>().ConvertUsing<SpecificationMapConverter<IListCommandArguments, IServiceSpecification>>();
+            Mapper.CreateMap<IListCommandArguments, IServiceSpecification>().ConvertUsing<MapConverter<IListCommandArguments, IServiceSpecification>>();
         }
 
         public IServiceSpecification GetQuerySpecification(IListCommandArguments specification)

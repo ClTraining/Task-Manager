@@ -8,8 +8,11 @@ using FluentAssertions;
 
 namespace TaskManagerServiceLibrary.Commands
 {
-    public class SetDateServiceCommand : IServiceCommand<SetDateTaskArgs>
+    public class SetDateServiceCommand : IServiceCommand
     {
+        public int Id { get; set; }
+        public DateTime DueDate { get; set; }
+
         private readonly IRepository repo;
 
         public SetDateServiceCommand(IRepository repo)
@@ -17,12 +20,12 @@ namespace TaskManagerServiceLibrary.Commands
             this.repo = repo;
         }
 
-        public void ExecuteCommand(SetDateTaskArgs args)
+        public void ExecuteCommand()
         {
-            var task = GetTask(args.Id);
+            var task = GetTask(Id);
             if(task.IsCompleted)
                 throw new Exception();
-            task.DueDate = args.DueDate;
+            task.DueDate = DueDate;
         }
 
         private ServiceTask GetTask(int id)
@@ -48,7 +51,7 @@ namespace TaskManagerServiceLibrary.Commands
             var serviceTask = new ServiceTask {Id = 1, DueDate = default(DateTime)};
             repo.Select(1).Returns(serviceTask);
 
-            command.ExecuteCommand(args);
+            command.ExecuteCommand();
             serviceTask.DueDate.Should().Be(DateTime.Today);
         }
 
@@ -58,7 +61,7 @@ namespace TaskManagerServiceLibrary.Commands
             var serviceTask = new ServiceTask { Id = 1, DueDate = default(DateTime), IsCompleted = true};
             repo.Select(1).Returns(serviceTask);
 
-            Action action = () => command.ExecuteCommand(args);
+            Action action = () => command.ExecuteCommand();
 
             action.ShouldThrow<Exception>();
         }
