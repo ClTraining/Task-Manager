@@ -18,12 +18,12 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         public string Name { get { return GetType().Name.Split(new[] { "Command" }, StringSplitOptions.None)[0].ToLower(); } }
         public string Description { get; private set; }
         private readonly IClient client;
-        private readonly IFactory factory;
+        private readonly ITaskFormatterFactory factory;
         private readonly TaskArgsConverter converter;
         private readonly TextWriter textWriter;
 
         public ListCommand(TaskArgsConverter converter, TextWriter textWriter,
-                    IClient client, IFactory factory )
+                    IClient client, ITaskFormatterFactory factory)
         {
             Description = "Displays list of all tasks or single task, specified by ID.";
             this.converter = converter;
@@ -65,12 +65,13 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         private readonly StringBuilder sb = new StringBuilder();
         readonly StringWriter writer;
         private readonly ListCommand list;
-        private readonly IFactory factory = Substitute.For<IFactory>();
+        private readonly ITaskFormatterFactory factory = Substitute.For<ITaskFormatterFactory>();
 
         public ListTests()
         {
             writer = new StringWriter(sb);
             list = new ListCommand(converter, writer, connection, factory);
+            //list = new ListCommand(converter, writer, connection);
         }
 
         [Fact]

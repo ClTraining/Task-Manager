@@ -21,7 +21,7 @@ namespace TaskManagerServiceLibrary
 
         public List<ClientTask> GetTasks(IListCommandArguments input)
         {
-            var serviceSpecification = new SpecificationsConverter().GetQuerySpecification(null);
+            var serviceSpecification = new SpecificationsConverter().GetQuerySpecification(input);
             return todoList.GetTasks(serviceSpecification);
         }
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace EntitiesLibrary.CommandArguments
+﻿namespace EntitiesLibrary.CommandArguments
 {
     public class ClearDateTaskArgs : IEditCommandArguments
     {

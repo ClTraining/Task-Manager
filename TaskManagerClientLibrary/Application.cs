@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using AutoMapper;
 using ConnectToWcf;
-using EntitiesLibrary.CommandArguments;
 using Ninject;
 using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using TaskManagerClientLibrary.CommandContainer;
 using TaskManagerClientLibrary.ConcreteCommands;
+using TaskManagerClientLibrary.ConcreteCommands.TaskFormatter;
 
 namespace TaskManagerClientLibrary
 {
@@ -25,9 +23,11 @@ namespace TaskManagerClientLibrary
             var greeting = notifier.GenerateGreeting();
             Console.WriteLine(greeting);
 
+            var factory = kernel.Get<ITaskFormatterFactory>();
+
             for (string s; ((s = Console.ReadLine()) != null);)
             {
-                kernel.Get<LineParser>().ExecuteCommand(s);
+               kernel.Get<LineParser>().ExecuteCommand(s);
             }
         }
     }
@@ -57,8 +57,6 @@ namespace TaskManagerClientLibrary
             Bind<IClient>()
                 .To<TodoServiceClient>()
                 .WithConstructorArgument("address", address);
-
-            Bind<IFactory>().To<Factory>();
         }
     }
 }
