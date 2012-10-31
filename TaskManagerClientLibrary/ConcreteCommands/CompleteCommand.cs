@@ -47,7 +47,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         private CompleteTaskArgs ConvertToArgs(List<string> argument)
         {
-            var completeTaskArgs = converter.Convert(argument, typeof(CompleteTaskArgs)) as CompleteTaskArgs;
+            var completeTaskArgs = converter.Convert(argument, new List<Type>{typeof(CompleteTaskArgs)}) as CompleteTaskArgs;
             return completeTaskArgs;
         }
     }
@@ -77,7 +77,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var completeTaskArgs = new CompleteTaskArgs { Id = 1 };
             var argument = new List<string> { "1", "10-10-2012" };
-            converter.Convert(argument, typeof(CompleteTaskArgs)).Returns(completeTaskArgs);
+            converter.Convert(argument, new List<Type>{typeof(CompleteTaskArgs)}).Returns(completeTaskArgs);
             command.Execute(argument);
             client.Received().ExecuteCommand(completeTaskArgs);
         }

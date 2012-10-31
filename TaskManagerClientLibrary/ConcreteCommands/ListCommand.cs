@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using ConnectToWcf;
 using EntitiesLibrary;
@@ -51,8 +50,8 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var types = new List<Type>
                             {typeof (ListByDateTaskArgs), typeof (ListSingleTaskArgs), typeof (ListAllTaskArgs)};
-            var listType = (from type in types where converter.CanConvert(source, type) select type).FirstOrDefault();
-            return converter.Convert(source, listType) as IListCommandArguments;
+            
+            return converter.Convert(source, types) as IListCommandArguments;
 
         }
     }
@@ -85,7 +84,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             data = new ListAllTaskArgs();
             var input = new List<string> { "153" };
-            converter.Convert(input, typeof(ListAllTaskArgs)).Returns(data);
+            converter.Convert(input, new List<Type>{typeof(ListAllTaskArgs)}).Returns(data);
             connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientTask>());
 
             list.Execute(input);
@@ -97,7 +96,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             data = new ListSingleTaskArgs();
             var input = new List<string>();
             connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientTask>());
-            converter.Convert(input, typeof(ListSingleTaskArgs)).Returns(new ListSingleTaskArgs());
+            converter.Convert(input, new List<Type>{typeof(ListSingleTaskArgs)}).Returns(new ListSingleTaskArgs());
 
             list.Execute(input);
             connection.ReceivedWithAnyArgs().GetTasks(data);
@@ -108,7 +107,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             data = new ListByDateTaskArgs();
             var input = new List<string>();
             connection.GetTasks(data).ReturnsForAnyArgs(new List<ClientTask>());
-            converter.Convert(input, typeof(ListByDateTaskArgs)).Returns(data);
+            converter.Convert(input, new List<Type>{typeof(ListByDateTaskArgs)}).Returns(data);
 
             list.Execute(input);
             connection.ReceivedWithAnyArgs().GetTasks(data);
