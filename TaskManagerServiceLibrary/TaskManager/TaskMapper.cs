@@ -40,8 +40,8 @@ namespace TaskManagerServiceLibrary.TaskManager
 
     public class TaskMapperTests
     {
-        private readonly ClientPackage contractTask = new ClientPackage {Id = 10, Name = "service", IsCompleted = true};
-        private readonly ServiceTask serviceTask = new ServiceTask {Id = 10, Name = "service", IsCompleted = true};
+        private readonly ClientPackage contractTask = new ClientPackage { Id = 10, Name = "service", IsCompleted = true };
+        private readonly ServiceTask serviceTask = new ServiceTask { Id = 10, Name = "service", IsCompleted = true };
         private readonly TaskMapper mapper = new TaskMapper();
 
         [Fact]
@@ -62,7 +62,7 @@ namespace TaskManagerServiceLibrary.TaskManager
         public void should_convert_to_servicetask()
         {
             var task = new ServiceTask { Name = "task1" };
-            var renameTaskArgs = new RenameTaskArgs {Name = "12345"};
+            var renameTaskArgs = new RenameTaskArgs { Name = "12345" };
 
             var result = mapper.Convert(renameTaskArgs, task);
 

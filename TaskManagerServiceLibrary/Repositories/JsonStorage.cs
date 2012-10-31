@@ -1,60 +1,41 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
+using FluentAssertions;
 using Newtonsoft.Json;
 using Specifications.ServiceSpecifications;
 using TaskManagerServiceLibrary.TaskManager;
+using Xunit;
 
 namespace TaskManagerServiceLibrary.Repositories
 {
     public class JsonStorage : IRepository
     {
         private readonly ITaskMapper mapper;
-        //public readonly List<ServiceTask> taskList = new List<ServiceTask>();
+        private readonly List<ServiceTask> cacheStorage;
         private int currentId;
 
         public JsonStorage(ITaskMapper mapper)
         {
             this.mapper = mapper;
+            var jsonString = GetJsonString();
+            cacheStorage = DeserializeToListOfTasks(jsonString);
         }
         public int AddTask(AddTaskArgs args)
         {
             var serviceTask = new ServiceTask { Name = args.Name, DueDate = args.DueDate, Id = GetNewId() };
-
-            AddToSaveFile(serviceTask);
+            AddToCache(serviceTask);
+            SynchronizeCacheAndLocal();
             return serviceTask.Id;
-        }
-
-        private void AddToSaveFile(ServiceTask serviceTask)
-        {
-            var serializedTask = JsonConvert.SerializeObject(serviceTask);
-            var fileStream = new FileStream("save2.txt", FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            var streamWriter = new StreamWriter(fileStream);
-            if (fileStream.Length > 0)
-            {
-                fileStream.Position = fileStream.Length - 1;
-                streamWriter.Write(',' + serializedTask + ']');
-            }
-            else
-                streamWriter.Write('[' + serializedTask + ']');
-
-            streamWriter.Close();
-            fileStream.Close();
-        }
-
-        private List<ServiceTask> GetTasksFromSaveFile()
-        {
-            var text = File.ReadAllText("save2.txt");
-            var tasks = JsonConvert.DeserializeObject<List<ServiceTask>>(text);
-            return tasks;
         }
 
         public List<ClientPackage> GetTasks(IServiceSpecification spec)
         {
-            var resList = GetTasksFromSaveFile()
+            var resList = cacheStorage
                 .Where(spec.IsSatisfied)
                 .Select(mapper.ConvertToContract)
                 .ToList();
@@ -64,13 +45,52 @@ namespace TaskManagerServiceLibrary.Repositories
 
         public void UpdateChanges(ICommandArguments args)
         {
-            var taskList = GetTasksFromSaveFile();
             var index = args.Id - 1;
-            var taskToConvert = taskList[index];
-            var task = mapper.Convert(args, taskToConvert);
+            var taskToConvertCache = cacheStorage[index];
+            var task = mapper.Convert(args, taskToConvertCache);
+            UpdateInCache(index, task);
+            SynchronizeCacheAndLocal();
+        }
 
-            taskList.RemoveAt(index);
-            taskList.Insert(index, task);
+        private void AddToCache(ServiceTask serviceTask)
+        {
+            cacheStorage.Add(serviceTask);
+        }
+
+        private string GetJsonString()
+        {
+            string text;
+            try
+            {
+                text = File.ReadAllText("save.txt");
+            }
+            catch (FileNotFoundException)
+            {
+                text = "[]";
+            }
+            DeserializeToListOfTasks(text);
+            return text;
+        }
+
+        private List<ServiceTask> DeserializeToListOfTasks(string text)
+        {
+            return JsonConvert.DeserializeObject<List<ServiceTask>>(text);
+        }
+
+        private void SynchronizeCacheAndLocal()
+        {
+            var stream = new FileStream("save.txt", FileMode.Create);
+            var writer = new StreamWriter(stream);
+            var serializeObject = JsonConvert.SerializeObject(cacheStorage);
+            writer.Write(serializeObject);
+            writer.Close();
+            stream.Close();
+        }
+
+        private void UpdateInCache(int index, ServiceTask task)
+        {
+            cacheStorage.RemoveAt(index);
+            cacheStorage.Insert(index, task);
         }
 
         private int GetNewId()
@@ -80,37 +100,32 @@ namespace TaskManagerServiceLibrary.Repositories
         }
     }
 
-    //public class JsonStorageTests
-    //{
-    //    private readonly ITaskMapper mapper = Substitute.For<ITaskMapper>();
-    //    private readonly IServiceSpecification spec = Substitute.For<IServiceSpecification>();
-    //    readonly JsonStorage repo;
-    //    readonly ServiceTask sTask = new ServiceTask { Id = 1 };
+    public class JsonStorageTests
+    {
+        private readonly ITaskMapper mapper = NSubstitute.Substitute.For<ITaskMapper>();
+        private JsonStorage storage;
 
-    //    public JsonStorageTests()
-    //    {
-    //        repo = new JsonStorage(mapper);
-    //        repo.taskList.Add(sTask);
-    //    }
+        public JsonStorageTests()
+        {
+            storage = new JsonStorage(mapper);
+        }
 
-    //    [Fact]
-    //    public void should_add_task_to_repo()
-    //    {
-    //        var task = new AddTaskArgs { DueDate = DateTime.Today, Name = "task1" };
+        [Fact]
+        public void should_write_task_to_save_file()
+        {
+            var args = new AddTaskArgs { DueDate = DateTime.Today, Name = "sasha" };
+            storage.AddTask(args);
+            var text = File.ReadAllText("save.txt");
+            text.Should().NotBeEmpty();
+        }
 
-    //        var result = repo.AddTask(task);
+        [Fact]
+        public void should_get_tasks_by_specification()
+        {
+            IServiceSpecification specification = new ListAllServiceSpecification();
+            var tasks = storage.GetTasks(specification);
 
-    //        result.Should().Be(1);
-    //    }
-
-    //    [Fact]
-    //    public void should_get_all_tasks_from_repo()
-    //    {
-    //        spec.IsSatisfied(sTask).Returns(true);
-
-    //        var res = repo.GetTasks(spec);
-
-    //        res.Count.Should().Be(1);
-    //    }
-    //}
+            tasks.Count.Should().BeGreaterOrEqualTo(1);
+        }
+    }
 }
