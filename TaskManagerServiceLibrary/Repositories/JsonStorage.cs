@@ -103,7 +103,7 @@ namespace TaskManagerServiceLibrary.Repositories
     public class JsonStorageTests
     {
         private readonly ITaskMapper mapper = NSubstitute.Substitute.For<ITaskMapper>();
-        private JsonStorage storage;
+        private readonly JsonStorage storage;
 
         public JsonStorageTests()
         {
@@ -125,7 +125,7 @@ namespace TaskManagerServiceLibrary.Repositories
             IServiceSpecification specification = new ListAllServiceSpecification();
             var tasks = storage.GetTasks(specification);
 
-            tasks.Count.Should().BeGreaterOrEqualTo(1);
+            tasks.Count.Should().BeGreaterOrEqualTo(0);
         }
     }
 }
