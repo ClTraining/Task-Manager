@@ -39,7 +39,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         private SetDateTaskArgs ConvertToArgs(List<string> argument)
         {
-            var setDateArgs = converter.Convert(argument, typeof(SetDateTaskArgs)) as SetDateTaskArgs;
+            var setDateArgs = converter.Convert(argument, new List<Type>(){typeof(SetDateTaskArgs)}) as SetDateTaskArgs;
             return setDateArgs;
         }
     }
@@ -68,7 +68,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var setDateArgs = new SetDateTaskArgs { Id = 5, DueDate = DateTime.Parse("10-10-2012") };
             var argument = new List<string> { "1", "10-10-2012" };
-            converter.Convert(argument, typeof(SetDateTaskArgs)).Returns(setDateArgs);
+            converter.Convert(argument, new List<Type> {typeof(SetDateTaskArgs)}).Returns(setDateArgs);
             command.Execute(argument);
             client.Received().ExecuteCommand(setDateArgs);
         }

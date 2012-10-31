@@ -1,7 +1,5 @@
-using System;
 using AutoMapper;
 using EntitiesLibrary;
-using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using Xunit;
 

@@ -18,7 +18,7 @@ namespace TaskManagerServiceLibrary.Repositories
 
         public int AddTask(AddTaskArgs args)
         {
-            var serviceTask = new ServiceTask { Name = args.Name, DueDate = args.DueDate, Id = GetNewId() };
+            var serviceTask = new ServiceTask { Name = args.Name, DueDate = args.DueDate == null ? default(DateTime):args.DueDate.Value, Id = GetNewId() };
 
             taskList.Add(serviceTask);
 

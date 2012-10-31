@@ -39,7 +39,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         private AddTaskArgs ConvertToArgs(List<string> argument)
         {
-            var addTaskArgs = converter.Convert(argument, typeof(AddTaskArgs)) as AddTaskArgs;
+            var addTaskArgs = converter.Convert(argument, new List<Type>{typeof(AddTaskArgs)}) as AddTaskArgs;
             return addTaskArgs;
         }
     }
@@ -67,7 +67,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var addTaskArgs = new AddTaskArgs { Name = taskName };
             var argument = new List<string> { taskName };
-            converter.Convert(argument, typeof(AddTaskArgs)).Returns(addTaskArgs);
+            converter.Convert(argument, new List<Type>{typeof(AddTaskArgs)}).Returns(addTaskArgs);
             handler.Execute(argument);
             client.Received().AddTask(addTaskArgs);
         }

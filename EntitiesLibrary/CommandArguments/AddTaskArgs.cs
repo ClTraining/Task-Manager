@@ -6,6 +6,6 @@ namespace EntitiesLibrary.CommandArguments
     {
         public string Name { get; set; }
 
-        public DateTime DueDate { get; set; }
+        public DateTime? DueDate { get; set; }
     }
 }

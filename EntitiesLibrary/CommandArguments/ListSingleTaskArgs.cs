@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EntitiesLibrary.CommandArguments
+﻿namespace EntitiesLibrary.CommandArguments
 {
     public class ListSingleTaskArgs:IListCommandArguments
     {
+        public int Id { get; set; }
     }
 }

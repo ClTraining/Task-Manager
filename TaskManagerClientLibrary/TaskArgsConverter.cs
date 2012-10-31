@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -12,47 +13,60 @@ namespace TaskManagerClientLibrary
 {
     public class TaskArgsConverter
     {
-        public virtual bool CanConvert(List<string> source, Type type)
+        private readonly Dictionary<string, DateTime> dateAliases;
+
+        public TaskArgsConverter()
         {
-            var properties = type.GetProperties().ToList();
-            var i = 0;
-
-            if (properties.Count < source.Count)
-                return false;
-            foreach (var typeConverter in properties.Select(property => GetConverter(property, source[i])))
-            {
-                if (typeConverter == null)
-                {
-                    return false;
-                }
-                i++;
-            }
-
-            return true;
+            dateAliases = new Dictionary<string, DateTime> {{"today", DateTime.Today}};
         }
 
-        public virtual ICommandArguments Convert(List<string> source, Type type)
+        public virtual ICommandArguments Convert(List<string> source, IEnumerable<Type> types)
         {
-            var properties = type.GetProperties().ToList();
-            var returnValue = Activator.CreateInstance(type);
-            var i = 0;
-
-            foreach (var property in properties)
+            foreach (var type in types)
             {
-                var value = i < source.Count ? source[i] : "";
+                var properties = type.GetProperties().ToList();
+                var returnValue = Activator.CreateInstance(type);
+                if (properties.Count<source.Count)
+                    break;
+                var sourceArr = new string[properties.Count];
+                source.CopyTo(sourceArr, 0);
 
-                var typeConverter = GetConverter(property, value);
-
-                if (typeConverter == null)
+                var stringPropertyDictionary = sourceArr.Zip(properties,
+                                                             (first, second) =>
+                                                             new KeyValuePair<string, PropertyInfo>(first ?? String.Empty, second));
+                foreach (var property in stringPropertyDictionary)
                 {
-                    throw new WrongTaskArgumentsException("Wrong command arguments.");
+                    var convertedValue = GetAliasValue(property.Value, property.Key);
+                    if (convertedValue == null)
+                    {
+                        var typeConverter = GetConverter(property.Value, property.Key);
+                        if (typeConverter == null)
+                        {
+                            returnValue = null;
+                            break;
+                        }
+                        convertedValue = typeConverter.ConvertFrom(property.Key);
+                    }
+                    property.Value.SetValue(returnValue, convertedValue, null);
                 }
-
-                property.SetValue(returnValue, typeConverter.ConvertFrom(value), null);
-
-                i++;
+                if (returnValue!= null) return (ICommandArguments) returnValue;
             }
-            return (ICommandArguments) returnValue;
+
+            throw new WrongTaskArgumentsException("Wrong command arguments.");
+        }
+
+        private object GetAliasValue(PropertyInfo property, string source)
+        {
+            if (property.PropertyType == typeof (DateTime))
+            {
+                var key = source.ToLower();
+
+                if (dateAliases.ContainsKey(key))
+                {
+                    return dateAliases[key];
+                }
+            }
+            return null;
         }
 
         private TypeConverter GetConverter(PropertyInfo property, string source)
@@ -61,7 +75,7 @@ namespace TaskManagerClientLibrary
             var typeConverter = TypeDescriptor.GetConverter(propertyType);
             var isNullable = (propertyType.IsGenericType &&
                               propertyType.GetGenericTypeDefinition() == typeof (Nullable<>));
-            if (typeConverter.IsValid(source) || isNullable)
+            if ((typeConverter.IsValid(source) && !String.IsNullOrEmpty(source)) || isNullable)
             {
                 return typeConverter;
             }
@@ -69,7 +83,7 @@ namespace TaskManagerClientLibrary
         }
     }
 
-    public class TestArgs
+    public class TestArgs : ICommandArguments
     {
         public int IntValue { get; set; }
 
@@ -88,35 +102,37 @@ namespace TaskManagerClientLibrary
         public void sould_get_all_arguments_without_nullable()
         {
             var arguments = new List<string> {"11", "lhkjh", "10-10-2012", ""};
-            var result = converter.Convert(arguments, typeof (TestArgs));
-            result.ShouldBeEquivalentTo(new TestArgs
-                                            {
-                                                IntValue = 11,
-                                                StringValue = "lhkjh",
-                                                DateTimeValue1 = DateTime.Parse("10-10-2012"),
-                                                DateTimeValue2 = null
-                                            });
+            var result = converter.Convert(arguments, new List<Type>{typeof (TestArgs)}) as TestArgs;
+            var testArgs = new TestArgs
+                               {
+                                   IntValue = 11,
+                                   StringValue = "lhkjh",
+                                   DateTimeValue1 = DateTime.Parse("10-10-2012"),
+                                   DateTimeValue2 = null
+                               };
+            result.ShouldBeEquivalentTo(testArgs);
         }
 
         [Fact]
         public void should_get_nullable_value()
         {
             var arguments = new List<string> {"102", "some string", "07-02-2010", "10-12-2012"};
-            var result = converter.Convert(arguments, typeof (TestArgs));
-            result.ShouldBeEquivalentTo(new TestArgs
-                                            {
-                                                IntValue = 102,
-                                                StringValue = "some string",
-                                                DateTimeValue1 = DateTime.Parse("07-02-2010"),
-                                                DateTimeValue2 = DateTime.Parse("10-12-2012")
-                                            });
+            var result = converter.Convert(arguments, new List<Type>{typeof (TestArgs)}) as TestArgs;
+            var testArgs = new TestArgs
+                               {
+                                   IntValue = 102,
+                                   StringValue = "some string",
+                                   DateTimeValue1 = DateTime.Parse("07-02-2010"),
+                                   DateTimeValue2 = DateTime.Parse("10-12-2012")
+                               };
+            result.ShouldBeEquivalentTo(testArgs);
         }
 
         [Fact]
         public void should_throw_exception_wrong_argument_types()
         {
             var arguments = new List<string> {"aa4", "task", "01-05-2012", "11-11-2012"};
-            Action action = () => converter.Convert(arguments, typeof (TestArgs));
+            Action action = () => converter.Convert(arguments, new List<Type>{typeof (TestArgs)});
             action.ShouldThrow<WrongTaskArgumentsException>().WithMessage("Wrong command arguments.");
         }
 
@@ -124,16 +140,8 @@ namespace TaskManagerClientLibrary
         public void should_throw_exception_wrong_argument_count()
         {
             var arguments = new List<string> {"dd", "fff"};
-            Action action = () => converter.Convert(arguments, typeof (TestArgs));
+            Action action = () => converter.Convert(arguments, new List<Type>{typeof (TestArgs)});
             action.ShouldThrow<WrongTaskArgumentsException>().WithMessage("Wrong command arguments.");
-        }
-
-        [Fact]
-        public void should_can_convert_return_true()
-        {
-            var arguments = new List<string> {"11","some string", "01-01-2001","12-12-2012"};
-            var result = converter.CanConvert(arguments, typeof(TestArgs));
-            result.Should().Be(true);
         }
     }
 }

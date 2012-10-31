@@ -27,7 +27,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         public void Execute(List<string> argument)
         {
-            var clearDateArgs = converter.Convert(argument, typeof(ClearDateTaskArgs)) as ClearDateTaskArgs;
+            var clearDateArgs = converter.Convert(argument, new List<Type>{typeof(ClearDateTaskArgs)}) as ClearDateTaskArgs;
             client.ExecuteCommand(clearDateArgs);
             if (clearDateArgs != null) textWriter.WriteLine("Due date cleared for task ID: {0} .", clearDateArgs.Id);
         }
@@ -55,7 +55,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var arguments = new List<string> { "12" };
             var clearDateArgs = new ClearDateTaskArgs { Id = 12 };
-            converter.Convert(arguments, typeof(ClearDateTaskArgs)).Returns(clearDateArgs);
+            converter.Convert(arguments, new List<Type>{typeof(ClearDateTaskArgs)}).Returns(clearDateArgs);
             handler.Execute(arguments);
             client.Received().ExecuteCommand(clearDateArgs);
         }

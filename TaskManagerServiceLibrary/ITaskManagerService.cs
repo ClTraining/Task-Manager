@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.ServiceModel;
-using CommandQueryLibrary.ClientSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 
