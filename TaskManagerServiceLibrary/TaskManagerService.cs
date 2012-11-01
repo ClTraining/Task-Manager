@@ -34,7 +34,7 @@ namespace TaskManagerServiceLibrary
 
         public void UpdateChanges(IEditCommandArguments args)
         {
-//            converter.GetServiceCommand(args).ExecuteCommand();
+            converter.GetServiceCommand(args).ExecuteCommand();
         }
     }
     
