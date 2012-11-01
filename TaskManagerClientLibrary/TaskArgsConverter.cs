@@ -34,6 +34,7 @@ namespace TaskManagerClientLibrary
                 var stringPropertyDictionary = sourceArr.Zip(properties,
                                                              (first, second) =>
                                                              new KeyValuePair<string, PropertyInfo>(first ?? String.Empty, second));
+
                 foreach (var property in stringPropertyDictionary)
                 {
                     var convertedValue = GetAliasValue(property.Value, property.Key);
@@ -47,6 +48,7 @@ namespace TaskManagerClientLibrary
                         }
                         convertedValue = typeConverter.ConvertFrom(property.Key);
                     }
+
                     property.Value.SetValue(returnValue, convertedValue, null);
                 }
                 if (returnValue!= null) return (ICommandArguments) returnValue;
