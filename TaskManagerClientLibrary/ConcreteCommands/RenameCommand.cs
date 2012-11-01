@@ -34,7 +34,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         private void PrintInfo(RenameTaskArgs renameTaskArgs)
         {
-            textWriter.WriteLine(string.Format("Task ID: {0} renamed.", renameTaskArgs.Id));
+            textWriter.WriteLine("Task ID: {0} renamed.", renameTaskArgs.Id);
         }
 
         private RenameTaskArgs ConvertToArgs(List<string> argument)

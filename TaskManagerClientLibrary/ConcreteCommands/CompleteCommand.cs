@@ -28,16 +28,9 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         public void Execute(List<string> argument)
         {
-            try
-            {
                 var completeTaskArgs = ConvertToArgs(argument);
                 client.ExecuteCommand(completeTaskArgs);
                 PrintInfo(completeTaskArgs);
-            }
-            catch (TaskNotFoundException e)
-            {
-                Console.WriteLine(e.Message);
-            }
         }
 
         private void PrintInfo(CompleteTaskArgs completeTaskArgs)
