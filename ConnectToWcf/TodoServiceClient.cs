@@ -122,8 +122,6 @@ namespace ConnectToWcf
         {
             var tasks = new List<ServiceTask> { new ServiceTask { Id = 1 } };
             var cSpec = Substitute.For<IListCommandArguments>();
-            //cSpec.Data.Returns(1);
-            var qSpec = Substitute.For<IServiceSpecification>();
 
             repo.GetTasks(Arg.Is<IServiceSpecification>(s => s.IsSatisfied(new ServiceTask{Id = 1}))).Returns(tasks);
 
