@@ -45,13 +45,13 @@ namespace TaskManagerServiceHost
 
             this.Bind(a => a.FromAssemblyContaining<IServiceSpecification>()
                                .SelectAllClasses()
-                               .InNamespaceOf<IServiceSpecification>()
+//                               .InNamespaceOf<IServiceSpecification>()
                                .BindAllInterfaces()
                 );
 
             this.Bind(a => a.FromAssemblyContaining<IServiceCommand>()
                                .SelectAllClasses()
-                               .InNamespaceOf<IServiceCommand>()
+//                               .InNamespaceOf<IServiceCommand>()
                                .BindAllInterfaces()
                                .Configure(s => s.WithConstructorArgument("todoList", (c, o) => c.Kernel.Get<ITodoList>()))
                 );
