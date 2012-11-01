@@ -1,5 +1,4 @@
 using EntitiesLibrary;
-using EntitiesLibrary.CommandArguments;
 using NSubstitute;
 using TaskManagerServiceLibrary.Repositories;
 using Xunit;
@@ -12,11 +11,10 @@ namespace TaskManagerServiceLibrary.Commands
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public void ExecuteCommand(IRepository repo)
+        public ServiceTask ExecuteCommand(ServiceTask task)
         {
-            var task = repo.Select(Id);
             task.Name = Name;
-            repo.UpdateChanges(task);
+            return task;
         }
     }
 
@@ -30,7 +28,7 @@ namespace TaskManagerServiceLibrary.Commands
             repo.Select(1).Returns(serviceTask);
 
             var command = new RenameServiceCommand();
-            command.ExecuteCommand(repo);
+            command.ExecuteCommand(serviceTask);
 
             serviceTask.Name.Should().Be("task1");
         }

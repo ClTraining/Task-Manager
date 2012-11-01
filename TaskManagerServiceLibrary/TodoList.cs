@@ -23,7 +23,9 @@ namespace TaskManagerServiceLibrary
 
         public void UpdateChanges(IEditCommandArguments args)
         {
-            converter.GetServiceCommand(args).ExecuteCommand(repo);
+            var task = repo.Select(args.Id);
+            var resultTask = converter.GetServiceCommand(args).ExecuteCommand(task);
+            repo.UpdateChanges(resultTask);
         }
 
         public int AddTask(AddTaskArgs args)

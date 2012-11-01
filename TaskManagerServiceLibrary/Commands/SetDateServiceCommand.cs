@@ -13,12 +13,12 @@ namespace TaskManagerServiceLibrary.Commands
         public int Id { get; set; }
         public DateTime DueDate { get; set; }
 
-        public void ExecuteCommand(IRepository repo)
+        public ServiceTask ExecuteCommand(ServiceTask task)
         {
-            var task = repo.Select(Id);
             if(task.IsCompleted)
                 throw new Exception();
             task.DueDate = DueDate;
+            return task;
         }
     }
 
@@ -34,7 +34,7 @@ namespace TaskManagerServiceLibrary.Commands
             var serviceTask = new ServiceTask {Id = 1, DueDate = default(DateTime)};
             repo.Select(1).Returns(serviceTask);
 
-            command.ExecuteCommand(repo);
+            command.ExecuteCommand(serviceTask);
             serviceTask.DueDate.Should().Be(DateTime.Today);
         }
 
@@ -44,7 +44,7 @@ namespace TaskManagerServiceLibrary.Commands
             var serviceTask = new ServiceTask { Id = 1, DueDate = default(DateTime), IsCompleted = true};
             repo.Select(1).Returns(serviceTask);
 
-            Action action = () => command.ExecuteCommand(repo);
+            Action action = () => command.ExecuteCommand(serviceTask);
 
             action.ShouldThrow<Exception>();
         }

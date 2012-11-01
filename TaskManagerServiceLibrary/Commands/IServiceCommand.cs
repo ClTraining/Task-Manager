@@ -1,9 +1,9 @@
-using TaskManagerServiceLibrary.Repositories;
+using EntitiesLibrary;
 
 namespace TaskManagerServiceLibrary.Commands
 {
     public interface IServiceCommand
     {
-        void ExecuteCommand(IRepository repo);
+        ServiceTask ExecuteCommand(ServiceTask task);
     }
 }

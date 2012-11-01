@@ -3,6 +3,7 @@ using AutoMapper;
 using EntitiesLibrary.CommandArguments;
 using TaskManagerServiceLibrary.Commands;
 using Xunit;
+using FluentAssertions;
 
 namespace TaskManagerServiceLibrary
 {
@@ -31,12 +32,14 @@ namespace TaskManagerServiceLibrary
     public class ArgToCommandConverterTests
     {
         [Fact]
-        public void test1()
+        public void should_convert_to_command_correctly()
         {
-            var args = new RenameTaskArgs{Id = 1, Name = "name"};
+            var args = new RenameTaskArgs{Id = 1, Name = "some name"};
             var conv = new ArgToCommandConverter();
-            var result = (RenameTaskArgs)conv.GetServiceCommand(args);
-            Console.Out.WriteLine(result.Id + " " + result.Name);
+            var result = (RenameServiceCommand)conv.GetServiceCommand(args);
+
+            result.Id.Should().Be(1);
+            result.Name.Should().Be("some name");
         }
     }
 }

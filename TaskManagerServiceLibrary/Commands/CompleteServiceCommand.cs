@@ -9,11 +9,10 @@ namespace TaskManagerServiceLibrary.Commands
     {
         public int Id { get; set; }
         
-        public void ExecuteCommand(IRepository repo)
+        public ServiceTask ExecuteCommand(ServiceTask task)
         {
-            var task = repo.Select(Id);
             task.IsCompleted = true;
-            repo.UpdateChanges(task);
+            return task;
         }
     }
 

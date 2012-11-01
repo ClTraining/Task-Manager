@@ -12,11 +12,10 @@ namespace TaskManagerServiceLibrary.Commands
     {
         private int Id { get; set; }
 
-        public void ExecuteCommand(IRepository repo)
+        public ServiceTask ExecuteCommand(ServiceTask task)
         {
-            var task = repo.Select(Id);
             task.DueDate = default(DateTime);
-            repo.UpdateChanges(task);
+            return task;
         }
     }
 
@@ -25,13 +24,10 @@ namespace TaskManagerServiceLibrary.Commands
         [Fact]
         public void command_should_clear_date()
         {
-            var repo = Substitute.For<IRepository>();
             var serviceTask = new ServiceTask {Id = 1, DueDate = DateTime.Today};
-            repo.Select(1).Returns(serviceTask);
+            var repo = new MemoRepository();
+            repo.AddTask(new AddTaskArgs {Name = "some", DueDate = DateTime.Today});
 
-            var command = new ClearDateServiceCommand();
-            command.ExecuteCommand(repo);
-            serviceTask.DueDate.Should().Be(default(DateTime));
         }
     }
 }
