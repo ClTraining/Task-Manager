@@ -23,16 +23,23 @@ namespace TaskManagerClientLibrary
 
         public void ExecuteCommand(string input)
         {
-            var args = parser.Parse(input);
-
-            var command = commands.FirstOrDefault(a => a.Name == args[0]);
-
-            if (command == null)
-                Console.WriteLine("No such command");
-            else
+            try
             {
-                args.RemoveAt(0);
-                command.Execute(args);
+                var args = parser.Parse(input);
+
+                var command = commands.FirstOrDefault(a => a.Name == args[0]);
+
+                if (command == null)
+                    Console.WriteLine("No such command");
+                else
+                {
+                    var skip = args.Skip(1).ToList();
+                    command.Execute(skip);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
     }

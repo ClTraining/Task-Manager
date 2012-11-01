@@ -11,17 +11,25 @@ namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
     public class SingleTaskFormatter : ITaskFormatter
     {
         private const string Format = "\nID:\t\t{0}\n" + "Name:\t\t{1}\n" + "Completed:\t{2}\n" + "Due date:\t{3}\n\n";
+        private const string TaskNotFound = "Specified task not found.";
         private readonly string datePattern = CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern;
 
         public virtual string ToFormatString(List<ClientTask> tasks)
         {
             var taskString = new StringBuilder();
-
-            tasks.ForEach(
-                x =>
-                taskString.Append(String.Format(Format, x.Id, x.Name, x.IsCompleted ? "+" : "-",
-                                                x.DueDate == default(DateTime) ? "not set" : x.DueDate.ToString(datePattern))));
-
+            if (tasks.Count == 0)
+            {
+                taskString.Append(TaskNotFound);
+            }
+            else
+            {
+                tasks.ForEach(
+                    x =>
+                    taskString.Append(String.Format(Format, x.Id, x.Name, x.IsCompleted ? "+" : "-",
+                                                    x.DueDate == default(DateTime)
+                                                        ? "not set"
+                                                        : x.DueDate.ToString(datePattern))));
+            }
             return taskString.ToString();
         }
     }
