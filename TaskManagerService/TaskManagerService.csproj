@@ -8,7 +8,7 @@
     <ProjectGuid>{F3A90486-C083-46EC-A393-9ED92957C96A}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TaskManagerServiceHost</RootNamespace>
+    <RootNamespace>TaskManagerService</RootNamespace>
     <AssemblyName>TaskManagerService</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>

@@ -21,10 +21,19 @@ namespace TaskManagerServiceLibrary
         public ArgToCommandConverter(IKernel kernel)
         {
 
-            Mapper.Initialize(map => map.ConstructServicesUsing(t => kernel.Get(t)));
+            //            Mapper.Initialize(map => map.ConstructServicesUsing(t => kernel.Get(t)));
+
+            Mapper.CreateMap<ClearDateTaskArgs, ClearDateServiceCommand>()
+                .ConstructUsing((ClearDateTaskArgs a) => kernel.Get<ClearDateServiceCommand>());
 
             Mapper.CreateMap<CompleteTaskArgs, CompleteServiceCommand>()
-                .ConstructUsing((ResolutionContext a) => kernel.Get<CompleteServiceCommand>());
+                .ConstructUsing((CompleteTaskArgs a) => kernel.Get<CompleteServiceCommand>());
+
+            Mapper.CreateMap<RenameTaskArgs, RenameServiceCommand>()
+                .ConstructUsing((RenameTaskArgs a) => kernel.Get<RenameServiceCommand>());
+
+            Mapper.CreateMap<SetDateTaskArgs, SetDateServiceCommand>()
+                .ConstructUsing((SetDateTaskArgs a) => kernel.Get<SetDateServiceCommand>());
 
             Mapper.CreateMap<IEditCommandArguments, IServiceCommand>().ConvertUsing<MapConverter<IEditCommandArguments, IServiceCommand>>();
         }
@@ -42,7 +51,7 @@ namespace TaskManagerServiceLibrary
         {
             var kernel = new StandardKernel();
             kernel.Bind<ITodoList>().ToConstant(Substitute.For<ITodoList>());
-            var args = new CompleteTaskArgs {Id = 1};
+            var args = new CompleteTaskArgs { Id = 1 };
             var converter = new ArgToCommandConverter(kernel);
             var result = (CompleteServiceCommand)converter.GetServiceCommand(args);
 
