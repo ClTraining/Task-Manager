@@ -1,9 +1,13 @@
 ﻿using System;
 using AutoMapper;
 using EntitiesLibrary.CommandArguments;
-using TaskManagerServiceLibrary.Commands;
-using Xunit;
 using FluentAssertions;
+using NSubstitute;
+using Ninject;
+using TaskManagerServiceLibrary.Commands;
+using TaskManagerServiceLibrary.Repositories;
+using TaskManagerServiceLibrary.TaskManager;
+using Xunit;
 
 namespace TaskManagerServiceLibrary
 {
@@ -14,32 +18,40 @@ namespace TaskManagerServiceLibrary
 
     public class ArgToCommandConverter : IArgToCommandConverter
     {
-        public ArgToCommandConverter()
+        public ArgToCommandConverter(IKernel kernel)
         {
-            Mapper.CreateMap<ClearDateTaskArgs, ClearDateServiceCommand>();
-            Mapper.CreateMap<CompleteTaskArgs, CompleteServiceCommand>();
-            Mapper.CreateMap<RenameTaskArgs, RenameServiceCommand>();
-            Mapper.CreateMap<SetDateTaskArgs, SetDateServiceCommand>();
+//            Mapper.CreateMap<ClearDateTaskArgs, ClearDateServiceCommand>();
+//            Mapper.CreateMap<CompleteTaskArgs, CompleteServiceCommand>();
+//            Mapper.CreateMap<RenameTaskArgs, RenameServiceCommand>()
+//                .ConstructUsing((ResolutionContext c) => kernel.Get<RenameServiceCommand>());
+//
+//            Mapper.CreateMap<SetDateTaskArgs, SetDateServiceCommand>();
+//            Mapper.CreateMap<IEditCommandArguments, IServiceCommand>().ConvertUsing<MapConverter<IEditCommandArguments, IServiceCommand>>();
+//            Mapper.Initialize(map => map.ConstructServicesUsing(t => kernel.Get(t)));
+
+            Mapper.CreateMap<CompleteTaskArgs, CompleteServiceCommand>().ConstructUsing((CompleteTaskArgs a)=>kernel.Get<CompleteServiceCommand>());
+            Mapper.Initialize(map => map.ConstructServicesUsing(t => kernel.Get(t)));
             Mapper.CreateMap<IEditCommandArguments, IServiceCommand>().ConvertUsing<MapConverter<IEditCommandArguments, IServiceCommand>>();
         }
 
         public IServiceCommand GetServiceCommand(IEditCommandArguments args)
         {
-            return Mapper.DynamicMap<IEditCommandArguments, IServiceCommand>(args);
+            return Mapper.Map<IServiceCommand>(args);
         }
     }
 
     public class ArgToCommandConverterTests
     {
         [Fact]
-        public void should_convert_to_command_correctly()
+        public void test1()
         {
-            var args = new RenameTaskArgs{Id = 1, Name = "some name"};
-            var conv = new ArgToCommandConverter();
-            var result = (RenameServiceCommand)conv.GetServiceCommand(args);
+            var kernel = new StandardKernel();
+            kernel.Bind<ITodoList>().ToConstant(Substitute.For<ITodoList>());
+            var args = new CompleteTaskArgs();
+            var converter = new ArgToCommandConverter(kernel);
+            var result = (CompleteServiceCommand)converter.GetServiceCommand(args);
 
             result.Id.Should().Be(1);
-            result.Name.Should().Be("some name");
         }
     }
 }

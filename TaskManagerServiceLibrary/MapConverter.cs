@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using AutoMapper;
+using Ninject;
 
 namespace TaskManagerServiceLibrary
 {
@@ -7,6 +8,8 @@ namespace TaskManagerServiceLibrary
         where TSource : class
         where TDestination : class
     {
+       
+
         public TDestination Convert(ResolutionContext context)
         {
             var baseType = context.SourceValue.GetType();
@@ -18,10 +21,12 @@ namespace TaskManagerServiceLibrary
             if (map != null)
             {
                 var destType = map.DestinationType;
+//                Mapper.
                 return Mapper.DynamicMap(context.SourceValue, baseType, destType) as TDestination;
             }
 
             return null;
         }
     }
+
 }

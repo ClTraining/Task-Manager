@@ -94,12 +94,13 @@ namespace ConnectToWcf
         private readonly IRepository repo = Substitute.For<IRepository>();
         private readonly IClient client = new TodoServiceClient(address);
         private readonly ITodoList list = Substitute.For<ITodoList>();
+        private readonly IArgToCommandConverter converter = Substitute.For<IArgToCommandConverter>();
         private readonly ITaskManagerService service;
         private readonly ServiceHost host;
 
         public ExchangeClientTests()
         {
-            service = new TaskManagerService(repo, list);
+            service = new TaskManagerService(list, converter);
             host = new ServiceHost(service, new Uri(address));
             host.Open();
         }

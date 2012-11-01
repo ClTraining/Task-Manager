@@ -1,6 +1,4 @@
-using EntitiesLibrary;
 using NSubstitute;
-using TaskManagerServiceLibrary.Repositories;
 using Xunit;
 
 namespace TaskManagerServiceLibrary.Commands
@@ -8,24 +6,35 @@ namespace TaskManagerServiceLibrary.Commands
     public class CompleteServiceCommand : IServiceCommand
     {
         public int Id { get; set; }
-        
-        public ServiceTask ExecuteCommand(ServiceTask task)
+
+        private readonly ITodoList todoList;
+
+        public CompleteServiceCommand(ITodoList todoList)
         {
-            task.IsCompleted = true;
-            return task;
+            this.todoList = todoList;
+        }
+
+        public void ExecuteCommand()
+        {
+            todoList.CompleteTask(Id);
         }
     }
 
     public class CompleteServiceCommandTests
     {
+        private readonly ITodoList todoList = Substitute.For<ITodoList>();
+        private readonly CompleteServiceCommand command;
+
+        public CompleteServiceCommandTests()
+        {
+            command = new CompleteServiceCommand(todoList){Id = 1};
+        }
+
         [Fact]
         public void command_should_complete_task()
         {
-            var repo = Substitute.For<IRepository>();
-            var serviceTask = new ServiceTask { Id = 1 };
-            repo.Select(1).Returns(serviceTask);
-
-            var command = new CompleteServiceCommand();
+            command.ExecuteCommand();
+            todoList.Received().CompleteTask(1);
         }
     }
 }

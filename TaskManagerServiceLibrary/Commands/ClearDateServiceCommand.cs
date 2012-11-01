@@ -1,33 +1,40 @@
-using System;
-using EntitiesLibrary;
-using EntitiesLibrary.CommandArguments;
 using NSubstitute;
-using TaskManagerServiceLibrary.Repositories;
 using Xunit;
-using FluentAssertions;
 
 namespace TaskManagerServiceLibrary.Commands
 {
     public class ClearDateServiceCommand : IServiceCommand
     {
-        private int Id { get; set; }
+        public int Id { private get; set; }
 
-        public ServiceTask ExecuteCommand(ServiceTask task)
+        private readonly ITodoList todoList;
+
+        public ClearDateServiceCommand(ITodoList todoList)
         {
-            task.DueDate = default(DateTime);
-            return task;
+            this.todoList = todoList;
+        }
+
+        public void ExecuteCommand()
+        {
+            todoList.ClearDate(Id);
         }
     }
 
     public class ClearDateServiceCommandTests
     {
+        private readonly ITodoList todoList = Substitute.For<ITodoList>();
+        private readonly ClearDateServiceCommand command;
+
+        public ClearDateServiceCommandTests()
+        {
+            command = new ClearDateServiceCommand(todoList) {Id = 1};
+        }
+
         [Fact]
         public void command_should_clear_date()
         {
-            var serviceTask = new ServiceTask {Id = 1, DueDate = DateTime.Today};
-            var repo = new MemoRepository();
-            repo.AddTask(new AddTaskArgs {Name = "some", DueDate = DateTime.Today});
-
+            command.ExecuteCommand();
+            todoList.Received().ClearDate(1);
         }
     }
 }

@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using System.ServiceModel;
-using AutoMapper;
-using CommandQueryLibrary.ServiceSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
+using FluentAssertions;
 using NSubstitute;
-using TaskManagerServiceLibrary.Repositories;
+using TaskManagerServiceLibrary.Commands;
+using Xunit;
 
 namespace TaskManagerServiceLibrary
 {
@@ -13,10 +13,17 @@ namespace TaskManagerServiceLibrary
     public class TaskManagerService : ITaskManagerService
     {
         private readonly ITodoList todoList;
+        private readonly IArgToCommandConverter converter;
 
-        public TaskManagerService(IRepository repo, ITodoList todoList)
+        public TaskManagerService(ITodoList todoList, IArgToCommandConverter converter)
         {
             this.todoList = todoList;
+            this.converter = converter;
+        }
+
+        public int AddTask(AddTaskArgs task)
+        {
+            return todoList.AddTask(task);
         }
 
         public List<ClientTask> GetTasks(IListCommandArguments input)
@@ -27,31 +34,31 @@ namespace TaskManagerServiceLibrary
 
         public void UpdateChanges(IEditCommandArguments args)
         {
-            todoList.UpdateChanges(args);
-        }
-
-        public int AddTask(AddTaskArgs task)
-        {
-            return todoList.AddTask(task);
+            converter.GetServiceCommand(args).ExecuteCommand();
         }
     }
-
+    
     public class TaskManagerTests
     {
-        private readonly IServiceSpecification qSpec = Substitute.For<IServiceSpecification>();
-        private readonly IListCommandArguments cSpec = Substitute.For<IListCommandArguments>();
-        private readonly ISpecificationsConverter converter = Substitute.For<ISpecificationsConverter>();
-        private readonly IRepository repo = Substitute.For<IRepository>();
         readonly ITodoList todoList = Substitute.For<ITodoList>();
-
-        private readonly ITypeConverter<IListCommandArguments, IServiceSpecification> typeConverter =
-            Substitute.For<ITypeConverter<IListCommandArguments, IServiceSpecification>>();
+        private readonly IArgToCommandConverter converter = Substitute.For<IArgToCommandConverter>();
 
         private readonly TaskManagerService service;
 
         public TaskManagerTests()
         {
-            service = new TaskManagerService(repo, todoList);
+            service = new TaskManagerService(todoList, converter);
+        }
+
+        [Fact]
+        public void should_add_task_return_id()
+        {
+            var args = new AddTaskArgs();
+            todoList.AddTask(args).Returns(1);
+
+            var result = service.AddTask(args);
+
+            result.Should().Be(1);
         }
     }
 }

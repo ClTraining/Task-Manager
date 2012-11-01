@@ -1,16 +1,16 @@
 using System;
 using System.ServiceModel;
 using CommandQueryLibrary.ServiceSpecifications;
-using EntitiesLibrary.CommandArguments;
 using Ninject;
 using Ninject.Extensions.Conventions;
+using Ninject.Extensions.Conventions.Syntax;
 using Ninject.Modules;
 using TaskManagerServiceLibrary;
 using TaskManagerServiceLibrary.Commands;
 using TaskManagerServiceLibrary.Repositories;
 using TaskManagerServiceLibrary.TaskManager;
 
-namespace TaskManagerService
+namespace TaskManagerServiceHost
 {
     internal static class TaskManagerApplication
     {
@@ -35,11 +35,11 @@ namespace TaskManagerService
     {
         public override void Load()
         {
-            Bind<ITaskManagerService>().To<TaskManagerServiceLibrary.TaskManagerService>();
+            Bind<ITaskManagerService>().To<TaskManagerService>();
             Bind<IRepository>().To<MemoRepository>().InSingletonScope();
             Bind<ITaskMapper>().To<TaskMapper>();
             Bind<ITodoList>().To<TodoList>();
-            Bind<IArgToCommandConverter>().To<ArgToCommandConverter>();
+            Bind<IArgToCommandConverter>().To<ArgToCommandConverter>().WithConstructorArgument("kernel", (c, o) => c.Kernel);
 
             Bind<ISpecificationsConverter>().To<SpecificationsConverter>();
 
@@ -53,6 +53,7 @@ namespace TaskManagerService
                                .SelectAllClasses()
                                .InNamespaceOf<IServiceCommand>()
                                .BindAllInterfaces()
+                               .Configure(s => s.WithConstructorArgument("todoList", (c, o) => c.Kernel.Get<ITodoList>()))
                 );
         }
     }

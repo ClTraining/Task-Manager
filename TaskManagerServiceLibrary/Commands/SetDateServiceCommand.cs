@@ -1,52 +1,42 @@
 using System;
-using EntitiesLibrary;
-using EntitiesLibrary.CommandArguments;
 using NSubstitute;
-using TaskManagerServiceLibrary.Repositories;
 using Xunit;
-using FluentAssertions;
 
 namespace TaskManagerServiceLibrary.Commands
 {
     public class SetDateServiceCommand : IServiceCommand
     {
-        public int Id { get; set; }
-        public DateTime DueDate { get; set; }
+        public int Id { private get; set; }
+        public DateTime DueDate { private get; set; }
 
-        public ServiceTask ExecuteCommand(ServiceTask task)
+        private readonly ITodoList todoList;
+
+        public SetDateServiceCommand(ITodoList todoList)
         {
-            if(task.IsCompleted)
-                throw new Exception();
-            task.DueDate = DueDate;
-            return task;
+            this.todoList = todoList;
+        }
+
+        public void ExecuteCommand()
+        {
+            todoList.SetTaskDate(Id, DueDate);
         }
     }
 
     public class SetDateServiceCommandTest
     {
-        private SetDateTaskArgs args = new SetDateTaskArgs {Id = 1, DueDate = DateTime.Today};
-        private readonly IRepository repo = Substitute.For<IRepository>();
-        readonly SetDateServiceCommand command = new SetDateServiceCommand();
-        
-        [Fact]
-        public void command_should_set_date_for_task()
-        {
-            var serviceTask = new ServiceTask {Id = 1, DueDate = default(DateTime)};
-            repo.Select(1).Returns(serviceTask);
+        private readonly ITodoList todoList = Substitute.For<ITodoList>();
+        private readonly SetDateServiceCommand command;
 
-            command.ExecuteCommand(serviceTask);
-            serviceTask.DueDate.Should().Be(DateTime.Today);
+        public SetDateServiceCommandTest()
+        {
+            command = new SetDateServiceCommand(todoList) { Id = 1, DueDate = DateTime.Today };
         }
 
         [Fact]
-        public void should_throw_exception_if_task_is_completed()
+        public void command_should_set_date_for_task()
         {
-            var serviceTask = new ServiceTask { Id = 1, DueDate = default(DateTime), IsCompleted = true};
-            repo.Select(1).Returns(serviceTask);
-
-            Action action = () => command.ExecuteCommand(serviceTask);
-
-            action.ShouldThrow<Exception>();
+            command.ExecuteCommand();
+            todoList.SetTaskDate(1, DateTime.Today);
         }
     }
 }

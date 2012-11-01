@@ -8,7 +8,7 @@
     <ProjectGuid>{F3A90486-C083-46EC-A393-9ED92957C96A}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TaskManagerService</RootNamespace>
+    <RootNamespace>TaskManagerServiceHost</RootNamespace>
     <AssemblyName>TaskManagerService</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>
@@ -73,6 +73,10 @@
     <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">
       <Project>{20ae42ef-7dc6-478b-b1a3-825fbf16e6c7}</Project>
       <Name>EntitiesLibrary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TaskManagerClientLibrary\TaskManagerClientLibrary.csproj">
+      <Project>{22B09AEF-6CBA-420F-B650-7C6968585A48}</Project>
+      <Name>TaskManagerClientLibrary</Name>
     </ProjectReference>
     <ProjectReference Include="..\TaskManagerServiceLibrary\TaskManagerServiceLibrary.csproj">
       <Project>{e82ccfa8-614b-4c74-aa99-344c00afc325}</Project>

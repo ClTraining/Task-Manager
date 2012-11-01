@@ -1,36 +1,41 @@
-using EntitiesLibrary;
 using NSubstitute;
-using TaskManagerServiceLibrary.Repositories;
 using Xunit;
-using FluentAssertions;
 
 namespace TaskManagerServiceLibrary.Commands
 {
     public class RenameServiceCommand : IServiceCommand
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        public int Id { private get; set; }
+        public string NewName { private get; set; }
 
-        public ServiceTask ExecuteCommand(ServiceTask task)
+        private readonly ITodoList todoList;
+        
+        public RenameServiceCommand(ITodoList todoList)
         {
-            task.Name = Name;
-            return task;
+            this.todoList = todoList;
+        }
+
+        public void ExecuteCommand()
+        {
+            todoList.RenameTask(Id, NewName);
         }
     }
 
     public class RenameServiceCommandTests
     {
+        private readonly RenameServiceCommand command;
+        private readonly ITodoList todoList = Substitute.For<ITodoList>();
+
+        public RenameServiceCommandTests()
+        {
+            command = new RenameServiceCommand(todoList) {Id = 1 , NewName = "new task"};
+        }
+
         [Fact]
         public void command_should_rename_task()
         {
-            var repo = Substitute.For<IRepository>();
-            var serviceTask = new ServiceTask { Id = 1, Name = "1"};
-            repo.Select(1).Returns(serviceTask);
-
-            var command = new RenameServiceCommand();
-            command.ExecuteCommand(serviceTask);
-
-            serviceTask.Name.Should().Be("task1");
+            command.ExecuteCommand();
+            todoList.Received().RenameTask(1, "new task");
         }
     }
 }
