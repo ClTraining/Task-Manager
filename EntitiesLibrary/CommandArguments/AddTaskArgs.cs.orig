@@ -1,4 +1,15 @@
 using System;
+<<<<<<< HEAD
+
+namespace EntitiesLibrary.CommandArguments
+{
+    public class AddTaskArgs: ICommandArguments
+    {
+        public string Name { get; set; }
+
+        public DateTime? DueDate { get; set; }
+    }
+=======
 using System.ComponentModel;
 using EntitiesLibrary.Converter;
 using FluentAssertions;
@@ -6,13 +17,12 @@ using Xunit;
 
 namespace EntitiesLibrary.CommandArguments
 {
-    public class AddTaskArgs: ICommandArguments
     [TypeConverter(typeof (AddTaskArgsConverter))]
     public class AddTaskArgs
     {
         public string Name { get; set; }
 
-        public DateTime? DueDate { get; set; }
+        public DateTime DueDate { get; set; }
     }
 
 
@@ -25,4 +35,5 @@ namespace EntitiesLibrary.CommandArguments
             attribute.Should().NotBeNull();
         }
     }
+>>>>>>> experiments
 }

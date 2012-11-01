@@ -1,16 +1,22 @@
 using System;
+<<<<<<< HEAD
+=======
 using System.ComponentModel;
 using EntitiesLibrary.Converter;
 using FluentAssertions;
 using Xunit;
+>>>>>>> experiments
 
 namespace EntitiesLibrary.CommandArguments
 {
     public class SetDateTaskArgs : IEditCommandArguments
     {
-        DateTime DueDate { get; set; }
-    }
+        public int Id { get; set; }
 
+<<<<<<< HEAD
+        public DateTime DueDate { get; set; }
+    }
+=======
     [TypeConverter(typeof (SetDateTaskArgsConverter))]
     public class SetDateTaskArgs : ISetDateTaskArgs
     {
@@ -28,4 +34,5 @@ namespace EntitiesLibrary.CommandArguments
             attribute.Should().NotBeNull();
         }
     }
+>>>>>>> experiments
 }

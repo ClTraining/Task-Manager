@@ -1,11 +1,12 @@
 ﻿using System;
 using EntitiesLibrary;
 using FluentAssertions;
+using Specifications.ClientSpecifications;
 using Xunit;
 
 namespace CommandQueryLibrary.ServiceSpecifications
 {
-    public class ListByDateServiceSpecification : IServiceSpecification
+    public class ListByDateServiceSpecification : IServiceSpecification, IClientSpecification
     {
         public DateTime Date { get; set; }
 
@@ -15,7 +16,7 @@ namespace CommandQueryLibrary.ServiceSpecifications
         }
     }
 
-    public class ListByDateSpecificationTests
+    public class ListTodaySpecificationTests
     {
         ListByDateServiceSpecification spec = new ListByDateServiceSpecification();
 

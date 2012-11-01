@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{22B09AEF-6CBA-420F-B650-7C6968585A48}</ProjectGuid>
+    <ProjectGuid>{E82CCFA8-614B-4C74-AA99-344C00AFC325}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TaskManagerClientLibrary</RootNamespace>
-    <AssemblyName>TaskManagerClientLibrary</AssemblyName>
+    <RootNamespace>TaskManagerServiceLibrary</RootNamespace>
+    <AssemblyName>TaskManagerServiceLibrary</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
@@ -32,13 +32,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=2.2.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="AutoMapper">
       <HintPath>..\packages\AutoMapper.2.2.0\lib\net40\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="FluentAssertions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentAssertions.2.0.0.1\lib\net45\FluentAssertions.dll</HintPath>
+      <HintPath>..\packages\FluentAssertions.2.0.0\Lib\net45\FluentAssertions.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.4.5.10\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="Ninject">
       <HintPath>..\packages\Ninject.3.0.1.10\lib\net45-full\Ninject.dll</HintPath>
@@ -50,8 +52,8 @@
       <HintPath>..\packages\NSubstitute.1.4.3.0\lib\NET40\NSubstitute.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -61,55 +63,47 @@
     <Reference Include="xunit">
       <HintPath>..\packages\xunit.1.9.1\lib\net20\xunit.dll</HintPath>
     </Reference>
+    <Reference Include="xunit.extensions">
+      <HintPath>..\packages\xunit.extensions.1.9.1\lib\net20\xunit.extensions.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Application.cs" />
-    <Compile Include="CommandContainer\CommandContainer.cs" />
-    <Compile Include="CommandContainer\ICommandContainer.cs" />
-    <Compile Include="ConcreteCommands\AddCommand.cs" />
-    <Compile Include="ConcreteCommands\ClearDateCommand.cs" />
-    <Compile Include="ConcreteCommands\CompleteCommand.cs" />
-    <Compile Include="ConcreteCommands\ExitCommand.cs" />
-    <Compile Include="ConcreteCommands\HelpCommand\HelpCommand.cs" />
-    <Compile Include="ConcreteCommands\HelpCommand\HelpCommandDisplayer.cs" />
-    <Compile Include="ConcreteCommands\HelpCommand\IHelpCommandDisplayer.cs" />
-    <Compile Include="ConcreteCommands\ICommand.cs" />
-    <Compile Include="ConcreteCommands\ListCommand.cs" />
-    <Compile Include="ConcreteCommands\RenameCommand.cs" />
-    <Compile Include="ConcreteCommands\SetDateCommand.cs" />
-    <Compile Include="ConcreteCommands\TaskFormatter\ITaskFormatter.cs" />
-    <Compile Include="ConcreteCommands\TaskFormatter\ListTaskFormatter.cs" />
-    <Compile Include="ConcreteCommands\TaskFormatter\SingleTaskFormatter.cs" />
-    <Compile Include="ConfigManager.cs" />
-    <Compile Include="EnvironmentWrapper.cs" />
-    <Compile Include="Factory.cs" />
-    <Compile Include="IFactory.cs" />
-    <Compile Include="InputParser.cs" />
-    <Compile Include="LineParser.cs" />
+<<<<<<< HEAD
+    <Compile Include="ArgToCommandConverter.cs" />
+    <Compile Include="Commands\ClearDateServiceCommand.cs" />
+    <Compile Include="Commands\CompleteServiceCommand.cs" />
+    <Compile Include="Commands\IServiceCommand.cs" />
+    <Compile Include="Commands\RenameServiceCommand.cs" />
+    <Compile Include="Commands\SetDateServiceCommand.cs" />
+    <Compile Include="ITodoList.cs" />
+    <Compile Include="MapConverter.cs" />
+=======
+    <Compile Include="Repositories\JsonStorage.cs" />
+    <Compile Include="SpecificationMapConverter.cs" />
+>>>>>>> experiments
+    <Compile Include="ISpecificationsConverter.cs" />
+    <Compile Include="ITaskManagerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TaskArgsConverter.cs" />
-    <Compile Include="UserNotifier.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Repositories\MemoRepository.cs" />
+    <Compile Include="SpecificationsConverter.cs" />
+    <Compile Include="TaskManagerService.cs" />
+    <Compile Include="TaskManager\ITaskMapper.cs" />
+    <Compile Include="TaskManager\TaskMapper.cs" />
+    <Compile Include="TodoList.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CommandQueryLibrary\CommandQueryLibrary.csproj">
       <Project>{26e506ca-7cd6-45a2-9a33-5e6339c39f1a}</Project>
       <Name>CommandQueryLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ConnectToWcf\ConnectToWcf.csproj">
-      <Project>{98346f47-73d5-423c-8439-473926635211}</Project>
-      <Name>ConnectToWcf</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">
       <Project>{20ae42ef-7dc6-478b-b1a3-825fbf16e6c7}</Project>
       <Name>EntitiesLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\TaskManagerServiceLibrary\TaskManagerServiceLibrary.csproj">
-      <Project>{E82CCFA8-614B-4C74-AA99-344C00AFC325}</Project>
-      <Name>TaskManagerServiceLibrary</Name>
-    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

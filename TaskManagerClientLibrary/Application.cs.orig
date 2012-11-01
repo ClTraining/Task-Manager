@@ -23,9 +23,13 @@ namespace TaskManagerClientLibrary
             var greeting = notifier.GenerateGreeting();
             Console.WriteLine(greeting);
 
+<<<<<<< HEAD
             var factory = kernel.Get<ITaskFormatterFactory>();
 
+            for (string s; ((s = Console.ReadLine()) != null);)
+=======
             for (string s; ((s = Console.ReadLine()) != null); )
+>>>>>>> experiments
             {
                kernel.Get<LineParser>().ExecuteCommand(s);
             }
@@ -48,7 +52,12 @@ namespace TaskManagerClientLibrary
                 .To<CommandContainer.CommandContainer>()
                 .InSingletonScope()
                 .WithConstructorArgument("commands", Kernel.GetAll<ICommand>());
+<<<<<<< HEAD
+=======
             Bind<IFactory>().To<Factory>();
+            Bind<ArgumentConverter<object>>().ToSelf();
+>>>>>>> experiments
+
             var configManager = new ConfigurationManager();
             var address = configManager.GetAddress();
 
