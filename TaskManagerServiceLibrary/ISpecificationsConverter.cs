@@ -1,5 +1,5 @@
-﻿using EntitiesLibrary.CommandArguments;
-using CommandQueryLibrary.ServiceSpecifications;
+﻿using CommandQueryLibrary.ServiceSpecifications;
+using EntitiesLibrary.CommandArguments;
 
 namespace TaskManagerServiceLibrary
 {

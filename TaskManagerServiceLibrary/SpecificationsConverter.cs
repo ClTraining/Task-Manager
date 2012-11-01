@@ -1,6 +1,6 @@
 using AutoMapper;
-using EntitiesLibrary.CommandArguments;
 using CommandQueryLibrary.ServiceSpecifications;
+using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using Xunit;
 

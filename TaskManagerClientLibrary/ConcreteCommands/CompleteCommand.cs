@@ -42,7 +42,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         private void PrintInfo(CompleteTaskArgs completeTaskArgs)
         {
-            textWriter.WriteLine(string.Format("Task ID: {0} completed.", completeTaskArgs.Id));
+            textWriter.WriteLine("Task ID: {0} completed.", completeTaskArgs.Id);
         }
 
         private CompleteTaskArgs ConvertToArgs(List<string> argument)
