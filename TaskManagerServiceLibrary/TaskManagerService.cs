@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.ServiceModel;
 using CommandQueryLibrary.ServiceSpecifications;
@@ -8,7 +7,6 @@ using FluentAssertions;
 using NSubstitute;
 using TaskManagerServiceLibrary.Commands;
 using Xunit;
-using Xunit.Extensions;
 
 namespace TaskManagerServiceLibrary
 {

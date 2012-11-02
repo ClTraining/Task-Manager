@@ -94,10 +94,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommandQueryLibrary\CommandQueryLibrary.csproj">
-      <Project>{26e506ca-7cd6-45a2-9a33-5e6339c39f1a}</Project>
-      <Name>CommandQueryLibrary</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ConnectToWcf\ConnectToWcf.csproj">
       <Project>{98346f47-73d5-423c-8439-473926635211}</Project>
       <Name>ConnectToWcf</Name>

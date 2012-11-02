@@ -8,17 +8,13 @@ namespace TaskManagerServiceLibrary
 {
     public class SpecificationsConverter : ISpecificationsConverter
     {
-        public SpecificationsConverter()
-        {
-            Mapper.CreateMap<ListAllTaskArgs, ListAllServiceSpecification>();
-            Mapper.CreateMap<ListByDateTaskArgs, ListByDateServiceSpecification>();
-            Mapper.CreateMap<ListSingleTaskArgs, ListSingleServiceSpecification>();
-            Mapper.CreateMap<IListCommandArguments, IServiceSpecification>().ConvertUsing<MapConverter<IListCommandArguments, IServiceSpecification>>();
-        }
-
         public IServiceSpecification GetQuerySpecification(IListCommandArguments args)
         {
-            return Mapper.DynamicMap<IListCommandArguments, IServiceSpecification>(args);
+            if (args is ListSingleTaskArgs)
+                return new ListSingleServiceSpecification { Id = ((ListSingleTaskArgs)args).Id };
+            else if (args is ListByDateTaskArgs)
+                return new ListByDateServiceSpecification {Date = ((ListByDateTaskArgs) args).Date};
+            else return new ListAllServiceSpecification();
         }
     }
 

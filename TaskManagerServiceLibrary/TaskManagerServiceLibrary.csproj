@@ -82,6 +82,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\MemoRepository.cs" />
+    <Compile Include="ServiceSpecifications\IServiceSpecification.cs" />
+    <Compile Include="ServiceSpecifications\ListAllServiceSpecification.cs" />
+    <Compile Include="ServiceSpecifications\ListByDateServiceSpecification.cs" />
+    <Compile Include="ServiceSpecifications\ListSingleServiceSpecification.cs" />
     <Compile Include="SpecificationsConverter.cs" />
     <Compile Include="TaskManagerService.cs" />
     <Compile Include="TaskManager\ITaskMapper.cs" />
@@ -89,10 +93,6 @@
     <Compile Include="TodoList.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CommandQueryLibrary\CommandQueryLibrary.csproj">
-      <Project>{26e506ca-7cd6-45a2-9a33-5e6339c39f1a}</Project>
-      <Name>CommandQueryLibrary</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">
       <Project>{20ae42ef-7dc6-478b-b1a3-825fbf16e6c7}</Project>
       <Name>EntitiesLibrary</Name>
