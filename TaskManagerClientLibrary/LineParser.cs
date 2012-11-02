@@ -32,18 +32,14 @@ namespace TaskManagerClientLibrary
                 Console.WriteLine("No such command");
             else
             {
+                args.RemoveAt(0);
                 try
                 {
-                    args.RemoveAt(0);
                     command.Execute(args);
                 }
                 catch (TaskNotFoundException e)
                 {
-                    Console.WriteLine("Task not found, ID: " + e.Message);
-                }
-                catch (CouldNotSetDateException e)
-                {
-                    Console.WriteLine(e.Message);
+                    Console.WriteLine("Task not found: ID = {0}", e.Message);
                 }
             }
         }
@@ -71,7 +67,7 @@ namespace TaskManagerClientLibrary
             command1.Name.Returns("add");
             command2.Name.Returns("command");
             command3.Name.Returns("hello");
-            const string input = "add foo";
+            var input = "add foo";
             var list = new List<string> { "add", "foo" };
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
@@ -84,7 +80,7 @@ namespace TaskManagerClientLibrary
         {
             command1.Name.Returns("add");
             command2.Name.Returns("add");
-            const string input = "add aaa";
+            var input = "add aaa";
             var list = new List<string> { "add", "aaa" };
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
@@ -100,7 +96,7 @@ namespace TaskManagerClientLibrary
             command2.Name.Returns("command");
             command3.Name.Returns("hello");
 
-            const string input = "ababa bababab";
+            var input = "ababa bababab";
             var list = new List<string> { "ababa", "bababab" };
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
@@ -120,7 +116,7 @@ namespace TaskManagerClientLibrary
             command2.Name.Returns("command");
             command3.Name.Returns("abrakadabra");
 
-            const string input = "hello world";
+            var input = "hello world";
             var list = new List<string> { "hello", "world" };
             parser.Parse(input).Returns(list);
 
@@ -133,29 +129,12 @@ namespace TaskManagerClientLibrary
         public void should_ignore_double_quotes()
         {
             command1.Name.Returns("add");
-            const string input = "add \"hello world\"";
+            var input = "add \"hello world\"";
             var list = new List<string> { "add", "hello world" };
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand("add \"hello world\"");
             list.RemoveAt(0);
-            command1.Received().Execute(list);
-        }
-
-        [Fact(Skip = "")]
-        public void should_throw_exception_if_task_was_not_found()
-        {
-            var input = "123";
-            command1.Name.Returns("complete");
-            var list = new List<string> {"complete", "world"};
-            var newList = list.Skip(1);
-            parser.Parse(input).Returns(list);
-            lp.ExecuteCommand(input);
-            
-            command1.When(x => x.Execute(newList.ToList())).Do(_ => { throw new TaskNotFoundException(1); });
-            var sb = new StringBuilder();
-            Console.SetOut(new StringWriter(sb));
-
-            sb.ToString().Should().BeEquivalentTo("Task not found, ID: 1");
+            command1.ReceivedWithAnyArgs().Execute(list);
         }
     }
 }
