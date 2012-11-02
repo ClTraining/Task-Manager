@@ -57,7 +57,7 @@ namespace ConnectToWcf
             }
             catch (FaultException<ExceptionDetail> e)
             {
-                throw new TaskNotFoundException(e.Detail.Message);
+                throw new TaskNotFoundException(int.Parse(e.Detail.Message));
             }
             finally
             {

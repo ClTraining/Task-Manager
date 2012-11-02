@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
 using TaskManagerClientLibrary.ConcreteCommands;
@@ -23,18 +24,24 @@ namespace TaskManagerClientLibrary
 
         public void ExecuteCommand(string input)
         {
-                var args = parser.Parse(input);
+            var args = parser.Parse(input);
 
-                var command = commands.FirstOrDefault(a => a.Name == args[0]);
+            var command = commands.FirstOrDefault(a => a.Name == args[0]);
 
-                if (command == null)
-                    Console.WriteLine("No such command");
-                else
+            if (command == null)
+                Console.WriteLine("No such command");
+            else
+            {
+                try
                 {
                     var skip = args.Skip(1).ToList();
                     command.Execute(skip);
                 }
-
+                catch (TaskNotFoundException e)
+                {
+                    Console.WriteLine("Task not found, ID: " + e.Message);
+                }
+            }
         }
     }
 

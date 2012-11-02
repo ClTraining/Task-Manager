@@ -46,6 +46,7 @@ namespace TaskManagerServiceLibrary
         public void CompleteTask(int id)
         {
             var task = repo.Select(id);
+            if(task == null) throw new TaskNotFoundException(id);
             task.IsCompleted = true;
             repo.UpdateChanges(task);
         }
