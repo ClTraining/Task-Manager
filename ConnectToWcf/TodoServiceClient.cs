@@ -7,7 +7,9 @@ using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
 using TaskManagerServiceLibrary;
+using TaskManagerServiceLibrary.Converters;
 using TaskManagerServiceLibrary.Repositories;
+using TaskManagerServiceLibrary.ToDoList;
 using Xunit;
 
 namespace ConnectToWcf

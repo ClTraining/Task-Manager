@@ -6,6 +6,8 @@ using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
 using TaskManagerServiceLibrary.Commands;
+using TaskManagerServiceLibrary.Converters;
+using TaskManagerServiceLibrary.ToDoList;
 using Xunit;
 
 namespace TaskManagerServiceLibrary

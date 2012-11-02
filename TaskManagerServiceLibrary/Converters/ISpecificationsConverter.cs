@@ -1,7 +1,7 @@
 ﻿using CommandQueryLibrary.ServiceSpecifications;
 using EntitiesLibrary.CommandArguments;
 
-namespace TaskManagerServiceLibrary
+namespace TaskManagerServiceLibrary.Converters
 {
     public interface ISpecificationsConverter
     {
