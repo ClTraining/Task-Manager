@@ -41,6 +41,10 @@ namespace TaskManagerClientLibrary
                 {
                     Console.WriteLine("Task not found, ID: " + e.Message);
                 }
+                catch (CouldNotSetDateException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
         }
     }
