@@ -27,7 +27,7 @@ namespace TaskManagerClientLibrary
 
             for (string s; ((s = Console.ReadLine()) != null); )
             {
-               kernel.Get<LineParser>().ExecuteCommand(s);
+                kernel.Get<LineParser>().ExecuteCommand(s);
             }
         }
     }
@@ -48,7 +48,6 @@ namespace TaskManagerClientLibrary
                 .To<CommandContainer.CommandContainer>()
                 .InSingletonScope()
                 .WithConstructorArgument("commands", Kernel.GetAll<ICommand>());
-            Bind<IFactory>().To<Factory>();
             var configManager = new ConfigurationManager();
             var address = configManager.GetAddress();
 

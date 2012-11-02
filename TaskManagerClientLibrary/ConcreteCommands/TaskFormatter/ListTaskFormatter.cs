@@ -36,7 +36,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
             return taskString.ToString();
         }
 
-        protected virtual string PrintHeader()
+        private string PrintHeader()
         {
             return string.Format(format, "Id", "Name", "Completed", "Due date");
         }

@@ -29,10 +29,10 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var addTaskArgs = ConvertToArgs(argument);
             var result = client.AddTask(addTaskArgs);
-            Printinfo(result);
+            PrintInfo(result);
         }
 
-        private void Printinfo(int result)
+        private void PrintInfo(int result)
         {
             textWriter.WriteLine("Task added. Task ID: " + result);
         }
@@ -67,7 +67,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var addTaskArgs = new AddTaskArgs { Name = taskName };
             var argument = new List<string> { taskName };
-            converter.Convert(argument, new List<Type>{typeof(AddTaskArgs)}).Returns(addTaskArgs);
+            converter.Convert(argument, new List<Type> { typeof(AddTaskArgs) }).Returns(addTaskArgs);
             handler.Execute(argument);
             client.Received().AddTask(addTaskArgs);
         }

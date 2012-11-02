@@ -75,6 +75,7 @@
     <Compile Include="Commands\RenameServiceCommand.cs" />
     <Compile Include="Commands\SetDateServiceCommand.cs" />
     <Compile Include="ITodoList.cs" />
+    <Compile Include="Repositories\JsonStorage.cs" />
     <Compile Include="MapConverter.cs" />
     <Compile Include="ISpecificationsConverter.cs" />
     <Compile Include="ITaskManagerService.cs" />

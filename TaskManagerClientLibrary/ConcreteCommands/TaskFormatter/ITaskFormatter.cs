@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿﻿using System.Collections.Generic;
 using EntitiesLibrary;
 
 namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter

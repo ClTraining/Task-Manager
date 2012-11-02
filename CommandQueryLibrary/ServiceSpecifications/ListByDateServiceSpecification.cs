@@ -1,7 +1,7 @@
 ﻿using System;
+using CommandQueryLibrary.ClientSpecifications;
 using EntitiesLibrary;
 using FluentAssertions;
-using Specifications.ClientSpecifications;
 using Xunit;
 
 namespace CommandQueryLibrary.ServiceSpecifications

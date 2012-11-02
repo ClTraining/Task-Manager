@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using CommandQueryLibrary.ServiceSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using Newtonsoft.Json;
-using Specifications.ServiceSpecifications;
 using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
 
@@ -15,41 +15,46 @@ namespace TaskManagerServiceLibrary.Repositories
 {
     public class JsonStorage : IRepository
     {
-        private readonly ITaskMapper mapper;
+
         private readonly List<ServiceTask> cacheStorage;
         private int currentId;
 
-        public JsonStorage(ITaskMapper mapper)
+        public JsonStorage()
         {
-            this.mapper = mapper;
             var jsonString = GetJsonString();
             cacheStorage = DeserializeToListOfTasks(jsonString);
         }
         public int AddTask(AddTaskArgs args)
         {
-            var serviceTask = new ServiceTask { Name = args.Name, DueDate = args.DueDate, Id = GetNewId() };
+            var serviceTask = new ServiceTask { Name = args.Name, DueDate = args.DueDate == null ? default(DateTime) : args.DueDate.Value, Id = GetNewId() };
             AddToCache(serviceTask);
             SynchronizeCacheAndLocal();
             return serviceTask.Id;
         }
 
-        public List<ClientPackage> GetTasks(IServiceSpecification spec)
+        public ServiceTask Select(int id)
+        {
+            return cacheStorage[id - 1];
+        }
+
+        public void UpdateChanges(ServiceTask task)
+        {
+            UpdateCacheStorage(task);
+            SynchronizeCacheAndLocal();
+        }
+
+        private void UpdateCacheStorage(ServiceTask task)
+        {
+            cacheStorage[task.Id - 1] = task;
+        }
+
+        public List<ServiceTask> GetTasks(IServiceSpecification spec)
         {
             var resList = cacheStorage
                 .Where(spec.IsSatisfied)
-                .Select(mapper.ConvertToContract)
                 .ToList();
 
             return resList;
-        }
-
-        public void UpdateChanges(ICommandArguments args)
-        {
-            var index = args.Id - 1;
-            var taskToConvertCache = cacheStorage[index];
-            var task = mapper.Convert(args, taskToConvertCache);
-            UpdateInCache(index, task);
-            SynchronizeCacheAndLocal();
         }
 
         private void AddToCache(ServiceTask serviceTask)
@@ -87,12 +92,6 @@ namespace TaskManagerServiceLibrary.Repositories
             stream.Close();
         }
 
-        private void UpdateInCache(int index, ServiceTask task)
-        {
-            cacheStorage.RemoveAt(index);
-            cacheStorage.Insert(index, task);
-        }
-
         private int GetNewId()
         {
             Interlocked.Increment(ref currentId);
@@ -102,12 +101,11 @@ namespace TaskManagerServiceLibrary.Repositories
 
     public class JsonStorageTests
     {
-        private readonly ITaskMapper mapper = NSubstitute.Substitute.For<ITaskMapper>();
         private readonly JsonStorage storage;
 
         public JsonStorageTests()
         {
-            storage = new JsonStorage(mapper);
+            storage = new JsonStorage();
         }
 
         [Fact]

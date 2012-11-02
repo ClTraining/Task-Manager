@@ -20,9 +20,9 @@ namespace TaskManagerServiceLibrary.TaskManager
 
     public class TaskMapperTests
     {
-        private readonly ClientTask contractTask = new ClientTask {Id = 10, Name = "service", IsCompleted = true};
+        private readonly ClientTask contractTask = new ClientTask { Id = 10, Name = "service", IsCompleted = true };
         private readonly ServiceTask serviceTask = new ServiceTask { Id = 10, Name = "service", IsCompleted = true };
-        private readonly ServiceTask serviceTask = new ServiceTask {Id = 10, Name = "service", IsCompleted = true};
+
         private readonly TaskMapper mapper = new TaskMapper();
 
         [Fact]
