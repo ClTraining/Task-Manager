@@ -48,6 +48,7 @@ namespace TaskManagerServiceLibrary.Repositories
         private void UpdateCacheStorage(ServiceTask task)
         {
             cacheStorage[task.Id - 1] = task;
+            SynchronizeCacheAndLocal();
         }
 
         public List<ServiceTask> GetTasks(IServiceSpecification spec)
@@ -122,17 +123,25 @@ namespace TaskManagerServiceLibrary.Repositories
         [Fact]
         public void should_get_tasks_by_specification()
         {
+            storage.AddTask(new AddTaskArgs());
+            storage.AddTask(new AddTaskArgs());
             IServiceSpecification specification = new ListAllServiceSpecification();
             var tasks = storage.GetTasks(specification);
 
-            tasks.Count.Should().BeGreaterOrEqualTo(0);
+            tasks.Count.Should().BeGreaterOrEqualTo(2);
         }
 
         [Fact]
         public void should_update_storage()
         {
-            storage.UpdateChanges(new ServiceTask{Id = 1});
-            storage.Select(1);
+            var task = new ServiceTask { Id = 2, DueDate = DateTime.Today, Name = "sasha", IsCompleted = false };
+            storage.AddTask(new AddTaskArgs { Name = "a", DueDate = DateTime.Today });
+            storage.AddTask(new AddTaskArgs { Name = "b", DueDate = DateTime.Today });
+            storage.UpdateChanges(task);
+
+            var text = File.ReadAllText("save.txt");
+            var tasksList = JsonConvert.DeserializeObject<List<ServiceTask>>(text);
+            tasksList[1].Name.Should().Be("sasha");
         }
     }
 }

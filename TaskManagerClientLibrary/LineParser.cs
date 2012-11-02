@@ -32,14 +32,18 @@ namespace TaskManagerClientLibrary
                 Console.WriteLine("No such command");
             else
             {
-                args.RemoveAt(0);
                 try
                 {
+                    args.RemoveAt(0);
                     command.Execute(args);
                 }
                 catch (TaskNotFoundException e)
                 {
-                    Console.WriteLine("Task not found: ID = {0}", e.Message);
+                    Console.WriteLine("Task not found, ID: " + e.Message);
+                }
+                catch (CouldNotSetDateException e)
+                {
+                    Console.WriteLine(e.Message);
                 }
             }
         }
@@ -134,7 +138,40 @@ namespace TaskManagerClientLibrary
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand("add \"hello world\"");
             list.RemoveAt(0);
-            command1.ReceivedWithAnyArgs().Execute(list);
+            command1.Received().Execute(list);
         }
+
+        [Fact]
+        public void should_inform_if_could_not_set_date()
+        {
+            var world = "world";
+            var list = new List<string> { "hello", world };
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+            command1.Name.Returns("hello");
+            parser.Parse("hello world").Returns(list);
+            command1.WhenForAnyArgs(x => x.Execute(new List<string>())).Do(x => { throw new TaskNotFoundException(1); });
+
+            lp.ExecuteCommand("hello world");
+
+            sb.ToString().Should().Be("Task not found, ID: 1\r\n");
+        }
+
+        [Fact]
+        public void should_inform_if_task_was_not_found()
+        {
+            var world = "world";
+            var list = new List<string> { "hello", world };
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+            command1.Name.Returns("hello");
+            parser.Parse("hello world").Returns(list);
+            command1.WhenForAnyArgs(x => x.Execute(new List<string>())).Do(x => { throw new CouldNotSetDateException("exception"); });
+
+            lp.ExecuteCommand("hello world");
+
+            sb.ToString().Should().Be("exception\r\n");
+        }
+
     }
 }
