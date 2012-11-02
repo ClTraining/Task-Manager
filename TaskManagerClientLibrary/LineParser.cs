@@ -34,8 +34,8 @@ namespace TaskManagerClientLibrary
             {
                 try
                 {
-                    var skip = args.Skip(1).ToList();
-                    command.Execute(skip);
+                    args.RemoveAt(0);
+                    command.Execute(args);
                 }
                 catch (TaskNotFoundException e)
                 {
@@ -72,7 +72,7 @@ namespace TaskManagerClientLibrary
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
             list.RemoveAt(0);
-            command1.ReceivedWithAnyArgs().Execute(list);
+            command1.Received().Execute(list);
         }
 
         [Fact]
@@ -85,7 +85,7 @@ namespace TaskManagerClientLibrary
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
             list.RemoveAt(0);
-            command1.ReceivedWithAnyArgs().Execute(list);
+            command1.Received().Execute(list);
             command2.DidNotReceiveWithAnyArgs().Execute(list);
         }
 
@@ -134,7 +134,7 @@ namespace TaskManagerClientLibrary
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand("add \"hello world\"");
             list.RemoveAt(0);
-            command1.ReceivedWithAnyArgs().Execute(list);
+            command1.Received().Execute(list);
         }
     }
 }
