@@ -5,6 +5,6 @@ namespace TaskManagerServiceLibrary
 {
     public interface ISpecificationsConverter
     {
-        IServiceSpecification GetQuerySpecification(IListCommandArguments specification);
+        IServiceSpecification GetQuerySpecification(IListCommandArguments args);
     }
 }

@@ -5,8 +5,8 @@ namespace TaskManagerServiceLibrary.Commands
 {
     public class RenameServiceCommand : IServiceCommand
     {
-        public int Id { private get; set; }
-        public string NewName { private get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
 
         private readonly ITodoList todoList;
         
@@ -17,7 +17,7 @@ namespace TaskManagerServiceLibrary.Commands
 
         public void ExecuteCommand()
         {
-            todoList.RenameTask(Id, NewName);
+            todoList.RenameTask(Id, Name);
         }
     }
 
@@ -28,7 +28,7 @@ namespace TaskManagerServiceLibrary.Commands
 
         public RenameServiceCommandTests()
         {
-            command = new RenameServiceCommand(todoList) {Id = 1 , NewName = "new task"};
+            command = new RenameServiceCommand(todoList) {Id = 1 , Name = "new task"};
         }
 
         [Fact]

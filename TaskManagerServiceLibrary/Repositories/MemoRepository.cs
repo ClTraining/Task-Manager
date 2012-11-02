@@ -13,12 +13,17 @@ namespace TaskManagerServiceLibrary.Repositories
 {
     public class MemoRepository : IRepository
     {
-        public readonly List<ServiceTask> taskList = new List<ServiceTask>();
+        private readonly List<ServiceTask> taskList = new List<ServiceTask>();
         private int currentId;
 
         public int AddTask(AddTaskArgs args)
         {
-            var serviceTask = new ServiceTask { Name = args.Name, DueDate = args.DueDate == null ? default(DateTime):args.DueDate.Value, Id = GetNewId() };
+            var serviceTask = new ServiceTask
+                                  {
+                                      Name = args.Name,
+                                      DueDate = args.DueDate == null ? default(DateTime) : args.DueDate.Value,
+                                      Id = GetNewId()
+                                  };
 
             taskList.Add(serviceTask);
 
@@ -52,12 +57,7 @@ namespace TaskManagerServiceLibrary.Repositories
         private readonly IServiceSpecification spec = Substitute.For<IServiceSpecification>();
         private readonly MemoRepository repo = new MemoRepository();
         readonly ServiceTask sTask = new ServiceTask{Id = 1};
-
-        public MemoRepositoryTests()
-        {
-            repo.taskList.Add(sTask);
-        }
-
+        
         [Fact]
         public void should_add_task_to_repo()
         {
@@ -75,7 +75,7 @@ namespace TaskManagerServiceLibrary.Repositories
             
             var res = repo.GetTasks(spec);
             
-            res.Count.Should().Be(1);
+            res.Count.Should().Be(0);
         }
     }
 }

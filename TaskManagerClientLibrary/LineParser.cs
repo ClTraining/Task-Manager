@@ -23,8 +23,6 @@ namespace TaskManagerClientLibrary
 
         public void ExecuteCommand(string input)
         {
-            try
-            {
                 var args = parser.Parse(input);
 
                 var command = commands.FirstOrDefault(a => a.Name == args[0]);
@@ -36,11 +34,7 @@ namespace TaskManagerClientLibrary
                     var skip = args.Skip(1).ToList();
                     command.Execute(skip);
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+
         }
     }
 

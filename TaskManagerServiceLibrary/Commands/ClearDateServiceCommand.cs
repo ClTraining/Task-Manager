@@ -5,7 +5,7 @@ namespace TaskManagerServiceLibrary.Commands
 {
     public class ClearDateServiceCommand : IServiceCommand
     {
-        public int Id { private get; set; }
+        public int Id { get; set; }
 
         private readonly ITodoList todoList;
 

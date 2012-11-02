@@ -4,6 +4,6 @@ namespace TaskManagerServiceLibrary.TaskManager
 {
     public interface ITaskMapper
     {
-        ClientTask ConvertToContract(ServiceTask task);
+        ClientTask ConvertToClient(ServiceTask task);
     }
 }

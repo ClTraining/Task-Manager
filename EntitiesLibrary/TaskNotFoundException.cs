@@ -4,7 +4,7 @@ namespace EntitiesLibrary
 {
     public class TaskNotFoundException : Exception
     {
-        public TaskNotFoundException(int id) : base(id.ToString())
+        public TaskNotFoundException(string id) : base(id)
         {
         }
     }
