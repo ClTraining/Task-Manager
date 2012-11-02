@@ -35,7 +35,7 @@ namespace TaskManagerService
         public override void Load()
         {
             Bind<ITaskManagerService>().To<TaskManagerServiceLibrary.TaskManagerService>();
-            Bind<IRepository>().To<JsonStorage>().InSingletonScope();
+            Bind<IRepository>().To<MemoRepository>().InSingletonScope();
             Bind<ITaskMapper>().To<TaskMapper>();
             Bind<ITodoList>().To<TodoList>();
             Bind<IArgToCommandConverter>().To<ArgToCommandConverter>().WithConstructorArgument("kernel", (c, o) => c.Kernel);

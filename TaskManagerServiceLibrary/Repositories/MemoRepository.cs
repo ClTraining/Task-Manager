@@ -37,13 +37,12 @@ namespace TaskManagerServiceLibrary.Repositories
 
         public ServiceTask Select(int id)
         {
-            return taskList[id - 1];
+            var task = taskList.FirstOrDefault(t => t.Id == id);
+            if (task == null) throw new TaskNotFoundException(id);
+            return task;
         }
 
-        public void UpdateChanges(ServiceTask task)
-        {
-            taskList[task.Id - 1] = task;
-        }
+        public void UpdateChanges(ServiceTask task) { }
 
         private int GetNewId()
         {
@@ -56,15 +55,15 @@ namespace TaskManagerServiceLibrary.Repositories
     {
         private readonly IServiceSpecification spec = Substitute.For<IServiceSpecification>();
         private readonly MemoRepository repo = new MemoRepository();
-        readonly ServiceTask sTask = new ServiceTask{Id = 1};
-        
+        readonly ServiceTask sTask = new ServiceTask { Id = 1 };
+
         [Fact]
         public void should_add_task_to_repo()
         {
             var task = new AddTaskArgs { DueDate = DateTime.Now, Name = "task1" };
-            
+
             var result = repo.AddTask(task);
-            
+
             result.Should().Be(1);
         }
 
@@ -72,9 +71,9 @@ namespace TaskManagerServiceLibrary.Repositories
         public void should_get_all_tasks_from_repo()
         {
             spec.IsSatisfied(sTask).Returns(true);
-            
+
             var res = repo.GetTasks(spec);
-            
+
             res.Count.Should().Be(0);
         }
     }

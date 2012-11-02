@@ -46,7 +46,6 @@ namespace TaskManagerServiceLibrary
         public void CompleteTask(int id)
         {
             var task = repo.Select(id);
-            if(task == null) throw new TaskNotFoundException(id);
             task.IsCompleted = true;
             repo.UpdateChanges(task);
         }
@@ -61,7 +60,7 @@ namespace TaskManagerServiceLibrary
         public void SetTaskDate(int id, DateTime dueDate)
         {
             var task = repo.Select(id);
-            if(task.IsCompleted) throw new FaultException("Could not set date to completed task.");
+            if (task.IsCompleted) throw new CouldNotSetDateException("Could not set date to completed task.");
             task.DueDate = dueDate;
             repo.UpdateChanges(task);
         }
