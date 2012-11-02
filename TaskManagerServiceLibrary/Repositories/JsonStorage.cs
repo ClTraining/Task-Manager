@@ -17,6 +17,7 @@ namespace TaskManagerServiceLibrary.Repositories
 
         private readonly List<ServiceTask> cacheStorage;
         private int currentId;
+        private const string FileName = "save.txt";
 
         public JsonStorage()
         {
@@ -67,7 +68,7 @@ namespace TaskManagerServiceLibrary.Repositories
             string text;
             try
             {
-                text = File.ReadAllText("save.txt");
+                text = File.ReadAllText(FileName);
             }
             catch (FileNotFoundException)
             {
@@ -84,7 +85,7 @@ namespace TaskManagerServiceLibrary.Repositories
 
         private void SynchronizeCacheAndLocal()
         {
-            var stream = new FileStream("save.txt", FileMode.Create);
+            var stream = new FileStream(FileName, FileMode.Create);
             var writer = new StreamWriter(stream);
             var serializeObject = JsonConvert.SerializeObject(cacheStorage);
             writer.Write(serializeObject);
