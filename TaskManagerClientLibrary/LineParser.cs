@@ -136,5 +136,22 @@ namespace TaskManagerClientLibrary
             list.RemoveAt(0);
             command1.Received().Execute(list);
         }
+
+        [Fact(Skip = "")]
+        public void should_throw_exception_if_task_was_not_found()
+        {
+            var input = "123";
+            command1.Name.Returns("complete");
+            var list = new List<string> {"complete", "world"};
+            var newList = list.Skip(1);
+            parser.Parse(input).Returns(list);
+            lp.ExecuteCommand(input);
+            
+            command1.When(x => x.Execute(newList.ToList())).Do(_ => { throw new TaskNotFoundException(1); });
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+
+            sb.ToString().Should().BeEquivalentTo("Task not found, ID: 1");
+        }
     }
 }

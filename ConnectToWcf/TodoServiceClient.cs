@@ -106,7 +106,7 @@ namespace ConnectToWcf
             host.Open();
         }
 
-        [Fact(Skip = "")]
+        [Fact]
         public void should_add_task_to_service()
         {
             const string myname = "myName";
@@ -119,7 +119,7 @@ namespace ConnectToWcf
             result.Should().Be(1);
         }
 
-        [Fact(Skip = "")]
+        [Fact]
         public void should_get_tasks_from_server()
         {
             var tasks = new List<ServiceTask> { new ServiceTask { Id = 1 } };
