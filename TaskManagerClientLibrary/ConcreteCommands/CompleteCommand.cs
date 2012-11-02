@@ -69,7 +69,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var completeTaskArgs = new CompleteTaskArgs { Id = 1 };
             var argument = new List<string> { "1", "10-10-2012" };
-            converter.Convert(argument, new List<Type>{typeof(CompleteTaskArgs)}).Returns(completeTaskArgs);
+            converter.Convert(argument, new List<Type>{typeof(CompleteTaskArgs)}).ReturnsForAnyArgs(completeTaskArgs);
             command.Execute(argument);
             client.Received().ExecuteCommand(completeTaskArgs);
         }

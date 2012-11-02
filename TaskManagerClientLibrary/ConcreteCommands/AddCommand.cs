@@ -67,7 +67,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var addTaskArgs = new AddTaskArgs { Name = taskName };
             var argument = new List<string> { taskName };
-            converter.Convert(argument, new List<Type> { typeof(AddTaskArgs) }).Returns(addTaskArgs);
+            converter.Convert(argument, new List<Type> { typeof(AddTaskArgs) }).ReturnsForAnyArgs(addTaskArgs);
             handler.Execute(argument);
             client.Received().AddTask(addTaskArgs);
         }

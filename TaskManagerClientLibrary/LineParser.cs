@@ -65,7 +65,7 @@ namespace TaskManagerClientLibrary
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
             list.RemoveAt(0);
-            command1.Received().Execute(list);
+            command1.ReceivedWithAnyArgs().Execute(list);
         }
 
         [Fact]
@@ -78,7 +78,7 @@ namespace TaskManagerClientLibrary
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
             list.RemoveAt(0);
-            command1.Received().Execute(list);
+            command1.ReceivedWithAnyArgs().Execute(list);
             command2.DidNotReceiveWithAnyArgs().Execute(list);
         }
 

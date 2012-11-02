@@ -70,7 +70,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var renameTaskArgs = new RenameTaskArgs { Id = 5, Name = "newTask" };
             var argument = new List<string> { "1", "10-10-2012" };
-            converter.Convert(argument, new List<Type>{typeof(RenameTaskArgs)}).Returns(renameTaskArgs);
+            converter.Convert(argument, new List<Type>{typeof(RenameTaskArgs)}).ReturnsForAnyArgs(renameTaskArgs);
             command.Execute(argument);
             client.Received().ExecuteCommand(renameTaskArgs);
         }
