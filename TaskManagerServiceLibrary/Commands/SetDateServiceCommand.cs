@@ -6,8 +6,8 @@ namespace TaskManagerServiceLibrary.Commands
 {
     public class SetDateServiceCommand : IServiceCommand
     {
-        public int Id { private get; set; }
-        public DateTime DueDate { private get; set; }
+        public int Id { get; set; }
+        public DateTime DueDate { get; set; }
 
         private readonly ITodoList todoList;
 

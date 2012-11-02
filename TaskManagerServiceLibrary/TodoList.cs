@@ -5,7 +5,6 @@ using CommandQueryLibrary.ServiceSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using NSubstitute;
-using TaskManagerServiceLibrary.Commands;
 using TaskManagerServiceLibrary.Repositories;
 using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
@@ -17,13 +16,11 @@ namespace TaskManagerServiceLibrary
     {
         private readonly IRepository repo;
         private readonly ITaskMapper mapper;
-        private readonly IArgToCommandConverter converter;
 
         public TodoList(IRepository repo, ITaskMapper mapper, IArgToCommandConverter converter)
         {
             this.repo = repo;
             this.mapper = mapper;
-            this.converter = converter;
         }
 
         public int AddTask(AddTaskArgs args)
@@ -34,7 +31,7 @@ namespace TaskManagerServiceLibrary
         public List<ClientTask> GetTasks(IServiceSpecification serviceSpecification)
         {
             return repo.GetTasks(serviceSpecification)
-                .Select(mapper.ConvertToContract)
+                .Select(mapper.ConvertToClient)
                 .ToList();
         }
 

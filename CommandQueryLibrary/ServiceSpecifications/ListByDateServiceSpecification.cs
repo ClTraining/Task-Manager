@@ -7,7 +7,7 @@ namespace CommandQueryLibrary.ServiceSpecifications
 {
     public class ListByDateServiceSpecification : IServiceSpecification
     {
-        public DateTime Date { get; set; }
+        public DateTime Date { private get; set; }
 
         public bool IsSatisfied(ServiceTask task)
         {

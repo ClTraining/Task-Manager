@@ -57,7 +57,7 @@ namespace ConnectToWcf
             }
             catch (FaultException<ExceptionDetail> e)
             {
-                throw new TaskNotFoundException(int.Parse(e.Detail.Message));
+                throw new TaskNotFoundException(e.Detail.Message);
             }
             finally
             {
@@ -94,13 +94,14 @@ namespace ConnectToWcf
         private readonly IRepository repo = Substitute.For<IRepository>();
         private readonly IClient client = new TodoServiceClient(address);
         private readonly ITodoList list = Substitute.For<ITodoList>();
-        private readonly IArgToCommandConverter converter = Substitute.For<IArgToCommandConverter>();
+        private readonly IArgToCommandConverter comConverter = Substitute.For<IArgToCommandConverter>();
+        private readonly ISpecificationsConverter specConverter = Substitute.For<ISpecificationsConverter>();
         private readonly ITaskManagerService service;
         private readonly ServiceHost host;
 
         public ExchangeClientTests()
         {
-            service = new TaskManagerService(list, converter);
+            service = new TaskManagerService(list, comConverter, specConverter);
             host = new ServiceHost(service, new Uri(address));
             host.Open();
         }

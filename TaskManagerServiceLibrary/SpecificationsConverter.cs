@@ -16,10 +16,9 @@ namespace TaskManagerServiceLibrary
             Mapper.CreateMap<IListCommandArguments, IServiceSpecification>().ConvertUsing<MapConverter<IListCommandArguments, IServiceSpecification>>();
         }
 
-        public IServiceSpecification GetQuerySpecification(IListCommandArguments specification)
+        public IServiceSpecification GetQuerySpecification(IListCommandArguments args)
         {
-            var querySpecification = Mapper.DynamicMap<IListCommandArguments, IServiceSpecification>(specification);
-            return querySpecification;
+            return Mapper.DynamicMap<IListCommandArguments, IServiceSpecification>(args);
         }
     }
 
