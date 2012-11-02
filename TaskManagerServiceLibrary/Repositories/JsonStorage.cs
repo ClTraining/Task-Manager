@@ -8,7 +8,6 @@ using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using Newtonsoft.Json;
-using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
 
 namespace TaskManagerServiceLibrary.Repositories
@@ -23,6 +22,7 @@ namespace TaskManagerServiceLibrary.Repositories
         {
             var jsonString = GetJsonString();
             cacheStorage = DeserializeToListOfTasks(jsonString);
+            currentId = cacheStorage.Max(t => t.Id);
         }
         public int AddTask(AddTaskArgs args)
         {

@@ -4,7 +4,6 @@ using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
-using TaskManagerServiceLibrary.Commands;
 using Xunit;
 
 namespace TaskManagerServiceLibrary

@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using AutoMapper;
-using Ninject;
 
 namespace TaskManagerServiceLibrary
 {

@@ -1,12 +1,9 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
 using Ninject;
 using TaskManagerServiceLibrary.Commands;
-using TaskManagerServiceLibrary.Repositories;
-using TaskManagerServiceLibrary.TaskManager;
 using Xunit;
 
 namespace TaskManagerServiceLibrary
