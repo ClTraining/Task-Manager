@@ -9,10 +9,12 @@ namespace TaskManagerServiceLibrary.Converters
     {
         public IServiceSpecification GetQuerySpecification(IListCommandArguments args)
         {
-            if (args is ListSingleTaskArgs)
-                return new ListSingleServiceSpecification { Id = ((ListSingleTaskArgs)args).Id };
-            if (args is ListByDateTaskArgs)
-                return new ListByDateServiceSpecification {Date = ((ListByDateTaskArgs) args).Date};
+            var listSingleTaskArgs = args as ListSingleTaskArgs;
+            if (listSingleTaskArgs != null)
+                return new ListSingleServiceSpecification { Id = listSingleTaskArgs.Id };
+            var listByDateTaskArgs = args as ListByDateTaskArgs;
+            if (listByDateTaskArgs != null)
+                return new ListByDateServiceSpecification {Date = listByDateTaskArgs.Date};
             return new ListAllServiceSpecification();
         }
     }
