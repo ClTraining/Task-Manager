@@ -14,7 +14,6 @@ namespace TaskManagerServiceLibrary.Repositories
 {
     public class JsonStorage : IRepository
     {
-
         private readonly List<ServiceTask> cacheStorage;
         private int currentId;
         private const string FileName = "save.txt";
@@ -23,7 +22,7 @@ namespace TaskManagerServiceLibrary.Repositories
         {
             var jsonString = GetJsonString();
             cacheStorage = DeserializeToListOfTasks(jsonString);
-            currentId = cacheStorage.Max(t => t.Id);
+            currentId = cacheStorage.Any() ? cacheStorage.Max(t => t.Id) : 0;
         }
         public int AddTask(AddTaskArgs args)
         {
