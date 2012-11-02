@@ -34,7 +34,9 @@ namespace TaskManagerServiceLibrary.Repositories
 
         public ServiceTask Select(int id)
         {
-            return cacheStorage.FirstOrDefault(t => t.Id == id);
+            var task = cacheStorage.FirstOrDefault(t => t.Id == id);
+            if (task == null) throw new TaskNotFoundException(id);
+            return task;
         }
 
         public void UpdateChanges(ServiceTask task)

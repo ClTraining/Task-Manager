@@ -39,7 +39,6 @@ namespace TaskManagerServiceLibrary
         public void ClearDate(int id)
         {
             var task = repo.Select(id);
-            if (task.IsCompleted) throw new CouldNotSetDateException("Could not set date to completed task.");
             task.DueDate = default(DateTime);
             repo.UpdateChanges(task);
         }
@@ -47,7 +46,6 @@ namespace TaskManagerServiceLibrary
         public void CompleteTask(int id)
         {
             var task = repo.Select(id);
-            if(task == null) throw new TaskNotFoundException(id);
             task.IsCompleted = true;
             repo.UpdateChanges(task);
         }

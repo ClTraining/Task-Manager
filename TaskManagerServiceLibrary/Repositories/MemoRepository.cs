@@ -37,12 +37,15 @@ namespace TaskManagerServiceLibrary.Repositories
 
         public ServiceTask Select(int id)
         {
-            return taskList[id - 1];
+            var task = taskList.FirstOrDefault(t => t.Id == id);
+            if (task == null) throw new TaskNotFoundException(id);
+            return task;
         }
 
         public void UpdateChanges(ServiceTask task)
         {
-            taskList[task.Id - 1] = task;
+            ServiceTask first = taskList.FirstOrDefault(t => t.Id == task.Id);
+            first = task;
         }
 
         private int GetNewId()
