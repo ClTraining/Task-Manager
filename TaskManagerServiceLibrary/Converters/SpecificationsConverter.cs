@@ -11,9 +11,9 @@ namespace TaskManagerServiceLibrary.Converters
         {
             if (args is ListSingleTaskArgs)
                 return new ListSingleServiceSpecification { Id = ((ListSingleTaskArgs)args).Id };
-            else if (args is ListByDateTaskArgs)
+            if (args is ListByDateTaskArgs)
                 return new ListByDateServiceSpecification {Date = ((ListByDateTaskArgs) args).Date};
-            else return new ListAllServiceSpecification();
+            return new ListAllServiceSpecification();
         }
     }
 

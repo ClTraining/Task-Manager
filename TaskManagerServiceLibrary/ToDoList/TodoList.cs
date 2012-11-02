@@ -39,6 +39,7 @@ namespace TaskManagerServiceLibrary.ToDoList
         public void ClearDate(int id)
         {
             var task = repo.Select(id);
+            if (task.IsCompleted) throw new CouldNotSetDateException("Could not clear due date for completed task.");
             task.DueDate = default(DateTime);
             repo.UpdateChanges(task);
         }
@@ -60,7 +61,7 @@ namespace TaskManagerServiceLibrary.ToDoList
         public void SetTaskDate(int id, DateTime dueDate)
         {
             var task = repo.Select(id);
-            if (task.IsCompleted) throw new CouldNotSetDateException("Could not set date to completed task.");
+            if (task.IsCompleted) throw new CouldNotSetDateException("Could not set due date to completed task.");
             task.DueDate = dueDate;
             repo.UpdateChanges(task);
         }
