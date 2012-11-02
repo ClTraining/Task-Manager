@@ -1,5 +1,4 @@
-﻿using System;
-using AutoMapper;
+﻿using AutoMapper;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;

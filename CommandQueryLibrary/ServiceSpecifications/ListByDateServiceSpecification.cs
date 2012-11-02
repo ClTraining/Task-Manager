@@ -1,12 +1,11 @@
 ﻿using System;
-using CommandQueryLibrary.ClientSpecifications;
 using EntitiesLibrary;
 using FluentAssertions;
 using Xunit;
 
 namespace CommandQueryLibrary.ServiceSpecifications
 {
-    public class ListByDateServiceSpecification : IServiceSpecification, IClientSpecification
+    public class ListByDateServiceSpecification : IServiceSpecification 
     {
         public DateTime Date { private get; set; }
 
@@ -18,8 +17,6 @@ namespace CommandQueryLibrary.ServiceSpecifications
 
     public class ListTodaySpecificationTests
     {
-        ListByDateServiceSpecification spec = new ListByDateServiceSpecification();
-
         [Fact]
         public void should_return_task_if_task_exists()
         {

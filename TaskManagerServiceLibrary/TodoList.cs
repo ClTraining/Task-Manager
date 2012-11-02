@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using CommandQueryLibrary.ServiceSpecifications;
 using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
@@ -59,7 +60,7 @@ namespace TaskManagerServiceLibrary
         public void SetTaskDate(int id, DateTime dueDate)
         {
             var task = repo.Select(id);
-            if(task.IsCompleted) throw new Exception();
+            if(task.IsCompleted) throw new FaultException("Could not set date to completed task.");
             task.DueDate = dueDate;
             repo.UpdateChanges(task);
         }
