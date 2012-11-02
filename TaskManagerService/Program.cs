@@ -6,8 +6,10 @@ using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using TaskManagerServiceLibrary;
 using TaskManagerServiceLibrary.Commands;
+using TaskManagerServiceLibrary.Converters;
 using TaskManagerServiceLibrary.Repositories;
-using TaskManagerServiceLibrary.TaskManager;
+using TaskManagerServiceLibrary.TaskMapper;
+using TaskManagerServiceLibrary.ToDoList;
 
 namespace TaskManagerService
 {
