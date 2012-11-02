@@ -26,6 +26,9 @@ namespace TaskManagerClientLibrary
         {
             var args = parser.Parse(input);
 
+            if (args.Count == 0)
+                return;
+
             var command = commands.FirstOrDefault(a => a.Name == args[0]);
 
             if (command == null)
