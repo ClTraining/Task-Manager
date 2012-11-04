@@ -14,12 +14,12 @@ using Xunit;
 
 namespace ConnectToWcf
 {
-    public class TodoServiceClient : IClient
+    public class ToDoServiceClient : IClient
     {
         private readonly NetTcpBinding binding;
         private readonly string serviceAddress;
 
-        public TodoServiceClient(string address)
+        public ToDoServiceClient(string address)
         {
             serviceAddress = address;
             binding = new NetTcpBinding();
@@ -97,7 +97,7 @@ namespace ConnectToWcf
     {
         private const string address = "net.tcp://localhost:44440";
 
-        private readonly IClient client = new TodoServiceClient(address);
+        private readonly IClient client = new ToDoServiceClient(address);
         private readonly IArgToCommandConverter comConverter = Substitute.For<IArgToCommandConverter>();
         private readonly ServiceHost host;
         private readonly ITodoList list = Substitute.For<ITodoList>();

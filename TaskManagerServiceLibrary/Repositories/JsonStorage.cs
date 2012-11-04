@@ -8,18 +8,20 @@ using EntitiesLibrary;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using Newtonsoft.Json;
+using NSubstitute;
 using Xunit;
 
 namespace TaskManagerServiceLibrary.Repositories
 {
     public class JsonStorage : IRepository
     {
+        private readonly FileOperationsWrapper saver;
         private readonly List<ServiceTask> cacheStorage;
         private int currentId;
-        private const string FileName = "save.txt";
 
-        public JsonStorage()
+        public JsonStorage(FileOperationsWrapper saver)
         {
+            this.saver = saver;
             var jsonString = GetJsonString();
             cacheStorage = DeserializeToListOfTasks(jsonString);
             currentId = cacheStorage.Any() ? cacheStorage.Max(t => t.Id) : 0;
@@ -67,17 +69,8 @@ namespace TaskManagerServiceLibrary.Repositories
 
         private string GetJsonString()
         {
-            string text;
-            try
-            {
-                text = File.ReadAllText(FileName);
-            }
-            catch (FileNotFoundException)
-            {
-                text = "[]";
-            }
-            DeserializeToListOfTasks(text);
-            return text;
+            var info = saver.GetInfo();
+            return info.Any() ? info : "[]";
         }
 
         private List<ServiceTask> DeserializeToListOfTasks(string text)
@@ -87,12 +80,8 @@ namespace TaskManagerServiceLibrary.Repositories
 
         private void SynchronizeCacheAndLocal()
         {
-            var stream = new FileStream(FileName, FileMode.Create);
-            var writer = new StreamWriter(stream);
             var serializeObject = JsonConvert.SerializeObject(cacheStorage);
-            writer.Write(serializeObject);
-            writer.Close();
-            stream.Close();
+            saver.SaveToFile(serializeObject);
         }
 
         private int GetNewId()
@@ -105,43 +94,49 @@ namespace TaskManagerServiceLibrary.Repositories
     public class JsonStorageTests
     {
         private readonly JsonStorage storage;
+        private readonly FileOperationsWrapper saver = Substitute.For<FileOperationsWrapper>();
 
         public JsonStorageTests()
         {
-            storage = new JsonStorage();
+            storage = new JsonStorage(saver);
         }
 
         [Fact]
         public void should_write_task_to_save_file()
         {
-            var args = new AddTaskArgs { DueDate = DateTime.Today, Name = "sasha" };
-            storage.AddTask(args);
-            var text = File.ReadAllText("save.txt");
-            text.Should().NotBeEmpty();
+            storage.AddTask(new AddTaskArgs());
+
+            saver.ReceivedWithAnyArgs().SaveToFile("bla-bla");
         }
 
         [Fact]
         public void should_get_tasks_by_specification()
         {
-            storage.AddTask(new AddTaskArgs());
-            storage.AddTask(new AddTaskArgs());
-            IServiceSpecification specification = new ListAllServiceSpecification();
-            var tasks = storage.GetTasks(specification);
+            var spec = Substitute.For<IServiceSpecification>();
+            storage.GetTasks(spec);
 
-            tasks.Count.Should().BeGreaterOrEqualTo(2);
+            saver.ReceivedWithAnyArgs().GetInfo();
         }
 
         [Fact]
         public void should_update_storage()
         {
-            var task = new ServiceTask { Id = 2, DueDate = DateTime.Today, Name = "sasha", IsCompleted = false };
-            storage.AddTask(new AddTaskArgs { Name = "a", DueDate = DateTime.Today });
-            storage.AddTask(new AddTaskArgs { Name = "b", DueDate = DateTime.Today });
+            storage.AddTask(new AddTaskArgs { DueDate = DateTime.Today, Name = "Misha" });
+            var task = new ServiceTask { Id = 1, DueDate = DateTime.Today, IsCompleted = false, Name = "Sasha" };
+
             storage.UpdateChanges(task);
 
-            var text = File.ReadAllText("save.txt");
-            var tasksList = JsonConvert.DeserializeObject<List<ServiceTask>>(text);
-            tasksList[1].Name.Should().Be("sasha");
+            saver.ReceivedWithAnyArgs().SaveToFile("bla-bla");
+        }
+
+        [Fact]
+        public void should_select_task_with_given_ID()
+        {
+            storage.AddTask(new AddTaskArgs { DueDate = DateTime.Today, Name = "Sasha" });
+            storage.AddTask(new AddTaskArgs { DueDate = DateTime.Today, Name = "Misha" });
+            storage.AddTask(new AddTaskArgs { DueDate = DateTime.Today, Name = "Pasha" });
+            var serviceTask = storage.Select(1);
+            serviceTask.Id.Should().Be(1);
         }
     }
 }

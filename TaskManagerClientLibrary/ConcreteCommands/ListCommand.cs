@@ -118,7 +118,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         }
 
         [Fact]
-        public void should_print_info_on_reauired_tasks()
+        public void should_print_info_on_required_tasks()
         {
 
             //var args = new ListTaskArgs { Id = 153 };

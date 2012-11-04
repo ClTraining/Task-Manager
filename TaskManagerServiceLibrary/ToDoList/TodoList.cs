@@ -13,12 +13,12 @@ using FluentAssertions;
 
 namespace TaskManagerServiceLibrary.ToDoList
 {
-    public class TodoList : ITodoList
+    public class ToDoList : ITodoList
     {
         private readonly IRepository repo;
         private readonly ITaskMapper mapper;
 
-        public TodoList(IRepository repo, ITaskMapper mapper, IArgToCommandConverter converter)
+        public ToDoList(IRepository repo, ITaskMapper mapper)
         {
             this.repo = repo;
             this.mapper = mapper;
@@ -72,12 +72,12 @@ namespace TaskManagerServiceLibrary.ToDoList
         private readonly IRepository repo = Substitute.For<IRepository>();
         private readonly ITaskMapper mapper = Substitute.For<ITaskMapper>();
         private readonly IArgToCommandConverter converter = Substitute.For<IArgToCommandConverter>();
-        readonly TodoList todoList;
+        readonly ToDoList todoList;
         const int id = 1;
 
         public TodoListTests()
         {
-            todoList = new TodoList(repo, mapper, converter);
+            todoList = new ToDoList(repo, mapper);
         }
 
         [Fact]

@@ -74,6 +74,7 @@
     <Compile Include="Commands\IServiceCommand.cs" />
     <Compile Include="Commands\RenameServiceCommand.cs" />
     <Compile Include="Commands\SetDateServiceCommand.cs" />
+    <Compile Include="Repositories\FileOperationsWrapper.cs" />
     <Compile Include="ToDoList\ITodoList.cs" />
     <Compile Include="Repositories\JsonStorage.cs" />
     <Compile Include="Converters\MapConverter.cs" />
@@ -90,7 +91,7 @@
     <Compile Include="TaskManagerService.cs" />
     <Compile Include="TaskMapper\ITaskMapper.cs" />
     <Compile Include="TaskMapper\TaskMapper.cs" />
-    <Compile Include="ToDoList\TodoList.cs" />
+    <Compile Include="ToDoList\ToDoList.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EntitiesLibrary\EntitiesLibrary.csproj">

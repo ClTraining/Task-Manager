@@ -39,7 +39,8 @@ namespace TaskManagerService
             Bind<ITaskManagerService>().To<TaskManagerServiceLibrary.TaskManagerService>();
             Bind<IRepository>().To<JsonStorage>().InSingletonScope();
             Bind<ITaskMapper>().To<TaskMapper>();
-            Bind<ITodoList>().To<TodoList>();
+            Bind<FileOperationsWrapper>().ToSelf().WithConstructorArgument("path", "save.txt");
+            Bind<ITodoList>().To<ToDoList>();
             Bind<IArgToCommandConverter>().To<ArgToCommandConverter>().WithConstructorArgument("kernel", (c, o) => c.Kernel);
 
             Bind<ISpecificationsConverter>().To<SpecificationsConverter>();
