@@ -1,4 +1,6 @@
 ﻿using System.IO;
+using FluentAssertions;
+using Xunit;
 
 namespace TaskManagerServiceLibrary.Repositories
 {
@@ -34,5 +36,28 @@ namespace TaskManagerServiceLibrary.Repositories
             }
             return text;
         }
+    }
+
+    public class FileOperationsWrapperTests
+    {
+        FileOperationsWrapper wrapper=new FileOperationsWrapper("someSave.txt");
+        FileOperationsWrapper wrapper2 = new FileOperationsWrapper("someSave2.txt");
+        
+        [Fact]
+        public void should_return_empty_string_if_file_contains_nothing()
+        {
+            var info = wrapper2.GetInfo();
+
+            info.Should().BeEmpty();
+        }
+
+        [Fact]
+        public void should_save_argument_string_to_file()
+        {
+            wrapper.SaveToFile("Hello world");
+
+            File.ReadAllText("someSave.txt").Should().NotBeEmpty();
+        }
+
     }
 }
