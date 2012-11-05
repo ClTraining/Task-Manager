@@ -114,6 +114,16 @@ namespace TaskManagerServiceLibrary.ToDoList
         }
 
         [Fact]
+        public void should_throw_exception_on_clear_date_for_completed_task()
+        {
+            var task = new ServiceTask { Id = id, IsCompleted = true};
+            repo.Select(id).Returns(task);
+
+            Action act = () => todoList.ClearDate(id);
+            act.ShouldThrow<CouldNotSetDateException>("Could not clear due date for completed task.");
+        }
+
+        [Fact]
         public void should_complete_task()
         {
             var task = new ServiceTask {Id = id};
@@ -149,6 +159,18 @@ namespace TaskManagerServiceLibrary.ToDoList
             task.DueDate = dueDate;
 
             repo.Received().UpdateChanges(task);
+        }
+
+        [Fact]
+        public void should_throw_exception_on_set_date_to_completed_task()
+        {
+            var dueDate = DateTime.Today;
+            var task = new ServiceTask { Id = id, DueDate = dueDate, IsCompleted = true};
+            repo.Select(id).Returns(task);
+
+            Action action = () => todoList.SetTaskDate(id, dueDate);
+
+            action.ShouldThrow<CouldNotSetDateException>("Could not set due date to completed task.");
         }
     }
 }
