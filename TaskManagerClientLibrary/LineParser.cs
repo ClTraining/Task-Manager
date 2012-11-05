@@ -48,6 +48,10 @@ namespace TaskManagerClientLibrary
                 {
                     Console.WriteLine(e.Message);
                 }
+                catch (WrongTaskArgumentsException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
         }
     }
