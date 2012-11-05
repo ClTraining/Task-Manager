@@ -65,10 +65,15 @@ namespace ConnectToWcf
                     throw new CouldNotSetDateException(e.Message);
                 throw new Exception(e.Message);
             }
+            catch (EndpointNotFoundException e)
+            {
+                Console.WriteLine("Server is not available");
+            }
             finally
             {
                 CloseClient(client);
             }
+            return default(T);
         }
 
         private static void CloseClient(ChannelFactory<ITaskManagerService> client)
@@ -95,7 +100,7 @@ namespace ConnectToWcf
 
     public class ExchangeClientTests
     {
-        private const string address = "net.tcp://localhost:44400";
+        private const string address = "net.tcp://localhost:44445";
 
         private readonly IClient client = new ToDoServiceClient(address);
         private readonly IArgToCommandConverter comConverter = Substitute.For<IArgToCommandConverter>();
@@ -112,15 +117,12 @@ namespace ConnectToWcf
             host.Open();
         }
 
-        [Fact(Skip = "")]
+        [Fact]
         public void should_add_task_to_service()
         {
-            host.Open();
-
             const string myname = "myName";
             var args = new AddTaskArgs {Name = myname};
-            repo.AddTask(Arg.Is<AddTaskArgs>(a => a.Name == myname)).Returns(1);
-
+            service.AddTask(Arg.Is<AddTaskArgs>(a => a.Name == myname)).Returns(1);
             var result = client.AddTask(args);
             Console.Out.WriteLine(result);
             host.Close();
@@ -131,14 +133,14 @@ namespace ConnectToWcf
         [Fact(Skip = "")]
         public void should_get_tasks_from_server()
         {
-            var task = new ServiceTask {Id = 1};
-            var tasks = new List<ServiceTask> {task};
-            var cSpec = Substitute.For<IListCommandArguments>();
+            var task = new ClientTask {Id = 1};
+            var tasks = new List<ClientTask> {task};
+            var args = new ListAllTaskArgs();
 
-
-
-//            repo.GetTasks(Arg.Is<IServiceSpecification>(s => s.IsSatisfied(task))).Returns(tasks);
-
+            service.GetTasks(Arg.Is(args)).Returns(tasks);
+            var resultList = client.GetTasks(args);
+            host.Close();
+            Console.Out.WriteLine(resultList.GetType());
         }
     }
 }

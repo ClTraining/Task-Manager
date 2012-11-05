@@ -42,11 +42,20 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var listArgs = GetClientSpecification(argument);
             var formatter = factory.GetFormatter(listArgs);
+<<<<<<< HEAD
             var tasks = client.GetTasks(listArgs);
-            
-            if (tasks != null)
-                PrintWithFormatter(tasks, formatter);
+            PrintWithFormatter(tasks, formatter);
+=======
+            var tasks = client.GetTasks(listArgs);
 
+            if (tasks != null)
+            {
+                PrintWithFormatter(tasks, formatter);
+                return;
+            }
+
+            textWriter.WriteLine("Tasks not found");
+>>>>>>> exception if server is not available
         }
 
         private IListCommandArguments GetClientSpecification(List<string> source)
