@@ -169,22 +169,6 @@ namespace TaskManagerClientLibrary
         }
 
         [Fact]
-        public void should_ignore_double_quotes()
-        {
-            const string add = "add";
-            const string helloWorld = "hello world";
-            const string input = add +"\""+helloWorld+"\"";
-
-            command1.Name.Returns(add);
-            var list = new List<string> { add, helloWorld };
-            parser.Parse(input).Returns(list);
-            lp.ExecuteCommand(input);
-            list.RemoveAt(0);
-
-            command1.Received().Execute(list);
-        }
-
-        [Fact]
         public void should_inform_if_could_not_set_date()
         {
             const string world = "world";
