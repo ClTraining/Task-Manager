@@ -133,10 +133,18 @@ namespace TaskManagerClientLibrary
         }
 
         [Fact]
-        public void should_throw_exception_wrong_argument_types()
+        public void should_throw_exception__if_wrong_argument_types()
         {
             var arguments = new List<string> {"aa4", "task", "01-05-2012", "11-11-2012"};
             Action action = () => converter.Convert(arguments, new List<Type> {typeof (TestArgs)});
+            action.ShouldThrow<WrongTaskArgumentsException>().WithMessage("Wrong command arguments.");
+        }
+
+        [Fact]
+        public void should_throw_exception_if_properties_count_less_than_input()
+        {
+            var arguments = new List<string> { "4", "task", "01-05-2012", "11-11-2012", "fjhf" };
+            Action action = () => converter.Convert(arguments, new List<Type> { typeof(TestArgs) });
             action.ShouldThrow<WrongTaskArgumentsException>().WithMessage("Wrong command arguments.");
         }
 
