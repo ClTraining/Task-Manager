@@ -7,9 +7,8 @@ namespace TaskManagerServiceLibrary.Repositories
 {
     public interface IRepository
     {
-        int AddTask(AddTaskArgs args);
+        int AddTask(ServiceTask args);
         List<ServiceTask> GetTasks(IServiceSpecification spec);
-        ServiceTask Select(int id);
         void UpdateChanges(ServiceTask task);
     }
 }

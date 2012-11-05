@@ -14,5 +14,6 @@ namespace TaskManagerServiceLibrary.ToDoList
         void CompleteTask(int id);
         void RenameTask(int id, string newName);
         void SetTaskDate(int id, DateTime dueDate);
+        ServiceTask SelectTaskById(int id);
     }
 }

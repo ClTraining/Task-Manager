@@ -1,6 +1,7 @@
 using System;
 using AutoMapper;
 using EntitiesLibrary;
+using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using Xunit;
 
@@ -17,6 +18,11 @@ namespace TaskManagerServiceLibrary.TaskMapper
         public ClientTask ConvertToClient(ServiceTask task)
         {
             return Mapper.DynamicMap<ServiceTask, ClientTask>(task);
+        }
+
+        public ServiceTask ConvertArgsToTask(AddTaskArgs args)
+        {
+            return new ServiceTask { Name = args.Name, DueDate = args.DueDate == null ? default(DateTime) : args.DueDate.Value };
         }
     }
 

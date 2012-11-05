@@ -75,6 +75,8 @@
     <Compile Include="Commands\RenameServiceCommand.cs" />
     <Compile Include="Commands\SetDateServiceCommand.cs" />
     <Compile Include="Repositories\FileOperationsWrapper.cs" />
+    <Compile Include="Repositories\TaskExtractor\ITaskExtractor.cs" />
+    <Compile Include="Repositories\TaskExtractor\TaskExtractor.cs" />
     <Compile Include="ToDoList\ITodoList.cs" />
     <Compile Include="Repositories\JsonStorage.cs" />
     <Compile Include="Converters\MapConverter.cs" />
