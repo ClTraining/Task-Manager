@@ -28,8 +28,15 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         public void Execute(List<string> argument)
         {
             var setDateArgs = ConvertToArgs(argument);
-            client.ExecuteCommand(setDateArgs);
-            PrintInfo(setDateArgs);
+            try
+            {
+                client.ExecuteCommand(setDateArgs);
+                PrintInfo(setDateArgs);
+            }
+            catch (ServerNotAvailableException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         private void PrintInfo(SetDateTaskArgs setDateArgs)

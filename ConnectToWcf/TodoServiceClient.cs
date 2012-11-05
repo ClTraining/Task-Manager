@@ -67,13 +67,12 @@ namespace ConnectToWcf
             }
             catch (EndpointNotFoundException e)
             {
-                Console.WriteLine("Server is not available");
+                throw new ServerNotAvailableException();
             }
             finally
             {
                 CloseClient(client);
             }
-            return default(T);
         }
 
         private static void CloseClient(ChannelFactory<ITaskManagerService> client)

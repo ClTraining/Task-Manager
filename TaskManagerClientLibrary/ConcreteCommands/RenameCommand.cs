@@ -28,8 +28,15 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         public void Execute(List<string> argument)
         {
             var renameTaskArgs = ConvertToArgs(argument);
-            client.ExecuteCommand(renameTaskArgs);
-            PrintInfo(renameTaskArgs);
+            try
+            {
+                client.ExecuteCommand(renameTaskArgs);
+                PrintInfo(renameTaskArgs);
+            }
+            catch (ServerNotAvailableException e)
+            {
+                Console.WriteLine(e.Message);
+            }
         }
 
         private void PrintInfo(RenameTaskArgs renameTaskArgs)

@@ -28,8 +28,17 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         public void Execute(List<string> argument)
         {
             var addTaskArgs = ConvertToArgs(argument);
-            var result = client.AddTask(addTaskArgs);
-            PrintInfo(result);
+
+            try
+            {
+                var result = client.AddTask(addTaskArgs);
+                PrintInfo(result);
+            }
+            catch (ServerNotAvailableException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
         }
 
         private void PrintInfo(int result)
