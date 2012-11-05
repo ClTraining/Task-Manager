@@ -118,14 +118,14 @@ namespace TaskManagerClientLibrary
         [Fact]
         public void should_get_nullable_value()
         {
-            var arguments = new List<string> {"102", "some string", "07-02-2010", "10-12-2012"};
+            var arguments = new List<string> {"102", "some string", "07-02-2010", "today"};
             var result = converter.Convert(arguments, new List<Type> {typeof (TestArgs)}) as TestArgs;
             var testArgs = new TestArgs
                                {
                                    IntValue = 102,
                                    StringValue = "some string",
                                    DateTimeValue1 = DateTime.Parse("07-02-2010"),
-                                   DateTimeValue2 = DateTime.Parse("10-12-2012")
+                                   DateTimeValue2 = DateTime.Today
                                };
             result.ShouldBeEquivalentTo(testArgs);
         }
