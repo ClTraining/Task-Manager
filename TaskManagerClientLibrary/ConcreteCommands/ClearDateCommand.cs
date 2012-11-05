@@ -6,6 +6,7 @@ using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
+using System.Linq;
 
 namespace TaskManagerClientLibrary.ConcreteCommands
 {
@@ -61,11 +62,14 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         [Fact]
         public void should_send_string_return_id()
         {
-            var arguments = new List<string> { "12" };
-            var clearDateArgs = new ClearDateTaskArgs { Id = 12 };
-            converter.Convert(arguments, new List<Type>{typeof(ClearDateTaskArgs)}).ReturnsForAnyArgs(clearDateArgs);
-            handler.Execute(arguments);
-            client.Received().ExecuteCommand(clearDateArgs);
+            var args = new ClearDateTaskArgs { Id = 12 };
+            var argument = new List<string> { "12" };
+
+            converter
+                .Convert(argument, Arg.Is<List<Type>>(list => list.SequenceEqual(new List<Type> {typeof (ClearDateTaskArgs)})))
+                .Returns(args);
+            handler.Execute(argument);
+            client.Received().ExecuteCommand(args);
         }
     }
 }

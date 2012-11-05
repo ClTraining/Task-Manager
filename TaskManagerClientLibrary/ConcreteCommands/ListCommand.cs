@@ -117,27 +117,5 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             list.Execute(input);
             connection.ReceivedWithAnyArgs().GetTasks(data);
         }
-
-        [Fact]
-        public void should_print_info_on_required_tasks()
-        {
-
-            //var args = new ListTaskArgs { Id = 153 };
-            //var input = new List<string> { "153" };
-            //var listPackage = new List<ClientTask> { new ClientTask { DueDate = DateTime.Now, Id = 1, IsCompleted = true } };
-
-            //var formatter = Substitute.For<ITaskFormatter>();
-            //data = Substitute.For<IClientSpecification>();
-
-            //converter.Convert(input).Returns(args);
-            //factory.GetClientSpecification(args).Returns(data);
-            //factory.GetFormatter(data).Returns(formatter);
-            //formatter.ToFormatString(listPackage).Returns("hello world");
-
-            //connection.GetTasks(data).Returns(listPackage);
-
-            //list.Execute(input);
-            //sb.ToString().Should().BeEquivalentTo("hello world\r\n");
-        }
     }
 }

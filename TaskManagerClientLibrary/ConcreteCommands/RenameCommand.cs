@@ -6,6 +6,7 @@ using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
+using System.Linq;
 
 namespace TaskManagerClientLibrary.ConcreteCommands
 {
@@ -77,7 +78,9 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var renameTaskArgs = new RenameTaskArgs { Id = 5, Name = "newTask" };
             var argument = new List<string> { "1", "10-10-2012" };
-            converter.Convert(argument, new List<Type>{typeof(RenameTaskArgs)}).ReturnsForAnyArgs(renameTaskArgs);
+            converter
+                .Convert(argument, Arg.Is<List<Type>>(list => list.SequenceEqual(new List<Type>{typeof(RenameTaskArgs)})))
+                .Returns(renameTaskArgs);
             command.Execute(argument);
             client.Received().ExecuteCommand(renameTaskArgs);
         }
