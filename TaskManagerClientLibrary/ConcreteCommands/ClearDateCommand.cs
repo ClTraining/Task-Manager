@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using ConnectToWcf;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
@@ -29,17 +28,11 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         public void Execute(List<string> argument)
         {
-            var clearDateArgs = converter.Convert(argument, new List<Type> { typeof(ClearDateTaskArgs) }) as ClearDateTaskArgs;
+            var clearDateArgs =
+                converter.Convert(argument, new List<Type> {typeof (ClearDateTaskArgs)}) as ClearDateTaskArgs;
 
-            try
-            {
-                client.ExecuteCommand(clearDateArgs);
-                if (clearDateArgs != null) textWriter.WriteLine("Due date cleared for task ID: {0} .", clearDateArgs.Id);
-            }
-            catch (ServerNotAvailableException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            client.ExecuteCommand(clearDateArgs);
+            if (clearDateArgs != null) textWriter.WriteLine("Due date cleared for task ID: {0} .", clearDateArgs.Id);
         }
     }
 
@@ -72,16 +65,5 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             client.Received().ExecuteCommand(args);
         }
 
-        [Fact]
-        public void should_throw_exception_if_server_not_available()
-        {
-            client.When(c => c.ExecuteCommand(args)).Do(_ => { throw new ServerNotAvailableException(); });
-            var sb = new StringBuilder();
-            Console.SetOut(new StringWriter(sb));
-
-            command.Execute(argument);
-
-            sb.ToString().Should().Be("Server is not available.\r\n");
-        }
     }
 }

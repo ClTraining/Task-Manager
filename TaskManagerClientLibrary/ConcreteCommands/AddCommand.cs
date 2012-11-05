@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using ConnectToWcf;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
@@ -31,16 +30,8 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var addTaskArgs = ConvertToArgs(argument);
 
-            try
-            {
-                var result = client.AddTask(addTaskArgs);
-                PrintInfo(result);
-            }
-            catch (ServerNotAvailableException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            
+            var result = client.AddTask(addTaskArgs);
+            PrintInfo(result);
         }
 
         private void PrintInfo(int result)
@@ -84,18 +75,6 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             command.Execute(argument);
             client.Received().AddTask(args);
-        }
-
-        [Fact]
-        public void should_throw_exception_if_server_is_not_available()
-        {
-            client.When(c => c.AddTask(args)).Do(_ => { throw new ServerNotAvailableException(); });
-            var sb = new StringBuilder();
-            Console.SetOut(new StringWriter(sb));
-
-            command.Execute(argument);
-            
-            sb.ToString().Should().Be("Server is not available.\r\n");
         }
     }
 }

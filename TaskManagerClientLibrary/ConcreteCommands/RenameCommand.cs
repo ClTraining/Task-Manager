@@ -30,15 +30,8 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         public void Execute(List<string> argument)
         {
             var renameTaskArgs = ConvertToArgs(argument);
-            try
-            {
-                client.ExecuteCommand(renameTaskArgs);
-                PrintInfo(renameTaskArgs);
-            }
-            catch (ServerNotAvailableException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            client.ExecuteCommand(renameTaskArgs);
+            PrintInfo(renameTaskArgs);
         }
 
         private void PrintInfo(RenameTaskArgs renameTaskArgs)
@@ -81,18 +74,6 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             command.Execute(argument);
             client.Received().ExecuteCommand(args);
-        }
-
-        [Fact]
-        public void should_throw_exception_if_server_is_not_available()
-        {
-            client.When(c => c.ExecuteCommand(args)).Do(_ => { throw new ServerNotAvailableException(); });
-            var sb = new StringBuilder();
-            Console.SetOut(new StringWriter(sb));
-
-            command.Execute(argument);
-
-            sb.ToString().Should().Be("Server is not available.\r\n");
         }
     }
 }

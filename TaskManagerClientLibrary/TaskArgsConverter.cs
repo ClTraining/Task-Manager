@@ -13,6 +13,8 @@ namespace TaskManagerClientLibrary
     public class TaskArgsConverter
     {
         private readonly Dictionary<string, DateTime> dateAliases;
+        private const string WrongCommandArguments = "Wrong command arguments.";
+
 
         public TaskArgsConverter()
         {
@@ -54,7 +56,7 @@ namespace TaskManagerClientLibrary
                 if (returnValue != null) return (ICommandArguments) returnValue;
             }
 
-            throw new WrongTaskArgumentsException("Wrong command arguments.");
+            throw new WrongTaskArgumentsException(WrongCommandArguments);
         }
 
         private object GetAliasValue(PropertyInfo property, string source)

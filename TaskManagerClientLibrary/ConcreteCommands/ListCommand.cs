@@ -37,15 +37,8 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             var listArgs = GetClientSpecification(argument);
             var formatter = factory.GetFormatter(listArgs);
 
-            try
-            {
-                var tasks = client.GetTasks(listArgs);
-                PrintWithFormatter(tasks, formatter);
-            }
-            catch (ServerNotAvailableException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            var tasks = client.GetTasks(listArgs);
+            PrintWithFormatter(tasks, formatter);
         }
 
         private IListCommandArguments GetClientSpecification(List<string> source)
@@ -115,26 +108,6 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
             command.Execute(argument);
             client.ReceivedWithAnyArgs().GetTasks(args);
-        }
-
-        [Fact]
-        public void should_throw_exception_if_server_is_not_available()
-        {
-            var argument = new List<string> { "153" };
-            var listPackage = new List<ClientTask> { new ClientTask { DueDate = DateTime.Now, Id = 1, IsCompleted = true } };
-            var formatter = Substitute.For<ITaskFormatter>();
-            var types = new List<Type> { typeof(ListByDateTaskArgs), typeof(ListSingleTaskArgs), typeof(ListAllTaskArgs) };
-
-            converter.Convert(argument, types).Returns(args);
-            factory.GetFormatter(args).Returns(formatter);
-            formatter.ToFormatString(listPackage).Returns("hello world");
-
-            client.When(c => c.GetTasks(args)).Do(_ => { throw new ServerNotAvailableException(); });
-            Console.SetOut(new StringWriter(sb));
-
-            command.Execute(argument);
-
-            sb.ToString().Should().Be("Server is not available.\r\n");
         }
 
         [Fact]

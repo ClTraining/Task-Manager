@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using ConnectToWcf;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
@@ -49,6 +50,10 @@ namespace TaskManagerClientLibrary
                     Console.WriteLine(e.Message);
                 }
                 catch (WrongTaskArgumentsException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                catch (ServerNotAvailableException e)
                 {
                     Console.WriteLine(e.Message);
                 }
@@ -256,6 +261,28 @@ namespace TaskManagerClientLibrary
             lp.ExecuteCommand(empty);
 
             sb.ToString().Should().Be(empty);
+        }
+
+        [Fact]
+        public void should_handle_server_not_available_exception()
+        {
+            const string commandName = "command";
+            const string argumentName = "argument";
+            const string commandArgument = commandName + " " + argumentName;
+            const string serverNotAvailable = "Server is not available.";
+
+            var input = new List<string> { commandName, argumentName };
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+            command1.Name.Returns(commandName);
+            parser.Parse(commandArgument).Returns(input);
+            command1.When(x => x.Execute(input)).Do(x =>
+            {
+                throw new ServerNotAvailableException();
+            });
+            lp.ExecuteCommand(commandArgument);
+
+            sb.ToString().Should().Be(serverNotAvailable + EndForStringBuilder);
         }
     }
 }
