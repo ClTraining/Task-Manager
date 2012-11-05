@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using CommandQueryLibrary.ServiceSpecifications;
 using EntitiesLibrary;
@@ -104,12 +105,16 @@ namespace TaskManagerServiceLibrary.ToDoList
         public void should_get_task_from_repository()
         {
             var spec = new ListAllServiceSpecification();
-            var expectedTasks = new List<ServiceTask>();
-            repo.GetTasks(spec).Returns(expectedTasks);
+            var serviceTask = new ServiceTask {Id = 3};
+            var serviceTasks = new List<ServiceTask>{serviceTask};
+            var expectedTask = new ClientTask{Id =3 };
+            var clientTasks = new List<ClientTask> { expectedTask };
+            repo.GetTasks(spec).Returns(serviceTasks);
+            mapper.ConvertToClient(serviceTask).Returns(expectedTask);
 
             var resultList = todoList.GetTasks(spec);
 
-            resultList.Should().BeEquivalentTo(expectedTasks);
+            resultList.Should().BeEquivalentTo(clientTasks);
         }
 
         [Fact]
