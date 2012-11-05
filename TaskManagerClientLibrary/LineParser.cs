@@ -26,7 +26,7 @@ namespace TaskManagerClientLibrary
         {
             var args = parser.Parse(input);
 
-            if (args.Count == 0)
+            if (!args.Any())
                 return;
 
             var command = commands.FirstOrDefault(a => a.Name == args[0]);
@@ -178,6 +178,37 @@ namespace TaskManagerClientLibrary
             lp.ExecuteCommand("hello world");
 
             sb.ToString().Should().Be("exception\r\n");
+        }
+
+        [Fact]
+        public void should_handle_wrong_arguments_exception()
+        {
+            const string commandName = "command";
+            const string argumentName = "argument";
+            const string commandArgument = commandName + " " + argumentName;
+
+            var input = new List<string> {commandName, argumentName};
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+            command1.Name.Returns(commandName);
+            parser.Parse(commandArgument).Returns(input);
+            command1.When(x => x.Execute(input)).Do(x => { throw new WrongTaskArgumentsException("Wrong command arguments.");});
+            lp.ExecuteCommand(commandArgument);
+
+            sb.ToString().Should().Be("Wrong command arguments.\r\n");
+        }
+
+        [Fact]
+        public void should_do_nothing_if_empty_string_received()
+        {
+            const string empty = "";
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+
+            parser.Parse(empty).Returns(new List<string>());
+            lp.ExecuteCommand(empty);
+
+            sb.ToString().Should().Be(empty);
         }
     }
 }
