@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using EntitiesLibrary;
 using FluentAssertions;
@@ -17,18 +18,18 @@ namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
         public virtual string ToFormatString(List<ClientTask> tasks)
         {
             var taskString = new StringBuilder();
-            if (tasks.Count == 0)
-            {
-                taskString.Append(TaskNotFound);
-            }
-            else
-            {
+            if (tasks.Any())
+            {    
                 tasks.ForEach(
                     x =>
                     taskString.Append(String.Format(Format, x.Id, x.Name, x.IsCompleted ? "+" : "-",
                                                     x.DueDate == default(DateTime)
                                                         ? "not set"
                                                         : x.DueDate.ToString(datePattern))));
+            }
+            else
+            {
+                taskString.Append(TaskNotFound);
             }
             return taskString.ToString();
         }

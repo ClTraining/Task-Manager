@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using EntitiesLibrary;
 using FluentAssertions;
@@ -14,6 +15,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
         private const int PosName = 15;
         private const int PosCompleted = 13;
         private const int PosDueDate = 20;
+        private const string TasksNotFound = "Tasks not found.";
         private readonly string format;
         private readonly string datePattern = CultureInfo.InvariantCulture.DateTimeFormat.ShortDatePattern;
 
@@ -25,14 +27,23 @@ namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
         public virtual string ToFormatString(List<ClientTask> tasks)
         {
             var taskString = new StringBuilder();
-            taskString.AppendLine(PrintHeader());
+            if (tasks.Any())
+            {
+                taskString.AppendLine(PrintHeader());
+                tasks.ForEach(
+                    x =>
+                    taskString.AppendLine(String.Format(format, x.Id,
+                                                        (x.Name.Length > PosName) ? x.Name.Remove(PosName) : x.Name,
+                                                        x.IsCompleted ? "+" : "-",
+                                                        x.DueDate == default(DateTime)
+                                                            ? "not set"
+                                                            : x.DueDate.ToString(datePattern))));
 
-            tasks.ForEach(
-                x =>
-                taskString.AppendLine(String.Format(format, x.Id,
-                                                    (x.Name.Length > PosName) ? x.Name.Remove(PosName) : x.Name,
-                                                    x.IsCompleted ? "+" : "-", x.DueDate == default(DateTime) ? "not set" : x.DueDate.ToString(datePattern))));
-
+            }
+            else
+            {
+                taskString.AppendLine(TasksNotFound);
+            }
             return taskString.ToString();
         }
 
@@ -45,12 +56,12 @@ namespace TaskManagerClientLibrary.ConcreteCommands.TaskFormatter
     public class ListTaskFormatterTests
     {
         [Fact]
-        public void should_print_header_for_empty_list()
+        public void should_print_tasks_not_found_for_empty_list()
         {
             var formatter = new ListTaskFormatter();
             var sb = new StringBuilder();
             sb.Append(formatter.ToFormatString(new List<ClientTask>()));
-            sb.ToString().Should().Be("Id    |            Name |     Completed |             Due date\r\n");
+            sb.ToString().Should().Be("Tasks not found.\r\n");
         }
 
         [Fact]

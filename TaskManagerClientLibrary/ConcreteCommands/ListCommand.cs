@@ -43,12 +43,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             var listArgs = GetClientSpecification(argument);
             var formatter = factory.GetFormatter(listArgs);
             var tasks = client.GetTasks(listArgs);
-            if (tasks.Any())
-            {
-                PrintWithFormatter(tasks, formatter);
-                return;
-            }
-            textWriter.WriteLine("Tasks not found");
+            PrintWithFormatter(tasks, formatter);
         }
 
         private IListCommandArguments GetClientSpecification(List<string> source)
@@ -56,7 +51,6 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             var types = new List<Type> { typeof(ListByDateTaskArgs), typeof(ListSingleTaskArgs), typeof(ListAllTaskArgs) };
 
             return converter.Convert(source, types) as IListCommandArguments;
-
         }
     }
 
