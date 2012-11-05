@@ -6,6 +6,7 @@ using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
+using System.Linq;
 
 namespace TaskManagerClientLibrary.ConcreteCommands
 {
@@ -29,15 +30,8 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var completeTaskArgs = ConvertToArgs(argument);
 
-            try
-            {
-                client.ExecuteCommand(completeTaskArgs);
-                PrintInfo(completeTaskArgs);
-            }
-            catch (ServerNotAvailableException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            client.ExecuteCommand(completeTaskArgs);
+            PrintInfo(completeTaskArgs);
         }
 
         private void PrintInfo(CompleteTaskArgs completeTaskArgs)
@@ -47,23 +41,24 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         private CompleteTaskArgs ConvertToArgs(List<string> argument)
         {
-            var completeTaskArgs = converter.Convert(argument, new List<Type>{typeof(CompleteTaskArgs)}) as CompleteTaskArgs;
-            return completeTaskArgs;
+            return converter.Convert(argument, new List<Type>{typeof(CompleteTaskArgs)}) as CompleteTaskArgs;
         }
     }
 
     public class CompleteTests
     {
         private readonly IClient client = Substitute.For<IClient>();
-
-        private readonly TaskArgsConverter converter =
-            Substitute.For<TaskArgsConverter>();
-
+        private readonly TaskArgsConverter converter = Substitute.For<TaskArgsConverter>();
         private readonly CompleteCommand command;
+        readonly CompleteTaskArgs args = new CompleteTaskArgs { Id = 1 };
+        readonly List<string> argument = new List<string> { "1", "10-10-2012" };
 
         public CompleteTests()
         {
             command = new CompleteCommand(converter, new StringWriter(), client);
+            converter
+                .Convert(argument, Arg.Is<List<Type>>(list => list.SequenceEqual(new List<Type> {typeof (CompleteTaskArgs)})))
+                .Returns(args);
         }
 
         [Fact]
@@ -75,11 +70,8 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         [Fact]
         public void should_send_set_date_to_client()
         {
-            var completeTaskArgs = new CompleteTaskArgs { Id = 1 };
-            var argument = new List<string> { "1", "10-10-2012" };
-            converter.Convert(argument, new List<Type>{typeof(CompleteTaskArgs)}).ReturnsForAnyArgs(completeTaskArgs);
             command.Execute(argument);
-            client.Received().ExecuteCommand(completeTaskArgs);
+            client.Received().ExecuteCommand(args);
         }
     }
 }

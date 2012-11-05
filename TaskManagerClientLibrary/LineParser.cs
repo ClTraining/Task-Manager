@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using ConnectToWcf;
 using EntitiesLibrary;
 using FluentAssertions;
 using NSubstitute;
@@ -26,7 +27,7 @@ namespace TaskManagerClientLibrary
         {
             var args = parser.Parse(input);
 
-            if (args.Count == 0)
+            if (!args.Any())
                 return;
 
             var command = commands.FirstOrDefault(a => a.Name == args[0]);
@@ -48,6 +49,14 @@ namespace TaskManagerClientLibrary
                 {
                     Console.WriteLine(e.Message);
                 }
+                catch (WrongTaskArgumentsException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                catch (ServerNotAvailableException e)
+                {
+                    Console.WriteLine(e.Message);
+                }
             }
         }
     }
@@ -60,6 +69,7 @@ namespace TaskManagerClientLibrary
         private readonly List<ICommand> commands;
         private readonly LineParser lp;
         private readonly InputParser parser = Substitute.For<InputParser>();
+        private const string EndForStringBuilder = "\r\n";
 
         public LineParserTests()
         {
@@ -71,11 +81,17 @@ namespace TaskManagerClientLibrary
         [Fact]
         public void should_call_proper_command()
         {
-            command1.Name.Returns("add");
-            command2.Name.Returns("command");
-            command3.Name.Returns("hello");
-            var input = "add foo";
-            var list = new List<string> { "add", "foo" };
+            const string command1Name = "add";
+            const string command2Name = "command";
+            const string command3Name = "hello";
+            const string arg = "foo";
+            const string input = command1Name+" " +arg;
+            var list = new List<string> { command1Name, arg };
+
+            command1.Name.Returns(command1Name);
+            command2.Name.Returns(command2Name);
+            command3.Name.Returns(command3Name);
+            
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
             list.RemoveAt(0);
@@ -85,10 +101,12 @@ namespace TaskManagerClientLibrary
         [Fact]
         public void should_call_the_first_command()
         {
-            command1.Name.Returns("add");
-            command2.Name.Returns("add");
-            var input = "add aaa";
-            var list = new List<string> { "add", "aaa" };
+            const string commandName = "add";
+            command1.Name.Returns(commandName);
+            command2.Name.Returns(commandName);
+            const string arg = "aaa";
+            const string input = commandName + " " + arg;
+            var list = new List<string> { commandName, arg };
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
             list.RemoveAt(0);
@@ -99,18 +117,26 @@ namespace TaskManagerClientLibrary
         [Fact]
         public void should_inform_if_no_such_command()
         {
-            command1.Name.Returns("add");
-            command2.Name.Returns("command");
-            command3.Name.Returns("hello");
+            const string command1Name = "add";
+            const string command2Name = "command";
+            const string command3Name = "hello";
+            const string wrongArgs = "aaa";
+            const string wrongCommand = "ababa";
+            const string someArgs = "bababab";
+            const string input = wrongCommand + " " + someArgs;
 
-            var input = "ababa bababab";
-            var list = new List<string> { "ababa", "bababab" };
+            command1.Name.Returns(command1Name);
+            command2.Name.Returns(command2Name);
+            command3.Name.Returns(command3Name);
+            
+            var list = new List<string> { wrongCommand, someArgs };
             parser.Parse(input).Returns(list);
             lp.ExecuteCommand(input);
 
-            command1.DidNotReceiveWithAnyArgs().Execute(new List<string> { "aaa" });
-            command2.DidNotReceiveWithAnyArgs().Execute(new List<string> { "aaa" });
-            command3.DidNotReceiveWithAnyArgs().Execute(new List<string> { "aaa" });
+            
+            command1.DidNotReceiveWithAnyArgs().Execute(new List<string> { wrongArgs });
+            command2.DidNotReceiveWithAnyArgs().Execute(new List<string> { wrongArgs });
+            command3.DidNotReceiveWithAnyArgs().Execute(new List<string> { wrongArgs });
         }
 
         [Fact]
@@ -119,61 +145,144 @@ namespace TaskManagerClientLibrary
             var sb = new StringBuilder();
             Console.SetOut(new StringWriter(sb));
 
-            command1.Name.Returns("add");
-            command2.Name.Returns("command");
-            command3.Name.Returns("abrakadabra");
+            const string command1Name = "add";
+            const string command2Name = "command";
+            const string command3Name = "abrakadabra";
+            const string world = "world";
+            const string hello = "hello";
+            const string helloWorld = hello + " " + world;
+            const string input = helloWorld;
+            const string noSuchCommand = "No such command";
 
-            var input = "hello world";
-            var list = new List<string> { "hello", "world" };
+            command1.Name.Returns(command1Name);
+            command2.Name.Returns(command2Name);
+            command3.Name.Returns(command3Name);
+
+            
+            var list = new List<string> { hello, world };
             parser.Parse(input).Returns(list);
 
             lp.ExecuteCommand(input);
 
-            sb.ToString().ShouldBeEquivalentTo("No such command\r\n");
+
+            sb.ToString().ShouldBeEquivalentTo(noSuchCommand + EndForStringBuilder);
         }
 
         [Fact]
         public void should_ignore_double_quotes()
         {
-            command1.Name.Returns("add");
-            var input = "add \"hello world\"";
-            var list = new List<string> { "add", "hello world" };
+            const string add = "add";
+            const string helloWorld = "hello world";
+            const string input = add +"\""+helloWorld+"\"";
+
+            command1.Name.Returns(add);
+            var list = new List<string> { add, helloWorld };
             parser.Parse(input).Returns(list);
-            lp.ExecuteCommand("add \"hello world\"");
+            lp.ExecuteCommand(input);
             list.RemoveAt(0);
+
             command1.Received().Execute(list);
         }
 
         [Fact]
         public void should_inform_if_could_not_set_date()
         {
-            var world = "world";
-            var list = new List<string> { "hello", world };
+            const string world = "world";
+            const string hello = "hello";
+            const string helloWorld = hello + " " + world;
+            const string taskNotFoundId = "Task not found, ID: 1";
+
+            var list = new List<string> { hello, world };
             var sb = new StringBuilder();
             Console.SetOut(new StringWriter(sb));
-            command1.Name.Returns("hello");
-            parser.Parse("hello world").Returns(list);
+            command1.Name.Returns(hello);
+            parser.Parse(helloWorld).Returns(list);
             command1.When(x => x.Execute(list)).Do(x => { throw new TaskNotFoundException(1); });
 
-            lp.ExecuteCommand("hello world");
+            lp.ExecuteCommand(helloWorld);
 
-            sb.ToString().Should().Be("Task not found, ID: 1\r\n");
+            sb.ToString().Should().Be(taskNotFoundId + EndForStringBuilder);
         }
 
         [Fact]
         public void should_inform_if_task_was_not_found()
         {
-            var world = "world";
-            var list = new List<string> { "hello", world };
+            const string world = "world";
+            const string hello = "hello";
+            const string helloWorld = hello +" "+ world;
+            const string exception = "exception";
+
+            var list = new List<string> { hello, world };
             var sb = new StringBuilder();
             Console.SetOut(new StringWriter(sb));
-            command1.Name.Returns("hello");
-            parser.Parse("hello world").Returns(list);
-            command1.When(x => x.Execute(list)).Do(x => { throw new CouldNotSetDateException("exception"); });
+            command1.Name.Returns(hello);
+            
+            parser.Parse(helloWorld).Returns(list);
+            command1.When(x => x.Execute(list)).Do(x =>
+                                                       {
+                                                           throw new CouldNotSetDateException(exception);
+                                                       });
 
-            lp.ExecuteCommand("hello world");
+            lp.ExecuteCommand(helloWorld);
 
-            sb.ToString().Should().Be("exception\r\n");
+            sb.ToString().Should().Be(exception + EndForStringBuilder);
+        }
+
+        [Fact]
+        public void should_handle_wrong_arguments_exception()
+        {
+            const string commandName = "command";
+            const string argumentName = "argument";
+            const string commandArgument = commandName + " " + argumentName;
+            const string wrongCommandArguments = "Wrong command arguments.";
+
+            var input = new List<string> {commandName, argumentName};
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+            command1.Name.Returns(commandName);
+            parser.Parse(commandArgument).Returns(input);
+            command1.When(x => x.Execute(input)).Do(x =>
+                                                        {
+                                                            throw new WrongTaskArgumentsException(wrongCommandArguments);
+                                                        });
+            lp.ExecuteCommand(commandArgument);
+
+            sb.ToString().Should().Be(wrongCommandArguments + EndForStringBuilder);
+        }
+
+        [Fact]
+        public void should_do_nothing_if_empty_string_received()
+        {
+            const string empty = "";
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+
+            parser.Parse(empty).Returns(new List<string>());
+            lp.ExecuteCommand(empty);
+
+            sb.ToString().Should().Be(empty);
+        }
+
+        [Fact]
+        public void should_handle_server_not_available_exception()
+        {
+            const string commandName = "command";
+            const string argumentName = "argument";
+            const string commandArgument = commandName + " " + argumentName;
+            const string serverNotAvailable = "Server is not available.";
+
+            var input = new List<string> { commandName, argumentName };
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+            command1.Name.Returns(commandName);
+            parser.Parse(commandArgument).Returns(input);
+            command1.When(x => x.Execute(input)).Do(x =>
+            {
+                throw new ServerNotAvailableException();
+            });
+            lp.ExecuteCommand(commandArgument);
+
+            sb.ToString().Should().Be(serverNotAvailable + EndForStringBuilder);
         }
     }
 }

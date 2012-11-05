@@ -5,7 +5,6 @@ using Ninject.Extensions.Conventions;
 using Ninject.Modules;
 using TaskManagerClientLibrary.CommandContainer;
 using TaskManagerClientLibrary.ConcreteCommands;
-using TaskManagerClientLibrary.ConcreteCommands.TaskFormatter;
 
 namespace TaskManagerClientLibrary
 {
@@ -22,8 +21,6 @@ namespace TaskManagerClientLibrary
 
             var greeting = notifier.GenerateGreeting();
             Console.WriteLine(greeting);
-
-            var factory = kernel.Get<ITaskFormatterFactory>();
 
             for (string s; ((s = Console.ReadLine()) != null); )
             {

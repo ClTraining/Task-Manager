@@ -13,6 +13,8 @@ namespace TaskManagerClientLibrary
     public class TaskArgsConverter
     {
         private readonly Dictionary<string, DateTime> dateAliases;
+        private const string WrongCommandArguments = "Wrong command arguments.";
+
 
         public TaskArgsConverter()
         {
@@ -25,14 +27,15 @@ namespace TaskManagerClientLibrary
             {
                 var properties = type.GetProperties().ToList();
                 var returnValue = Activator.CreateInstance(type);
-                if (properties.Count<source.Count)
+                if (properties.Count < source.Count)
                     break;
                 var sourceArr = new string[properties.Count];
                 source.CopyTo(sourceArr, 0);
 
                 var stringPropertyDictionary = sourceArr.Zip(properties,
                                                              (first, second) =>
-                                                             new KeyValuePair<string, PropertyInfo>(first ?? String.Empty, second));
+                                                             new KeyValuePair<string, PropertyInfo>(
+                                                                 first ?? String.Empty, second));
 
                 foreach (var property in stringPropertyDictionary)
                 {
@@ -50,15 +53,15 @@ namespace TaskManagerClientLibrary
 
                     property.Value.SetValue(returnValue, convertedValue, null);
                 }
-                if (returnValue!= null) return (ICommandArguments) returnValue;
+                if (returnValue != null) return (ICommandArguments) returnValue;
             }
 
-            throw new WrongTaskArgumentsException("Wrong command arguments.");
+            throw new WrongTaskArgumentsException(WrongCommandArguments);
         }
 
         private object GetAliasValue(PropertyInfo property, string source)
         {
-            if (property.PropertyType == typeof (DateTime))
+            if (property.PropertyType == typeof (DateTime) || property.PropertyType == typeof (DateTime?))
             {
                 var key = source.ToLower();
 
@@ -103,7 +106,7 @@ namespace TaskManagerClientLibrary
         public void sould_get_all_arguments_without_nullable()
         {
             var arguments = new List<string> {"11", "lhkjh", "10-10-2012", ""};
-            var result = converter.Convert(arguments, new List<Type>{typeof (TestArgs)}) as TestArgs;
+            var result = converter.Convert(arguments, new List<Type> {typeof (TestArgs)}) as TestArgs;
             var testArgs = new TestArgs
                                {
                                    IntValue = 11,
@@ -117,23 +120,31 @@ namespace TaskManagerClientLibrary
         [Fact]
         public void should_get_nullable_value()
         {
-            var arguments = new List<string> {"102", "some string", "07-02-2010", "10-12-2012"};
-            var result = converter.Convert(arguments, new List<Type>{typeof (TestArgs)}) as TestArgs;
+            var arguments = new List<string> {"102", "some string", "07-02-2010", "today"};
+            var result = converter.Convert(arguments, new List<Type> {typeof (TestArgs)}) as TestArgs;
             var testArgs = new TestArgs
                                {
                                    IntValue = 102,
                                    StringValue = "some string",
                                    DateTimeValue1 = DateTime.Parse("07-02-2010"),
-                                   DateTimeValue2 = DateTime.Parse("10-12-2012")
+                                   DateTimeValue2 = DateTime.Today
                                };
             result.ShouldBeEquivalentTo(testArgs);
         }
 
         [Fact]
-        public void should_throw_exception_wrong_argument_types()
+        public void should_throw_exception__if_wrong_argument_types()
         {
             var arguments = new List<string> {"aa4", "task", "01-05-2012", "11-11-2012"};
-            Action action = () => converter.Convert(arguments, new List<Type>{typeof (TestArgs)});
+            Action action = () => converter.Convert(arguments, new List<Type> {typeof (TestArgs)});
+            action.ShouldThrow<WrongTaskArgumentsException>().WithMessage("Wrong command arguments.");
+        }
+
+        [Fact]
+        public void should_throw_exception_if_properties_count_less_than_input()
+        {
+            var arguments = new List<string> { "4", "task", "01-05-2012", "11-11-2012", "fjhf" };
+            Action action = () => converter.Convert(arguments, new List<Type> { typeof(TestArgs) });
             action.ShouldThrow<WrongTaskArgumentsException>().WithMessage("Wrong command arguments.");
         }
 
@@ -141,7 +152,7 @@ namespace TaskManagerClientLibrary
         public void should_throw_exception_wrong_argument_count()
         {
             var arguments = new List<string> {"dd", "fff"};
-            Action action = () => converter.Convert(arguments, new List<Type>{typeof (TestArgs)});
+            Action action = () => converter.Convert(arguments, new List<Type> {typeof (TestArgs)});
             action.ShouldThrow<WrongTaskArgumentsException>().WithMessage("Wrong command arguments.");
         }
     }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ConnectToWcf;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
@@ -29,16 +30,8 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             var addTaskArgs = ConvertToArgs(argument);
 
-            try
-            {
-                var result = client.AddTask(addTaskArgs);
-                PrintInfo(result);
-            }
-            catch (ServerNotAvailableException e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            
+            var result = client.AddTask(addTaskArgs);
+            PrintInfo(result);
         }
 
         private void PrintInfo(int result)
@@ -58,27 +51,30 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         private const string taskName = "sometask1";
         private readonly IClient client = Substitute.For<IClient>();
         private readonly TaskArgsConverter converter = Substitute.For<TaskArgsConverter>();
-        private readonly AddCommand handler;
+        private readonly AddCommand command;
+
+        readonly AddTaskArgs args = new AddTaskArgs { Name = taskName };
+        readonly List<string> argument = new List<string> { taskName };
 
         public AddTests()
         {
-            handler = new AddCommand(converter, new StringWriter(), client);
+            command = new AddCommand(converter, new StringWriter(), client);
+            converter
+                .Convert(argument, Arg.Is<List<Type>>(list => list.SequenceEqual(new List<Type> {typeof (AddTaskArgs)})))
+                .Returns(args);
         }
 
         [Fact]
         public void property_name_should_return_class_name()
         {
-            handler.Name.Should().Be("add");
+            command.Name.Should().Be("add");
         }
 
         [Fact]
         public void should_execute_on_client_add_task()
         {
-            var addTaskArgs = new AddTaskArgs { Name = taskName };
-            var argument = new List<string> { taskName };
-            converter.Convert(argument, new List<Type> { typeof(AddTaskArgs) }).ReturnsForAnyArgs(addTaskArgs);
-            handler.Execute(argument);
-            client.Received().AddTask(addTaskArgs);
+            command.Execute(argument);
+            client.Received().AddTask(args);
         }
     }
 }

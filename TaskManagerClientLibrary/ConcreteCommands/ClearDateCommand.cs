@@ -6,6 +6,7 @@ using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
+using System.Linq;
 
 namespace TaskManagerClientLibrary.ConcreteCommands
 {
@@ -27,17 +28,11 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         public void Execute(List<string> argument)
         {
-            var clearDateArgs = converter.Convert(argument, new List<Type> { typeof(ClearDateTaskArgs) }) as ClearDateTaskArgs;
+            var clearDateArgs =
+                converter.Convert(argument, new List<Type> {typeof (ClearDateTaskArgs)}) as ClearDateTaskArgs;
 
-            try
-            {
-                client.ExecuteCommand(clearDateArgs);
-                if (clearDateArgs != null) textWriter.WriteLine("Due date cleared for task ID: {0} .", clearDateArgs.Id);
-            }
-            catch (ServerNotAvailableException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            client.ExecuteCommand(clearDateArgs);
+            if (clearDateArgs != null) textWriter.WriteLine("Due date cleared for task ID: {0} .", clearDateArgs.Id);
         }
     }
 
@@ -45,27 +40,30 @@ namespace TaskManagerClientLibrary.ConcreteCommands
     {
         private readonly IClient client = Substitute.For<IClient>();
         private readonly TaskArgsConverter converter = Substitute.For<TaskArgsConverter>();
-        private readonly ClearDateCommand handler;
+        private readonly ClearDateCommand command;
+        readonly ClearDateTaskArgs args = new ClearDateTaskArgs { Id = 12 };
+        readonly List<string> argument = new List<string> { "12" };
 
         public ClearDateTests()
         {
-            handler = new ClearDateCommand(converter, new StringWriter(), client);
+            command = new ClearDateCommand(converter, new StringWriter(), client);
+            converter
+                .Convert(argument, Arg.Is<List<Type>>(list => list.SequenceEqual(new List<Type> {typeof (ClearDateTaskArgs)})))
+                .Returns(args);
         }
 
         [Fact]
         public void property_name_should_be_classname()
         {
-            handler.Name.Should().Be("cleardate");
+            command.Name.Should().Be("cleardate");
         }
 
         [Fact]
         public void should_send_string_return_id()
         {
-            var arguments = new List<string> { "12" };
-            var clearDateArgs = new ClearDateTaskArgs { Id = 12 };
-            converter.Convert(arguments, new List<Type>{typeof(ClearDateTaskArgs)}).ReturnsForAnyArgs(clearDateArgs);
-            handler.Execute(arguments);
-            client.Received().ExecuteCommand(clearDateArgs);
+            command.Execute(argument);
+            client.Received().ExecuteCommand(args);
         }
+
     }
 }

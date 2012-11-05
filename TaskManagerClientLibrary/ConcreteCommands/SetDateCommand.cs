@@ -6,6 +6,7 @@ using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
 using NSubstitute;
 using Xunit;
+using System.Linq;
 
 namespace TaskManagerClientLibrary.ConcreteCommands
 {
@@ -28,15 +29,8 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         public void Execute(List<string> argument)
         {
             var setDateArgs = ConvertToArgs(argument);
-            try
-            {
-                client.ExecuteCommand(setDateArgs);
-                PrintInfo(setDateArgs);
-            }
-            catch (ServerNotAvailableException e)
-            {
-                Console.WriteLine(e.Message);
-            }
+            client.ExecuteCommand(setDateArgs);
+            PrintInfo(setDateArgs);
         }
 
         private void PrintInfo(SetDateTaskArgs setDateArgs)
@@ -46,7 +40,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
 
         private SetDateTaskArgs ConvertToArgs(List<string> argument)
         {
-            var setDateArgs = converter.Convert(argument, new List<Type>(){typeof(SetDateTaskArgs)}) as SetDateTaskArgs;
+            var setDateArgs = converter.Convert(argument, new List<Type>{typeof(SetDateTaskArgs)}) as SetDateTaskArgs;
             return setDateArgs;
         }
     }
@@ -57,11 +51,15 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         private readonly ICommand command;
         private readonly TaskArgsConverter converter = Substitute.For<TaskArgsConverter>();
         private readonly TextWriter writer = Substitute.For<TextWriter>();
-
+        readonly SetDateTaskArgs args = new SetDateTaskArgs { Id = 5, DueDate = DateTime.Parse("10-10-2012") };
+        readonly List<string> argument = new List<string> { "1", "10-10-2012" };
 
         public SetDateTests()
         {
             command = new SetDateCommand(converter, writer, client);
+            converter
+                .Convert(argument, Arg.Is<List<Type>>(list => list.SequenceEqual(new List<Type> {typeof (SetDateTaskArgs)})))
+                .Returns(args);
         }
 
         [Fact]
@@ -73,11 +71,9 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         [Fact]
         public void should_send_set_date_to_client()
         {
-            var setDateArgs = new SetDateTaskArgs { Id = 5, DueDate = DateTime.Parse("10-10-2012") };
-            var argument = new List<string> { "1", "10-10-2012" };
-            converter.Convert(argument, new List<Type> {typeof(SetDateTaskArgs)}).ReturnsForAnyArgs(setDateArgs);
+
             command.Execute(argument);
-            client.Received().ExecuteCommand(setDateArgs);
+            client.Received().ExecuteCommand(args);
         }
     }
 }

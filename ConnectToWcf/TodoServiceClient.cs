@@ -25,14 +25,14 @@ namespace ConnectToWcf
             binding = new NetTcpBinding();
         }
 
-        public int AddTask(AddTaskArgs task)
+        public int AddTask(AddTaskArgs args)
         {
-            return GetDataFromServer(t => t.AddTask(task));
+            return GetDataFromServer(t => t.AddTask(args));
         }
 
-        public List<ClientTask> GetTasks(IListCommandArguments data)
+        public List<ClientTask> GetTasks(IListCommandArguments args)
         {
-            return GetDataFromServer(s => s.GetTasks(data));
+            return GetDataFromServer(s => s.GetTasks(args));
         }
 
         public void ExecuteCommand(IEditCommandArguments args)
