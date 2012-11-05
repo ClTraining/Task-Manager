@@ -89,7 +89,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             args = new ListAllTaskArgs();
             var argument = new List<string> { "153" };
             converter.Convert(argument, new List<Type> { typeof(ListAllTaskArgs) }).Returns(args);
-            client.GetTasks(args).ReturnsForAnyArgs(new List<ClientTask>());
+            client.GetTasks(args).Returns(new List<ClientTask>());
 
             command.Execute(argument);
             client.ReceivedWithAnyArgs().GetTasks(args);
@@ -99,7 +99,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             args = new ListSingleTaskArgs();
             var argument = new List<string>();
-            client.GetTasks(args).ReturnsForAnyArgs(new List<ClientTask>());
+            client.GetTasks(args).Returns(new List<ClientTask>());
             converter.Convert(argument, new List<Type> { typeof(ListSingleTaskArgs) }).Returns(new ListSingleTaskArgs());
 
             command.Execute(argument);
