@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 using ConnectToWcf;
 using EntitiesLibrary;
@@ -33,11 +32,6 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             this.factory = factory;
         }
 
-        private void PrintWithFormatter(List<ClientTask> list, ITaskFormatter formatter)
-        {
-            textWriter.WriteLine(formatter.ToFormatString(list));
-        }
-
         public void Execute(List<string> argument)
         {
             var listArgs = GetClientSpecification(argument);
@@ -51,6 +45,11 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             var types = new List<Type> { typeof(ListByDateTaskArgs), typeof(ListSingleTaskArgs), typeof(ListAllTaskArgs) };
 
             return converter.Convert(source, types) as IListCommandArguments;
+        }
+
+        private void PrintWithFormatter(List<ClientTask> list, ITaskFormatter formatter)
+        {
+            textWriter.WriteLine(formatter.ToFormatString(list));
         }
     }
 
@@ -68,7 +67,6 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         {
             writer = new StringWriter(sb);
             list = new ListCommand(converter, writer, connection, factory);
-            //list = new ListCommand(converter, writer, connection);
         }
 
         [Fact]
@@ -114,23 +112,19 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         [Fact]
         public void should_print_info_on_required_tasks()
         {
+            var args = new ListAllTaskArgs();
+            var input = new List<string> { "153" };
+            var listPackage = new List<ClientTask> { new ClientTask { DueDate = DateTime.Now, Id = 1, IsCompleted = true } };
+            var formatter = Substitute.For<ITaskFormatter>();
+            var types = new List<Type> { typeof(ListByDateTaskArgs), typeof(ListSingleTaskArgs), typeof(ListAllTaskArgs) };
 
-            //var args = new ListTaskArgs { Id = 153 };
-            //var input = new List<string> { "153" };
-            //var listPackage = new List<ClientTask> { new ClientTask { DueDate = DateTime.Now, Id = 1, IsCompleted = true } };
+            converter.Convert(input, types).ReturnsForAnyArgs(args);
+            factory.GetFormatter(args).Returns(formatter);
+            formatter.ToFormatString(listPackage).Returns("hello world");
+            connection.GetTasks(args).Returns(listPackage);
 
-            //var formatter = Substitute.For<ITaskFormatter>();
-            //data = Substitute.For<IClientSpecification>();
-
-            //converter.Convert(input).Returns(args);
-            //factory.GetClientSpecification(args).Returns(data);
-            //factory.GetFormatter(data).Returns(formatter);
-            //formatter.ToFormatString(listPackage).Returns("hello world");
-
-            //connection.GetTasks(data).Returns(listPackage);
-
-            //list.Execute(input);
-            //sb.ToString().Should().BeEquivalentTo("hello world\r\n");
+            list.Execute(input);
+            sb.ToString().Should().BeEquivalentTo("hello world\r\n");
         }
     }
 }
