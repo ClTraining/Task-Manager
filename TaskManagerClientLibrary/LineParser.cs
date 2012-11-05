@@ -153,7 +153,7 @@ namespace TaskManagerClientLibrary
             Console.SetOut(new StringWriter(sb));
             command1.Name.Returns("hello");
             parser.Parse("hello world").Returns(list);
-            command1.WhenForAnyArgs(x => x.Execute(new List<string>())).Do(x => { throw new TaskNotFoundException(1); });
+            command1.When(x => x.Execute(list)).Do(x => { throw new TaskNotFoundException(1); });
 
             lp.ExecuteCommand("hello world");
 
@@ -169,12 +169,11 @@ namespace TaskManagerClientLibrary
             Console.SetOut(new StringWriter(sb));
             command1.Name.Returns("hello");
             parser.Parse("hello world").Returns(list);
-            command1.WhenForAnyArgs(x => x.Execute(new List<string>())).Do(x => { throw new CouldNotSetDateException("exception"); });
+            command1.When(x => x.Execute(list)).Do(x => { throw new CouldNotSetDateException("exception"); });
 
             lp.ExecuteCommand("hello world");
 
             sb.ToString().Should().Be("exception\r\n");
         }
-
     }
 }
