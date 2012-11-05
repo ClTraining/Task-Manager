@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using ConnectToWcf;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
@@ -59,36 +60,42 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         private const string taskName = "sometask1";
         private readonly IClient client = Substitute.For<IClient>();
         private readonly TaskArgsConverter converter = Substitute.For<TaskArgsConverter>();
-        private readonly AddCommand handler;
+        private readonly AddCommand command;
+
+        readonly AddTaskArgs args = new AddTaskArgs { Name = taskName };
+        readonly List<string> argument = new List<string> { taskName };
 
         public AddTests()
         {
-            handler = new AddCommand(converter, new StringWriter(), client);
+            command = new AddCommand(converter, new StringWriter(), client);
+            converter
+                .Convert(argument, Arg.Is<List<Type>>(list => list.SequenceEqual(new List<Type> {typeof (AddTaskArgs)})))
+                .Returns(args);
         }
 
         [Fact]
         public void property_name_should_return_class_name()
         {
-            handler.Name.Should().Be("add");
+            command.Name.Should().Be("add");
         }
 
         [Fact]
         public void should_execute_on_client_add_task()
         {
-            var args = new AddTaskArgs { Name = taskName };
-            var argument = new List<string> { taskName };
-
-            converter
-                .Convert(argument, Arg.Is<List<Type>>(list => list.SequenceEqual(new List<Type> { typeof(AddTaskArgs) })))
-                .Returns(args);
-            handler.Execute(argument);
+            command.Execute(argument);
             client.Received().AddTask(args);
         }
 
         [Fact]
-        public void should_throw_exception_if_server_doesnt_response()
+        public void should_throw_exception_if_server_is_not_available()
         {
-            var args = new AddTaskArgs{Name = taskName};
+            client.When(c => c.AddTask(args)).Do(_ => { throw new ServerNotAvailableException(); });
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+
+            command.Execute(argument);
+            
+            sb.ToString().Should().Be("Server is not available.\r\n");
         }
     }
 }
