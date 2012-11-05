@@ -46,21 +46,21 @@ namespace TaskManagerServiceLibrary.ToDoList
             var task = SelectTaskById(id);
             if (task.IsCompleted) throw new CouldNotSetDateException("Could not clear due date for completed task.");
             task.DueDate = default(DateTime);
-            repo.UpdateChanges(task);
+            repo.UpdateChanges();
         }
 
         public void CompleteTask(int id)
         {
             var task = SelectTaskById(id);
             task.IsCompleted = true;
-            repo.UpdateChanges(task);
+            repo.UpdateChanges();
         }
 
         public void RenameTask(int id, string newName)
         {
             var task = SelectTaskById(id);
             task.Name = newName;
-            repo.UpdateChanges(task);
+            repo.UpdateChanges();
         }
 
         public void SetTaskDate(int id, DateTime dueDate)
@@ -68,7 +68,7 @@ namespace TaskManagerServiceLibrary.ToDoList
             var task = SelectTaskById(id);
             if (task.IsCompleted) throw new CouldNotSetDateException("Could not set due date to completed task.");
             task.DueDate = dueDate;
-            repo.UpdateChanges(task);
+            repo.UpdateChanges();
         }
 
         public ServiceTask SelectTaskById(int id)
@@ -125,7 +125,7 @@ namespace TaskManagerServiceLibrary.ToDoList
             extractor.SelectTaskById(id).Returns(task);
 
             todoList.ClearDate(5);
-            repo.Received().UpdateChanges(task);
+            repo.Received().UpdateChanges();
         }
 
         [Fact]
@@ -148,7 +148,7 @@ namespace TaskManagerServiceLibrary.ToDoList
             extractor.SelectTaskById(id).Returns(task);
 
             todoList.CompleteTask(5);
-            repo.Received().UpdateChanges(task);
+            repo.Received().UpdateChanges();
         }
 
         [Fact]
@@ -159,7 +159,7 @@ namespace TaskManagerServiceLibrary.ToDoList
             extractor.SelectTaskById(id).Returns(task);
 
             todoList.RenameTask(5, "sasha");
-            repo.Received().UpdateChanges(task);
+            repo.Received().UpdateChanges();
         }
 
         [Fact]
@@ -170,7 +170,7 @@ namespace TaskManagerServiceLibrary.ToDoList
             extractor.SelectTaskById(id).Returns(task);
 
             todoList.SetTaskDate(5, DateTime.Today);
-            repo.Received().UpdateChanges(task);
+            repo.Received().UpdateChanges();
         }
 
         [Fact]

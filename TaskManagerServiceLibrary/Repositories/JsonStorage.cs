@@ -98,7 +98,7 @@ namespace TaskManagerServiceLibrary.Repositories
             var spec = Substitute.For<IServiceSpecification>();
             storage.GetTasks(spec);
 
-            saver.ReceivedWithAnyArgs().GetInfo();
+            saver.Received().GetInfo();
         }
 
         [Fact]
