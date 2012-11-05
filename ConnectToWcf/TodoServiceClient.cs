@@ -95,7 +95,7 @@ namespace ConnectToWcf
 
     public class ExchangeClientTests
     {
-        private const string address = "net.tcp://localhost:44440";
+        private const string address = "net.tcp://localhost:44400";
 
         private readonly IClient client = new ToDoServiceClient(address);
         private readonly IArgToCommandConverter comConverter = Substitute.For<IArgToCommandConverter>();
@@ -115,11 +115,14 @@ namespace ConnectToWcf
         [Fact(Skip = "")]
         public void should_add_task_to_service()
         {
+            host.Open();
+
             const string myname = "myName";
             var args = new AddTaskArgs {Name = myname};
             repo.AddTask(Arg.Is<AddTaskArgs>(a => a.Name == myname)).Returns(1);
 
             var result = client.AddTask(args);
+            Console.Out.WriteLine(result);
             host.Close();
 
             result.Should().Be(1);
@@ -128,19 +131,14 @@ namespace ConnectToWcf
         [Fact(Skip = "")]
         public void should_get_tasks_from_server()
         {
-            var tasks = new List<ServiceTask> {new ServiceTask {Id = 1}};
+            var task = new ServiceTask {Id = 1};
+            var tasks = new List<ServiceTask> {task};
             var cSpec = Substitute.For<IListCommandArguments>();
 
-            repo.GetTasks(Arg.Is<IServiceSpecification>(s => s.IsSatisfied(new ServiceTask {Id = 1}))).Returns(tasks);
 
-            var result = client.GetTasks(cSpec);
 
-            foreach (var task in result)
-            {
-                Console.WriteLine(task);
-            }
+//            repo.GetTasks(Arg.Is<IServiceSpecification>(s => s.IsSatisfied(task))).Returns(tasks);
 
-            host.Close();
         }
     }
 }
