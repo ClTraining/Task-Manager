@@ -29,7 +29,7 @@ namespace TaskManagerServiceLibrary.Repositories
             return taskList.Where(spec.IsSatisfied).ToList();
         }
 
-        public void UpdateChanges(ServiceTask task) { }
+        public void UpdateChanges() { }
 
         private int GetNewId()
         {

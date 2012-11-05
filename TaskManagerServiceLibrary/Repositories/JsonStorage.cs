@@ -31,15 +31,8 @@ namespace TaskManagerServiceLibrary.Repositories
             return task.Id;
         }
 
-        public void UpdateChanges(ServiceTask task)
+        public void UpdateChanges()
         {
-            UpdateCacheStorage(task);
-            SynchronizeCacheAndLocal();
-        }
-
-        private void UpdateCacheStorage(ServiceTask task)
-        {
-            cacheStorage[task.Id - 1] = task;
             SynchronizeCacheAndLocal();
         }
 
@@ -114,7 +107,7 @@ namespace TaskManagerServiceLibrary.Repositories
             storage.AddTask(new ServiceTask { DueDate = DateTime.Today, Name = "Misha" });
             var task = new ServiceTask { Id = 1, DueDate = DateTime.Today, IsCompleted = false, Name = "Sasha" };
 
-            storage.UpdateChanges(task);
+            storage.UpdateChanges();
 
             saver.ReceivedWithAnyArgs().SaveToFile("bla-bla");
         }
