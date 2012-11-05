@@ -116,6 +116,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             list.Execute(input);
             connection.ReceivedWithAnyArgs().GetTasks(data);
         }
+<<<<<<< HEAD
 
         [Fact]
         public void should_print_info_on_required_tasks()
@@ -134,5 +135,7 @@ namespace TaskManagerClientLibrary.ConcreteCommands
             list.Execute(input);
             sb.ToString().Should().BeEquivalentTo("hello world\r\n");
         }
+=======
+>>>>>>> 1cfccecdf860cc6c2ab75d217731f73669c6ba1b
     }
 }

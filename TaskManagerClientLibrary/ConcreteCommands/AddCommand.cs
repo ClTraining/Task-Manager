@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using ConnectToWcf;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
@@ -28,8 +29,17 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         public void Execute(List<string> argument)
         {
             var addTaskArgs = ConvertToArgs(argument);
-            var result = client.AddTask(addTaskArgs);
-            PrintInfo(result);
+
+            try
+            {
+                var result = client.AddTask(addTaskArgs);
+                PrintInfo(result);
+            }
+            catch (ServerNotAvailableException e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            
         }
 
         private void PrintInfo(int result)
@@ -65,11 +75,20 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         [Fact]
         public void should_execute_on_client_add_task()
         {
-            var addTaskArgs = new AddTaskArgs { Name = taskName };
+            var args = new AddTaskArgs { Name = taskName };
             var argument = new List<string> { taskName };
-            converter.Convert(argument, new List<Type> { typeof(AddTaskArgs) }).ReturnsForAnyArgs(addTaskArgs);
+
+            converter
+                .Convert(argument, Arg.Is<List<Type>>(list => list.SequenceEqual(new List<Type> { typeof(AddTaskArgs) })))
+                .Returns(args);
             handler.Execute(argument);
-            client.Received().AddTask(addTaskArgs);
+            client.Received().AddTask(args);
+        }
+
+        [Fact]
+        public void should_throw_exception_if_server_doesnt_response()
+        {
+            var args = new AddTaskArgs{Name = taskName};
         }
     }
 }
