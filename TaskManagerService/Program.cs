@@ -8,6 +8,7 @@ using TaskManagerServiceLibrary;
 using TaskManagerServiceLibrary.Commands;
 using TaskManagerServiceLibrary.Converters;
 using TaskManagerServiceLibrary.Repositories;
+using TaskManagerServiceLibrary.Repositories.TaskExtractor;
 using TaskManagerServiceLibrary.TaskMapper;
 using TaskManagerServiceLibrary.ToDoList;
 
@@ -36,6 +37,7 @@ namespace TaskManagerService
     {
         public override void Load()
         {
+            Bind<ITaskExtractor>().To<TaskExtractor>();
             Bind<ITaskManagerService>().To<TaskManagerServiceLibrary.TaskManagerService>();
             Bind<IRepository>().To<JsonStorage>().InSingletonScope();
             Bind<ITaskMapper>().To<TaskMapper>();

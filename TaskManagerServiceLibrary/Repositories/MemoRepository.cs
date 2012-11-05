@@ -16,30 +16,17 @@ namespace TaskManagerServiceLibrary.Repositories
         private readonly List<ServiceTask> taskList = new List<ServiceTask>();
         private int currentId;
 
-        public int AddTask(AddTaskArgs args)
+        public int AddTask(ServiceTask task)
         {
-            var serviceTask = new ServiceTask
-                                  {
-                                      Name = args.Name,
-                                      DueDate = args.DueDate == null ? default(DateTime) : args.DueDate.Value,
-                                      Id = GetNewId()
-                                  };
+            task.Id = GetNewId();
+            taskList.Add(task);
 
-            taskList.Add(serviceTask);
-
-            return serviceTask.Id;
+            return task.Id;
         }
 
         public List<ServiceTask> GetTasks(IServiceSpecification spec)
         {
             return taskList.Where(spec.IsSatisfied).ToList();
-        }
-
-        public ServiceTask Select(int id)
-        {
-            var task = taskList.FirstOrDefault(t => t.Id == id);
-            if (task == null) throw new TaskNotFoundException(id);
-            return task;
         }
 
         public void UpdateChanges(ServiceTask task) { }
@@ -60,7 +47,7 @@ namespace TaskManagerServiceLibrary.Repositories
         [Fact]
         public void should_add_task_to_repo()
         {
-            var task = new AddTaskArgs { DueDate = DateTime.Now, Name = "task1" };
+            var task = new ServiceTask { DueDate = DateTime.Now, Name = "task1" };
 
             var result = repo.AddTask(task);
 
