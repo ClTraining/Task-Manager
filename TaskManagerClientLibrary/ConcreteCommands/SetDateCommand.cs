@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using ConnectToWcf;
 using EntitiesLibrary.CommandArguments;
 using FluentAssertions;
@@ -58,11 +59,15 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         private readonly ICommand command;
         private readonly TaskArgsConverter converter = Substitute.For<TaskArgsConverter>();
         private readonly TextWriter writer = Substitute.For<TextWriter>();
-
+        readonly SetDateTaskArgs args = new SetDateTaskArgs { Id = 5, DueDate = DateTime.Parse("10-10-2012") };
+        readonly List<string> argument = new List<string> { "1", "10-10-2012" };
 
         public SetDateTests()
         {
             command = new SetDateCommand(converter, writer, client);
+            converter
+                .Convert(argument, Arg.Is<List<Type>>(list => list.SequenceEqual(new List<Type> {typeof (SetDateTaskArgs)})))
+                .Returns(args);
         }
 
         [Fact]
@@ -74,13 +79,21 @@ namespace TaskManagerClientLibrary.ConcreteCommands
         [Fact]
         public void should_send_set_date_to_client()
         {
-            var setDateArgs = new SetDateTaskArgs { Id = 5, DueDate = DateTime.Parse("10-10-2012") };
-            var argument = new List<string> { "1", "10-10-2012" };
-            converter
-                .Convert(argument, Arg.Is<List<Type>>(list=> list.SequenceEqual(new List<Type> {typeof(SetDateTaskArgs)})))
-                .Returns(setDateArgs);
+
             command.Execute(argument);
-            client.Received().ExecuteCommand(setDateArgs);
+            client.Received().ExecuteCommand(args);
+        }
+
+        [Fact]
+        public void should_throw_exception_if_server_is_not_available()
+        {
+            client.When(c => c.ExecuteCommand(args)).Do(_ => { throw new ServerNotAvailableException(); });
+            var sb = new StringBuilder();
+            Console.SetOut(new StringWriter(sb));
+
+            command.Execute(argument);
+
+            sb.ToString().Should().Be("Server is not available.\r\n");
         }
     }
 }
